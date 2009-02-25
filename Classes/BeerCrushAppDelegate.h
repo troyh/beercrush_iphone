@@ -15,7 +15,7 @@
 	UISearchBar* mySearchBar;
 	UIApplication* app;
 
-	NSArray* searchResultsList;
+//	NSArray* searchResultsList;
 
 }
 

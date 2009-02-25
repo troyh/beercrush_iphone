@@ -8,21 +8,106 @@
 
 #import "MyTableViewController.h"
 
+typedef enum resultType
+	{
+		Beer=1,
+		Brewer=2
+	} ResultType;
+
+
+@interface SearchResultObject : NSObject
+{
+	NSString* title;
+	NSString* desc;
+	ResultType type;
+	NSString* uri;
+}
+
+@property (nonatomic, retain) NSString* title;
+@property (nonatomic, retain) NSString* desc;
+@property (nonatomic) ResultType type;
+@property (nonatomic, retain) NSString* uri;
+
+-(id)initWithTitle:(NSString*)title desc:(NSString*)desc type:(ResultType)t uri:(NSString*)uri;
+
+@end
+
+@implementation SearchResultObject
+
+@synthesize title;
+@synthesize desc;
+@synthesize type;
+@synthesize uri;
+
+-(id)initWithTitle:(NSString*)t desc:(NSString*)d type:(ResultType)n uri:(NSString*)u
+{
+	self.title=t;
+	self.desc=d;
+	self.type=n;
+	self.uri=u;
+	return self;
+}
+
+-(BOOL)isEqualToString:(NSString*)s
+{
+	return NO;
+}
+
+-(id)copyWithZone
+{
+	return self;
+}
+
+@end
 
 @implementation MyTableViewController
 
 @synthesize app;
 @synthesize appdel;
 
+
 -(void)query:(NSString*)qs 
 {
-	// Send the query off to the server
-	// Get results back
-	if (searchResultsList)
-		[searchResultsList release];
-	searchResultsList=[[NSArray alloc] initWithObjects: @"Dogfish Head",@"North Coast",@"Pliny the Elder",nil];
+	// TODO: Send the query off to the server
 
-	// 
+	// Get results back
+	if (searchResultsList_title)
+		[searchResultsList_title release];
+	if (searchResultsList_desc)
+		[searchResultsList_desc release];
+	if (searchResultsList_type)
+		[searchResultsList_type release];
+	if (searchResultsList_uri)
+		[searchResultsList_uri release];
+
+	searchResultsList_title=[[NSMutableArray alloc] initWithCapacity:10];
+	searchResultsList_desc=[[NSMutableArray alloc] initWithCapacity:10];
+	searchResultsList_type=[[NSMutableArray alloc] initWithCapacity:10];
+	searchResultsList_uri=[[NSMutableArray alloc] initWithCapacity:10];
+	
+	[searchResultsList_title addObject:@"Dogfish Head"];
+	[searchResultsList_desc  addObject:@"A brewer in Delaware"];
+	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
+	[searchResultsList_uri   addObject:@"/xml/brewery/Dogfish-Head"];
+
+	[searchResultsList_title addObject:@"North Coast Brewing Co."];
+	[searchResultsList_desc  addObject:@"A brewer in Northern California"];
+	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
+	[searchResultsList_uri   addObject:@"/xml/brewery/North-Coast"];
+
+	[searchResultsList_title addObject:@"Pliny the Elder"];
+	[searchResultsList_desc  addObject:@"An Imperial IPA"];
+	[searchResultsList_type  addObject:[NSNumber numberWithInt:Beer]];
+	[searchResultsList_uri   addObject:@"/xml/beer/Pliny-the-Elder"];
+
+	[searchResultsList_title addObject:@"Old Rasputin Russian Imperial Stout"];
+	[searchResultsList_desc  addObject:@"An Imperial Stout"];
+	[searchResultsList_type  addObject:[NSNumber numberWithInt:Beer]];
+	[searchResultsList_uri   addObject:@"/xml/beer/Old-Rasputin"];
+	
+//	SearchResultObject* obj=[[SearchResultObject alloc] initWithTitle:@"Dogfish Head" desc:@"A brewer in Delaware" type:Brewer uri:@"/xml/brewery/Dogfish-Head" ];
+	
+//	[searchResultsList addObject: obj ];
 }
 
 /*
@@ -43,14 +128,11 @@
 }
 */
 
-
+/*
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//	CGRect f=self.tableView.frame;
-//	f.origin.y=40;
-//	self.tableView.frame=f;
 }
-
+*/
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -78,6 +160,7 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
+	// TODO: free any search results
 }
 
 #pragma mark Table view methods
@@ -89,7 +172,7 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return searchResultsList.count;
+    return searchResultsList_title.count;
 }
 
 
@@ -104,7 +187,7 @@
     }
     
     // Set up the cell...
-	cell.text=[searchResultsList objectAtIndex:indexPath.row];
+	cell.text=[searchResultsList_title objectAtIndex:indexPath.row];
 	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 	
     return cell;
@@ -118,28 +201,46 @@
 
 	// Make the background view
 	UIView* backgroundView=[[UIView alloc] initWithFrame: app.keyWindow.frame];
-	backgroundView.backgroundColor=[UIColor whiteColor];
-	
-	// Make the Description label view
-	CGRect f;
-	f=CGRectZero;
-	f.origin.y=0;
-	f.size.width=200;
-	f.size.height=200;
-	UILabel* desc=[[UILabel alloc] initWithFrame:f];
-	desc.text=@"Blah blah blah";
-
+	backgroundView.backgroundColor=[UIColor groupTableViewBackgroundColor];
 	anotherViewController.title=@"Beer";
-
 	[anotherViewController.view addSubview:backgroundView];
-	[anotherViewController.view addSubview:desc];
-	
+
 	appdel.mySearchBar.hidden=YES;
 	appdel.nav.view.frame=app.keyWindow.frame;
 	appdel.nav.navigationBarHidden=NO;
 	
 	[appdel.nav pushViewController:anotherViewController animated:YES];
 	[anotherViewController release];
+
+	// TODO: get info from server
+
+	CGRect f;
+	// Make the title
+	f=CGRectZero;
+	f.origin.y=0;
+	f.origin.x=100;
+	f.size.width=app.keyWindow.frame.size.width-100-10;
+	f.size.height=80;
+	UILabel* title=[[UILabel alloc] initWithFrame:f];
+//	title.adjustsFontSizeToFitWidth=YES;
+	title.font=[UIFont boldSystemFontOfSize:20];
+	title.minimumFontSize=2.0;
+	title.numberOfLines=3;
+	title.text=[searchResultsList_title objectAtIndex:indexPath.row];
+
+	// Make the Description label view
+	f=CGRectZero;
+	f.origin.y=100;
+	f.origin.x=10;
+	f.size.width=app.keyWindow.frame.size.width-10-10;
+	f.size.height=200;
+	UILabel* desc=[[UILabel alloc] initWithFrame:f];
+	desc.numberOfLines=10;
+	desc.text=[searchResultsList_desc objectAtIndex: indexPath.row];
+
+
+	[anotherViewController.view addSubview:title];
+	[anotherViewController.view addSubview:desc];
 	
 }
 
@@ -185,7 +286,10 @@
 
 
 - (void)dealloc {
-	[searchResultsList release];
+	[searchResultsList_title release];
+	[searchResultsList_desc release];
+	[searchResultsList_type release];
+	[searchResultsList_uri release];
     [super dealloc];
 }
 

@@ -10,7 +10,10 @@
 #import "BeerCrushAppDelegate.h"
 
 @interface MyTableViewController : UITableViewController {
-	NSArray* searchResultsList;
+	NSMutableArray* searchResultsList_title;
+	NSMutableArray* searchResultsList_desc;
+	NSMutableArray* searchResultsList_type;
+	NSMutableArray* searchResultsList_uri;
 	UIApplication* app;
 	BeerCrushAppDelegate* appdel;
 }
