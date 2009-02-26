@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05C6364D0F55C03C00B1C78A /* BreweryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */; };
+		05C636500F55C1CE00B1C78A /* BeerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */; };
+		05C637900F56018100B1C78A /* ReviewsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */; };
+		05C637F40F56087F00B1C78A /* BeerListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C637F30F56087F00B1C78A /* BeerListTableViewController.m */; };
 		05C9A9BC0F531DE40020B102 /* ThirdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05C9A9BB0F531DE40020B102 /* ThirdView.xib */; };
 		05C9AC400F53756F0020B102 /* MyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C9AC3F0F53756F0020B102 /* MyTableViewController.m */; };
 		05C9ACC50F53865E0020B102 /* Beer View.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05C9ACC40F53865E0020B102 /* Beer View.xib */; };
@@ -21,6 +25,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		05C6364B0F55C03C00B1C78A /* BreweryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreweryTableViewController.h; sourceTree = "<group>"; };
+		05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BreweryTableViewController.m; sourceTree = "<group>"; };
+		05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeerTableViewController.h; sourceTree = "<group>"; };
+		05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeerTableViewController.m; sourceTree = "<group>"; };
+		05C6378E0F56018100B1C78A /* ReviewsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReviewsTableViewController.h; sourceTree = "<group>"; };
+		05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReviewsTableViewController.m; sourceTree = "<group>"; };
+		05C637F20F56087F00B1C78A /* BeerListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeerListTableViewController.h; sourceTree = "<group>"; };
+		05C637F30F56087F00B1C78A /* BeerListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeerListTableViewController.m; sourceTree = "<group>"; };
 		05C9A9BB0F531DE40020B102 /* ThirdView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ThirdView.xib; sourceTree = "<group>"; };
 		05C9AC3E0F53756F0020B102 /* MyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableViewController.h; sourceTree = "<group>"; };
 		05C9AC3F0F53756F0020B102 /* MyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableViewController.m; sourceTree = "<group>"; };
@@ -63,6 +75,14 @@
 				1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */,
 				05C9AC3E0F53756F0020B102 /* MyTableViewController.h */,
 				05C9AC3F0F53756F0020B102 /* MyTableViewController.m */,
+				05C6364B0F55C03C00B1C78A /* BreweryTableViewController.h */,
+				05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */,
+				05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */,
+				05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */,
+				05C6378E0F56018100B1C78A /* ReviewsTableViewController.h */,
+				05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */,
+				05C637F20F56087F00B1C78A /* BeerListTableViewController.h */,
+				05C637F30F56087F00B1C78A /* BeerListTableViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -178,6 +198,10 @@
 				1D3623260D0F684500981E51 /* BeerCrushAppDelegate.m in Sources */,
 				28216C970DB411BC00E5133A /* FirstViewController.m in Sources */,
 				05C9AC400F53756F0020B102 /* MyTableViewController.m in Sources */,
+				05C6364D0F55C03C00B1C78A /* BreweryTableViewController.m in Sources */,
+				05C636500F55C1CE00B1C78A /* BeerTableViewController.m in Sources */,
+				05C637900F56018100B1C78A /* ReviewsTableViewController.m in Sources */,
+				05C637F40F56087F00B1C78A /* BeerListTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

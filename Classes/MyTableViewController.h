@@ -13,7 +13,7 @@
 	NSMutableArray* searchResultsList_title;
 	NSMutableArray* searchResultsList_desc;
 	NSMutableArray* searchResultsList_type;
-	NSMutableArray* searchResultsList_uri;
+	NSMutableArray* searchResultsList_id;
 	UIApplication* app;
 	BeerCrushAppDelegate* appdel;
 }
@@ -24,3 +24,9 @@
 -(void)query:(NSString*)qs;
 
 @end
+
+typedef enum resultType
+{
+	Beer=1,
+	Brewer=2
+} ResultType;
