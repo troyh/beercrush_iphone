@@ -11,11 +11,29 @@
 #import "ReviewsTableViewController.h"
 #import "BeerListTableViewController.h"
 
+@implementation BreweryObject
+
+@synthesize name;
+@synthesize street;
+@synthesize city;
+@synthesize state;
+@synthesize zip;
+@synthesize phone;
+
+-(id)init
+{
+	return self;
+}
+
+@end
+
 @implementation BreweryTableViewController
 
 @synthesize breweryID;
+@synthesize breweryObject;
 @synthesize app;
 @synthesize appdel;
+@synthesize currentElemValue;
 
 -(id) initWithBreweryID:(NSString*)brewery_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
 {
@@ -27,6 +45,16 @@
 	
 	[super initWithStyle:UITableViewStyleGrouped];
 
+//	breweryInfo=[[NSMutableπArray alloc] initWithObjects:@"Name",@"Rating & Reviews",@"List of beers",@"1234 Main Street, Anytown AA 12345 US",@"(456) 789-0123",nil];
+	breweryObject=[[BreweryObject alloc] init];
+	
+	// Retrieve XML doc from server
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/xml/brewery/%@.xml", breweryID ]];
+	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+	[parser setDelegate:self];
+	[parser parse];
+
+	
 	return self;
 }
 
@@ -124,16 +152,16 @@
 			switch (indexPath.row)
 			{
 				case 0:
-					cell.text=@"Name";
+					cell.text=breweryObject.name;
 					cell.font=[UIFont boldSystemFontOfSize:20];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
 				case 1:
-					cell.text=@"Rating & Reviews";
+					cell.text=@"Ratings & Reviews";
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 					break;
 				case 2:
-					cell.text=@"List of beers";
+					cell.text=@"List of Beers";
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 					break;
 				default:
@@ -144,12 +172,12 @@
 			switch (indexPath.row)
 			{
 				case 0:
-					cell.text=@"1234 Main Street, Anytown AA 12345 US";
+					cell.text=[NSString stringWithFormat:@"%@, %@ %@ %@",breweryObject.street,breweryObject.city,breweryObject.state,breweryObject.zip];
 					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
 				case 1:
-					cell.text=@"(456) 789-0123";
+					cell.text=breweryObject.phone;
 					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
@@ -223,6 +251,71 @@
 - (void)dealloc {
     [super dealloc];
 }
+
+// NSXMLParser delegate methods
+
+- (void)parserDidStartDocument:(NSXMLParser *)parser
+{
+	// Clear any old data
+	self.currentElemValue=nil;
+}
+
+- (void)parserDidEndDocument:(NSXMLParser *)parser
+{
+}
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
+{
+	if ([elementName isEqualToString:@"name"] ||
+	    [elementName isEqualToString:@"street"] ||
+	    [elementName isEqualToString:@"city"] ||
+	    [elementName isEqualToString:@"state"] ||
+	    [elementName isEqualToString:@"zip"] ||
+	    [elementName isEqualToString:@"country"] ||
+	    [elementName isEqualToString:@"phone"]
+	)
+	{
+		self.currentElemValue=[NSMutableString string];
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+{
+	if (self.currentElemValue)
+	{
+		if ([elementName isEqualToString:@"name"])
+			breweryObject.name=currentElemValue;
+		else if ([elementName isEqualToString:@"street"])
+			breweryObject.street=currentElemValue;
+		else if ([elementName isEqualToString:@"city"])
+			breweryObject.city=currentElemValue;
+		else if ([elementName isEqualToString:@"state"])
+			breweryObject.state=currentElemValue;
+		else if ([elementName isEqualToString:@"zip"])
+			breweryObject.zip=currentElemValue;
+		else if ([elementName isEqualToString:@"phone"])
+			breweryObject.phone=currentElemValue;
+		
+		self.currentElemValue=nil;
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
+{
+}
+
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
+	if (self.currentElemValue)
+	{
+		[self.currentElemValue appendString:string];
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
+{
+}
+
 
 
 @end

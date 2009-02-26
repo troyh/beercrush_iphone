@@ -87,22 +87,22 @@
 	[searchResultsList_title addObject:@"Dogfish Head"];
 	[searchResultsList_desc  addObject:@"A brewer in Delaware"];
 	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
-	[searchResultsList_id   addObject:@"Dogfish-Head"];
+	[searchResultsList_id   addObject:@"Dogfish-Head-Craft-Brewery-Milton"];
 
 	[searchResultsList_title addObject:@"North Coast Brewing Co."];
 	[searchResultsList_desc  addObject:@"A brewer in Northern California"];
 	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
-	[searchResultsList_id   addObject:@"North-Coast"];
+	[searchResultsList_id   addObject:@"North-Coast-Brewing-Co"];
 
-	[searchResultsList_title addObject:@"Pliny the Elder"];
-	[searchResultsList_desc  addObject:@"An Imperial IPA"];
-	[searchResultsList_type  addObject:[NSNumber numberWithInt:Beer]];
-	[searchResultsList_id   addObject:@"Pliny-the-Elder"];
+	[searchResultsList_title addObject:@"Russian River"];
+	[searchResultsList_desc  addObject:@"A brewery in California"];
+	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
+	[searchResultsList_id   addObject:@"Russian-River-Brewing-Co"];
 
-	[searchResultsList_title addObject:@"Old Rasputin Russian Imperial Stout"];
-	[searchResultsList_desc  addObject:@"An Imperial Stout"];
-	[searchResultsList_type  addObject:[NSNumber numberWithInt:Beer]];
-	[searchResultsList_id   addObject:@"Old-Rasputin"];
+//	[searchResultsList_title addObject:@"Old Rasputin Russian Imperial Stout"];
+//	[searchResultsList_desc  addObject:@"An Imperial Stout"];
+//	[searchResultsList_type  addObject:[NSNumber numberWithInt:Beer]];
+//	[searchResultsList_id   addObject:@"Old-Rasputin"];
 	
 //	SearchResultObject* obj=[[SearchResultObject alloc] initWithTitle:@"Dogfish Head" desc:@"A brewer in Delaware" type:Brewer uri:@"/xml/brewery/Dogfish-Head" ];
 	

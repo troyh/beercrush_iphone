@@ -9,15 +9,41 @@
 #import <UIKit/UIKit.h>
 #import "BeerCrushAppDelegate.h"
 
+@interface BreweryObject: NSObject
+{
+	NSString* name;
+	NSString* street;
+	NSString* city;
+	NSString* state;
+	NSString* zip;
+	NSString* phone;
+}
+
+@property (nonatomic,retain) NSString* name;
+@property (nonatomic,retain) NSString* street;
+@property (nonatomic,retain) NSString* city;
+@property (nonatomic,retain) NSString* state;
+@property (nonatomic,retain) NSString* zip;
+@property (nonatomic,retain) NSString* phone;
+
+-(id)init;
+
+@end
+
 @interface BreweryTableViewController : UITableViewController <UITableViewDataSource,UITableViewDelegate> {
 	NSString* breweryID;
+//	NSMutableArray* breweryInfo;
+	BreweryObject* breweryObject;
 	UIApplication* app;
 	BeerCrushAppDelegate* appdel;
+	NSMutableString* currentElemValue;
 }
 
 @property (nonatomic,retain) NSString* breweryID;
+@property (nonatomic,retain) BreweryObject* breweryObject;
 @property (nonatomic,retain) UIApplication* app;
 @property (nonatomic,retain) BeerCrushAppDelegate* appdel;
+@property (nonatomic,retain) NSMutableString* currentElemValue;
 
 -(id) initWithBreweryID:(NSString*)brewery_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d;
 

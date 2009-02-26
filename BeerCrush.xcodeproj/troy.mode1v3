@@ -273,7 +273,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>15</integer>
+									<integer>9</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -316,7 +316,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>BeerListTableViewController.m</string>
+								<string>BreweryTableViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -324,11 +324,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>BeerListTableViewController.m</string>
+										<string>BreweryTableViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>05C6381F0F56124E00B1C78A</string>
+										<string>05C6398C0F5754B800B1C78A</string>
 										<key>history</key>
 										<array>
 											<string>05C9A9F60F533EE90020B102</string>
@@ -337,20 +337,20 @@
 											<string>05C9AAE80F534D590020B102</string>
 											<string>05C9AAFC0F534DA90020B102</string>
 											<string>05C9ADA70F5478B90020B102</string>
-											<string>05C9AF9B0F54C1AD0020B102</string>
 											<string>05C6371C0F55DC6B00B1C78A</string>
 											<string>05C637A50F56064E00B1C78A</string>
 											<string>05C637A60F56064E00B1C78A</string>
-											<string>05C637A90F56064E00B1C78A</string>
 											<string>05C637AB0F56064E00B1C78A</string>
 											<string>05C637AD0F56064E00B1C78A</string>
 											<string>05C637EA0F5607FA00B1C78A</string>
 											<string>05C637FB0F560A7C00B1C78A</string>
-											<string>05C637FC0F560A7C00B1C78A</string>
-											<string>05C637FE0F560A7C00B1C78A</string>
 											<string>05C6380D0F560B4700B1C78A</string>
 											<string>05C638170F560CE400B1C78A</string>
-											<string>05C638180F560CE400B1C78A</string>
+											<string>05C638250F561D6C00B1C78A</string>
+											<string>05C639310F57517F00B1C78A</string>
+											<string>05C639570F57532E00B1C78A</string>
+											<string>05C639860F57549F00B1C78A</string>
+											<string>05C639870F57549F00B1C78A</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -496,6 +496,53 @@
 											<string>05C6380E0F560B4700B1C78A</string>
 											<string>05C638190F560CE400B1C78A</string>
 											<string>05C6381A0F560CE400B1C78A</string>
+											<string>05C638280F561D6C00B1C78A</string>
+											<string>05C638290F561D6C00B1C78A</string>
+											<string>05C6382A0F561D6C00B1C78A</string>
+											<string>05C6382B0F561D6C00B1C78A</string>
+											<string>05C6382C0F561D6C00B1C78A</string>
+											<string>05C638750F573FD000B1C78A</string>
+											<string>05C638760F573FD000B1C78A</string>
+											<string>05C638770F573FD000B1C78A</string>
+											<string>05C638780F573FD000B1C78A</string>
+											<string>05C638820F5740F100B1C78A</string>
+											<string>05C638830F5740F100B1C78A</string>
+											<string>05C638840F5740F100B1C78A</string>
+											<string>05C638850F5740F100B1C78A</string>
+											<string>05C638860F5740F100B1C78A</string>
+											<string>05C638870F5740F100B1C78A</string>
+											<string>05C638960F57419000B1C78A</string>
+											<string>05C638970F57419000B1C78A</string>
+											<string>05C638980F57419000B1C78A</string>
+											<string>05C638B00F57435C00B1C78A</string>
+											<string>05C638B10F57435C00B1C78A</string>
+											<string>05C638D60F57450200B1C78A</string>
+											<string>05C638DE0F57455500B1C78A</string>
+											<string>05C638F30F574C6300B1C78A</string>
+											<string>05C638F40F574C6300B1C78A</string>
+											<string>05C638FE0F574D1600B1C78A</string>
+											<string>05C638FF0F574D1600B1C78A</string>
+											<string>05C639130F574F9E00B1C78A</string>
+											<string>05C639140F574F9E00B1C78A</string>
+											<string>05C639150F574F9E00B1C78A</string>
+											<string>05C639160F574F9E00B1C78A</string>
+											<string>05C639170F574F9E00B1C78A</string>
+											<string>05C639180F574F9E00B1C78A</string>
+											<string>05C639190F574F9E00B1C78A</string>
+											<string>05C6391A0F574F9E00B1C78A</string>
+											<string>05C639250F57506000B1C78A</string>
+											<string>05C639260F57506000B1C78A</string>
+											<string>05C639320F57517F00B1C78A</string>
+											<string>05C639330F57517F00B1C78A</string>
+											<string>05C639380F57519A00B1C78A</string>
+											<string>05C6393F0F57524400B1C78A</string>
+											<string>05C639400F57524400B1C78A</string>
+											<string>05C6394B0F5752B300B1C78A</string>
+											<string>05C6394C0F5752B300B1C78A</string>
+											<string>05C639590F57532E00B1C78A</string>
+											<string>05C6395A0F57532E00B1C78A</string>
+											<string>05C639880F57549F00B1C78A</string>
+											<string>05C639890F57549F00B1C78A</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -689,12 +736,12 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>05C638200F56124E00B1C78A</string>
+		<string>05C6398B0F57549F00B1C78A</string>
 		<string>05C636B10F55D1A100B1C78A</string>
 		<string>05C636890F55CED600B1C78A</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>056D28710F5319CA00A1F223</string>
+		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/troy/Documents/BeerCrush/BeerCrush.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -1030,6 +1077,8 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -1075,7 +1124,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C78EAAD065D492600B07095</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>Identifier</key>
