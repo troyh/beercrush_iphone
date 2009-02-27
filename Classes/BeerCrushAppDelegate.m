@@ -76,11 +76,32 @@
 	f.size.height=411-searchBar.frame.size.height;
 	f.origin.y=searchBar.frame.size.height;
 	nav.view.frame=f;
-	MyTableViewController* tbl=[[MyTableViewController alloc] initWithNibName:nil bundle:nil];
-	[nav pushViewController:tbl animated:NO];
-	tbl.app=app;
-	tbl.appdel=self;
+
+	MyTableViewController* tbl=nil;
+	if (nav.viewControllers.count)
+	{
+		if ([nav.topViewController isMemberOfClass:[MyTableViewController class]])
+		{
+			tbl=(MyTableViewController*)nav.topViewController;
+		}
+		else // This shouldn't happen...
+		{
+			// ...but just in case it does, pop all view controllers
+			while (nav.navigationController.viewControllers.count)
+				[nav.navigationController popViewControllerAnimated:YES];
+		}
+	}
+	
+	if (tbl==nil)
+	{
+		tbl=[[MyTableViewController alloc] initWithNibName:nil bundle:nil];
+		[nav pushViewController:tbl animated:NO];
+		tbl.app=app;
+		tbl.appdel=self;
+	}
+	
 	[tbl query: searchBar.text];
+	[tbl.tableView reloadData];
 	
 	//UIAlertView* av=[[UIAlertView alloc] initWithTitle: @"Blah"  message:searchBar.text delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	//[av show];

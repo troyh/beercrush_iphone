@@ -16,10 +16,14 @@
 	NSMutableArray* searchResultsList_id;
 	UIApplication* app;
 	BeerCrushAppDelegate* appdel;
+	NSMutableString* currentElemValue;
+	BOOL bInResultElement;
 }
 
 @property (nonatomic, retain) UIApplication* app;
 @property (nonatomic, retain) BeerCrushAppDelegate* appdel;
+@property (nonatomic, retain) NSMutableString* currentElemValue;
+@property (nonatomic) BOOL bInResultElement;
 
 -(void)query:(NSString*)qs;
 

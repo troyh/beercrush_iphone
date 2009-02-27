@@ -61,15 +61,13 @@
 
 @synthesize app;
 @synthesize appdel;
-
+@synthesize currentElemValue;
+@synthesize bInResultElement;
 
 -(void)query:(NSString*)qs 
 {
 	self.title=@"Results";
-	
-	// TODO: Send the query off to the server
 
-	// Get results back
 	if (searchResultsList_title)
 		[searchResultsList_title release];
 	if (searchResultsList_desc)
@@ -78,26 +76,35 @@
 		[searchResultsList_type release];
 	if (searchResultsList_id)
 		[searchResultsList_id release];
-
+	
 	searchResultsList_title=[[NSMutableArray alloc] initWithCapacity:10];
 	searchResultsList_desc=[[NSMutableArray alloc] initWithCapacity:10];
 	searchResultsList_type=[[NSMutableArray alloc] initWithCapacity:10];
 	searchResultsList_id=[[NSMutableArray alloc] initWithCapacity:10];
 	
-	[searchResultsList_title addObject:@"Dogfish Head"];
-	[searchResultsList_desc  addObject:@"A brewer in Delaware"];
-	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
-	[searchResultsList_id   addObject:@"Dogfish-Head-Craft-Brewery-Milton"];
+	// TODO: Send the query off to the server
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/api/autocomplete.fcgi?output=xml&q=%@", qs ]];
+	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+	[parser setDelegate:self];
+	[parser parse];
+	
+	// Get results back
 
-	[searchResultsList_title addObject:@"North Coast Brewing Co."];
-	[searchResultsList_desc  addObject:@"A brewer in Northern California"];
-	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
-	[searchResultsList_id   addObject:@"North-Coast-Brewing-Co"];
-
-	[searchResultsList_title addObject:@"Russian River"];
-	[searchResultsList_desc  addObject:@"A brewery in California"];
-	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
-	[searchResultsList_id   addObject:@"Russian-River-Brewing-Co"];
+	
+//	[searchResultsList_title addObject:@"Dogfish Head"];
+//	[searchResultsList_desc  addObject:@"A brewer in Delaware"];
+//	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
+//	[searchResultsList_id   addObject:@"Dogfish-Head-Craft-Brewery-Milton"];
+//
+//	[searchResultsList_title addObject:@"North Coast Brewing Co."];
+//	[searchResultsList_desc  addObject:@"A brewer in Northern California"];
+//	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
+//	[searchResultsList_id   addObject:@"North-Coast-Brewing-Co"];
+//
+//	[searchResultsList_title addObject:@"Russian River"];
+//	[searchResultsList_desc  addObject:@"A brewery in California"];
+//	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
+//	[searchResultsList_id   addObject:@"Russian-River-Brewing-Co"];
 
 //	[searchResultsList_title addObject:@"Old Rasputin Russian Imperial Stout"];
 //	[searchResultsList_desc  addObject:@"An Imperial Stout"];
@@ -200,7 +207,8 @@
 	appdel.nav.view.frame=app.keyWindow.frame;
 	appdel.nav.navigationBarHidden=NO;
 	
-	ResultType t=[[searchResultsList_type objectAtIndex:indexPath.row] intValue];
+//	ResultType t=[[searchResultsList_type objectAtIndex:indexPath.row] intValue];
+	ResultType t=Brewer;
 	if (t == Brewer)
 	{
 		BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:[searchResultsList_id objectAtIndex:indexPath.row] app:app appDelegate: appdel];
@@ -304,6 +312,67 @@
 	[searchResultsList_type release];
 	[searchResultsList_id release];
     [super dealloc];
+}
+
+// NSXMLParser delegate methods
+
+- (void)parserDidStartDocument:(NSXMLParser *)parser
+{
+	// Clear any old data
+	self.currentElemValue=nil;
+	bInResultElement=NO;
+}
+
+- (void)parserDidEndDocument:(NSXMLParser *)parser
+{
+}
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
+{
+	if ([elementName isEqualToString:@"result"])
+	{
+		bInResultElement=YES;
+	}
+	else if (bInResultElement && ([elementName isEqualToString:@"text"] || [elementName isEqualToString:@"id"]))
+	{
+		self.currentElemValue=[NSMutableString string];
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+{
+	if (self.currentElemValue)
+	{
+		if ([elementName isEqualToString:@"result"])
+		{
+			bInResultElement=NO;
+		}
+		else if (bInResultElement)
+		{
+			if ([elementName isEqualToString:@"text"])
+				[searchResultsList_title addObject:currentElemValue];
+			else if ([elementName isEqualToString:@"id"])
+				[searchResultsList_id addObject:currentElemValue];
+		}
+		
+		self.currentElemValue=nil;
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
+{
+}
+
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
+	if (self.currentElemValue)
+	{
+		[self.currentElemValue appendString:string];
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
+{
 }
 
 
