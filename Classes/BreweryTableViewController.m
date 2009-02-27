@@ -205,6 +205,14 @@
 		[self.navigationController pushViewController: bltvc animated:YES];
 		[bltvc release];
 	}
+	else if (indexPath.section == 1 && indexPath.row == 0) // Address cell
+	{
+		[app openURL:[[NSURL alloc] initWithString: [NSString stringWithFormat:@"http://maps.google.com/maps?g=%@, %@ %@ %@",breweryObject.street,breweryObject.city,breweryObject.state,breweryObject.zip]]];
+	}
+	else if (indexPath.section == 1 && indexPath.row == 1) // Phone number cell
+	{
+		[app openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", breweryObject.phone ]]];
+	}
 }
 
 
