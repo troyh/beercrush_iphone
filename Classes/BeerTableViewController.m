@@ -6,6 +6,7 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
+#import <CoreGraphics/CGGeometry.h>
 #import "BeerTableViewController.h"
 #import "ReviewsTableViewController.h"
 
@@ -14,6 +15,9 @@
 @synthesize beerID;
 @synthesize app;
 @synthesize appdel;
+@synthesize beerObj;
+@synthesize currentElemValue;
+@synthesize xmlParseDepth;
 
 -(id) initWithBeerID:(NSString*)beer_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
 {
@@ -21,9 +25,16 @@
 	self.app=a;
 	self.appdel=d;
 
+	self.beerObj=[BeerObject alloc];
 	self.title=@"Beer";
 	
 	[super initWithStyle:UITableViewStyleGrouped];
+	
+	// Retrieve XML doc for this beer
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/xml/beer/%@.xml", beerID ]];
+	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+	[parser setDelegate:self];
+	[parser parse];
 	
 	return self;
 }
@@ -102,6 +113,40 @@
 	return 0;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	switch (indexPath.section) 
+	{
+		case 0:
+			switch (indexPath.row)
+			{
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+			{
+				CGSize sz=[beerObj.description sizeWithFont:[UIFont systemFontOfSize: [UIFont smallSystemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
+				return sz.height+20.0f;
+				break;
+			}
+			default:
+				break;
+			}
+			break;
+		case 1:
+			switch (indexPath.row)
+			{
+			case 0:
+				break;
+			case 1:
+				break;
+			default:
+				break;
+			}
+	}
+	return 44.0f;
+}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -121,7 +166,7 @@
 			switch (indexPath.row)
 		{
 			case 0:
-				cell.text=@"Name";
+				cell.text=beerObj.name;
 				cell.font=[UIFont boldSystemFontOfSize:20];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
@@ -130,10 +175,29 @@
 				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				break;
 			case 2:
-				cell.text=@"Description";
-				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+			{
+//				cell.text=beerObj.description;
+				CGRect contentRect=CGRectMake(10, 10, 0, 0);
+				UILabel* textView=[[UILabel alloc] initWithFrame:contentRect];
+				textView.text=beerObj.description;
+				
+				contentRect.size=[textView.text sizeWithFont:[UIFont systemFontOfSize: [UIFont smallSystemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f)];
+				textView.frame=contentRect;
+				
+				textView.numberOfLines=0;
+				textView.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+				textView.lineBreakMode=UILineBreakModeWordWrap;
+				[textView sizeToFit];
+
+				cell.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+				cell.lineBreakMode=UILineBreakModeWordWrap;
+				
+				[cell.contentView addSubview:textView];
+				[cell.contentView sizeToFit];
+				[textView release];
 				break;
+			}
 			default:
 				break;
 		}
@@ -142,12 +206,16 @@
 			switch (indexPath.row)
 		{
 			case 0:
-				cell.text=@"Style";
+				cell.text=beerObj.style;
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
 			case 1:
-				cell.text=@"ABV";
+				if (beerObj.ibu)
+					cell.text=[[NSString alloc] initWithFormat:@"%u%% ABV %u IBUs", beerObj.abv, beerObj.ibu];
+				else
+					cell.text=[[NSString alloc] initWithFormat:@"%u%% ABV", beerObj.abv];
+				
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
@@ -214,6 +282,89 @@
 
 - (void)dealloc {
     [super dealloc];
+}
+
+
+// NSXMLParser delegate methods
+
+- (void)parserDidStartDocument:(NSXMLParser *)parser
+{
+	// Clear any old data
+	self.currentElemValue=nil;
+}
+
+- (void)parserDidEndDocument:(NSXMLParser *)parser
+{
+}
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
+{
+	++xmlParseDepth;
+	
+	if ([elementName isEqualToString:@"beer"])
+	{
+		NSString* s=[attributeDict valueForKey:@"abv"];
+		beerObj.abv=s.intValue;
+//		[s release];
+		s=[attributeDict valueForKey:@"ibu"];
+		beerObj.ibu=s.intValue;
+//		[s release];
+	}
+	else if ([elementName isEqualToString:@"name"])
+	{
+		if (xmlParseDepth==2)
+			self.currentElemValue=[NSMutableString string];
+	}
+	else if ([elementName isEqualToString:@"description"])
+	{
+		if (xmlParseDepth==2)
+			self.currentElemValue=[NSMutableString string];
+	}
+	else if ([elementName isEqualToString:@"style"])
+	{
+		if (xmlParseDepth==3)
+			self.currentElemValue=[NSMutableString string];
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+{
+	--xmlParseDepth;
+	
+	if (self.currentElemValue)
+	{
+		if ([elementName isEqualToString:@"name"])
+		{
+			beerObj.name=currentElemValue;
+		}
+		else if ([elementName isEqualToString:@"description"])
+		{
+			beerObj.description=currentElemValue;
+		}
+		else if ([elementName isEqualToString:@"style"])
+		{
+			if ([beerObj.style length] == 0) // Only take the 1st style
+				beerObj.style=currentElemValue;
+		}
+		
+		self.currentElemValue=nil;
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
+{
+}
+
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
+	if (self.currentElemValue)
+	{
+		[self.currentElemValue appendString:string];
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
+{
 }
 
 

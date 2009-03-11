@@ -9,6 +9,17 @@
 #import "BeerCrushAppDelegate.h"
 #import "MyTableViewController.h"
 
+@implementation BeerObject
+
+@synthesize name;
+@synthesize attribs;
+@synthesize description;
+@synthesize style;
+@synthesize abv;
+@synthesize ibu;
+
+@end
+
 @implementation BeerCrushAppDelegate
 
 @synthesize window;

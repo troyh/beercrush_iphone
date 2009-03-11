@@ -201,7 +201,7 @@
 	}
 	else if (indexPath.section == 0 && indexPath.row == 2) // List of beers is the 3rd row in the 1st section
 	{
-		BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.breweryID];
+		BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.breweryID andApp:self.app];
 		[self.navigationController pushViewController: bltvc animated:YES];
 		[bltvc release];
 	}

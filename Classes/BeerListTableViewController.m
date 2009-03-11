@@ -6,25 +6,33 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
+#import "BeerCrushAppDelegate.h"
 #import "BeerListTableViewController.h"
+#import "BeerTableViewController.h"
 
 
 @implementation BeerListTableViewController
 
 @synthesize breweryID;
-@synthesize beerStyleNames;
+@synthesize currentElemValue;
+@synthesize	currentElemAttribs;
+@synthesize beerList;
+@synthesize app;
 
--(id)initWithBreweryID:(NSString*)brewery_id
+-(id)initWithBreweryID:(NSString*)brewery_id andApp:(UIApplication*)a
 {
 	self.breweryID=brewery_id;
+	self.app=a;
 	
 	self.title=@"Beer List";
 	
-	// TODO: get actual data from server if we don't yet have it.
-	if (!beerStyleNames)
-	{
-		beerStyleNames=[[NSArray alloc] initWithObjects:@"Pale Ale",@"IPA",@"Double IPA",@"Stout",@"Imperial Stout",@"Porter",nil];
-	}
+	beerList=[[NSMutableArray alloc] initWithCapacity:10];
+	
+	// Retrieve XML doc from server
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/xml/meta/brewery/%@.xml", breweryID ]];
+	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+	[parser setDelegate:self];
+	[parser parse];
 	
 	return self;
 }
@@ -86,19 +94,18 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-	return [beerStyleNames objectAtIndex:section];
+	return [NSString string];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [beerStyleNames count];
+    return 1;
 }
 
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return [beerList count];
 }
-
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -111,7 +118,8 @@
     }
     
     // Set up the cell...
-	cell.text=[NSString stringWithFormat:@"%@ #%U", [beerStyleNames objectAtIndex:indexPath.section],indexPath.row];
+	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
+	cell.text=[NSString stringWithFormat:@"%@", beer.name ];
 	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
     return cell;
@@ -119,10 +127,11 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	// AnotherViewController *anotherViewController = [[AnotherViewController alloc] initWithNibName:@"AnotherView" bundle:nil];
-	// [self.navigationController pushViewController:anotherViewController];
-	// [anotherViewController release];
+	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
+	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)self.app.delegate;
+	BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID:[beer.attribs valueForKey:@"id"]  app:self.app appDelegate:del];
+	[del.nav pushViewController: btvc animated:YES];
+	[btvc release];
 }
 
 
@@ -169,6 +178,68 @@
 - (void)dealloc {
     [super dealloc];
 }
+
+// NSXMLParser delegate methods
+
+- (void)parserDidStartDocument:(NSXMLParser *)parser
+{
+	// Clear any old data
+	self.currentElemValue=nil;
+}
+
+- (void)parserDidEndDocument:(NSXMLParser *)parser
+{
+}
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
+{
+	if ([elementName isEqualToString:@"brewery"])
+	{
+	}
+	else if ([elementName isEqualToString:@"beerlist"])
+	{
+	}
+	else if ([elementName isEqualToString:@"beer"])
+	{
+		self.currentElemValue=[NSMutableString string];
+		self.currentElemAttribs=[[NSMutableDictionary alloc] initWithCapacity:10];
+		[self.currentElemAttribs addEntriesFromDictionary:attributeDict];
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+{
+	if (self.currentElemValue)
+	{
+		if ([elementName isEqualToString:@"beer"])
+		{
+			BeerObject* beer=[BeerObject alloc];
+			beer.name=currentElemValue;
+			beer.attribs=currentElemAttribs;
+			
+			[beerList addObject:beer];
+		}
+		
+		self.currentElemValue=nil;
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
+{
+}
+
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
+	if (self.currentElemValue)
+	{
+		[self.currentElemValue appendString:string];
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
+{
+}
+
 
 
 @end

@@ -8,15 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-
 @interface BeerListTableViewController : UITableViewController {
 	NSString* breweryID;
-	NSArray* beerStyleNames;
+	NSMutableArray* beerList;
+	NSMutableString* currentElemValue;
+	NSMutableDictionary* currentElemAttribs;
+	UIApplication* app;
 }
 
 @property (nonatomic,retain) NSString* breweryID;
-@property (nonatomic,retain) NSArray* beerStyleNames;
+@property (nonatomic,retain) NSMutableArray* beerList;
+@property (nonatomic,retain) NSMutableString* currentElemValue;
+@property (nonatomic,retain) NSMutableDictionary* currentElemAttribs;
+@property (nonatomic,retain) UIApplication* app;
 
--(id)initWithBreweryID:(NSString*)brewery_id;
+-(id)initWithBreweryID:(NSString*)brewery_id andApp:(UIApplication*)app;
 
 @end
