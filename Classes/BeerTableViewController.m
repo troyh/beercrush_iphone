@@ -32,7 +32,7 @@
 	[super initWithStyle:UITableViewStyleGrouped];
 	
 	// Retrieve XML doc for this beer
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/xml/beer/%@.xml", beerID ]];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/api/xml/beer/%@.xml", beerID ]];
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	[parser parse];

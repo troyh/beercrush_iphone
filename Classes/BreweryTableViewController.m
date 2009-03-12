@@ -50,7 +50,7 @@
 	breweryObject=[[BreweryObject alloc] init];
 	
 	// Retrieve XML doc from server
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/xml/brewery/%@.xml", breweryID ]];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/api/xml/brewery/%@.xml", breweryID ]];
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	[parser parse];
@@ -238,13 +238,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Navigation logic may go here. Create and push another view controller.
-	if (indexPath.section == 0 && indexPath.row == 1) // Reviews is the 2nd row in the 1st section
+	if (indexPath.section == 0 && indexPath.row == 2) // Reviews is the 2nd row in the 1st section
 	{
 		ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.breweryID dataType:Brewer];
 		[self.navigationController pushViewController: rtvc animated:YES];
 		[rtvc release];
 	}
-	else if (indexPath.section == 0 && indexPath.row == 2) // List of beers is the 3rd row in the 1st section
+	else if (indexPath.section == 0 && indexPath.row == 3) // List of beers is the 3rd row in the 1st section
 	{
 		BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.breweryID andApp:self.app];
 		[self.navigationController pushViewController: bltvc animated:YES];
