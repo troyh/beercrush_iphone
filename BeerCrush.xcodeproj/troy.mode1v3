@@ -273,7 +273,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>5</integer>
+									<integer>9</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -316,7 +316,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>BeerCrushAppDelegate.m</string>
+								<string>BreweryTableViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -324,11 +324,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>BeerCrushAppDelegate.m</string>
+										<string>BreweryTableViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>0526998F0F698B4E00032627</string>
+										<string>052699E80F69BA5D00032627</string>
 										<key>history</key>
 										<array>
 											<string>05C9A9F60F533EE90020B102</string>
@@ -339,19 +339,19 @@
 											<string>05C6371C0F55DC6B00B1C78A</string>
 											<string>05C637A60F56064E00B1C78A</string>
 											<string>052695EA0F685BE900032627</string>
-											<string>052696320F685CC200032627</string>
-											<string>052696BE0F6863E400032627</string>
 											<string>052696E30F6865BE00032627</string>
 											<string>052696E50F6865BE00032627</string>
 											<string>0526978E0F686F7900032627</string>
 											<string>052697B30F68727600032627</string>
 											<string>052698970F68A17C00032627</string>
-											<string>052698E90F68AFFD00032627</string>
 											<string>052698EA0F68AFFD00032627</string>
 											<string>052698EB0F68AFFD00032627</string>
-											<string>0526998A0F698B4E00032627</string>
 											<string>0526998B0F698B4E00032627</string>
-											<string>0526998C0F698B4E00032627</string>
+											<string>052699900F6999C900032627</string>
+											<string>0526999A0F699DB000032627</string>
+											<string>0526999B0F699DB000032627</string>
+											<string>052699DB0F69AC3300032627</string>
+											<string>052699DC0F69AC3300032627</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -690,6 +690,24 @@
 											<string>052699840F69880600032627</string>
 											<string>0526998D0F698B4E00032627</string>
 											<string>0526998E0F698B4E00032627</string>
+											<string>052699920F6999C900032627</string>
+											<string>0526999D0F699DB000032627</string>
+											<string>0526999E0F699DB000032627</string>
+											<string>0526999F0F699DB000032627</string>
+											<string>052699A00F699DB000032627</string>
+											<string>052699A10F699DB000032627</string>
+											<string>052699A20F699DB000032627</string>
+											<string>052699A30F699DB000032627</string>
+											<string>052699A40F699DB000032627</string>
+											<string>052699A50F699DB000032627</string>
+											<string>052699A60F699DB000032627</string>
+											<string>052699A70F699DB000032627</string>
+											<string>052699B60F699F0500032627</string>
+											<string>052699B70F699F0500032627</string>
+											<string>052699C50F69AB2B00032627</string>
+											<string>052699C60F69AB2B00032627</string>
+											<string>052699DD0F69AC3300032627</string>
+											<string>052699DE0F69AC3300032627</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -883,8 +901,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>052699880F69881A00032627</string>
-		<string>052699860F69880600032627</string>
 		<string>0526953D0F683A5E00032627</string>
 		<string>0526953E0F683A5E00032627</string>
 		<string>1CD10A99069EF8BA00B06720</string>
@@ -909,14 +925,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>BeerCrushAppDelegate.m</string>
+								<string>BreweryTableViewController.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -933,6 +947,8 @@
 							<string>218pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -1239,7 +1255,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {650, 209}}</string>
 								<key>RubberWindowFrame</key>
-								<string>700 326 650 250 0 0 2560 1578 </string>
+								<string>814 105 650 250 0 0 2560 1578 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXDebugCLIModule</string>
@@ -1268,7 +1284,7 @@
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.consoleV3</string>
 			<key>WindowString</key>
-			<string>700 326 650 250 0 0 2560 1578 </string>
+			<string>814 105 650 250 0 0 2560 1578 </string>
 			<key>WindowToolGUID</key>
 			<string>1C78EAAD065D492600B07095</string>
 			<key>WindowToolIsVisible</key>

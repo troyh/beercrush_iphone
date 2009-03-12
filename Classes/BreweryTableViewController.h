@@ -37,6 +37,7 @@
 	UIApplication* app;
 	BeerCrushAppDelegate* appdel;
 	NSMutableString* currentElemValue;
+	NSMutableData* reviewPostResponse;
 }
 
 @property (nonatomic,retain) NSString* breweryID;
@@ -44,6 +45,7 @@
 @property (nonatomic,retain) UIApplication* app;
 @property (nonatomic,retain) BeerCrushAppDelegate* appdel;
 @property (nonatomic,retain) NSMutableString* currentElemValue;
+@property (nonatomic,retain) NSMutableData* reviewPostResponse;
 
 -(id) initWithBreweryID:(NSString*)brewery_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d;
 

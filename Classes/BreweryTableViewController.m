@@ -34,6 +34,7 @@
 @synthesize app;
 @synthesize appdel;
 @synthesize currentElemValue;
+@synthesize reviewPostResponse;
 
 -(id) initWithBreweryID:(NSString*)brewery_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
 {
@@ -121,10 +122,10 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return 3;
+			return 4;
 			break;
 		case 1:
-			return 2;
+			return 3;
 			break;
 		default:
 			break;
@@ -157,10 +158,20 @@
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
 				case 1:
+				{
+					NSArray* ratings=[NSArray arrayWithObjects:@" 1 ",@" 2 ",@" 3 ",@" 4 ",@" 5 ",nil];
+					UISegmentedControl* ratingctl=[[UISegmentedControl alloc] initWithItems:ratings];
+					[cell.contentView addSubview:ratingctl];
+					[ratings release];
+					
+					[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
+					break;
+				}
+				case 2:
 					cell.text=@"Ratings & Reviews";
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 					break;
-				case 2:
+				case 3:
 					cell.text=@"List of Beers";
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 					break;
@@ -172,11 +183,15 @@
 			switch (indexPath.row)
 			{
 				case 0:
+					cell.text=@"Web site";
+					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+					break;
+				case 1:
 					cell.text=[NSString stringWithFormat:@"%@, %@ %@ %@",breweryObject.street,breweryObject.city,breweryObject.state,breweryObject.zip];
 					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
-				case 1:
+				case 2:
 					cell.text=breweryObject.phone;
 					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
@@ -188,6 +203,36 @@
 	
 
     return cell;
+}
+
+-(void)ratingButtonTapped:(id)sender event:(id)event
+{
+	UISegmentedControl* segctl=(UISegmentedControl*)sender;
+	NSInteger rating=segctl.selectedSegmentIndex;
+	
+	// Send the review to the site
+	
+	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&brewery_id=%@", rating+1, breweryID];
+	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
+	
+	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://dev:81/api/post/place_review"]
+															cachePolicy:NSURLRequestUseProtocolCachePolicy
+														timeoutInterval:60.0];
+	[theRequest setHTTPMethod:@"POST"];
+	[theRequest setHTTPBody:body];
+	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+	
+	// create the connection with the request and start loading the data
+	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+	
+	if (theConnection) {
+		// Create the NSMutableData that will hold
+		// the received data
+		// receivedData is declared as a method instance elsewhere
+		reviewPostResponse=[[NSMutableData data] retain];
+	} else {
+		// TODO: inform the user that the download could not be made
+	}	
 }
 
 
@@ -324,7 +369,60 @@
 {
 }
 
+// NSURLConnection delegate methods
 
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    // this method is called when the server has determined that it
+    // has enough information to create the NSURLResponse
+	
+    // it can be called multiple times, for example in the case of a
+    // redirect, so each time we reset the data.
+    // receivedData is declared as a method instance elsewhere
+    [reviewPostResponse setLength:0];
+	
+	NSHTTPURLResponse* httprsp=(NSHTTPURLResponse*)response;
+	NSInteger n=httprsp.statusCode;
+	
+	if (n==401)
+	{
+		[appdel login];
+	}
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    // append the new data to the receivedData
+    // receivedData is declared as a method instance elsewhere
+    [reviewPostResponse appendData:data];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    // release the connection, and the data object
+    [connection release];
+	
+    // receivedData is declared as a method instance elsewhere
+    [reviewPostResponse release];
+	
+    // inform the user
+    NSLog(@"Connection failed! Error - %@ %@",
+          [error localizedDescription],
+          [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
+	
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+
+{
+    // do something with the data
+    // receivedData is declared as a method instance elsewhere
+    NSLog(@"Succeeded! Received %d bytes of data",[reviewPostResponse length]);
+	
+    // release the connection, and the data object
+    [connection release];
+    [reviewPostResponse release];
+}
 
 @end
 

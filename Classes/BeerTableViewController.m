@@ -175,7 +175,7 @@
 				break;
 			case 1:
 			{
-				NSArray* ratings=[[NSArray alloc] initWithObjects:@" 1 ",@" 2 ",@" 3 ",@" 4 ",@" 5 "];
+				NSArray* ratings=[[NSArray alloc] initWithObjects:@" 1 ",@" 2 ",@" 3 ",@" 4 ",@" 5 ",nil];
 				UISegmentedControl* ratingctl=[[UISegmentedControl alloc] initWithItems:ratings];
 				[cell.contentView addSubview:ratingctl];
 				[ratings release];
