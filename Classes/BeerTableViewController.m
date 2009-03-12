@@ -18,6 +18,7 @@
 @synthesize beerObj;
 @synthesize currentElemValue;
 @synthesize xmlParseDepth;
+@synthesize reviewPostResponse;
 
 -(id) initWithBeerID:(NSString*)beer_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
 {
@@ -102,7 +103,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return 3;
+			return 4;
 			break;
 		case 1:
 			return 2;
@@ -125,6 +126,8 @@
 			case 1:
 				break;
 			case 2:
+				break;
+			case 3:
 			{
 				CGSize sz=[beerObj.description sizeWithFont:[UIFont systemFontOfSize: [UIFont smallSystemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
 				return sz.height+20.0f;
@@ -145,7 +148,7 @@
 				break;
 			}
 	}
-	return 44.0f;
+	return 44.0f; // 44 is the default iPhone table cell height
 }
 
 // Customize the appearance of table view cells.
@@ -171,10 +174,20 @@
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
 			case 1:
+			{
+				NSArray* ratings=[[NSArray alloc] initWithObjects:@" 1 ",@" 2 ",@" 3 ",@" 4 ",@" 5 "];
+				UISegmentedControl* ratingctl=[[UISegmentedControl alloc] initWithItems:ratings];
+				[cell.contentView addSubview:ratingctl];
+				[ratings release];
+				
+				[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
+				break;
+			}
+			case 2:
 				cell.text=@"Rating & Reviews";
 				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				break;
-			case 2:
+			case 3:
 			{
 //				cell.text=beerObj.description;
 				CGRect contentRect=CGRectMake(10, 10, 0, 0);
@@ -228,6 +241,35 @@
     return cell;
 }
 
+-(void)ratingButtonTapped:(id)sender event:(id)event
+{
+	UISegmentedControl* segctl=(UISegmentedControl*)sender;
+	NSInteger rating=segctl.selectedSegmentIndex;
+	
+	// Send the review to the site
+	
+	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&beer_id=%@", rating+1, beerID];
+	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
+
+	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://dev:81/api/post/beer_review"]
+											cachePolicy:NSURLRequestUseProtocolCachePolicy
+											timeoutInterval:60.0];
+	[theRequest setHTTPMethod:@"POST"];
+	[theRequest setHTTPBody:body];
+	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+	
+	// create the connection with the request and start loading the data
+	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+	
+	if (theConnection) {
+		// Create the NSMutableData that will hold
+		// the received data
+		// receivedData is declared as a method instance elsewhere
+		reviewPostResponse=[[NSMutableData data] retain];
+	} else {
+		// TODO: inform the user that the download could not be made
+	}	
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Navigation logic may go here. Create and push another view controller.
@@ -367,6 +409,61 @@
 {
 }
 
+
+// NSURLConnection delegate methods
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    // this method is called when the server has determined that it
+    // has enough information to create the NSURLResponse
+	
+    // it can be called multiple times, for example in the case of a
+    // redirect, so each time we reset the data.
+    // receivedData is declared as a method instance elsewhere
+    [reviewPostResponse setLength:0];
+	
+	NSHTTPURLResponse* httprsp=(NSHTTPURLResponse*)response;
+	NSInteger n=httprsp.statusCode;
+	
+	if (n==401)
+	{
+		[appdel login];
+	}
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    // append the new data to the receivedData
+    // receivedData is declared as a method instance elsewhere
+    [reviewPostResponse appendData:data];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    // release the connection, and the data object
+    [connection release];
+	
+    // receivedData is declared as a method instance elsewhere
+    [reviewPostResponse release];
+	
+    // inform the user
+    NSLog(@"Connection failed! Error - %@ %@",
+          [error localizedDescription],
+          [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
+	
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+
+{
+    // do something with the data
+    // receivedData is declared as a method instance elsewhere
+    NSLog(@"Succeeded! Received %d bytes of data",[reviewPostResponse length]);
+	
+    // release the connection, and the data object
+    [connection release];
+    [reviewPostResponse release];
+}
 
 @end
 

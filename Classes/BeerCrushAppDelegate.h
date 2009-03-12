@@ -14,7 +14,7 @@
 	UINavigationController* nav;
 	UISearchBar* mySearchBar;
 	UIApplication* app;
-
+	
 //	NSArray* searchResultsList;
 
 }
@@ -24,6 +24,8 @@
 @property (nonatomic, retain) UINavigationController* nav;
 @property (nonatomic, retain) UISearchBar* mySearchBar;
 @property (nonatomic, retain) UIApplication* app;
+
+-(void)login;
 
 @end
 

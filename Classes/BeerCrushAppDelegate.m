@@ -28,7 +28,6 @@
 @synthesize mySearchBar;
 @synthesize app;
 
-
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
     
 	self.app=application;
@@ -150,6 +149,98 @@
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
+}
+
+// Login
+-(void)login
+{
+	NSString* bodystr=[[NSString alloc] initWithFormat:@"email=%@&password=%@", @"troy.hakala@gmail.com", @"foo"];
+	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
+
+	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://dev:81/api/login"]
+															cachePolicy:NSURLRequestUseProtocolCachePolicy
+														timeoutInterval:60.0];
+	[theRequest setHTTPMethod:@"POST"];
+	[theRequest setHTTPBody:body];
+	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+	
+	// create the connection with the request and start loading the data
+	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+
+	if (theConnection) {
+		// We don't care about any response document, just the cookies
+	} else {
+		// TODO: inform the user that the download could not be made
+	}	
+}
+
+
+// NSURLConnection delegate methods
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    // this method is called when the server has determined that it
+    // has enough information to create the NSURLResponse
+	
+    // it can be called multiple times, for example in the case of a
+    // redirect, so each time we reset the data.
+    // receivedData is declared as a method instance elsewhere
+	
+	NSHTTPURLResponse* httprsp=(NSHTTPURLResponse*)response;
+	NSInteger n=httprsp.statusCode;
+	
+	if (n!=200)
+	{
+		// TODO: alert the user that the login failed
+	}
+	else
+	{
+//		NSArray* cookies=[NSHTTPCookie cookiesWithResponseHeaderFields:httprsp.allHeaderFields forURL:@""];
+//		// Look through cookies and find userid and usrkey
+//		for (int i=0; i < [cookies count]; ++i) {
+//			NSHTTPCookie* c=[cookies objectAtIndex:i];
+//			if ([c.name isEqualToString:@"userid"])
+//			{
+//				userid=c.value;
+//			}
+//			else if ([c.name isEqualToString:@"usrkey"])
+//			{
+//				usrkey=c.value;
+//			}
+//		}
+	}
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    // append the new data to the receivedData
+    // receivedData is declared as a method instance elsewhere
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    // release the connection, and the data object
+    [connection release];
+	
+    // receivedData is declared as a method instance elsewhere
+	
+    // inform the user
+    NSLog(@"Connection failed! Error - %@ %@",
+          [error localizedDescription],
+          [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
+	
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+
+{
+    // do something with the data
+    // receivedData is declared as a method instance elsewhere
+//    NSLog(@"Succeeded! Received %d bytes of data",[reviewPostResponse length]);
+	
+    // release the connection, and the data object
+    [connection release];
+//    [reviewPostResponse release];
 }
 
 @end
