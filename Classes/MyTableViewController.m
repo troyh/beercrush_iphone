@@ -9,7 +9,7 @@
 #import "MyTableViewController.h"
 #import "BreweryTableViewController.h"
 #import "BeerTableViewController.h"
-
+#import "PlaceTableViewController.h"
 
 
 //@interface SearchResultObject : NSObject
@@ -221,7 +221,13 @@
 		[appdel.nav pushViewController: btvc animated:YES];
 		[btvc release];
 	}
-		
+	else if (t == Place)
+	{
+		PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID: [searchResultsList_id objectAtIndex:indexPath.row] app:app appDelegate: appdel];
+		[appdel.nav pushViewController: btvc animated:YES];
+		[btvc release];
+	}
+	
 	
 //	UIViewController *anotherViewController = [[UIViewController alloc] initWithNibName:nil bundle:nil];
 //

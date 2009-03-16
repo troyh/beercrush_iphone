@@ -55,7 +55,10 @@
 	ctl=[tabBarController.viewControllers objectAtIndex:1];
 	ctl.title=@"Places";
 	ctl=[tabBarController.viewControllers objectAtIndex:2];
-	[ctl pushViewController:[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain] animated:NO ];
+	NearbyTableViewController* ntvc=[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain];
+	ntvc.app=app;
+	ntvc.appdel=self;
+	[ctl pushViewController:ntvc animated:NO ];
 	ctl.title=@"Nearby";
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:3];

@@ -10,12 +10,21 @@
 #import <CoreLocation/CLLocationManager.h>
 
 #import "NearbyTableViewController.h"
+#import "MyTableViewController.h"
+#import "BreweryTableViewController.h"
+#import "PlaceTableViewController.h"
+#import "BeerTableViewController.h"
 
 @implementation PlaceObject
 
 @synthesize name;
 @synthesize place_id;
 @synthesize loc;
+@synthesize street;
+@synthesize city;
+@synthesize state;
+@synthesize zip;
+@synthesize phone;
 
 -(id)init
 {
@@ -27,6 +36,8 @@
 
 @implementation NearbyTableViewController
 
+@synthesize app;
+@synthesize appdel;
 @synthesize myLocation;
 @synthesize currentElemValue;
 @synthesize placeObject;
@@ -154,6 +165,30 @@
 	// AnotherViewController *anotherViewController = [[AnotherViewController alloc] initWithNibName:@"AnotherView" bundle:nil];
 	// [self.navigationController pushViewController:anotherViewController];
 	// [anotherViewController release];
+	
+	ResultType t=Place;
+//	if (t == Brewer)
+//	{
+//		BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:[searchResultsList_id objectAtIndex:indexPath.row] app:app appDelegate: appdel];
+//		[appdel.nav pushViewController: btvc animated:YES];
+//		[btvc release];
+//	}
+//	else if (t == Beer)
+//	{
+//		BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID: [searchResultsList_id objectAtIndex:indexPath.row] app:app appDelegate: appdel];
+//		[appdel.nav pushViewController: btvc animated:YES];
+//		[btvc release];
+//	}
+	if (t == Place)
+	{
+		PlaceObject* po=[places objectAtIndex:indexPath.row];
+		PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID:po.place_id  app:app appDelegate: appdel];
+		UINavigationController* nav=(UINavigationController*)self.parentViewController;
+		[nav pushViewController: btvc animated:YES];
+		[btvc release];
+	}
+	
+	
 }
 
 
@@ -223,11 +258,11 @@
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
 	// Clear any old data
-	if (self.currentElemValue)
-		[self.currentElemValue release];
+//	if (self.currentElemValue)
+//		[self.currentElemValue release];
 	self.currentElemValue=nil;
-	if (self.places)
-		[self.places release];
+//	if (self.places)
+//		[self.places release];
 	self.places=nil;
 }
 
