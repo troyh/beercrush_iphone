@@ -32,28 +32,46 @@
     
 	self.app=application;
 	
+	tabBarController.viewControllers=[[NSArray alloc] initWithObjects:[[UINavigationController alloc] initWithNibName:nil bundle:nil],
+																	  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
+																	  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
+																	  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
+																	  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
+																	  nil];
+	
+	UINavigationController* ctl=[tabBarController.viewControllers objectAtIndex:0];
+	ctl.title=@"Beers";
+	tabBarController.selectedViewController=ctl;
+	// Create the search bar
+	CGRect sbf=application.keyWindow.frame;
+	sbf.size.height=44;
+	mySearchBar=[[UISearchBar alloc] initWithFrame:sbf];
+	mySearchBar.delegate=self;
+//	[tabBarController.view addSubview: mySearchBar];
+	[ctl.view addSubview: mySearchBar];
+
+	ctl=[tabBarController.viewControllers objectAtIndex:1];
+	ctl.title=@"Places";
+	ctl=[tabBarController.viewControllers objectAtIndex:2];
+	ctl.title=@"Nearby";
+	ctl=[tabBarController.viewControllers objectAtIndex:3];
+	ctl.title=@"My Reviews";
+	ctl=[tabBarController.viewControllers objectAtIndex:4];
+	ctl.title=@"Wish List";
+	
+
     // Add the tab bar controller's current view as a subview of the window
     [window addSubview:tabBarController.view];
 	
 //	UIViewController* searchResultsController=[[[UIViewController alloc] initWithNibName:nil bundle:nil] autorelease];
 //	nav=[[UINavigationController alloc] initWithRootViewController:searchResultsController];
-	nav=[[UINavigationController alloc] initWithNibName:nil bundle:nil];
-	nav.navigationBarHidden=YES;
+//	nav=[[UINavigationController alloc] initWithNibName:nil bundle:nil];
+	nav=[tabBarController.viewControllers objectAtIndex:0];
+//	nav.navigationBarHidden=YES;
 	nav.delegate=self;
+	
+	[tabBarController retain];
 
-	CGRect sbf=application.keyWindow.frame;
-//	tabBarController.view.frame=sbf;
-	sbf.size.height=44;
-//	sbf.origin.y=40;
-//	nav.navigationBar.frame=sbf;
-	
-	[tabBarController.view addSubview:nav.view];
-	
-	// Create the search bar
-//	sbf.origin.y=0;
-	mySearchBar=[[UISearchBar alloc] initWithFrame:sbf];
-	mySearchBar.delegate=self;
-	[tabBarController.view addSubview: mySearchBar];
 }
 
 
@@ -82,10 +100,10 @@
 	[searchBar resignFirstResponder];
 
 	// Display them in a UITableView
-	CGRect f=tabBarController.view.frame;
-	f.size.height=411-searchBar.frame.size.height;
-	f.origin.y=searchBar.frame.size.height;
-	nav.view.frame=f;
+//	CGRect f=tabBarController.view.frame;
+//	f.size.height=411-searchBar.frame.size.height;
+//	f.origin.y=searchBar.frame.size.height;
+//	nav.view.frame=f;
 
 	MyTableViewController* tbl=nil;
 	if (nav.viewControllers.count)
@@ -138,12 +156,12 @@
 {
 	if (navigationController.viewControllers.count==1)
 	{
-		CGRect f=tabBarController.view.frame;
-		f.size.height=411-mySearchBar.frame.size.height;
-		f.origin.y=mySearchBar.frame.size.height;
-		nav.view.frame=f;
+//		CGRect f=tabBarController.view.frame;
+//		f.size.height=411-mySearchBar.frame.size.height;
+//		f.origin.y=mySearchBar.frame.size.height;
+//		nav.view.frame=f;
 		mySearchBar.hidden=NO;
-		nav.navigationBarHidden=YES;
+//		nav.navigationBarHidden=YES;
 	}
 }
 

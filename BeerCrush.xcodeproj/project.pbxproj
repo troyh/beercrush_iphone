@@ -11,17 +11,13 @@
 		05C636500F55C1CE00B1C78A /* BeerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */; };
 		05C637900F56018100B1C78A /* ReviewsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */; };
 		05C637F40F56087F00B1C78A /* BeerListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C637F30F56087F00B1C78A /* BeerListTableViewController.m */; };
-		05C9A9BC0F531DE40020B102 /* ThirdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05C9A9BB0F531DE40020B102 /* ThirdView.xib */; };
 		05C9AC400F53756F0020B102 /* MyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C9AC3F0F53756F0020B102 /* MyTableViewController.m */; };
-		05C9ACC50F53865E0020B102 /* Beer View.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05C9ACC40F53865E0020B102 /* Beer View.xib */; };
 		1D3623260D0F684500981E51 /* BeerCrushAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28216C970DB411BC00E5133A /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28216C960DB411BC00E5133A /* FirstViewController.m */; };
-		282CCBFE0DB6C98000C4EA27 /* SecondView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 282CCBFD0DB6C98000C4EA27 /* SecondView.xib */; };
 		288765080DF74369002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765070DF74369002DB57D /* CoreGraphics.framework */; };
-		28AD73880D9D96C1002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD73870D9D96C1002E5188 /* MainWindow.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,10 +29,8 @@
 		05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReviewsTableViewController.m; sourceTree = "<group>"; };
 		05C637F20F56087F00B1C78A /* BeerListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeerListTableViewController.h; sourceTree = "<group>"; };
 		05C637F30F56087F00B1C78A /* BeerListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeerListTableViewController.m; sourceTree = "<group>"; };
-		05C9A9BB0F531DE40020B102 /* ThirdView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ThirdView.xib; sourceTree = "<group>"; };
 		05C9AC3E0F53756F0020B102 /* MyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableViewController.h; sourceTree = "<group>"; };
 		05C9AC3F0F53756F0020B102 /* MyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableViewController.m; sourceTree = "<group>"; };
-		05C9ACC40F53865E0020B102 /* Beer View.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "Beer View.xib"; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeerCrushAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeerCrushAppDelegate.m; sourceTree = "<group>"; };
@@ -44,10 +38,8 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		28216C950DB411BC00E5133A /* FirstViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
 		28216C960DB411BC00E5133A /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
-		282CCBFD0DB6C98000C4EA27 /* SecondView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SecondView.xib; sourceTree = "<group>"; };
 		288765070DF74369002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AB4B0D9B1048005BE974 /* BeerCrush_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeerCrush_Prefix.pch; sourceTree = "<group>"; };
-		28AD73870D9D96C1002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,7 +95,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				05C9ACC40F53865E0020B102 /* Beer View.xib */,
 			);
 			name = BeerCrush;
 			sourceTree = "<group>";
@@ -120,9 +111,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				05C9A9BB0F531DE40020B102 /* ThirdView.xib */,
-				282CCBFD0DB6C98000C4EA27 /* SecondView.xib */,
-				28AD73870D9D96C1002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 			);
 			name = Resources;
@@ -180,10 +168,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28AD73880D9D96C1002E5188 /* MainWindow.xib in Resources */,
-				282CCBFE0DB6C98000C4EA27 /* SecondView.xib in Resources */,
-				05C9A9BC0F531DE40020B102 /* ThirdView.xib in Resources */,
-				05C9ACC50F53865E0020B102 /* Beer View.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

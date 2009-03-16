@@ -162,7 +162,6 @@
 					NSArray* ratings=[NSArray arrayWithObjects:@" 1 ",@" 2 ",@" 3 ",@" 4 ",@" 5 ",nil];
 					UISegmentedControl* ratingctl=[[UISegmentedControl alloc] initWithItems:ratings];
 					[cell.contentView addSubview:ratingctl];
-					[ratings release];
 					
 					[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
 					break;
