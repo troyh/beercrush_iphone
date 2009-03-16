@@ -266,12 +266,15 @@
 								<string>080E96DDFE201D6D7F000001</string>
 								<string>29B97315FDCFA39411CA2CEA</string>
 								<string>29B97317FDCFA39411CA2CEA</string>
+								<string>29B97323FDCFA39411CA2CEA</string>
+								<string>05F3C0730F6EF69400603ED1</string>
+								<string>05F3C0760F6EF69400603ED1</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>5</integer>
+									<integer>17</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -314,7 +317,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>BreweryTableViewController.m</string>
+								<string>NearbyTableViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -322,11 +325,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>BreweryTableViewController.m</string>
+										<string>NearbyTableViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>05F3BFB00F6EEC2100603ED1</string>
+										<string>05F3C1870F6F142C00603ED1</string>
 										<key>history</key>
 										<array>
 											<string>05C9AA760F53458A0020B102</string>
@@ -342,14 +345,16 @@
 											<string>05F3BD900F6ED2E000603ED1</string>
 											<string>05F3BDB50F6ED47500603ED1</string>
 											<string>05F3BDF10F6ED8DC00603ED1</string>
-											<string>05F3BDF30F6ED8DC00603ED1</string>
 											<string>05F3BF050F6EE39300603ED1</string>
 											<string>05F3BF5E0F6EE91500603ED1</string>
 											<string>05F3BF600F6EE91500603ED1</string>
 											<string>05F3BF610F6EE91500603ED1</string>
-											<string>05F3BFA80F6EEC0D00603ED1</string>
 											<string>05F3BFAD0F6EEC2100603ED1</string>
-											<string>05F3BFAE0F6EEC2100603ED1</string>
+											<string>05F3C0880F6EF78400603ED1</string>
+											<string>05F3C0C10F6F06A300603ED1</string>
+											<string>05F3C1230F6F0AC800603ED1</string>
+											<string>05F3C12E0F6F0BD000603ED1</string>
+											<string>05F3C12F0F6F0BD000603ED1</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -535,6 +540,53 @@
 											<string>05F3BFA50F6EEBFA00603ED1</string>
 											<string>05F3BFAA0F6EEC0D00603ED1</string>
 											<string>05F3BFAF0F6EEC2100603ED1</string>
+											<string>05F3BFBD0F6EF02B00603ED1</string>
+											<string>05F3BFBE0F6EF02B00603ED1</string>
+											<string>05F3BFBF0F6EF02B00603ED1</string>
+											<string>05F3BFC00F6EF02B00603ED1</string>
+											<string>05F3BFC10F6EF02B00603ED1</string>
+											<string>05F3BFC20F6EF02B00603ED1</string>
+											<string>05F3C08B0F6EF78400603ED1</string>
+											<string>05F3C08C0F6EF78400603ED1</string>
+											<string>05F3C08D0F6EF78400603ED1</string>
+											<string>05F3C08E0F6EF78400603ED1</string>
+											<string>05F3C08F0F6EF78400603ED1</string>
+											<string>05F3C0900F6EF78400603ED1</string>
+											<string>05F3C0910F6EF78400603ED1</string>
+											<string>05F3C0C40F6F06A300603ED1</string>
+											<string>05F3C0C50F6F06A300603ED1</string>
+											<string>05F3C0C60F6F06A300603ED1</string>
+											<string>05F3C0C70F6F06A300603ED1</string>
+											<string>05F3C0C80F6F06A300603ED1</string>
+											<string>05F3C0C90F6F06A300603ED1</string>
+											<string>05F3C0CA0F6F06A300603ED1</string>
+											<string>05F3C0CB0F6F06A300603ED1</string>
+											<string>05F3C0CC0F6F06A300603ED1</string>
+											<string>05F3C0CD0F6F06A300603ED1</string>
+											<string>05F3C0CE0F6F06A300603ED1</string>
+											<string>05F3C0CF0F6F06A300603ED1</string>
+											<string>05F3C0D00F6F06A300603ED1</string>
+											<string>05F3C0D10F6F06A300603ED1</string>
+											<string>05F3C0D20F6F06A300603ED1</string>
+											<string>05F3C0D30F6F06A300603ED1</string>
+											<string>05F3C0D40F6F06A300603ED1</string>
+											<string>05F3C0D50F6F06A300603ED1</string>
+											<string>05F3C0D60F6F06A300603ED1</string>
+											<string>05F3C0D70F6F06A300603ED1</string>
+											<string>05F3C0D80F6F06A300603ED1</string>
+											<string>05F3C0D90F6F06A300603ED1</string>
+											<string>05F3C0DA0F6F06A300603ED1</string>
+											<string>05F3C0DB0F6F06A300603ED1</string>
+											<string>05F3C0DC0F6F06A300603ED1</string>
+											<string>05F3C0DD0F6F06A300603ED1</string>
+											<string>05F3C0DE0F6F06A300603ED1</string>
+											<string>05F3C0DF0F6F06A300603ED1</string>
+											<string>05F3C0ED0F6F07BF00603ED1</string>
+											<string>05F3C0EE0F6F07BF00603ED1</string>
+											<string>05F3C1250F6F0AC800603ED1</string>
+											<string>05F3C1260F6F0AC800603ED1</string>
+											<string>05F3C1300F6F0BD000603ED1</string>
+											<string>05F3C1310F6F0BD000603ED1</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -730,9 +782,9 @@
 	<array>
 		<string>05F3BDA90F6ED2E000603ED1</string>
 		<string>05F3BDAA0F6ED2E000603ED1</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>056D28710F5319CA00A1F223</string>
+		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/troy/Documents/BeerCrush/BeerCrush.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -1113,7 +1165,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C78EAAD065D492600B07095</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>Identifier</key>

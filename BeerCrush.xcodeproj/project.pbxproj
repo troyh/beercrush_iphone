@@ -12,6 +12,8 @@
 		05C637900F56018100B1C78A /* ReviewsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */; };
 		05C637F40F56087F00B1C78A /* BeerListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C637F30F56087F00B1C78A /* BeerListTableViewController.m */; };
 		05C9AC400F53756F0020B102 /* MyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C9AC3F0F53756F0020B102 /* MyTableViewController.m */; };
+		05F3BFB30F6EEDCB00603ED1 /* NearbyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */; };
+		05F3C0740F6EF69400603ED1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05F3C0730F6EF69400603ED1 /* CoreLocation.framework */; };
 		1D3623260D0F684500981E51 /* BeerCrushAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -31,6 +33,9 @@
 		05C637F30F56087F00B1C78A /* BeerListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeerListTableViewController.m; sourceTree = "<group>"; };
 		05C9AC3E0F53756F0020B102 /* MyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableViewController.h; sourceTree = "<group>"; };
 		05C9AC3F0F53756F0020B102 /* MyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableViewController.m; sourceTree = "<group>"; };
+		05F3BFB10F6EEDCB00603ED1 /* NearbyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NearbyTableViewController.h; sourceTree = "<group>"; };
+		05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NearbyTableViewController.m; sourceTree = "<group>"; };
+		05F3C0730F6EF69400603ED1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeerCrushAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeerCrushAppDelegate.m; sourceTree = "<group>"; };
@@ -52,6 +57,7 @@
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765080DF74369002DB57D /* CoreGraphics.framework in Frameworks */,
+				05F3C0740F6EF69400603ED1 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +81,8 @@
 				05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */,
 				05C637F20F56087F00B1C78A /* BeerListTableViewController.h */,
 				05C637F30F56087F00B1C78A /* BeerListTableViewController.m */,
+				05F3BFB10F6EEDCB00603ED1 /* NearbyTableViewController.h */,
+				05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -119,6 +127,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				05F3C0730F6EF69400603ED1 /* CoreLocation.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765070DF74369002DB57D /* CoreGraphics.framework */,
@@ -186,6 +195,7 @@
 				05C636500F55C1CE00B1C78A /* BeerTableViewController.m in Sources */,
 				05C637900F56018100B1C78A /* ReviewsTableViewController.m in Sources */,
 				05C637F40F56087F00B1C78A /* BeerListTableViewController.m in Sources */,
+				05F3BFB30F6EEDCB00603ED1 /* NearbyTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

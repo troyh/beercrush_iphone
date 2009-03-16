@@ -8,6 +8,7 @@
 
 #import "BeerCrushAppDelegate.h"
 #import "MyTableViewController.h"
+#import "NearbyTableViewController.h"
 
 @implementation BeerObject
 
@@ -40,11 +41,12 @@
 																	  nil];
 	
 	UINavigationController* ctl=[tabBarController.viewControllers objectAtIndex:0];
+	nav=ctl;
 	ctl.title=@"Beers";
 	tabBarController.selectedViewController=ctl;
 	// Create the search bar
 	CGRect sbf=application.keyWindow.frame;
-	sbf.size.height=44;
+	sbf.size.height=44; // TODO: make this the height of the navbar
 	mySearchBar=[[UISearchBar alloc] initWithFrame:sbf];
 	mySearchBar.delegate=self;
 //	[tabBarController.view addSubview: mySearchBar];
@@ -53,7 +55,9 @@
 	ctl=[tabBarController.viewControllers objectAtIndex:1];
 	ctl.title=@"Places";
 	ctl=[tabBarController.viewControllers objectAtIndex:2];
+	[ctl pushViewController:[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain] animated:NO ];
 	ctl.title=@"Nearby";
+	
 	ctl=[tabBarController.viewControllers objectAtIndex:3];
 	ctl.title=@"My Reviews";
 	ctl=[tabBarController.viewControllers objectAtIndex:4];
@@ -66,7 +70,7 @@
 //	UIViewController* searchResultsController=[[[UIViewController alloc] initWithNibName:nil bundle:nil] autorelease];
 //	nav=[[UINavigationController alloc] initWithRootViewController:searchResultsController];
 //	nav=[[UINavigationController alloc] initWithNibName:nil bundle:nil];
-	nav=[tabBarController.viewControllers objectAtIndex:0];
+//	nav=[tabBarController.viewControllers objectAtIndex:0];
 //	nav.navigationBarHidden=YES;
 	nav.delegate=self;
 	
