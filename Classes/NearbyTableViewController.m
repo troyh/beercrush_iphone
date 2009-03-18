@@ -17,17 +17,20 @@
 
 @implementation PlaceObject
 
-@synthesize name;
 @synthesize place_id;
-@synthesize loc;
-@synthesize street;
-@synthesize city;
-@synthesize state;
-@synthesize zip;
-@synthesize phone;
+@synthesize data;
+//@synthesize name;
+//@synthesize loc;
+//@synthesize street;
+//@synthesize city;
+//@synthesize state;
+//@synthesize zip;
+//@synthesize phone;
+//@synthesize uri;
 
 -(id)init
 {
+	self.data=[[NSMutableDictionary alloc] initWithCapacity:10];
 	return self;
 }
 
@@ -140,12 +143,12 @@
     
     // Set up the cell...
 	PlaceObject* p=[places objectAtIndex:indexPath.row];
-	CLLocationDistance dist=[p.loc getDistanceFrom:myLocation];
+	CLLocationDistance dist=[[p.data valueForKey:@"loc"] getDistanceFrom:myLocation];
 //	cell.font=[UIFont boldSystemFontOfSize:14.0];
 	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
 	UILabel* nametext=[[[UILabel alloc] initWithFrame:CGRectMake(10.0, 5.0, 300.0, 20.0)] autorelease];
-	nametext.text=p.name;
+	nametext.text=[p.data valueForKey:@"name"];
 	nametext.font=[UIFont boldSystemFontOfSize:16.0];
 //	nametext.textColor=[UIColor grayColor];
 	[cell.contentView addSubview:nametext];
@@ -280,7 +283,8 @@
 	else if ([elementName isEqualToString:@"place"])
 	{
 		placeObject=[[PlaceObject alloc] init];
-		placeObject.loc=[[CLLocation alloc] initWithLatitude:[[attributeDict valueForKey:@"latitude"] doubleValue] longitude:[[attributeDict valueForKey:@"longitude"] doubleValue]];
+		CLLocation* loc=[[CLLocation alloc] initWithLatitude:[[attributeDict valueForKey:@"latitude"] doubleValue] longitude:[[attributeDict valueForKey:@"longitude"] doubleValue]];
+		[placeObject.data setObject:loc forKey:@"loc"];
 		placeObject.place_id=[attributeDict valueForKey:@"id"];
 	}
 	else if ([elementName isEqualToString:@"name"])
@@ -300,7 +304,7 @@
 	if (self.currentElemValue)
 	{
 		if ([elementName isEqualToString:@"name"])
-			placeObject.name=currentElemValue;
+			[placeObject.data setObject:currentElemValue forKey:@"name"];
 
 		self.currentElemValue=nil;
 	}

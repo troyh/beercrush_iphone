@@ -10,6 +10,7 @@
 #import "PlaceTableViewController.h"
 #import "ReviewsTableViewController.h"
 #import "BeerListTableViewController.h"
+#import "PhoneNumberEditTableViewController.h"
 
 
 @implementation PlaceTableViewController
@@ -39,8 +40,16 @@
 	[parser setDelegate:self];
 	[parser parse];
 	
-	
 	return self;
+}
+
+- (void)editPlace:(id)sender
+{
+//	UIBarButtonItem* button=(UIBarButtonItem*)sender;
+//	button.style=UIBarButtonItemStyleDone;
+	self.editButtonItem.style=UIBarButtonItemStyleDone;
+	self.title=@"Editing Place";
+	[self.tableView setEditing:(self.tableView.editing==YES?NO:YES) animated:YES];
 }
 
 /*
@@ -52,20 +61,25 @@
  }
  */
 
-/*
+
  - (void)viewDidLoad {
  [super viewDidLoad];
  
- // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
- // self.navigationItem.rightBarButtonItem = self.editButtonItem;
- }
- */
+// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+	 self.navigationItem.rightBarButtonItem = self.editButtonItem;
+//	 SEL oldsel=self.navigationItem.rightBarButtonItem.action;
+//	 self.navigationItem.rightBarButtonItem.action=@selector(editPlace:);
+//	 UINavigationController* nav=(UINavigationController*)self.parentViewController;
+//	 [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPlace)]];
 
-/*
- - (void)viewWillAppear:(BOOL)animated {
- [super viewWillAppear:animated];
  }
- */
+
+
+ - (void)viewWillAppear:(BOOL)animated {
+	 [super viewWillAppear:animated];
+	 [self.tableView reloadData]; // Reload data because we may come back from an editing view controller
+ }
+
 /*
  - (void)viewDidAppear:(BOOL)animated {
  [super viewDidAppear:animated];
@@ -121,8 +135,6 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-	// TODO: If we don't have the data yet, request it from the server
-	
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -130,14 +142,16 @@
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
     }
     
+	tableView.allowsSelectionDuringEditing=YES;
+
     // Set up the cell...
 	switch (indexPath.section) 
 	{
 		case 0:
 			switch (indexPath.row)
-		{
+			{
 			case 0:
-				cell.text=placeObject.name;
+				cell.text=[placeObject.data valueForKey:@"name"];
 				cell.font=[UIFont boldSystemFontOfSize:20];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
@@ -160,28 +174,33 @@
 				break;
 			default:
 				break;
-		}
+			}
 			break;
 		case 1:
 			switch (indexPath.row)
-		{
+			{
 			case 0:
-				cell.text=@"Web site";
+				cell.text=[placeObject.data valueForKey:@"uri"];
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 				break;
 			case 1:
-				cell.text=[NSString stringWithFormat:@"%@, %@ %@ %@",placeObject.street,placeObject.city,placeObject.state,placeObject.zip];
+				cell.text=[NSString stringWithFormat:@"%@, %@ %@ %@",
+						[placeObject.data objectForKey:@"street"],
+						[placeObject.data objectForKey:@"city"],
+						[placeObject.data objectForKey:@"state"],
+						[placeObject.data objectForKey:@"zip"]];
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
 			case 2:
-				cell.text=placeObject.phone;
-				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
-				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+				cell.text=[placeObject.data valueForKey:@"phone"];
+				cell.font=[UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+//				cell.selectionStyle=UITableViewCellSelectionStyleBlue;
+				cell.hidesAccessoryWhenEditing=NO;
 				break;
 			default:
 				break;
-		}
+			}
 	}
 	
 	
@@ -220,37 +239,143 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	if (indexPath.section == 0 && indexPath.row == 2) // Reviews is the 2nd row in the 1st section
+
+	if (indexPath.section == 0 && indexPath.row == 0) // Name is the 1st row in the 1st section
 	{
-		ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.placeID dataType:Place];
-		[self.navigationController pushViewController: rtvc animated:YES];
-		[rtvc release];
+		if (self.tableView.editing==YES)
+		{
+			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			pnetvc.data=placeObject.data;
+			pnetvc.editableValueName=@"name";
+			pnetvc.editableValueType=kBeerCrushEditableValueTypeText;
+			[self.navigationController pushViewController:pnetvc animated:YES];
+			[pnetvc release];
+		}
+	}
+	else if (indexPath.section == 0 && indexPath.row == 2) // Reviews is the 2nd row in the 1st section
+	{
+		if (self.tableView.editing==YES)
+		{
+			// Do nothing
+		}
+		else
+		{
+			ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.placeID dataType:Place];
+			[self.navigationController pushViewController: rtvc animated:YES];
+			[rtvc release];
+		}
 	}
 	else if (indexPath.section == 0 && indexPath.row == 3) // List of beers is the 3rd row in the 1st section
 	{
-		BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.placeID andApp:self.app];
-		[self.navigationController pushViewController: bltvc animated:YES];
-		[bltvc release];
+		if (self.tableView.editing==YES)
+		{
+			// Do nothing
+		}
+		else
+		{
+			BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.placeID andApp:self.app];
+			[self.navigationController pushViewController: bltvc animated:YES];
+			[bltvc release];
+		}
 	}
-	else if (indexPath.section == 1 && indexPath.row == 0) // Address cell
+	else if (indexPath.section == 1 && indexPath.row == 0) // Web site cell
 	{
-		[app openURL:[[NSURL alloc] initWithString: [NSString stringWithFormat:@"http://maps.google.com/maps?g=%@, %@ %@ %@",placeObject.street,placeObject.city,placeObject.state,placeObject.zip]]];
+		if (self.tableView.editing==YES)
+		{
+			// Go to view to edit URL
+			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			pnetvc.data=placeObject.data;
+			pnetvc.editableValueName=@"uri";
+			pnetvc.editableValueType=kBeerCrushEditableValueTypeURI;
+			[self.navigationController pushViewController:pnetvc animated:YES];
+			[pnetvc release];
+		}
+		else
+		{
+//			[app openURL:[[NSURL alloc] initWithString: placeObject.uri ]];
+		}
 	}
-	else if (indexPath.section == 1 && indexPath.row == 1) // Phone number cell
+	else if (indexPath.section == 1 && indexPath.row == 1) // Address cell
 	{
-		[app openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", placeObject.phone ]]];
+		if (self.tableView.editing==YES)
+		{
+			// Go to view to edit address
+		}
+		else
+		{
+			[app openURL:[[NSURL alloc] initWithString: [NSString stringWithFormat:@"http://maps.google.com/maps?g=%@, %@ %@ %@",
+				[placeObject.data valueForKey:@"street"],
+				[placeObject.data valueForKey:@"city"],
+				[placeObject.data valueForKey:@"state"],
+				[placeObject.data valueForKey:@"zip"]]]];
+		}
+	}
+	else if (indexPath.section == 1 && indexPath.row == 2) // Phone number cell
+	{
+		if (self.tableView.editing==YES)
+		{
+			// Go to view to edit phone number
+			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			pnetvc.editableValueName=@"phone";
+			pnetvc.data=placeObject.data;
+			pnetvc.editableValueType=kBeerCrushEditableValueTypePhoneNumber;
+			[self.navigationController pushViewController:pnetvc animated:YES];
+			[pnetvc release];
+		}
+		else
+		{
+			[app openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", [placeObject.data valueForKey:@"phone"] ]]];
+		}
 	}
 }
 
+// The accessory view is on the right side of each cell. We'll use a "disclosure" indicator in editing mode,
+// to indicate to the user that selecting the row will navigate to a new view where details can be edited.
+- (UITableViewCellAccessoryType)tableView:(UITableView *)aTableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {
+    return (self.editing) ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+}
 
-/*
+
  // Override to support conditional editing of the table view.
  - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
  // Return NO if you do not want the specified item to be editable.
- return YES;
+	 switch (indexPath.section) 
+	 {
+		 case 0:
+			 switch (indexPath.row)
+		 {
+			 case 0:
+				 break;
+			 case 1:
+				 break;
+			 case 2:
+				 return NO;
+				 break;
+			 case 3:
+				 return NO;
+				 break;
+			 default:
+				 break;
+		 }
+			 break;
+		 case 1:
+			 switch (indexPath.row)
+		 {
+			 case 0:
+				 break;
+			 case 1:
+				 break;
+			 case 2:
+//				 return NO;
+				 break;
+			 default:
+				 break;
+		 }
+	 }
+	 
+	 return YES;
  }
- */
+
 
 
 /*
@@ -320,17 +445,18 @@
 	if (self.currentElemValue)
 	{
 		if ([elementName isEqualToString:@"name"])
-			placeObject.name=currentElemValue;
+			[placeObject.data setObject:currentElemValue forKey:@"name"];
 		else if ([elementName isEqualToString:@"street"])
-			placeObject.street=currentElemValue;
+			[placeObject.data setObject:currentElemValue forKey:@"street"];
 		else if ([elementName isEqualToString:@"city"])
-			placeObject.city=currentElemValue;
+			[placeObject.data setObject:currentElemValue forKey:@"city"];
+
 		else if ([elementName isEqualToString:@"state"])
-			placeObject.state=currentElemValue;
+			[placeObject.data setObject:currentElemValue forKey:@"state"];
 		else if ([elementName isEqualToString:@"zip"])
-			placeObject.zip=currentElemValue;
+			[placeObject.data setObject:currentElemValue forKey:@"zip"];
 		else if ([elementName isEqualToString:@"phone"])
-			placeObject.phone=currentElemValue;
+			[placeObject.data setObject:currentElemValue forKey:@"phone"];
 		
 		self.currentElemValue=nil;
 	}

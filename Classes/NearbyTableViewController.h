@@ -12,24 +12,28 @@
 
 @interface PlaceObject: NSObject
 {
-	NSString* name;
 	NSString* place_id;
-	CLLocation* loc;
-	NSString* street;
-	NSString* city;
-	NSString* state;
-	NSString* zip;
-	NSString* phone;
+	NSMutableDictionary* data;
+//	NSString* name;
+//	CLLocation* loc;
+//	NSString* street;
+//	NSString* city;
+//	NSString* state;
+//	NSString* zip;
+//	NSString* phone;
+//	NSString* uri;
 }
 
-@property (nonatomic,retain) NSString* name;
 @property (nonatomic,retain) NSString* place_id;
-@property (nonatomic,retain) CLLocation* loc;
-@property (nonatomic,retain) NSString* street;
-@property (nonatomic,retain) NSString* city;
-@property (nonatomic,retain) NSString* state;
-@property (nonatomic,retain) NSString* zip;
-@property (nonatomic,retain) NSString* phone;
+@property (nonatomic,retain) NSMutableDictionary* data;
+//@property (nonatomic,retain) NSString* name;
+//@property (nonatomic,retain) CLLocation* loc;
+//@property (nonatomic,retain) NSString* street;
+//@property (nonatomic,retain) NSString* city;
+//@property (nonatomic,retain) NSString* state;
+//@property (nonatomic,retain) NSString* zip;
+//@property (nonatomic,retain) NSString* phone;
+//@property (nonatomic,retain) NSString* uri;
 
 -(id)init;
 

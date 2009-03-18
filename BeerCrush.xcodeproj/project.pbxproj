@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		053653960F703F99000389C1 /* PhoneNumberEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */; };
 		05C6364D0F55C03C00B1C78A /* BreweryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */; };
 		05C636500F55C1CE00B1C78A /* BeerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */; };
 		05C637900F56018100B1C78A /* ReviewsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */; };
@@ -24,6 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		053653940F703F99000389C1 /* PhoneNumberEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneNumberEditTableViewController.h; sourceTree = "<group>"; };
+		053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneNumberEditTableViewController.m; sourceTree = "<group>"; };
 		05C6364B0F55C03C00B1C78A /* BreweryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreweryTableViewController.h; sourceTree = "<group>"; };
 		05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BreweryTableViewController.m; sourceTree = "<group>"; };
 		05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeerTableViewController.h; sourceTree = "<group>"; };
@@ -88,6 +91,8 @@
 				05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */,
 				05F3C1880F6F150400603ED1 /* PlaceTableViewController.h */,
 				05F3C1890F6F150400603ED1 /* PlaceTableViewController.m */,
+				053653940F703F99000389C1 /* PhoneNumberEditTableViewController.h */,
+				053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -202,6 +207,7 @@
 				05C637F40F56087F00B1C78A /* BeerListTableViewController.m in Sources */,
 				05F3BFB30F6EEDCB00603ED1 /* NearbyTableViewController.m in Sources */,
 				05F3C18A0F6F150400603ED1 /* PlaceTableViewController.m in Sources */,
+				053653960F703F99000389C1 /* PhoneNumberEditTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

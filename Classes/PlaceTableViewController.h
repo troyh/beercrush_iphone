@@ -28,5 +28,6 @@
 @property (nonatomic,retain) NSMutableData* reviewPostResponse;
 
 -(id) initWithPlaceID:(NSString*)place_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d;
+- (void)editPlace:(id)sender;
 
 @end
