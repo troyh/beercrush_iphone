@@ -38,7 +38,7 @@
 @synthesize app;
 @synthesize appdel;
 @synthesize currentElemValue;
-@synthesize reviewPostResponse;
+@synthesize xmlPostResponse;
 
 -(id) initWithBreweryID:(NSString*)brewery_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
 {
@@ -114,6 +114,60 @@
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
 }
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated
+{
+	[super setEditing:editing animated:animated];
+	
+	if (editing==YES)
+	{
+		self.title=@"Editing Brewery";
+	}
+	else
+	{
+		// Save data to server
+		NSString* bodystr=[[NSString alloc] initWithFormat:
+						   @"brewery_id=%@&"
+						   "address/city=%@&"
+						   "address/state=%@&"
+						   "address/street=%@&"
+						   "address/zip=%@&"
+						   "name=%@&"			
+						   "phone=%@",
+						   self.breweryID,
+						   [[self.breweryObject.data objectForKey:@"address"] objectForKey:@"city"],
+						   [[self.breweryObject.data objectForKey:@"address"] objectForKey:@"state"],
+						   [[self.breweryObject.data objectForKey:@"address"] objectForKey:@"street"],
+						   [[self.breweryObject.data objectForKey:@"address"] objectForKey:@"zip"],
+						   [self.breweryObject.data objectForKey:@"name"],
+						   [self.breweryObject.data objectForKey:@"phone"]];
+		
+		NSLog(@"POST data:%@",bodystr);
+		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://dev:81/api/edit/brewery"]
+																cachePolicy:NSURLRequestUseProtocolCachePolicy
+															timeoutInterval:60.0];
+		[theRequest setHTTPMethod:@"POST"];
+		[theRequest setHTTPBody:body];
+		[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+		
+		// create the connection with the request and start loading the data
+		NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+		
+		if (theConnection) {
+			// Create the NSMutableData that will hold
+			// the received data
+			// receivedData is declared as a method instance elsewhere
+			xmlPostResponse=[[NSMutableData data] retain];
+		} else {
+			// TODO: inform the user that the download could not be made
+		}	
+		
+		self.title=@"Brewery";
+	}
+}
+
 
 #pragma mark Table view methods
 
@@ -241,7 +295,7 @@
 		// Create the NSMutableData that will hold
 		// the received data
 		// receivedData is declared as a method instance elsewhere
-		reviewPostResponse=[[NSMutableData data] retain];
+		xmlPostResponse=[[NSMutableData data] retain];
 	} else {
 		// TODO: inform the user that the download could not be made
 	}	
@@ -454,22 +508,25 @@
     // it can be called multiple times, for example in the case of a
     // redirect, so each time we reset the data.
     // receivedData is declared as a method instance elsewhere
-    [reviewPostResponse setLength:0];
+    [xmlPostResponse setLength:0];
 	
 	NSHTTPURLResponse* httprsp=(NSHTTPURLResponse*)response;
 	NSInteger n=httprsp.statusCode;
 	
 	if (n==401)
 	{
+		NSLog(@"Need to login...");
 		[appdel login];
 	}
+	else
+		NSLog(@"Status code:%u",n);
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     // append the new data to the receivedData
     // receivedData is declared as a method instance elsewhere
-    [reviewPostResponse appendData:data];
+    [xmlPostResponse appendData:data];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
@@ -478,7 +535,7 @@
     [connection release];
 	
     // receivedData is declared as a method instance elsewhere
-    [reviewPostResponse release];
+    [xmlPostResponse release];
 	
     // inform the user
     NSLog(@"Connection failed! Error - %@ %@",
@@ -492,11 +549,12 @@
 {
     // do something with the data
     // receivedData is declared as a method instance elsewhere
-    NSLog(@"Succeeded! Received %d bytes of data",[reviewPostResponse length]);
+    NSLog(@"Succeeded! Received %d bytes of data",[xmlPostResponse length]);
+	NSLog(@"Response doc:%s",(char*)[xmlPostResponse mutableBytes]);
 	
     // release the connection, and the data object
     [connection release];
-    [reviewPostResponse release];
+    [xmlPostResponse release];
 }
 
 @end

@@ -272,7 +272,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>19</integer>
+									<integer>9</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -315,7 +315,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>PhoneNumberEditTableViewController.m</string>
+								<string>BreweryTableViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -323,11 +323,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>PhoneNumberEditTableViewController.m</string>
+										<string>BreweryTableViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>05944C1D0F71B5360043D34C</string>
+										<string>05944C3C0F71BEB30043D34C</string>
 										<key>history</key>
 										<array>
 											<string>05C9AA760F53458A0020B102</string>
@@ -341,21 +341,21 @@
 											<string>05F3C1A60F6F1A8D00603ED1</string>
 											<string>053655D20F70978B000389C1</string>
 											<string>059449E90F7162BA0043D34C</string>
-											<string>05944A880F71876B0043D34C</string>
 											<string>05944AB50F71881A0043D34C</string>
 											<string>05944AF10F7197A00043D34C</string>
 											<string>05944B190F719A180043D34C</string>
 											<string>05944B320F719B050043D34C</string>
 											<string>05944B3D0F719C7F0043D34C</string>
-											<string>05944B690F71A1540043D34C</string>
 											<string>05944B800F71A5A30043D34C</string>
 											<string>05944BC90F71ADAD0043D34C</string>
 											<string>05944BCA0F71ADAD0043D34C</string>
 											<string>05944BCB0F71ADAD0043D34C</string>
 											<string>05944BE10F71B1220043D34C</string>
 											<string>05944C020F71B30A0043D34C</string>
-											<string>05944C180F71B4F70043D34C</string>
-											<string>05944C190F71B4F70043D34C</string>
+											<string>05944C1E0F71B6860043D34C</string>
+											<string>05944C270F71B7780043D34C</string>
+											<string>05944C280F71B7780043D34C</string>
+											<string>05944C290F71B7780043D34C</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -552,6 +552,17 @@
 											<string>05944C0A0F71B30A0043D34C</string>
 											<string>05944C100F71B3F20043D34C</string>
 											<string>05944C1A0F71B4F70043D34C</string>
+											<string>05944C210F71B6860043D34C</string>
+											<string>05944C220F71B6860043D34C</string>
+											<string>05944C2A0F71B7780043D34C</string>
+											<string>05944C2B0F71B7780043D34C</string>
+											<string>05944C2C0F71B7780043D34C</string>
+											<string>05944C2D0F71B7780043D34C</string>
+											<string>05944C2E0F71B7780043D34C</string>
+											<string>05944C2F0F71B7780043D34C</string>
+											<string>05944C300F71B7780043D34C</string>
+											<string>05944C310F71B7780043D34C</string>
+											<string>05944C320F71B7780043D34C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -747,9 +758,9 @@
 	<array>
 		<string>05944A420F71783A0043D34C</string>
 		<string>05944A380F7177D00043D34C</string>
+		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>056D28710F5319CA00A1F223</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/troy/Documents/BeerCrush/BeerCrush.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
