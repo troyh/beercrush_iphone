@@ -12,12 +12,19 @@
 
 @implementation BeerObject
 
-@synthesize name;
-@synthesize attribs;
-@synthesize description;
-@synthesize style;
-@synthesize abv;
-@synthesize ibu;
+@synthesize data;
+//@synthesize name;
+//@synthesize attribs;
+//@synthesize description;
+//@synthesize style;
+//@synthesize abv;
+//@synthesize ibu;
+
+-(id)init
+{
+	self.data=[[NSMutableDictionary alloc] initWithCapacity:5];
+	return self;
+}
 
 @end
 

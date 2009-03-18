@@ -31,6 +31,8 @@
 -(id)init
 {
 	self.data=[[NSMutableDictionary alloc] initWithCapacity:10];
+	if (self.data)
+		[self.data setObject:[[NSMutableDictionary alloc] initWithCapacity:4] forKey:@"address"];
 	return self;
 }
 

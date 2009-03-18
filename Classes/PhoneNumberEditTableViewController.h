@@ -13,20 +13,25 @@ typedef enum _BeerCrushEditableValueType {
 	kBeerCrushEditableValueTypeURI,
 	kBeerCrushEditableValueTypePhoneNumber,
 	kBeerCrushEditableValueTypeAddress,
+	kBeerCrushEditableValueTypeMultiText,
+	kBeerCrushEditableValueTypeNumber,
+	kBeerCrushEditableValueTypeChoice
 } BeerCrushEditableValueType;
 
 @interface PhoneNumberEditTableViewController : UITableViewController {
 	NSMutableDictionary* data;
 	NSString* editableValueName;
 	BeerCrushEditableValueType editableValueType;
+	NSArray* editableChoices;
 	
-	UIControl* editingControl;
+	NSMutableArray* editingControls;
 }
 
-@property (nonatomic,retain) UIControl* editingControl;
+@property (nonatomic,retain) NSMutableArray* editingControls;
 @property (nonatomic,retain) NSMutableDictionary* data;
 @property (nonatomic,retain) NSString* editableValueName;
 @property (nonatomic) BeerCrushEditableValueType editableValueType;
+@property (nonatomic,retain) NSArray* editableChoices;
 
 - (void)saveChanges:(id)sender;
 - (void)cancelChanges:(id)sender;

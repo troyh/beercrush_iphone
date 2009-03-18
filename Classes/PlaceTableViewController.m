@@ -184,18 +184,22 @@
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 				break;
 			case 1:
+			{
+				NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+					
 				cell.text=[NSString stringWithFormat:@"%@, %@ %@ %@",
-						[placeObject.data objectForKey:@"street"],
-						[placeObject.data objectForKey:@"city"],
-						[placeObject.data objectForKey:@"state"],
-						[placeObject.data objectForKey:@"zip"]];
+						[addr objectForKey:@"street"],
+						[addr objectForKey:@"city"],
+						[addr objectForKey:@"state"],
+						[addr objectForKey:@"zip"]];
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
+			}
 			case 2:
 				cell.text=[placeObject.data valueForKey:@"phone"];
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
-//				cell.selectionStyle=UITableViewCellSelectionStyleBlue;
+				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				cell.hidesAccessoryWhenEditing=NO;
 				break;
 			default:
@@ -300,14 +304,22 @@
 		if (self.tableView.editing==YES)
 		{
 			// Go to view to edit address
+			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			pnetvc.data=placeObject.data;
+			pnetvc.editableValueName=@"address";
+			pnetvc.editableValueType=kBeerCrushEditableValueTypeAddress;
+			[self.navigationController pushViewController:pnetvc animated:YES];
+			[pnetvc release];
 		}
 		else
 		{
+			NSMutableDictionary* addr=[placeObject.data valueForKey:@"address"];
+			
 			[app openURL:[[NSURL alloc] initWithString: [NSString stringWithFormat:@"http://maps.google.com/maps?g=%@, %@ %@ %@",
-				[placeObject.data valueForKey:@"street"],
-				[placeObject.data valueForKey:@"city"],
-				[placeObject.data valueForKey:@"state"],
-				[placeObject.data valueForKey:@"zip"]]]];
+														 [addr valueForKey:@"street"],
+														 [addr valueForKey:@"city"],
+														 [addr valueForKey:@"state"],
+														 [addr valueForKey:@"zip"]]]];
 		}
 	}
 	else if (indexPath.section == 1 && indexPath.row == 2) // Phone number cell
@@ -447,14 +459,25 @@
 		if ([elementName isEqualToString:@"name"])
 			[placeObject.data setObject:currentElemValue forKey:@"name"];
 		else if ([elementName isEqualToString:@"street"])
-			[placeObject.data setObject:currentElemValue forKey:@"street"];
+		{
+			NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+			[addr setObject:currentElemValue forKey:@"street"];
+		}
 		else if ([elementName isEqualToString:@"city"])
-			[placeObject.data setObject:currentElemValue forKey:@"city"];
-
+		{
+			NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+			[addr setObject:currentElemValue forKey:@"city"];
+		}
 		else if ([elementName isEqualToString:@"state"])
-			[placeObject.data setObject:currentElemValue forKey:@"state"];
+		{
+			NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+			[addr setObject:currentElemValue forKey:@"state"];
+		}
 		else if ([elementName isEqualToString:@"zip"])
-			[placeObject.data setObject:currentElemValue forKey:@"zip"];
+		{
+			NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+			[addr setObject:currentElemValue forKey:@"zip"];
+		}
 		else if ([elementName isEqualToString:@"phone"])
 			[placeObject.data setObject:currentElemValue forKey:@"phone"];
 		

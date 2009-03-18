@@ -9,6 +9,7 @@
 #import <CoreGraphics/CGGeometry.h>
 #import "BeerTableViewController.h"
 #import "ReviewsTableViewController.h"
+#import "PhoneNumberEditTableViewController.h"
 
 @implementation BeerTableViewController
 
@@ -26,7 +27,7 @@
 	self.app=a;
 	self.appdel=d;
 
-	self.beerObj=[BeerObject alloc];
+	self.beerObj=[[BeerObject alloc] init];
 	self.title=@"Beer";
 	
 	[super initWithStyle:UITableViewStyleGrouped];
@@ -49,14 +50,12 @@
 }
 */
 
-/*
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
-*/
 
 /*
 - (void)viewWillAppear:(BOOL)animated {
@@ -129,7 +128,7 @@
 				break;
 			case 3:
 			{
-				CGSize sz=[beerObj.description sizeWithFont:[UIFont systemFontOfSize: [UIFont smallSystemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
+				CGSize sz=[[beerObj.data objectForKey:@"description"] sizeWithFont:[UIFont systemFontOfSize: [UIFont smallSystemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
 				return sz.height+20.0f;
 				break;
 			}
@@ -161,7 +160,9 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
     }
-    
+
+	tableView.allowsSelectionDuringEditing=YES;
+
     // Set up the cell...
 	switch (indexPath.section) 
 	{
@@ -169,7 +170,7 @@
 			switch (indexPath.row)
 		{
 			case 0:
-				cell.text=beerObj.name;
+				cell.text=[beerObj.data objectForKey:@"name"];
 				cell.font=[UIFont boldSystemFontOfSize:20];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
@@ -192,9 +193,9 @@
 //				cell.text=beerObj.description;
 				CGRect contentRect=CGRectMake(10, 10, 0, 0);
 				UILabel* textView=[[UILabel alloc] initWithFrame:contentRect];
-				textView.text=beerObj.description;
+				textView.text=[beerObj.data objectForKey:@"description"];
 				
-				contentRect.size=[textView.text sizeWithFont:[UIFont systemFontOfSize: [UIFont smallSystemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f)];
+				contentRect.size=[textView.text sizeWithFont:[UIFont systemFontOfSize: [UIFont systemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f)];
 				textView.frame=contentRect;
 				
 				textView.numberOfLines=0;
@@ -219,19 +220,25 @@
 			switch (indexPath.row)
 		{
 			case 0:
-				cell.text=beerObj.style;
+				cell.text=[beerObj.data objectForKey:@"style"];
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
 			case 1:
-				if (beerObj.ibu)
-					cell.text=[[NSString alloc] initWithFormat:@"%u%% ABV %u IBUs", beerObj.abv, beerObj.ibu];
+			{
+				NSString* ibu=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"ibu"];
+				NSString* abv=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"abv"];
+				if ([ibu length])
+					cell.text=[[NSString alloc] initWithFormat:@"%u%% ABV %u IBUs", 
+							   abv.intValue, 
+							   ibu.intValue];
 				else
-					cell.text=[[NSString alloc] initWithFormat:@"%u%% ABV", beerObj.abv];
+					cell.text=[[NSString alloc] initWithFormat:@"%u%% ABV", abv.intValue];
 				
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
+			}
 			default:
 				break;
 		}
@@ -272,12 +279,76 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	if (indexPath.section == 0 && indexPath.row == 1) 
+	if (indexPath.section == 0 && indexPath.row == 0) // Beer name
+	{
+		if (self.tableView.editing==YES)
+		{
+			// Go to view to edit name
+			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			pnetvc.data=beerObj.data;
+			pnetvc.editableValueName=@"name";
+			pnetvc.editableValueType=kBeerCrushEditableValueTypeText;
+			[self.navigationController pushViewController:pnetvc animated:YES];
+			[pnetvc release];
+		}
+		else
+		{
+		}
+	}
+	else if (indexPath.section == 0 && indexPath.row == 2) // Ratings & Reviews
 	{
 		ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.beerID dataType:Beer];
 		[self.navigationController pushViewController: rtvc animated:YES];
 		[rtvc release];
+	}
+	else if (indexPath.section == 0 && indexPath.row == 3) // Beer description
+	{
+		if (self.tableView.editing==YES)
+		{
+			// Go to view to edit description
+			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			pnetvc.data=beerObj.data;
+			pnetvc.editableValueName=@"description";
+			pnetvc.editableValueType=kBeerCrushEditableValueTypeMultiText;
+			[self.navigationController pushViewController:pnetvc animated:YES];
+			[pnetvc release];
+		}
+		else
+		{
+		}
+	}
+	else if (indexPath.section == 1 && indexPath.row == 0) // Beer style
+	{
+		if (self.tableView.editing==YES)
+		{
+			// Go to view to edit style
+			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			pnetvc.data=beerObj.data;
+			pnetvc.editableValueName=@"style";
+			pnetvc.editableChoices=[NSArray arrayWithObjects:@"Stout",@"IPA",nil];
+			pnetvc.editableValueType=kBeerCrushEditableValueTypeChoice;
+			[self.navigationController pushViewController:pnetvc animated:YES];
+			[pnetvc release];
+		}
+		else
+		{
+		}
+	}
+	else if (indexPath.section == 1 && indexPath.row == 1) // Beer ABV & IBUs
+	{
+		if (self.tableView.editing==YES)
+		{
+			// Go to view to edit style
+			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			pnetvc.data=beerObj.data;
+			pnetvc.editableValueName=@"abv";
+			pnetvc.editableValueType=kBeerCrushEditableValueTypeNumber;
+			[self.navigationController pushViewController:pnetvc animated:YES];
+			[pnetvc release];
+		}
+		else
+		{
+		}
 	}
 }
 
@@ -345,12 +416,7 @@
 	
 	if ([elementName isEqualToString:@"beer"])
 	{
-		NSString* s=[attributeDict valueForKey:@"abv"];
-		beerObj.abv=s.intValue;
-//		[s release];
-		s=[attributeDict valueForKey:@"ibu"];
-		beerObj.ibu=s.intValue;
-//		[s release];
+		[beerObj.data setObject:attributeDict forKey:@"attribs"];
 	}
 	else if ([elementName isEqualToString:@"name"])
 	{
@@ -377,16 +443,16 @@
 	{
 		if ([elementName isEqualToString:@"name"])
 		{
-			beerObj.name=currentElemValue;
+			[beerObj.data setObject:currentElemValue forKey:@"name"];
 		}
 		else if ([elementName isEqualToString:@"description"])
 		{
-			beerObj.description=currentElemValue;
+			[beerObj.data setObject:currentElemValue forKey:@"description"];
 		}
 		else if ([elementName isEqualToString:@"style"])
 		{
-			if ([beerObj.style length] == 0) // Only take the 1st style
-				beerObj.style=currentElemValue;
+			if ([[beerObj.data objectForKey:@"style"] length] == 0) // Only take the 1st style
+				[beerObj.data setObject:currentElemValue forKey:@"style"];
 		}
 		
 		self.currentElemValue=nil;

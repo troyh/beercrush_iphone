@@ -10,18 +10,22 @@
 #import "BreweryTableViewController.h"
 #import "ReviewsTableViewController.h"
 #import "BeerListTableViewController.h"
+#import "PhoneNumberEditTableViewController.h"
 
 @implementation BreweryObject
 
-@synthesize name;
-@synthesize street;
-@synthesize city;
-@synthesize state;
-@synthesize zip;
-@synthesize phone;
+@synthesize data;
+//@synthesize name;
+//@synthesize street;
+//@synthesize city;
+//@synthesize state;
+//@synthesize zip;
+//@synthesize phone;
 
 -(id)init
 {
+	self.data=[[NSMutableDictionary alloc] initWithCapacity:10];
+	[self.data setObject:[[NSMutableDictionary alloc] initWithCapacity:4] forKey:@"address"];
 	return self;
 }
 
@@ -68,20 +72,20 @@
 }
 */
 
-/*
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
-*/
 
-/*
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+	[self.tableView reloadData]; // Reload data because we may come back from an editing view controller
 }
-*/
+
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -145,6 +149,8 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
     }
+	
+	tableView.allowsSelectionDuringEditing=YES;
     
     // Set up the cell...
 	switch (indexPath.section) 
@@ -153,7 +159,7 @@
 			switch (indexPath.row)
 			{
 				case 0:
-					cell.text=breweryObject.name;
+					cell.text=[breweryObject.data objectForKey:@"name"];
 					cell.font=[UIFont boldSystemFontOfSize:20];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
@@ -186,12 +192,19 @@
 					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 					break;
 				case 1:
-					cell.text=[NSString stringWithFormat:@"%@, %@ %@ %@",breweryObject.street,breweryObject.city,breweryObject.state,breweryObject.zip];
+				{
+					NSMutableDictionary* addr=[breweryObject.data objectForKey:@"address"];
+					cell.text=[NSString stringWithFormat:@"%@, %@ %@ %@",
+											[addr objectForKey:@"street"],
+											[addr objectForKey:@"city"],
+											[addr objectForKey:@"state"],
+											[addr objectForKey:@"zip"]];
 					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
+				}
 				case 2:
-					cell.text=breweryObject.phone;
+					cell.text=[breweryObject.data objectForKey:@"phone"];
 					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
@@ -237,7 +250,20 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Navigation logic may go here. Create and push another view controller.
-	if (indexPath.section == 0 && indexPath.row == 2) // Reviews is the 2nd row in the 1st section
+	if (indexPath.section == 0 && indexPath.row == 0) // Brewery name
+	{
+		if (self.tableView.editing==YES)
+		{
+			// Go to view to edit name
+			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			pnetvc.data=breweryObject.data;
+			pnetvc.editableValueName=@"name";
+			pnetvc.editableValueType=kBeerCrushEditableValueTypeText;
+			[self.navigationController pushViewController:pnetvc animated:YES];
+			[pnetvc release];
+		}
+	}
+	else if (indexPath.section == 0 && indexPath.row == 2) // Reviews is the 2nd row in the 1st section
 	{
 		ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.breweryID dataType:Brewer];
 		[self.navigationController pushViewController: rtvc animated:YES];
@@ -249,13 +275,63 @@
 		[self.navigationController pushViewController: bltvc animated:YES];
 		[bltvc release];
 	}
-	else if (indexPath.section == 1 && indexPath.row == 0) // Address cell
+	else if (indexPath.section == 1 && indexPath.row == 0) // Web site cell
 	{
-		[app openURL:[[NSURL alloc] initWithString: [NSString stringWithFormat:@"http://maps.google.com/maps?g=%@, %@ %@ %@",breweryObject.street,breweryObject.city,breweryObject.state,breweryObject.zip]]];
+		if (self.tableView.editing==YES)
+		{
+			// Go to view to edit URI
+			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			pnetvc.data=breweryObject.data;
+			pnetvc.editableValueName=@"uri";
+			pnetvc.editableValueType=kBeerCrushEditableValueTypeURI;
+			[self.navigationController pushViewController:pnetvc animated:YES];
+			[pnetvc release];
+		}
+		else
+		{
+			NSString* uri=[breweryObject.data objectForKey:@"uri"];
+			if (uri && [uri length])
+				[app openURL:[[NSURL alloc] initWithString: uri]];
+		}
 	}
-	else if (indexPath.section == 1 && indexPath.row == 1) // Phone number cell
+	else if (indexPath.section == 1 && indexPath.row == 1) // Address cell
 	{
-		[app openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", breweryObject.phone ]]];
+		if (self.tableView.editing==YES)
+		{
+			// Go to view to edit address
+			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			pnetvc.data=breweryObject.data;
+			pnetvc.editableValueName=@"address";
+			pnetvc.editableValueType=kBeerCrushEditableValueTypeAddress;
+			[self.navigationController pushViewController:pnetvc animated:YES];
+			[pnetvc release];
+		}
+		else
+		{
+			NSMutableDictionary* addr=[breweryObject.data objectForKey:@"address"];
+			[app openURL:[[NSURL alloc] initWithString: [NSString stringWithFormat:@"http://maps.google.com/maps?g=%@, %@ %@ %@",
+														 [addr objectForKey:@"street"],
+														 [addr objectForKey:@"city"],
+														 [addr objectForKey:@"state"],
+														 [addr objectForKey:@"zip"]]]];
+		}
+	}
+	else if (indexPath.section == 1 && indexPath.row == 2) // Phone number cell
+	{
+		if (self.tableView.editing==YES)
+		{
+			// Go to view to edit phone
+			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			pnetvc.data=breweryObject.data;
+			pnetvc.editableValueName=@"phone";
+			pnetvc.editableValueType=kBeerCrushEditableValueTypePhoneNumber;
+			[self.navigationController pushViewController:pnetvc animated:YES];
+			[pnetvc release];
+		}
+		else
+		{
+			[app openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", [breweryObject.data objectForKey:@"phone"] ]]];
+		}
 	}
 }
 
@@ -336,17 +412,17 @@
 	if (self.currentElemValue)
 	{
 		if ([elementName isEqualToString:@"name"])
-			breweryObject.name=currentElemValue;
+			[breweryObject.data setObject:currentElemValue forKey:@"name"];
 		else if ([elementName isEqualToString:@"street"])
-			breweryObject.street=currentElemValue;
+			[[breweryObject.data objectForKey:@"address"] setObject:currentElemValue forKey:@"street"];
 		else if ([elementName isEqualToString:@"city"])
-			breweryObject.city=currentElemValue;
+			[[breweryObject.data objectForKey:@"address"] setObject:currentElemValue forKey:@"city"];
 		else if ([elementName isEqualToString:@"state"])
-			breweryObject.state=currentElemValue;
+			[[breweryObject.data objectForKey:@"address"] setObject:currentElemValue forKey:@"state"];
 		else if ([elementName isEqualToString:@"zip"])
-			breweryObject.zip=currentElemValue;
+			[[breweryObject.data objectForKey:@"address"] setObject:currentElemValue forKey:@"zip"];
 		else if ([elementName isEqualToString:@"phone"])
-			breweryObject.phone=currentElemValue;
+			[breweryObject.data setObject:currentElemValue forKey:@"phone"];
 		
 		self.currentElemValue=nil;
 	}

@@ -119,7 +119,7 @@
     
     // Set up the cell...
 	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
-	cell.text=[NSString stringWithFormat:@"%@", beer.name ];
+	cell.text=[NSString stringWithFormat:@"%@", [beer.data objectForKey:@"name"] ];
 	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
     return cell;
@@ -129,7 +129,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
 	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)self.app.delegate;
-	BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID:[beer.attribs valueForKey:@"id"]  app:self.app appDelegate:del];
+	BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID:[beer.data valueForKey:@"id"]  app:self.app appDelegate:del];
 	[del.nav pushViewController: btvc animated:YES];
 	[btvc release];
 }
@@ -213,9 +213,9 @@
 	{
 		if ([elementName isEqualToString:@"beer"])
 		{
-			BeerObject* beer=[BeerObject alloc];
-			beer.name=currentElemValue;
-			beer.attribs=currentElemAttribs;
+			BeerObject* beer=[[BeerObject alloc] init];
+			[beer.data setObject:currentElemValue forKey:@"name"];
+			[beer.data setObject:[currentElemAttribs objectForKey:@"id"] forKey:@"id"];
 			
 			[beerList addObject:beer];
 		}

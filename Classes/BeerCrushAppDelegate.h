@@ -31,20 +31,24 @@
 
 @interface BeerObject : NSObject
 {
-	NSString* name;
-	NSDictionary* attribs;
-	NSString* description;
-	NSString* style;
-	unsigned int abv;
-	unsigned int ibu;
+	NSMutableDictionary* data;
+//	NSString* name;
+//	NSDictionary* attribs;
+//	NSString* description;
+//	NSString* style;
+//	unsigned int abv;
+//	unsigned int ibu;
 }
 
-@property (nonatomic, retain) NSString* name;
-@property (nonatomic, retain) NSDictionary* attribs;
-@property (nonatomic, retain) NSString* description;
-@property (nonatomic, retain) NSString* style;
-@property (nonatomic) unsigned int abv;
-@property (nonatomic) unsigned int ibu;
+@property (nonatomic,retain) NSMutableDictionary* data;
+//@property (nonatomic, retain) NSString* name;
+//@property (nonatomic, retain) NSDictionary* attribs;
+//@property (nonatomic, retain) NSString* description;
+//@property (nonatomic, retain) NSString* style;
+//@property (nonatomic) unsigned int abv;
+//@property (nonatomic) unsigned int ibu;
+
+-(id)init;
 
 @end
 

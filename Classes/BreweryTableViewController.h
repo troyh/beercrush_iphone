@@ -11,20 +11,22 @@
 
 @interface BreweryObject: NSObject
 {
-	NSString* name;
-	NSString* street;
-	NSString* city;
-	NSString* state;
-	NSString* zip;
-	NSString* phone;
+	NSMutableDictionary* data;
+//	NSString* name;
+//	NSString* street;
+//	NSString* city;
+//	NSString* state;
+//	NSString* zip;
+//	NSString* phone;
 }
 
-@property (nonatomic,retain) NSString* name;
-@property (nonatomic,retain) NSString* street;
-@property (nonatomic,retain) NSString* city;
-@property (nonatomic,retain) NSString* state;
-@property (nonatomic,retain) NSString* zip;
-@property (nonatomic,retain) NSString* phone;
+@property (nonatomic,retain) NSMutableDictionary* data;
+//@property (nonatomic,retain) NSString* name;
+//@property (nonatomic,retain) NSString* street;
+//@property (nonatomic,retain) NSString* city;
+//@property (nonatomic,retain) NSString* state;
+//@property (nonatomic,retain) NSString* zip;
+//@property (nonatomic,retain) NSString* phone;
 
 -(id)init;
 
