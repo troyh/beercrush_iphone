@@ -20,7 +20,7 @@
 @synthesize app;
 @synthesize appdel;
 @synthesize currentElemValue;
-@synthesize reviewPostResponse;
+@synthesize xmlPostResponse;
 
 -(id) initWithPlaceID:(NSString*)place_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
 {
@@ -43,14 +43,70 @@
 	return self;
 }
 
-- (void)editPlace:(id)sender
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
-//	UIBarButtonItem* button=(UIBarButtonItem*)sender;
-//	button.style=UIBarButtonItemStyleDone;
-	self.editButtonItem.style=UIBarButtonItemStyleDone;
-	self.title=@"Editing Place";
-	[self.tableView setEditing:(self.tableView.editing==YES?NO:YES) animated:YES];
+	[super setEditing:editing animated:animated];
+	
+	if (editing==YES)
+	{
+		self.title=@"Editing Place";
+	}
+	else
+	{
+		// Save data to server
+		NSString* bodystr=[[NSString alloc] initWithFormat:
+									@"place_id=%@&"
+									"address/city=%@&"
+									"address/state=%@&"
+									"address/street=%@&"
+									"address/zip=%@&"
+									"name=%@&"			
+									"phone=%@&"
+									"uri=%@",
+									self.placeID,
+									[[self.placeObject.data objectForKey:@"address"] objectForKey:@"city"],
+									[[self.placeObject.data objectForKey:@"address"] objectForKey:@"state"],
+									[[self.placeObject.data objectForKey:@"address"] objectForKey:@"street"],
+									[[self.placeObject.data objectForKey:@"address"] objectForKey:@"zip"],
+									[self.placeObject.data objectForKey:@"name"],
+									[self.placeObject.data objectForKey:@"phone"],
+									[self.placeObject.data objectForKey:@"uri"]];
+		
+		NSLog(@"POST data:%@",bodystr);
+		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://dev:81/api/edit/place"]
+																cachePolicy:NSURLRequestUseProtocolCachePolicy
+															timeoutInterval:60.0];
+		[theRequest setHTTPMethod:@"POST"];
+		[theRequest setHTTPBody:body];
+		[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+		
+		// create the connection with the request and start loading the data
+		NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+		
+		if (theConnection) {
+			// Create the NSMutableData that will hold
+			// the received data
+			// receivedData is declared as a method instance elsewhere
+			xmlPostResponse=[[NSMutableData data] retain];
+		} else {
+			// TODO: inform the user that the download could not be made
+		}	
+		
+		self.title=@"Place";
+	}
 }
+
+
+//- (void)editPlace:(id)sender
+//{
+////	UIBarButtonItem* button=(UIBarButtonItem*)sender;
+////	button.style=UIBarButtonItemStyleDone;
+//	self.editButtonItem.style=UIBarButtonItemStyleDone;
+//	self.title=@"Editing Place";
+//	[self.tableView setEditing:(self.tableView.editing==YES?NO:YES) animated:YES];
+//}
 
 /*
  - (id)initWithStyle:(UITableViewStyle)style {
@@ -235,7 +291,7 @@
 		// Create the NSMutableData that will hold
 		// the received data
 		// receivedData is declared as a method instance elsewhere
-		reviewPostResponse=[[NSMutableData data] retain];
+		xmlPostResponse=[[NSMutableData data] retain];
 	} else {
 		// TODO: inform the user that the download could not be made
 	}	
@@ -445,6 +501,7 @@
 	    [elementName isEqualToString:@"state"] ||
 	    [elementName isEqualToString:@"zip"] ||
 	    [elementName isEqualToString:@"country"] ||
+	    [elementName isEqualToString:@"uri"] ||
 	    [elementName isEqualToString:@"phone"]
 		)
 	{
@@ -478,6 +535,8 @@
 			NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
 			[addr setObject:currentElemValue forKey:@"zip"];
 		}
+		else if ([elementName isEqualToString:@"uri"])
+			[placeObject.data setObject:currentElemValue forKey:@"uri"];
 		else if ([elementName isEqualToString:@"phone"])
 			[placeObject.data setObject:currentElemValue forKey:@"phone"];
 		
@@ -511,22 +570,26 @@
     // it can be called multiple times, for example in the case of a
     // redirect, so each time we reset the data.
     // receivedData is declared as a method instance elsewhere
-    [reviewPostResponse setLength:0];
+    [xmlPostResponse setLength:0];
 	
 	NSHTTPURLResponse* httprsp=(NSHTTPURLResponse*)response;
 	NSInteger n=httprsp.statusCode;
 	
 	if (n==401)
 	{
+		NSLog(@"Need to login...");
 		[appdel login];
+		// TODO: once logged in, re-try the HTTP request
 	}
+	else
+		NSLog(@"Status code:%u",n);
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     // append the new data to the receivedData
     // receivedData is declared as a method instance elsewhere
-    [reviewPostResponse appendData:data];
+    [xmlPostResponse appendData:data];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
@@ -535,7 +598,7 @@
     [connection release];
 	
     // receivedData is declared as a method instance elsewhere
-    [reviewPostResponse release];
+    [xmlPostResponse release];
 	
     // inform the user
     NSLog(@"Connection failed! Error - %@ %@",
@@ -549,12 +612,14 @@
 {
     // do something with the data
     // receivedData is declared as a method instance elsewhere
-    NSLog(@"Succeeded! Received %d bytes of data",[reviewPostResponse length]);
+    NSLog(@"PlaceTableViewController:connectionDidFinishLoading Succeeded! Received %d bytes of data",[xmlPostResponse length]);
+	NSLog(@"Response doc:%s",(char*)[xmlPostResponse mutableBytes]);
 	
     // release the connection, and the data object
     [connection release];
-    [reviewPostResponse release];
+    [xmlPostResponse release];
 }
+
 
 @end
 

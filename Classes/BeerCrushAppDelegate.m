@@ -35,6 +35,7 @@
 @synthesize nav;
 @synthesize mySearchBar;
 @synthesize app;
+@synthesize xmlPostResponse;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
     
@@ -201,6 +202,7 @@
 
 	if (theConnection) {
 		// We don't care about any response document, just the cookies
+		xmlPostResponse=[[NSMutableData data] retain];
 	} else {
 		// TODO: inform the user that the download could not be made
 	}	
@@ -224,9 +226,11 @@
 	if (n!=200)
 	{
 		// TODO: alert the user that the login failed
+		NSLog(@"Login failed.");
 	}
 	else
 	{
+		NSLog(@"Login successful.");
 //		NSArray* cookies=[NSHTTPCookie cookiesWithResponseHeaderFields:httprsp.allHeaderFields forURL:@""];
 //		// Look through cookies and find userid and usrkey
 //		for (int i=0; i < [cookies count]; ++i) {
@@ -247,6 +251,7 @@
 {
     // append the new data to the receivedData
     // receivedData is declared as a method instance elsewhere
+    [xmlPostResponse appendData:data];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
@@ -257,7 +262,7 @@
     // receivedData is declared as a method instance elsewhere
 	
     // inform the user
-    NSLog(@"Connection failed! Error - %@ %@",
+    NSLog(@"Login failed! Error - %@ %@",
           [error localizedDescription],
           [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
 	
@@ -269,6 +274,7 @@
     // do something with the data
     // receivedData is declared as a method instance elsewhere
 //    NSLog(@"Succeeded! Received %d bytes of data",[reviewPostResponse length]);
+	NSLog(@"Login response:%s",(char*)[xmlPostResponse mutableBytes]);
 	
     // release the connection, and the data object
     [connection release];

@@ -17,7 +17,7 @@
 	//	NSMutableArray* breweryInfo;
 	PlaceObject* placeObject;
 	NSMutableString* currentElemValue;
-	NSMutableData* reviewPostResponse;
+	NSMutableData* xmlPostResponse;
 }
 
 @property (nonatomic,retain) NSString* placeID;
@@ -25,9 +25,9 @@
 @property (nonatomic,retain) UIApplication* app;
 @property (nonatomic,retain) BeerCrushAppDelegate* appdel;
 @property (nonatomic,retain) NSMutableString* currentElemValue;
-@property (nonatomic,retain) NSMutableData* reviewPostResponse;
+@property (nonatomic,retain) NSMutableData* xmlPostResponse;
 
 -(id) initWithPlaceID:(NSString*)place_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d;
-- (void)editPlace:(id)sender;
+//- (void)editPlace:(id)sender;
 
 @end

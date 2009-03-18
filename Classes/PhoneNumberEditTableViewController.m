@@ -21,6 +21,8 @@
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:style]) {
     }
+	
+	self.editingControls=[[NSMutableArray alloc] initWithCapacity:5];
     return self;
 }
 
@@ -46,7 +48,7 @@
 		case kBeerCrushEditableValueTypePhoneNumber:
 		case kBeerCrushEditableValueTypeText:
 		{
-			UITextField* fld=(UITextField*)[editingControls objectAtIndex:0]; // Should just be 1
+			UITextField* fld=(UITextField*)[self.editingControls objectAtIndex:0]; // Should just be 1
 			[self.data setObject:fld.text forKey:self.editableValueName];
 			break;
 		}

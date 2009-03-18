@@ -32,7 +32,12 @@
 {
 	self.data=[[NSMutableDictionary alloc] initWithCapacity:10];
 	if (self.data)
+	{
+		[self.data setObject:@"" forKey:@"name"];
+		[self.data setObject:@"" forKey:@"uri"];
+		[self.data setObject:@"" forKey:@"phone"];
 		[self.data setObject:[[NSMutableDictionary alloc] initWithCapacity:4] forKey:@"address"];
+	}
 	return self;
 }
 

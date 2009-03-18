@@ -16,6 +16,7 @@
 	UIApplication* app;
 	
 //	NSArray* searchResultsList;
+	NSMutableData* xmlPostResponse;
 
 }
 
@@ -24,6 +25,7 @@
 @property (nonatomic, retain) UINavigationController* nav;
 @property (nonatomic, retain) UISearchBar* mySearchBar;
 @property (nonatomic, retain) UIApplication* app;
+@property (nonatomic, retain) NSMutableData* xmlPostResponse;
 
 -(void)login;
 
