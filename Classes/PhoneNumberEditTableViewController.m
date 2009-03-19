@@ -151,14 +151,16 @@
 		{
 			CGRect f=cell.frame;
 			f.size.width-=20;
+//			f.size.height-=5;
 			f.origin.x+=10;
+//			f.origin.y+=5;
 			UITextField* fld=[[UITextField alloc] initWithFrame:f];
 
 			if ([[self.data objectForKey:self.editableValueName] isKindOfClass:[NSString class]])
 				fld.text=[self.data objectForKey:self.editableValueName];
 			else
 				fld.text=@"";
-			fld.font=[UIFont systemFontOfSize: 20.0];
+			fld.font=[UIFont systemFontOfSize: 40.0];
 			fld.textAlignment=UITextAlignmentCenter;
 			fld.clearButtonMode=UITextFieldViewModeWhileEditing;
 			fld.adjustsFontSizeToFitWidth=YES;
@@ -198,11 +200,13 @@
 		}
 		case kBeerCrushEditableValueTypeAddress:
 		{
+			BOOL bOnStreet=NO;
 			NSString* addr_field;
 			switch (indexPath.row)
 			{
 				case 0: // Street
 					addr_field=@"street";
+					bOnStreet=YES;
 					break;
 				case 1: // City
 					addr_field=@"city";
@@ -229,7 +233,7 @@
 				fld.text=[addr objectForKey:addr_field];
 			else
 				fld.text=@"";
-			fld.font=[UIFont systemFontOfSize:14.0];
+			fld.font=[UIFont systemFontOfSize:40.0];
 			fld.textAlignment=UITextAlignmentCenter;
 			fld.clearButtonMode=UITextFieldViewModeWhileEditing;
 			fld.adjustsFontSizeToFitWidth=YES;
@@ -240,7 +244,10 @@
 				fld.keyboardType=UIKeyboardTypeDefault;
 			
 			[cell addSubview:fld];
-			[self.editingControls addObject:fld];
+			if (bOnStreet) // Make sure Street is the first item in the array so it becomes first responder in viewDidAppear()
+				[self.editingControls insertObject:fld atIndex:0];
+			else
+				[self.editingControls addObject:fld];
 			break;
 		}
 		case kBeerCrushEditableValueTypeNumber:
