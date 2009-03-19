@@ -250,14 +250,14 @@
 						[addr objectForKey:@"state"],
 						[addr objectForKey:@"zip"]];
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
-				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+//				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				cell.textAlignment=UITextAlignmentCenter;
 				break;
 			}
 			case 2:
 				cell.text=[placeObject.data valueForKey:@"phone"];
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
-				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+//				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				cell.hidesAccessoryWhenEditing=NO;
 				cell.textAlignment=UITextAlignmentCenter;
 				break;
@@ -355,7 +355,7 @@
 		}
 		else
 		{
-			[app openURL:[[NSURL alloc] initWithString: [placeObject.data valueForKey:@"uri" ]]];
+			[[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString: [placeObject.data valueForKey:@"uri" ]]];
 		}
 	}
 	else if (indexPath.section == 1 && indexPath.row == 1) // Address cell
@@ -373,12 +373,15 @@
 		else
 		{
 			NSMutableDictionary* addr=[placeObject.data valueForKey:@"address"];
+			NSString* url=[[NSString stringWithFormat:@"http://maps.google.com/maps?g=%@, %@ %@ %@",
+															[addr valueForKey:@"street"],
+															[addr valueForKey:@"city"],
+															[addr valueForKey:@"state"],
+															[addr valueForKey:@"zip"]] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 			
-			[app openURL:[[NSURL alloc] initWithString: [NSString stringWithFormat:@"http://maps.google.com/maps?g=%@, %@ %@ %@",
-														 [addr valueForKey:@"street"],
-														 [addr valueForKey:@"city"],
-														 [addr valueForKey:@"state"],
-														 [addr valueForKey:@"zip"]]]];
+			NSLog(@"Opening URL:%@",url);
+			[[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:url ]];
+//			[url release];
 		}
 	}
 	else if (indexPath.section == 1 && indexPath.row == 2) // Phone number cell
@@ -395,7 +398,14 @@
 		}
 		else
 		{
-			[app openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", [placeObject.data valueForKey:@"phone"] ]]];
+			NSString* s=[[[[placeObject.data valueForKey:@"phone"] stringByReplacingOccurrencesOfString:@" " withString:@""] 
+																	stringByReplacingOccurrencesOfString:@"(" withString:@""] 
+																	stringByReplacingOccurrencesOfString:@")" withString:@""];
+			NSString* url=[NSString stringWithFormat:@"tel:%@",s];
+			NSLog(@"Opening URL:%@", url);
+			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+//			[s release];
+//			[url release];
 		}
 	}
 }

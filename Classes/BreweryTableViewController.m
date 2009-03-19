@@ -244,6 +244,7 @@
 				case 0:
 					cell.text=@"Web site";
 					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+					cell.textAlignment=UITextAlignmentCenter;
 					break;
 				case 1:
 				{
@@ -254,13 +255,15 @@
 											[addr objectForKey:@"state"],
 											[addr objectForKey:@"zip"]];
 					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
-					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+					cell.textAlignment=UITextAlignmentCenter;
+//					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
 				}
 				case 2:
 					cell.text=[breweryObject.data objectForKey:@"phone"];
 					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
-					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+					cell.textAlignment=UITextAlignmentCenter;
+//					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
 				default:
 					break;
@@ -345,7 +348,7 @@
 		{
 			NSString* uri=[breweryObject.data objectForKey:@"uri"];
 			if (uri && [uri length])
-				[app openURL:[[NSURL alloc] initWithString: uri]];
+				[[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString: uri]];
 		}
 	}
 	else if (indexPath.section == 1 && indexPath.row == 1) // Address cell
@@ -363,7 +366,7 @@
 		else
 		{
 			NSMutableDictionary* addr=[breweryObject.data objectForKey:@"address"];
-			[app openURL:[[NSURL alloc] initWithString: [NSString stringWithFormat:@"http://maps.google.com/maps?g=%@, %@ %@ %@",
+			[[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString: [NSString stringWithFormat:@"http://maps.google.com/maps?g=%@, %@ %@ %@",
 														 [addr objectForKey:@"street"],
 														 [addr objectForKey:@"city"],
 														 [addr objectForKey:@"state"],
