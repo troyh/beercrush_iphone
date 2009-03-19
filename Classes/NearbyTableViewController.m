@@ -82,13 +82,15 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-	// Get location
-//	CLLocationManager* locman=[[[CLLocationManager alloc] init] autorelease];
-	CLLocationManager* locman=[[CLLocationManager alloc] init];
-	locman.delegate=self;
-	locman.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
-	[locman startUpdatingLocation];
-	
+	if (myLocation==nil || [myLocation.timestamp timeIntervalSinceNow] > 60)
+	{
+		// Get location
+	//	CLLocationManager* locman=[[[CLLocationManager alloc] init] autorelease];
+		CLLocationManager* locman=[[CLLocationManager alloc] init];
+		locman.delegate=self;
+		locman.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
+		[locman startUpdatingLocation];
+	}
 }
 
 /*
@@ -131,7 +133,7 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"NearbyCell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -140,7 +142,10 @@
     
     // Set up the cell...
 	PlaceObject* p=[places objectAtIndex:indexPath.row];
-	CLLocationDistance dist=[[p.data valueForKey:@"loc"] getDistanceFrom:myLocation];
+	NSLog(@"MyLocation Lat:%f Lon:%f",myLocation.coordinate.latitude,myLocation.coordinate.longitude);
+	CLLocation* pl=[p.data valueForKey:@"loc"];
+	NSLog(@"PlaceLoctn Lat:%f Lon:%f",pl.coordinate.latitude,pl.coordinate.longitude);
+	CLLocationDistance dist=[pl getDistanceFrom:myLocation];
 //	cell.font=[UIFont boldSystemFontOfSize:14.0];
 	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
@@ -243,20 +248,19 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
 	// TODO: check timestamp of newLocation and if it's within a few seconds, stop updating location.
+	
+	NSLog(@"newLocation timestamp=%@ timeIntervalSinceNow=%d",newLocation.timestamp.description,[newLocation.timestamp timeIntervalSinceNow]);
 	if ([newLocation.timestamp timeIntervalSinceNow] > -3)
 	{
+		NSLog(@"Stopping updating Location");
 		[manager stopUpdatingLocation];
 	}
 	
+	if (myLocation)
+		[myLocation release];
 	myLocation=newLocation;
+	[myLocation retain];
 	
-	if (myLocation.coordinate.latitude==0 && myLocation.coordinate.longitude==0) // We're on the simulator
-	{
-		myLocation=[[CLLocation alloc] initWithLatitude:47.603580 longitude:-122.329454]; // Seattle
-		NSLog(@"Location: %@",myLocation.description);
-		NSLog(@"Location: %f, %f",myLocation.coordinate.latitude,myLocation.coordinate.longitude);
-	}
-
 	// Ask server for nearby places
 	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_NEARBY_QUERY, myLocation.coordinate.latitude, myLocation.coordinate.longitude]];
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];

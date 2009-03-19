@@ -238,6 +238,7 @@
 			case 0:
 				cell.text=[placeObject.data valueForKey:@"uri"];
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+				cell.textAlignment=UITextAlignmentCenter;
 				break;
 			case 1:
 			{
@@ -250,6 +251,7 @@
 						[addr objectForKey:@"zip"]];
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+				cell.textAlignment=UITextAlignmentCenter;
 				break;
 			}
 			case 2:
@@ -257,6 +259,7 @@
 				cell.font=[UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				cell.hidesAccessoryWhenEditing=NO;
+				cell.textAlignment=UITextAlignmentCenter;
 				break;
 			default:
 				break;
@@ -352,7 +355,7 @@
 		}
 		else
 		{
-//			[app openURL:[[NSURL alloc] initWithString: placeObject.uri ]];
+			[app openURL:[[NSURL alloc] initWithString: [placeObject.data valueForKey:@"uri" ]]];
 		}
 	}
 	else if (indexPath.section == 1 && indexPath.row == 1) // Address cell
