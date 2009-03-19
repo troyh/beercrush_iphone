@@ -272,7 +272,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>9</integer>
+									<integer>11</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -315,7 +315,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>BreweryTableViewController.m</string>
+								<string>BeerTableViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -323,11 +323,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>BreweryTableViewController.m</string>
+										<string>BeerTableViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>05944C3C0F71BEB30043D34C</string>
+										<string>05944C690F71C5C80043D34C</string>
 										<key>history</key>
 										<array>
 											<string>05C9AA760F53458A0020B102</string>
@@ -337,7 +337,6 @@
 											<string>052696E30F6865BE00032627</string>
 											<string>0526978E0F686F7900032627</string>
 											<string>05F3BF600F6EE91500603ED1</string>
-											<string>05F3C1A30F6F1A8D00603ED1</string>
 											<string>05F3C1A60F6F1A8D00603ED1</string>
 											<string>053655D20F70978B000389C1</string>
 											<string>059449E90F7162BA0043D34C</string>
@@ -345,8 +344,6 @@
 											<string>05944AF10F7197A00043D34C</string>
 											<string>05944B190F719A180043D34C</string>
 											<string>05944B320F719B050043D34C</string>
-											<string>05944B3D0F719C7F0043D34C</string>
-											<string>05944B800F71A5A30043D34C</string>
 											<string>05944BC90F71ADAD0043D34C</string>
 											<string>05944BCA0F71ADAD0043D34C</string>
 											<string>05944BCB0F71ADAD0043D34C</string>
@@ -355,7 +352,10 @@
 											<string>05944C1E0F71B6860043D34C</string>
 											<string>05944C270F71B7780043D34C</string>
 											<string>05944C280F71B7780043D34C</string>
-											<string>05944C290F71B7780043D34C</string>
+											<string>05944C4E0F71C46A0043D34C</string>
+											<string>05944C4F0F71C46A0043D34C</string>
+											<string>05944C5F0F71C4C80043D34C</string>
+											<string>05944C600F71C4C80043D34C</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -563,6 +563,20 @@
 											<string>05944C300F71B7780043D34C</string>
 											<string>05944C310F71B7780043D34C</string>
 											<string>05944C320F71B7780043D34C</string>
+											<string>05944C400F71C1A60043D34C</string>
+											<string>05944C410F71C1A60043D34C</string>
+											<string>05944C420F71C1A60043D34C</string>
+											<string>05944C520F71C46A0043D34C</string>
+											<string>05944C530F71C46A0043D34C</string>
+											<string>05944C540F71C46A0043D34C</string>
+											<string>05944C550F71C46A0043D34C</string>
+											<string>05944C560F71C46A0043D34C</string>
+											<string>05944C570F71C46A0043D34C</string>
+											<string>05944C580F71C46A0043D34C</string>
+											<string>05944C590F71C46A0043D34C</string>
+											<string>05944C5A0F71C46A0043D34C</string>
+											<string>05944C610F71C4C80043D34C</string>
+											<string>05944C620F71C4C80043D34C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -756,11 +770,13 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>05944C6A0F71C5C80043D34C</string>
+		<string>05944C680F71C51D0043D34C</string>
 		<string>05944A420F71783A0043D34C</string>
 		<string>05944A380F7177D00043D34C</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>056D28710F5319CA00A1F223</string>
+		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/troy/Documents/BeerCrush/BeerCrush.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
