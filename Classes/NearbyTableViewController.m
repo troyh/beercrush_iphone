@@ -38,6 +38,7 @@
 		[self.data setObject:@"" forKey:@"phone"];
 		[self.data setObject:[[NSMutableDictionary alloc] initWithCapacity:4] forKey:@"address"];
 	}
+	
 	return self;
 }
 
@@ -74,18 +75,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	
-	 // Get location
-	 CLLocationManager* locman=[[[CLLocationManager alloc] init] autorelease];
-	 locman.delegate=self;
-	 locman.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
-	 [locman startUpdatingLocation];
-	 
-	 //	CLLocation myloc=locman.location;
-	 myLocation=[[CLLocation alloc] initWithLatitude:47.603580 longitude:-122.329454];
-	 
-	 NSLog(@"Location: %@",myLocation.description);
-	 NSLog(@"Location: %f, %f",myLocation.coordinate.latitude,myLocation.coordinate.longitude);
-	
 	self.title=@"Nearby";
 }
 
@@ -93,11 +82,12 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-	// Ask server for nearby places
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/api/nearby.fcgi?lat=%f&lon=%f&within=5", myLocation.coordinate.latitude, myLocation.coordinate.longitude]];
-	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-	[parser setDelegate:self];
-	[parser parse];
+	// Get location
+//	CLLocationManager* locman=[[[CLLocationManager alloc] init] autorelease];
+	CLLocationManager* locman=[[CLLocationManager alloc] init];
+	locman.delegate=self;
+	locman.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
+	[locman startUpdatingLocation];
 	
 }
 
@@ -154,13 +144,13 @@
 //	cell.font=[UIFont boldSystemFontOfSize:14.0];
 	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
-	UILabel* nametext=[[[UILabel alloc] initWithFrame:CGRectMake(10.0, 5.0, 300.0, 20.0)] autorelease];
+	UILabel* nametext=[[UILabel alloc] initWithFrame:CGRectMake(10.0, 5.0, 300.0, 20.0)];
 	nametext.text=[p.data valueForKey:@"name"];
 	nametext.font=[UIFont boldSystemFontOfSize:16.0];
 //	nametext.textColor=[UIColor grayColor];
 	[cell.contentView addSubview:nametext];
 	
-	UILabel* disttext=[[[UILabel alloc] initWithFrame:CGRectMake(10.0, 30.0, 300.0, 10.0)] autorelease];
+	UILabel* disttext=[[UILabel alloc] initWithFrame:CGRectMake(10.0, 30.0, 300.0, 10.0)];
 	disttext.text=[NSString stringWithFormat:@"%0.1f miles",(dist/1000*0.62137119)]; // Convert meters to miles
 	disttext.font=[UIFont systemFontOfSize: [UIFont smallSystemFontSize]];
 	disttext.textColor=[UIColor grayColor];
@@ -253,8 +243,26 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
 	// TODO: check timestamp of newLocation and if it's within a few seconds, stop updating location.
-	[manager stopUpdatingLocation];
+	if ([newLocation.timestamp timeIntervalSinceNow] > -3)
+	{
+		[manager stopUpdatingLocation];
+	}
+	
 	myLocation=newLocation;
+	
+	if (myLocation.coordinate.latitude==0 && myLocation.coordinate.longitude==0) // We're on the simulator
+	{
+		myLocation=[[CLLocation alloc] initWithLatitude:47.603580 longitude:-122.329454]; // Seattle
+		NSLog(@"Location: %@",myLocation.description);
+		NSLog(@"Location: %f, %f",myLocation.coordinate.latitude,myLocation.coordinate.longitude);
+	}
+
+	// Ask server for nearby places
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/api/nearby.fcgi?lat=%f&lon=%f&within=5", myLocation.coordinate.latitude, myLocation.coordinate.longitude]];
+	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+	[parser setDelegate:self];
+	[parser parse];
+	
 }
 		  
 // Called when there is an error getting the location
