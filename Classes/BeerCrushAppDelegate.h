@@ -31,6 +31,19 @@
 
 @end
 
+#define BEERCRUSH_API_URL_LOGIN					@"http://troyandgay.com:2337/api/login"
+#define BEERCRUSH_API_URL_GET_BREWERY_META_DOC	@"http://troyandgay.com:2337/api/xml/meta/brewery/%@.xml"
+#define BEERCRUSH_API_URL_GET_BEER_DOC			@"http://troyandgay.com:2337/api/xml/beer/%@.xml"
+#define BEERCRUSH_API_URL_EDIT_BEER_DOC			@"http://troyandgay.com:2337/api/edit/beer"
+#define BEERCRUSH_API_URL_POST_BEER_REVIEW		@"http://troyandgay.com:2337/api/post/beer_review"
+#define BEERCRUSH_API_URL_GET_BREWERY_DOC		@"http://troyandgay.com:2337/api/xml/brewery/%@.xml"
+#define BEERCRUSH_API_URL_EDIT_BREWERY_DOC		@"http://troyandgay.com:2337/api/edit/brewery"
+#define BEERCRUSH_API_URL_POST_PLACE_REVIEW		@"http://troyandgay.com:2337/api/post/place_review"
+#define BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY	@"http://troyandgay.com:2337/api/autocomplete.fcgi?output=xml&q=%@"
+#define BEERCRUSH_API_URL_NEARBY_QUERY			@"http://troyandgay.com:2337/api/nearby.fcgi?lat=%f&lon=%f&within=5"
+#define BEERCRUSH_API_URL_GET_PLACE_DOC			@"http://troyandgay.com:2337/api/xml/place/%@.xml"
+#define BEERCRUSH_API_URL_EDIT_PLACE_DOC		@"http://troyandgay.com:2337/api/edit/place"
+
 @interface BeerObject : NSObject
 {
 	NSMutableDictionary* data;

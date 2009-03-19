@@ -83,7 +83,7 @@
 	searchResultsList_id=[[NSMutableArray alloc] initWithCapacity:10];
 	
 	// TODO: Send the query off to the server
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/api/autocomplete.fcgi?output=xml&q=%@", qs ]];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY, qs ]];
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	[parser parse];

@@ -33,7 +33,7 @@
 	[super initWithStyle:UITableViewStyleGrouped];
 	
 	// Retrieve XML doc for this beer
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/api/xml/beer/%@.xml", beerID ]];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_DOC, beerID ]];
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	[parser parse];
@@ -113,7 +113,7 @@
 		NSLog(@"POST data:%@",bodystr);
 		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 		
-		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://dev:81/api/edit/beer"]
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC]
 																cachePolicy:NSURLRequestUseProtocolCachePolicy
 															timeoutInterval:60.0];
 		[theRequest setHTTPMethod:@"POST"];
@@ -302,7 +302,7 @@
 	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&beer_id=%@", rating+1, beerID];
 	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 
-	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://dev:81/api/post/beer_review"]
+	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW]
 											cachePolicy:NSURLRequestUseProtocolCachePolicy
 											timeoutInterval:60.0];
 	[theRequest setHTTPMethod:@"POST"];

@@ -35,7 +35,7 @@
 	placeObject=[[PlaceObject alloc] init];
 	
 	// Retrieve XML doc from server
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/api/xml/place/%@.xml", placeID ]];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_DOC, placeID ]];
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	[parser parse];
@@ -75,7 +75,7 @@
 		NSLog(@"POST data:%@",bodystr);
 		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 		
-		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://dev:81/api/edit/place"]
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_PLACE_DOC]
 																cachePolicy:NSURLRequestUseProtocolCachePolicy
 															timeoutInterval:60.0];
 		[theRequest setHTTPMethod:@"POST"];
@@ -277,7 +277,7 @@
 	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&place_id=%@", rating+1, placeID];
 	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 	
-	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://dev:81/api/post/place_review"]
+	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_POST_PLACE_REVIEW]
 															cachePolicy:NSURLRequestUseProtocolCachePolicy
 														timeoutInterval:60.0];
 	[theRequest setHTTPMethod:@"POST"];

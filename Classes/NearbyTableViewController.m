@@ -258,7 +258,7 @@
 	}
 
 	// Ask server for nearby places
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/api/nearby.fcgi?lat=%f&lon=%f&within=5", myLocation.coordinate.latitude, myLocation.coordinate.longitude]];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_NEARBY_QUERY, myLocation.coordinate.latitude, myLocation.coordinate.longitude]];
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	[parser parse];

@@ -29,7 +29,7 @@
 	beerList=[[NSMutableArray alloc] initWithCapacity:10];
 	
 	// Retrieve XML doc from server
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://dev:81/api/xml/meta/brewery/%@.xml", breweryID ]];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_META_DOC, breweryID ]];
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	[parser parse];

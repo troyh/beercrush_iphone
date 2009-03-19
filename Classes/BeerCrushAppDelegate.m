@@ -190,7 +190,7 @@
 	NSString* bodystr=[[NSString alloc] initWithFormat:@"email=%@&password=%@", @"troy.hakala@gmail.com", @"foo"];
 	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 
-	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://dev:81/api/login"]
+	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_LOGIN]
 															cachePolicy:NSURLRequestUseProtocolCachePolicy
 														timeoutInterval:60.0];
 	[theRequest setHTTPMethod:@"POST"];
