@@ -373,7 +373,7 @@
 		else
 		{
 			NSMutableDictionary* addr=[placeObject.data valueForKey:@"address"];
-			NSString* url=[[NSString stringWithFormat:@"http://maps.google.com/maps?g=%@, %@ %@ %@",
+			NSString* url=[[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@, %@ %@ %@",
 															[addr valueForKey:@"street"],
 															[addr valueForKey:@"city"],
 															[addr valueForKey:@"state"],

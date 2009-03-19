@@ -365,12 +365,15 @@
 		}
 		else
 		{
-			NSMutableDictionary* addr=[breweryObject.data objectForKey:@"address"];
-			[[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString: [NSString stringWithFormat:@"http://maps.google.com/maps?g=%@, %@ %@ %@",
-														 [addr objectForKey:@"street"],
-														 [addr objectForKey:@"city"],
-														 [addr objectForKey:@"state"],
-														 [addr objectForKey:@"zip"]]]];
+			NSMutableDictionary* addr=[breweryObject.data valueForKey:@"address"];
+			NSString* url=[[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@, %@ %@ %@",
+							[addr valueForKey:@"street"],
+							[addr valueForKey:@"city"],
+							[addr valueForKey:@"state"],
+							[addr valueForKey:@"zip"]] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+			
+			NSLog(@"Opening URL:%@",url);
+			[[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:url ]];
 		}
 	}
 	else if (indexPath.section == 1 && indexPath.row == 2) // Phone number cell
@@ -387,7 +390,12 @@
 		}
 		else
 		{
-			[app openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", [breweryObject.data objectForKey:@"phone"] ]]];
+			NSString* s=[[[[breweryObject.data objectForKey:@"phone"] stringByReplacingOccurrencesOfString:@" " withString:@""] 
+						  stringByReplacingOccurrencesOfString:@"(" withString:@""] 
+						 stringByReplacingOccurrencesOfString:@")" withString:@""];
+			NSString* url=[NSString stringWithFormat:@"tel:%@",s];
+			NSLog(@"Opening URL:%@", url);
+			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 		}
 	}
 }
