@@ -66,7 +66,7 @@
 
 -(void)query:(NSString*)qs 
 {
-	self.title=@"Beers";
+	self.title=@"Places";
 
 	if (searchResultsList_title)
 		[searchResultsList_title release];

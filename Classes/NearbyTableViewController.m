@@ -19,6 +19,7 @@
 
 @synthesize place_id;
 @synthesize data;
+@synthesize distanceAway;
 //@synthesize name;
 //@synthesize loc;
 //@synthesize street;
@@ -40,6 +41,17 @@
 	}
 	
 	return self;
+}
+
+-(NSInteger)compareLocation:(id)other
+{
+	PlaceObject* otherplace=(PlaceObject*)other;
+	if (self.distanceAway < otherplace.distanceAway)
+		return NSOrderedAscending;
+	else if (self.distanceAway > otherplace.distanceAway)
+		return NSOrderedDescending;
+	else 
+		return NSOrderedSame;
 }
 
 @end
@@ -142,10 +154,6 @@
     
     // Set up the cell...
 	PlaceObject* p=[places objectAtIndex:indexPath.row];
-	NSLog(@"MyLocation Lat:%f Lon:%f",myLocation.coordinate.latitude,myLocation.coordinate.longitude);
-	CLLocation* pl=[p.data valueForKey:@"loc"];
-	NSLog(@"PlaceLoctn Lat:%f Lon:%f",pl.coordinate.latitude,pl.coordinate.longitude);
-	CLLocationDistance dist=[pl getDistanceFrom:myLocation];
 //	cell.font=[UIFont boldSystemFontOfSize:14.0];
 	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
@@ -156,7 +164,7 @@
 	[cell.contentView addSubview:nametext];
 	
 	UILabel* disttext=[[UILabel alloc] initWithFrame:CGRectMake(10.0, 30.0, 300.0, 10.0)];
-	disttext.text=[NSString stringWithFormat:@"%0.1f miles",(dist/1000*0.62137119)]; // Convert meters to miles
+	disttext.text=[NSString stringWithFormat:@"%0.1f miles",(p.distanceAway/1000*0.62137119)]; // Convert meters to miles
 	disttext.font=[UIFont systemFontOfSize: [UIFont smallSystemFontSize]];
 	disttext.textColor=[UIColor grayColor];
 	[cell.contentView addSubview:disttext];
@@ -290,6 +298,8 @@
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser
 {
+	// Sort the places
+	[self.places sortUsingSelector:@selector(compareLocation:)];
 	[self.tableView reloadData];
 }
 
@@ -317,6 +327,11 @@
 	if ([elementName isEqualToString:@"place"])
 	{
 		// TODO: store object
+		//	NSLog(@"MyLocation Lat:%f Lon:%f",myLocation.coordinate.latitude,myLocation.coordinate.longitude);
+		CLLocation* pl=[placeObject.data valueForKey:@"loc"];
+		//	NSLog(@"PlaceLoctn Lat:%f Lon:%f",pl.coordinate.latitude,pl.coordinate.longitude);
+		placeObject.distanceAway=[pl getDistanceFrom:myLocation];
+		
 		[places addObject:placeObject];
 	}
 	

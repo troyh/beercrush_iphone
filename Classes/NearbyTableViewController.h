@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CLLocationManagerDelegate.h>
+#import <CoreLocation/CLLocation.h>
 #import "BeerCrushAppDelegate.h"
 
 @interface PlaceObject: NSObject
 {
 	NSString* place_id;
 	NSMutableDictionary* data;
+	CLLocationDistance distanceAway;
 //	NSString* name;
 //	CLLocation* loc;
 //	NSString* street;
@@ -22,10 +24,12 @@
 //	NSString* zip;
 //	NSString* phone;
 //	NSString* uri;
+	
 }
 
 @property (nonatomic,retain) NSString* place_id;
 @property (nonatomic,retain) NSMutableDictionary* data;
+@property (nonatomic) CLLocationDistance distanceAway;
 //@property (nonatomic,retain) NSString* name;
 //@property (nonatomic,retain) CLLocation* loc;
 //@property (nonatomic,retain) NSString* street;
@@ -36,6 +40,7 @@
 //@property (nonatomic,retain) NSString* uri;
 
 -(id)init;
+-(NSInteger)compareLocation:(id)other;
 
 @end
 

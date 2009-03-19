@@ -49,19 +49,20 @@
 																	  nil];
 	
 	UINavigationController* ctl=[tabBarController.viewControllers objectAtIndex:0];
-	nav=ctl;
 	ctl.title=@"Beers";
+
+	ctl=[tabBarController.viewControllers objectAtIndex:1];
+	nav=ctl;
+	ctl.title=@"Places";
 	tabBarController.selectedViewController=ctl;
 	// Create the search bar
 	CGRect sbf=application.keyWindow.frame;
 	sbf.size.height=44; // TODO: make this the height of the navbar
 	mySearchBar=[[UISearchBar alloc] initWithFrame:sbf];
 	mySearchBar.delegate=self;
-//	[tabBarController.view addSubview: mySearchBar];
+	//	[tabBarController.view addSubview: mySearchBar];
 	[ctl.view addSubview: mySearchBar];
 
-	ctl=[tabBarController.viewControllers objectAtIndex:1];
-	ctl.title=@"Places";
 	ctl=[tabBarController.viewControllers objectAtIndex:2];
 	NearbyTableViewController* ntvc=[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain];
 	ntvc.app=app;
@@ -187,6 +188,7 @@
 // Login
 -(void)login
 {
+	NSLog(@"Logging in...");
 	NSString* bodystr=[[NSString alloc] initWithFormat:@"email=%@&password=%@", @"troy.hakala@gmail.com", @"foo"];
 	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 
