@@ -207,8 +207,8 @@
 			switch (indexPath.row)
 			{
 			case 0:
-				cell.text=[placeObject.data valueForKey:@"name"];
-				cell.font=[UIFont boldSystemFontOfSize:20];
+				[cell.textLabel setText:[placeObject.data valueForKey:@"name"]];
+				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
 			case 1:
@@ -221,11 +221,11 @@
 				break;
 			}
 			case 2:
-				cell.text=@"Ratings & Reviews";
+				[cell.textLabel setText:@"Ratings & Reviews"];
 				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				break;
 			case 3:
-				cell.text=@"List of Beers";
+				[cell.textLabel setText:@"List of Beers"];
 				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				break;
 			default:
@@ -236,30 +236,31 @@
 			switch (indexPath.row)
 			{
 			case 0:
-				cell.text=[placeObject.data valueForKey:@"uri"];
-				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
-				cell.textAlignment=UITextAlignmentCenter;
+				[cell.textLabel setText:[placeObject.data valueForKey:@"uri"]];
+				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+				[cell.textLabel setTextAlignment:UITextAlignmentCenter];
 				break;
 			case 1:
 			{
 				NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
 					
-				cell.text=[NSString stringWithFormat:@"%@, %@ %@ %@",
+				[cell.textLabel setText:[NSString stringWithFormat:@"%@, %@ %@ %@",
 						[addr objectForKey:@"street"],
 						[addr objectForKey:@"city"],
 						[addr objectForKey:@"state"],
-						[addr objectForKey:@"zip"]];
-				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+						[addr objectForKey:@"zip"]]];
+				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
 //				cell.selectionStyle=UITableViewCellSelectionStyleNone;
-				cell.textAlignment=UITextAlignmentCenter;
+				[cell.textLabel setTextAlignment:UITextAlignmentCenter];
 				break;
 			}
 			case 2:
-				cell.text=[placeObject.data valueForKey:@"phone"];
-				cell.font=[UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+				[cell.textLabel setText:[placeObject.data valueForKey:@"phone"]];
+				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
 //				cell.selectionStyle=UITableViewCellSelectionStyleNone;
-				cell.hidesAccessoryWhenEditing=NO;
-				cell.textAlignment=UITextAlignmentCenter;
+				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+				cell.editingAccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+				[cell.textLabel setTextAlignment:UITextAlignmentCenter];
 				break;
 			default:
 				break;

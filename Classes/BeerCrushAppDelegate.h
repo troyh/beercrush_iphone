@@ -31,7 +31,8 @@
 
 @end
 
-#define BEERCRUSH_API_URL_HOST					"http://troyandgay.com:2337"
+//#define BEERCRUSH_API_URL_HOST					"http://troyandgay.com:2337"
+#define BEERCRUSH_API_URL_HOST					"http://192.168.63.128"
 
 #define BEERCRUSH_API_URL_LOGIN					@BEERCRUSH_API_URL_HOST"/api/login"
 #define BEERCRUSH_API_URL_GET_BREWERY_META_DOC	@BEERCRUSH_API_URL_HOST"/api/xml/meta/brewery/%@.xml"
