@@ -193,7 +193,7 @@
     }
     
     // Set up the cell...
-	cell.text=[searchResultsList_title objectAtIndex:indexPath.row];
+	[cell.textLabel setText:[searchResultsList_title objectAtIndex:indexPath.row]];
 	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 	
     return cell;

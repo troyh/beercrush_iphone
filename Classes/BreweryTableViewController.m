@@ -213,8 +213,8 @@
 			switch (indexPath.row)
 			{
 				case 0:
-					cell.text=[breweryObject.data objectForKey:@"name"];
-					cell.font=[UIFont boldSystemFontOfSize:20];
+					[cell.textLabel setText:[breweryObject.data objectForKey:@"name"]];
+					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
 				case 1:
@@ -227,11 +227,11 @@
 					break;
 				}
 				case 2:
-					cell.text=@"Ratings & Reviews";
+					[cell.textLabel setText:@"Ratings & Reviews"];
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 					break;
 				case 3:
-					cell.text=@"List of Beers";
+					[cell.textLabel setText:@"List of Beers"];
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 					break;
 				default:
@@ -242,27 +242,27 @@
 			switch (indexPath.row)
 			{
 				case 0:
-					cell.text=@"Web site";
-					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
-					cell.textAlignment=UITextAlignmentCenter;
+					[cell.textLabel setText:@"Web site"];
+					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+					[cell.textLabel setTextAlignment:UITextAlignmentCenter];
 					break;
 				case 1:
 				{
 					NSMutableDictionary* addr=[breweryObject.data objectForKey:@"address"];
-					cell.text=[NSString stringWithFormat:@"%@, %@ %@ %@",
+					[cell.textLabel setText:[NSString stringWithFormat:@"%@, %@ %@ %@",
 											[addr objectForKey:@"street"],
 											[addr objectForKey:@"city"],
 											[addr objectForKey:@"state"],
-											[addr objectForKey:@"zip"]];
-					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
-					cell.textAlignment=UITextAlignmentCenter;
+											[addr objectForKey:@"zip"]]];
+					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+					[cell.textLabel setTextAlignment:UITextAlignmentCenter];
 //					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
 				}
 				case 2:
-					cell.text=[breweryObject.data objectForKey:@"phone"];
-					cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
-					cell.textAlignment=UITextAlignmentCenter;
+					[cell.textLabel setText:[breweryObject.data objectForKey:@"phone"]];
+					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+					[cell.textLabel setTextAlignment:UITextAlignmentCenter];
 //					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
 				default:

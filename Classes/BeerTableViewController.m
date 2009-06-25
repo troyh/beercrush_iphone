@@ -214,8 +214,8 @@
 			switch (indexPath.row)
 		{
 			case 0:
-				cell.text=[beerObj.data objectForKey:@"name"];
-				cell.font=[UIFont boldSystemFontOfSize:20];
+				[cell.textLabel setText:[beerObj.data objectForKey:@"name"]];
+				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
 			case 1:
@@ -229,7 +229,7 @@
 				break;
 			}
 			case 2:
-				cell.text=@"Rating & Reviews";
+				[cell.textLabel setText:@"Rating & Reviews"];
 				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				break;
 			case 3:
@@ -247,9 +247,9 @@
 				textView.lineBreakMode=UILineBreakModeWordWrap;
 				[textView sizeToFit];
 
-				cell.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+				[cell.textLabel setFont:[UIFont systemFontOfSize:[UIFont smallSystemFontSize]]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
-				cell.lineBreakMode=UILineBreakModeWordWrap;
+				[cell.textLabel setLineBreakMode:UILineBreakModeWordWrap];
 				
 				[cell.contentView addSubview:textView];
 				[cell.contentView sizeToFit];
@@ -264,8 +264,8 @@
 			switch (indexPath.row)
 		{
 			case 0:
-				cell.text=[beerObj.data objectForKey:@"style"];
-				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+				[cell.textLabel setText:[beerObj.data objectForKey:@"style"]];
+				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
 			case 1:
@@ -273,13 +273,13 @@
 				NSString* ibu=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"ibu"];
 				NSString* abv=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"abv"];
 				if ([ibu length])
-					cell.text=[[NSString alloc] initWithFormat:@"%u%% ABV %u IBUs", 
+					[cell.textLabel setText:[[NSString alloc] initWithFormat:@"%u%% ABV %u IBUs", 
 							   abv.intValue, 
-							   ibu.intValue];
+							   ibu.intValue]];
 				else
-					cell.text=[[NSString alloc] initWithFormat:@"%u%% ABV", abv.intValue];
+					[cell.textLabel setText:[[NSString alloc] initWithFormat:@"%u%% ABV", abv.intValue]];
 				
-				cell.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
 			}

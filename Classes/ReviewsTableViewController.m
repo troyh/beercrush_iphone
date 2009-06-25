@@ -100,7 +100,7 @@
     }
     
     // Set up the cell...
-	cell.text=[NSString stringWithFormat:@"Review #%U",indexPath.row];
+	[cell.textLabel setText:[NSString stringWithFormat:@"Review #%U",indexPath.row]];
 
     return cell;
 }

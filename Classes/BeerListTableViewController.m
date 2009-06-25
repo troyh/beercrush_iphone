@@ -119,7 +119,7 @@
     
     // Set up the cell...
 	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
-	cell.text=[NSString stringWithFormat:@"%@", [beer.data objectForKey:@"name"] ];
+	[cell.textLabel setText:[NSString stringWithFormat:@"%@", [beer.data objectForKey:@"name"] ]];
 	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
     return cell;
