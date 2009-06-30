@@ -57,8 +57,8 @@
 	tabBarController.selectedViewController=ctl;
 	// Create the search bar
 	CGRect sbf=application.keyWindow.frame;
-	sbf.size.height=44; // TODO: make this the height of the navbar
-	mySearchBar=[[UISearchBar alloc] initWithFrame:sbf];
+	sbf.size.height=nav.navigationBar.frame.size.height; // TODO: make this the height of the navbar
+	mySearchBar=[[UISearchBar alloc] initWithFrame:nav.navigationBar.frame];
 	mySearchBar.delegate=self;
 	//	[tabBarController.view addSubview: mySearchBar];
 	[ctl.view addSubview: mySearchBar];

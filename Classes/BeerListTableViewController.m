@@ -199,7 +199,7 @@
 	else if ([elementName isEqualToString:@"beerlist"])
 	{
 	}
-	else if ([elementName isEqualToString:@"beer"])
+	else if ([elementName isEqualToString:@"item"])
 	{
 		self.currentElemValue=[NSMutableString string];
 		self.currentElemAttribs=[[NSMutableDictionary alloc] initWithCapacity:10];
@@ -211,7 +211,7 @@
 {
 	if (self.currentElemValue)
 	{
-		if ([elementName isEqualToString:@"beer"])
+		if ([elementName isEqualToString:@"name"])
 		{
 			BeerObject* beer=[[BeerObject alloc] init];
 			[beer.data setObject:currentElemValue forKey:@"name"];

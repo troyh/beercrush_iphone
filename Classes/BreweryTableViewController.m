@@ -39,12 +39,14 @@
 @synthesize appdel;
 @synthesize currentElemValue;
 @synthesize xmlPostResponse;
+@synthesize xmlParserPath;
 
 -(id) initWithBreweryID:(NSString*)brewery_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
 {
 	self.breweryID=brewery_id;
 	self.app=a;
 	self.appdel=d;
+	self.xmlParserPath=[[NSMutableArray arrayWithCapacity:10] retain];
 	
 	self.title=@"Brewery";
 	
@@ -451,6 +453,7 @@
 {
 	// Clear any old data
 	self.currentElemValue=nil;
+	[self.xmlParserPath removeAllObjects];
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser
@@ -459,6 +462,9 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
+	// Add the element to the xmlParserPath
+	[self.xmlParserPath addObject:elementName];
+	
 	if ([elementName isEqualToString:@"name"] ||
 	    [elementName isEqualToString:@"street"] ||
 	    [elementName isEqualToString:@"city"] ||
@@ -474,10 +480,18 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
+	// Pop the element name off the XML parser path array
+	[self.xmlParserPath removeLastObject];
+	
 	if (self.currentElemValue)
 	{
 		if ([elementName isEqualToString:@"name"])
-			[breweryObject.data setObject:currentElemValue forKey:@"name"];
+		{
+			// Is it the //brewery/name or the //brewery/meta/beerlist/item/name element?
+			NSArray* tmp=[NSArray arrayWithObjects:@"brewery",nil];
+			if ([self.xmlParserPath isEqualToArray:tmp])
+				[breweryObject.data setObject:currentElemValue forKey:@"name"];
+		}
 		else if ([elementName isEqualToString:@"street"])
 			[[breweryObject.data objectForKey:@"address"] setObject:currentElemValue forKey:@"street"];
 		else if ([elementName isEqualToString:@"city"])
