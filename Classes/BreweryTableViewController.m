@@ -46,13 +46,12 @@
 	self.breweryID=brewery_id;
 	self.app=a;
 	self.appdel=d;
-	self.xmlParserPath=[[NSMutableArray arrayWithCapacity:10] retain];
+	self.xmlParserPath=[NSMutableArray arrayWithCapacity:10];
 	
 	self.title=@"Brewery";
 	
 	[super initWithStyle:UITableViewStyleGrouped];
 
-//	breweryInfo=[[NSMutableπArray alloc] initWithObjects:@"Name",@"Rating & Reviews",@"List of beers",@"1234 Main Street, Anytown AA 12345 US",@"(456) 789-0123",nil];
 	breweryObject=[[BreweryObject alloc] init];
 	
 	// Retrieve XML doc from server

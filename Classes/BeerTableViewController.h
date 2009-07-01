@@ -17,6 +17,7 @@
 	BeerObject* beerObj;
 	NSMutableString* currentElemValue;
 	int xmlParseDepth;
+	BOOL bParsingBeerReview;
 	NSMutableData* xmlPostResponse;
 }
 
@@ -26,6 +27,7 @@
 @property (nonatomic,retain) BeerObject* beerObj;
 @property (nonatomic,retain) NSMutableString* currentElemValue;
 @property (nonatomic) int xmlParseDepth;
+@property (nonatomic) BOOL bParsingBeerReview;
 @property (nonatomic, retain) NSMutableData* xmlPostResponse;
 
 -(id) initWithBeerID:(NSString*)beer_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d;

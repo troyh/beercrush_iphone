@@ -19,6 +19,7 @@
 @synthesize beerObj;
 @synthesize currentElemValue;
 @synthesize xmlParseDepth;
+@synthesize bParsingBeerReview;
 @synthesize xmlPostResponse;
 
 -(id) initWithBeerID:(NSString*)beer_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
@@ -36,7 +37,31 @@
 	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_DOC, beerID ]];
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
-	[parser parse];
+	BOOL retval=[parser parse];
+	
+	if (retval==YES)
+	{
+		[parser release];
+		
+		// Separate the brewery ID and the beer ID from the beerID
+		NSArray* idparts=[self.beerID componentsSeparatedByString:@":"];
+		
+		// Retrieve user's review for this beer
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_REVIEW_DOC, 
+								  [idparts objectAtIndex:0], 
+								  [idparts objectAtIndex:1], 
+								  @"troyh"]]; // TODO: get real user's id
+		parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+		[parser setDelegate:self];
+		retval=[parser parse];
+		[parser release];
+		
+		if (retval==YES)
+		{
+			// The user has a review for this beer
+			NSLog(@"User rating:%@", [self.beerObj.data objectForKey:@"user_rating"]);
+		}
+	}
 	
 	return self;
 }
@@ -225,7 +250,15 @@
 				[cell.contentView addSubview:ratingctl];
 				[ratings release];
 				
+				NSString* user_rating=[self.beerObj.data objectForKey:@"user_rating"];
+				if (user_rating==nil) // No user review
+					ratingctl.selectedSegmentIndex=UISegmentedControlNoSegment;
+				else
+					ratingctl.selectedSegmentIndex=[user_rating integerValue] - 1;
+				
 				[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
+				
+				[ratingctl autorelease]; // TODO: necessary?
 				break;
 			}
 			case 2:
@@ -448,6 +481,7 @@
 {
 	// Clear any old data
 	self.currentElemValue=nil;
+	xmlParseDepth=0;
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser
@@ -457,25 +491,43 @@
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
 	++xmlParseDepth;
-	
-	if ([elementName isEqualToString:@"beer"])
+
+	if (xmlParseDepth==1) // Figure out what document type we're parsing
 	{
-		[beerObj.data setObject:attributeDict forKey:@"attribs"];
+		if ([elementName isEqualToString:@"beer_review"])
+			self.bParsingBeerReview=YES;
+		else
+			self.bParsingBeerReview=NO;
 	}
-	else if ([elementName isEqualToString:@"name"])
+
+	if (self.bParsingBeerReview)
 	{
-		if (xmlParseDepth==2)
+		if ([elementName isEqualToString:@"rating"])
+		{
 			self.currentElemValue=[NSMutableString string];
+		}
 	}
-	else if ([elementName isEqualToString:@"description"])
+	else
 	{
-		if (xmlParseDepth==2)
-			self.currentElemValue=[NSMutableString string];
-	}
-	else if ([elementName isEqualToString:@"style"])
-	{
-		if (xmlParseDepth==3)
-			self.currentElemValue=[NSMutableString string];
+		if ([elementName isEqualToString:@"beer"])
+		{
+			[beerObj.data setObject:attributeDict forKey:@"attribs"];
+		}
+		else if ([elementName isEqualToString:@"name"])
+		{
+			if (xmlParseDepth==2)
+				self.currentElemValue=[NSMutableString string];
+		}
+		else if ([elementName isEqualToString:@"description"])
+		{
+			if (xmlParseDepth==2)
+				self.currentElemValue=[NSMutableString string];
+		}
+		else if ([elementName isEqualToString:@"style"])
+		{
+			if (xmlParseDepth==3)
+				self.currentElemValue=[NSMutableString string];
+		}
 	}
 }
 
@@ -483,23 +535,33 @@
 {
 	--xmlParseDepth;
 	
-	if (self.currentElemValue)
+	if (self.bParsingBeerReview)
 	{
-		if ([elementName isEqualToString:@"name"])
+		if ([elementName isEqualToString:@"rating"])
 		{
-			[beerObj.data setObject:currentElemValue forKey:@"name"];
+			[beerObj.data setObject:currentElemValue forKey:@"user_rating"];
 		}
-		else if ([elementName isEqualToString:@"description"])
+	}
+	else
+	{
+		if (self.currentElemValue)
 		{
-			[beerObj.data setObject:currentElemValue forKey:@"description"];
+			if ([elementName isEqualToString:@"name"])
+			{
+				[beerObj.data setObject:currentElemValue forKey:@"name"];
+			}
+			else if ([elementName isEqualToString:@"description"])
+			{
+				[beerObj.data setObject:currentElemValue forKey:@"description"];
+			}
+			else if ([elementName isEqualToString:@"style"])
+			{
+				if ([[beerObj.data objectForKey:@"style"] length] == 0) // Only take the 1st style
+					[beerObj.data setObject:currentElemValue forKey:@"style"];
+			}
+			
+			self.currentElemValue=nil;
 		}
-		else if ([elementName isEqualToString:@"style"])
-		{
-			if ([[beerObj.data objectForKey:@"style"] length] == 0) // Only take the 1st style
-				[beerObj.data setObject:currentElemValue forKey:@"style"];
-		}
-		
-		self.currentElemValue=nil;
 	}
 }
 
