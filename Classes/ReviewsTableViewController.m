@@ -11,15 +11,34 @@
 
 @implementation ReviewsTableViewController
 
-@synthesize dataid;
-@synthesize datatype;
+@synthesize beerID;
+@synthesize xmlParserPath;
+@synthesize currentElemValue;
+@synthesize reviewsList;
 
--(id)initWithID:(NSString*)did dataType:(ResultType)t
+-(id)initWithID:(NSString*)beerid dataType:(ResultType)t
 {
-	self.dataid=did;
-	self.datatype=t;
+	self.beerID=beerid;
+	self.xmlParserPath=[NSMutableArray arrayWithCapacity:5];
+	self.reviewsList=[NSMutableArray arrayWithCapacity:10];
 
 	self.title=@"Reviews";
+
+	// Separate the brewery ID and the beer ID from the beerID
+	NSArray* idparts=[self.beerID componentsSeparatedByString:@":"];
+
+	// Retrieve XML doc for this beer
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC, 
+									 [idparts objectAtIndex:0],
+									 [idparts objectAtIndex:1]]];
+	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+	[parser setDelegate:self];
+	BOOL retval=[parser parse];
+	
+	if (retval==NO)
+	{
+		// TODO: handle this error
+	}
 	
 	return self;
 }
@@ -85,7 +104,7 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 20;
+    return [self.reviewsList count];
 }
 
 
@@ -100,7 +119,10 @@
     }
     
     // Set up the cell...
-	[cell.textLabel setText:[NSString stringWithFormat:@"Review #%U",indexPath.row]];
+	[cell.textLabel setText:[NSString stringWithFormat:@"%@:%@",
+						[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"user_id"],
+						[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"rating"]
+	]];
 
     return cell;
 }
@@ -158,6 +180,79 @@
     [super dealloc];
 }
 
+		
+// NSXMLParser delegate methods
+
+- (void)parserDidStartDocument:(NSXMLParser *)parser
+{
+	// Clear any old data
+	self.currentElemValue=nil;
+	[self.xmlParserPath removeAllObjects];
+}
+
+- (void)parserDidEndDocument:(NSXMLParser *)parser
+{
+}
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
+{
+	// Add the element to the xmlParserPath
+	[self.xmlParserPath addObject:elementName];
+	
+	if ([elementName isEqualToString:@"beer_review"])
+	{
+		// Add a new review dictionary object to the list of reviews
+		[self.reviewsList addObject:[NSMutableDictionary dictionaryWithCapacity:3]]; // 3 matches the number of elements we know we're going to add
+	}
+	else if (
+		[elementName isEqualToString:@"timestamp"] ||
+	    [elementName isEqualToString:@"user_id"] ||
+	    [elementName isEqualToString:@"rating"]
+		)
+	{
+		self.currentElemValue=[NSMutableString string];
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+{
+	// Pop the element name off the XML parser path array
+	[self.xmlParserPath removeLastObject];
+	
+	if (self.currentElemValue) // If we care about capturing this data
+	{
+		// Is it the element under //beer_reviews/beer_review?
+		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer_reviews",@"beer_review",nil]])
+		{
+//			NSMutableDictionary* currentReviewObject=[self.reviewsList lastObject];
+			if ([elementName isEqualToString:@"timestamp"])
+				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"timestamp"];
+			else if ([elementName isEqualToString:@"user_id"])
+				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"user_id"];
+			else if ([elementName isEqualToString:@"rating"])
+				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"rating"];
+		}
+		
+		self.currentElemValue=nil;
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
+{
+}
+
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
+	if (self.currentElemValue)
+	{
+		[self.currentElemValue appendString:string];
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
+{
+}
+		
 
 @end
 

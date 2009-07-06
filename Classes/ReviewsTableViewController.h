@@ -10,12 +10,16 @@
 #import "MyTableViewController.h"
 
 @interface ReviewsTableViewController : UITableViewController {
-	NSString* dataid;
-	ResultType datatype;
+	NSString* beerID;
+	NSMutableArray* xmlParserPath;
+	NSMutableArray* reviewsList;
+	NSMutableString* currentElemValue;
 }
 
-@property (nonatomic,retain) NSString* dataid;
-@property (nonatomic) ResultType datatype;
+@property (nonatomic,retain) NSString* beerID;
+@property (nonatomic,retain) NSMutableArray* xmlParserPath;
+@property (nonatomic,retain) NSMutableArray* reviewsList;
+@property (nonatomic,retain) NSMutableString* currentElemValue;
 
 -(id)initWithID:(NSString*)dataid dataType:(ResultType)t;
 
