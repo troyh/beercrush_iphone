@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		053653960F703F99000389C1 /* PhoneNumberEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */; };
+		0577EA4D1002AC7700A2468C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0577EA4C1002AC7700A2468C /* Settings.bundle */; };
 		05944DBD0F72E2BB0043D34C /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05944DBC0F72E2BB0043D34C /* MainWindow.xib */; };
 		05944DC50F72E7C30043D34C /* BeerCrush.png in Resources */ = {isa = PBXBuildFile; fileRef = 05944DC40F72E7C30043D34C /* BeerCrush.png */; };
 		05C6364D0F55C03C00B1C78A /* BreweryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */; };
@@ -29,6 +30,7 @@
 /* Begin PBXFileReference section */
 		053653940F703F99000389C1 /* PhoneNumberEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneNumberEditTableViewController.h; sourceTree = "<group>"; };
 		053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneNumberEditTableViewController.m; sourceTree = "<group>"; };
+		0577EA4C1002AC7700A2468C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		05944DBC0F72E2BB0043D34C /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		05944DC40F72E7C30043D34C /* BeerCrush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BeerCrush.png; sourceTree = "<group>"; };
 		05C6364B0F55C03C00B1C78A /* BreweryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreweryTableViewController.h; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				0577EA4C1002AC7700A2468C /* Settings.bundle */,
 			);
 			name = BeerCrush;
 			sourceTree = "<group>";
@@ -195,6 +198,7 @@
 			files = (
 				05944DBD0F72E2BB0043D34C /* MainWindow.xib in Resources */,
 				05944DC50F72E7C30043D34C /* BeerCrush.png in Resources */,
+				0577EA4D1002AC7700A2468C /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

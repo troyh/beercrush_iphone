@@ -188,8 +188,12 @@
 // Login
 -(void)login
 {
+	// Get the userid and password from App Preferences
+	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
+	
 	NSLog(@"Logging in...");
-	NSString* bodystr=[[NSString alloc] initWithFormat:@"email=%@&password=%@", @"troy.hakala@gmail.com", @"foo"];
+	NSString* bodystr=[[NSString alloc] initWithFormat:@"userid=%@&password=%@", userid, password];
 	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 
 	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_LOGIN]
@@ -203,7 +207,7 @@
 	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
 
 	if (theConnection) {
-		// We don't care about any response document, just the cookies
+		// We don't care about any response document, we just want the cookies to be stored (automatically)
 		xmlPostResponse=[[NSMutableData data] retain];
 	} else {
 		// TODO: inform the user that the download could not be made
@@ -227,8 +231,18 @@
 	
 	if (n!=200)
 	{
+		NSLog(@"Headers:");
+		NSDictionary* hdrdict=[httprsp allHeaderFields];
+		NSArray* headers=[hdrdict allKeys];
+		for (NSUInteger i=0;i<[headers count];++i)
+		{
+			NSLog(@"%@:%@",[headers objectAtIndex:i],[hdrdict objectForKey:[headers objectAtIndex:i]]);
+		}
 		// TODO: alert the user that the login failed
-		NSLog(@"Login failed.");
+		UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"Login Failed" message:@"Check username and password in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert show];
+		[alert release];
+//		NSLog(@"Login failed.");
 	}
 	else
 	{

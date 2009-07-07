@@ -19,6 +19,8 @@
 	int xmlParseDepth;
 	BOOL bParsingBeerReview;
 	NSMutableData* xmlPostResponse;
+	UIView* overlay;
+	UIActivityIndicatorView* spinner;
 }
 
 @property (nonatomic,retain) NSString* beerID;
@@ -29,6 +31,8 @@
 @property (nonatomic) int xmlParseDepth;
 @property (nonatomic) BOOL bParsingBeerReview;
 @property (nonatomic, retain) NSMutableData* xmlPostResponse;
+@property (nonatomic, retain) UIView* overlay;
+@property (nonatomic, retain) UIActivityIndicatorView* spinner;
 
 -(id) initWithBeerID:(NSString*)beer_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d;
 

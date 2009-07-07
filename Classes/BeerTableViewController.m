@@ -21,12 +21,16 @@
 @synthesize xmlParseDepth;
 @synthesize bParsingBeerReview;
 @synthesize xmlPostResponse;
+@synthesize overlay;
+@synthesize spinner;
 
 -(id) initWithBeerID:(NSString*)beer_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
 {
 	self.beerID=beer_id;
 	self.app=a;
 	self.appdel=d;
+	self.overlay=nil;
+	self.spinner=nil;
 
 	self.beerObj=[[BeerObject alloc] init];
 	self.title=@"Beer";
@@ -245,6 +249,8 @@
 				break;
 			case 1:
 			{
+				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+				
 				NSArray* ratings=[[NSArray alloc] initWithObjects:@" 1 ",@" 2 ",@" 3 ",@" 4 ",@" 5 ",nil];
 				UISegmentedControl* ratingctl=[[UISegmentedControl alloc] initWithItems:ratings];
 				[cell.contentView addSubview:ratingctl];
@@ -327,6 +333,34 @@
 
 -(void)ratingButtonTapped:(id)sender event:(id)event
 {
+//	[self.view addSubview:spinner];
+//	CGRect frame=CGRectMake(0.0, 0.0, 100.0, 100.0);
+	CGRect frame=self.view.frame;
+	
+	if (self.overlay==nil)
+	{
+		self.overlay=[[UIView alloc] initWithFrame:frame];
+		self.overlay.backgroundColor=[UIColor blackColor];
+		self.overlay.alpha=0.7;
+	}
+	
+	if (self.spinner==nil)
+	{
+	//	UIActivityIndicatorView* spinner=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+		self.spinner=[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0, 0.0, 25.0, 25.0)];
+		self.spinner.activityIndicatorViewStyle=UIActivityIndicatorViewStyleWhite;
+	//	[spinner sizeToFit];
+		self.spinner.center=self.overlay.center;
+	//	spinner.autoresizingMask=(UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
+		[self.overlay addSubview:self.spinner];
+		[self.spinner release];
+	}
+
+	[self.spinner startAnimating];
+	self.spinner.hidden=NO;
+	[self.view addSubview:self.overlay];
+	[self.overlay release];
+	
 	UISegmentedControl* segctl=(UISegmentedControl*)sender;
 	NSInteger rating=segctl.selectedSegmentIndex;
 	
@@ -597,7 +631,7 @@
 	NSHTTPURLResponse* httprsp=(NSHTTPURLResponse*)response;
 	NSInteger n=httprsp.statusCode;
 	
-	if (n==401)
+	if (n==201)
 	{
 		NSLog(@"Need to login...");
 		[appdel login];
@@ -639,6 +673,11 @@
     // release the connection, and the data object
     [connection release];
     [xmlPostResponse release];
+	
+	[self.spinner stopAnimating];
+	[self.overlay removeFromSuperview];
+	self.spinner=nil;
+	self.overlay=nil;
 }
 
 @end
