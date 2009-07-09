@@ -230,7 +230,8 @@
 	
     static NSString *CellIdentifier = @"Cell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = nil;
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
@@ -258,6 +259,7 @@
 				NSString* user_rating=[self.beerObj.data objectForKey:@"user_rating"];
 				if (user_rating!=nil) // No user review
 					ratingctl.currentRating=[user_rating integerValue];
+				NSLog(@"Current rating:%d",ratingctl.currentRating);
 				
 				// Set the callback for a review
 				[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];

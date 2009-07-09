@@ -21,18 +21,63 @@
 
 - (id)initWithFrame:(CGRect)aRect
 {
+	[super initWithFrame:aRect];
+
 	self.contentMode=UIViewContentModeCenter;
 	
 	self.highestRating=kDefaultHighestRating;
 	self.currentRating=0; // Default is no rating
+	self.starImageViews=[NSMutableArray arrayWithCapacity:self.highestRating];
 
 	// Shrink it a bit to make it look better
 	CGRect tmp=CGRectInset(aRect,kFramePadding,0);
 	tmp.origin.x-=10;
 	self.starBox=tmp;
+
+//	self.frame=self.superview.frame;
+	if ([self.starImageViews count]==0)
+	{
+		// Put star images in
+		int partition_width=self.starBox.size.width/self.highestRating;
+		//NSLog(@"Partition width:%d",partition_width);
+		for (int i=0;i<self.highestRating;++i)
+		{
+			UIImage* emptyStarImage=[UIImage imageNamed:@"dot.png"];
+			if (emptyStarImage)
+			{
+				UIImage* starImage=[UIImage imageNamed:@"star_filled.png"];
+				if (starImage)
+				{
+					UIImageView* iv=[[UIImageView alloc] initWithImage:emptyStarImage highlightedImage:starImage];
+					iv.center=CGPointMake((self.starBox.origin.x-self.frame.origin.x)+(i*partition_width)+(0.5*partition_width),self.frame.size.height/2);
+					//NSLog(@"Center #%d:%d",i,(int)iv.center.x);
+					[self addSubview:iv];
+					
+					[self.starImageViews addObject:iv];
+					
+					[iv release];
+					[starImage release];
+				}
+				[emptyStarImage release];
+			}
+		}
+	}
+//	[self setStarsForRating:self.currentRating];
 	
-	return [super initWithFrame:aRect];
+	return self;
 }
+
+//-(void)drawRect:(CGRect)rect
+//{
+//	[super drawRect:rect];
+//	[self.superview drawRect:rect];
+//	[self setStarsForRating:self.currentRating];
+//}
+
+//- (void)willRemoveSubview:(UIView *)subview
+//{
+//	[super willRemoveSubview:subview];
+//}
 
 - (void)setStarsForRating:(NSUInteger)rating
 {
@@ -79,7 +124,7 @@
 		if (CGRectContainsPoint(self.starBox, pt))
 		{
 			self.currentRating=[self setStarsForTouch:touch];
-			NSLog(@"star rating:%d",self.currentRating);
+			//NSLog(@"star rating:%d",self.currentRating);
 			// Notify the owner of a rating
 			[self sendActionsForControlEvents:UIControlEventValueChanged];
 		}
@@ -93,36 +138,7 @@
 
 - (void)didMoveToWindow
 {
-	if (self.window!=nil && self.superview!=nil)
-	{
-		self.frame=self.superview.frame;
-		self.starImageViews=[NSMutableArray arrayWithCapacity:self.highestRating];
-		// Put star images in
-		int partition_width=self.starBox.size.width/self.highestRating;
-		NSLog(@"Partition width:%d",partition_width);
-		for (int i=0;i<self.highestRating;++i)
-		{
-			UIImage* emptyStarImage=[UIImage imageNamed:@"dot.png"];
-			if (emptyStarImage)
-			{
-				UIImage* starImage=[UIImage imageNamed:@"star_filled.png"];
-				if (starImage)
-				{
-					UIImageView* iv=[[UIImageView alloc] initWithImage:emptyStarImage highlightedImage:starImage];
-					iv.center=CGPointMake((self.starBox.origin.x-self.frame.origin.x)+(i*partition_width)+(0.5*partition_width),self.frame.size.height/2);
-					NSLog(@"Center #%d:%d",i,(int)iv.center.x);
-					[self addSubview:iv];
-					
-					[self.starImageViews addObject:iv];
-					
-					//[iv release]; caused a crash
-					[starImage release];
-				}
-				[emptyStarImage release];
-			}
-		}
-		[self setStarsForRating:self.currentRating];
-	}
+	[self setStarsForRating:self.currentRating];
 }
 
 @end

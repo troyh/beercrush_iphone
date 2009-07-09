@@ -63,10 +63,7 @@
 	mySearchBar=[[UISearchBar alloc] initWithFrame:nav.navigationBar.frame];
 	mySearchBar.delegate=self;
 	//	[tabBarController.view addSubview: mySearchBar];
-	if (FALSE)
-	{
-		[ctl.view addSubview: mySearchBar];
-	}
+	[ctl.view addSubview: mySearchBar];
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:2];
 	NearbyTableViewController* ntvc=[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain];
@@ -104,9 +101,9 @@
 //	self.nav.navigationBarHidden=NO;
 
 	// Start the navigation
-	BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:@"Dogfish-Head-Craft-Brewery-Milton" app:self.app appDelegate:self];
-	[[tabBarController.viewControllers objectAtIndex:1] pushViewController: btvc animated:YES];
-	[btvc release];
+//	BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:@"Dogfish-Head-Craft-Brewery-Milton" app:self.app appDelegate:self];
+//	[[tabBarController.viewControllers objectAtIndex:1] pushViewController: btvc animated:YES];
+//	[btvc release];
 
 }
 

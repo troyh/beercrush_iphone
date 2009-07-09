@@ -11,6 +11,7 @@
 #import "ReviewsTableViewController.h"
 #import "BeerListTableViewController.h"
 #import "PhoneNumberEditTableViewController.h"
+#import "RatingControl.h"
 
 @implementation BreweryObject
 
@@ -200,7 +201,9 @@
 	
     static NSString *CellIdentifier = @"Cell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = nil;
+
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
     }
@@ -220,11 +223,18 @@
 					break;
 				case 1:
 				{
-					NSArray* ratings=[NSArray arrayWithObjects:@" 1 ",@" 2 ",@" 3 ",@" 4 ",@" 5 ",nil];
-					UISegmentedControl* ratingctl=[[UISegmentedControl alloc] initWithItems:ratings];
-					[cell.contentView addSubview:ratingctl];
+					RatingControl* ratingctl=[[RatingControl alloc] initWithFrame:cell.contentView.frame];
 					
+					// Set current user's rating (if any)
+					NSString* user_rating=[self.breweryObject.data objectForKey:@"user_rating"];
+					if (user_rating!=nil) // No user review
+						ratingctl.currentRating=[user_rating integerValue];
+					
+					// Set the callback for a review
 					[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
+					
+					[cell.contentView addSubview:ratingctl];
+					[ratingctl release];
 					break;
 				}
 				case 2:
