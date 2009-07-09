@@ -9,6 +9,7 @@
 #import "BeerCrushAppDelegate.h"
 #import "MyTableViewController.h"
 #import "NearbyTableViewController.h"
+#import "BreweryTableViewController.h"
 
 @implementation BeerObject
 
@@ -55,14 +56,18 @@
 	nav=ctl;
 	ctl.title=@"Places";
 	tabBarController.selectedViewController=ctl;
+	
 	// Create the search bar
 	CGRect sbf=application.keyWindow.frame;
-	sbf.size.height=nav.navigationBar.frame.size.height; // TODO: make this the height of the navbar
+	sbf.size.height=nav.navigationBar.frame.size.height;
 	mySearchBar=[[UISearchBar alloc] initWithFrame:nav.navigationBar.frame];
 	mySearchBar.delegate=self;
 	//	[tabBarController.view addSubview: mySearchBar];
-	[ctl.view addSubview: mySearchBar];
-
+	if (FALSE)
+	{
+		[ctl.view addSubview: mySearchBar];
+	}
+	
 	ctl=[tabBarController.viewControllers objectAtIndex:2];
 	NearbyTableViewController* ntvc=[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain];
 	ntvc.app=app;
@@ -87,6 +92,21 @@
 	nav.delegate=self;
 	
 	[tabBarController retain];
+	
+	//
+	// Automatically navigate to where the user last closed the app
+	//
+
+//	// Hide search bar
+//	[mySearchBar resignFirstResponder];
+//	mySearchBar.hidden=YES;
+//	self.nav.view.frame=app.keyWindow.frame;
+//	self.nav.navigationBarHidden=NO;
+
+	// Start the navigation
+	BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:@"Dogfish-Head-Craft-Brewery-Milton" app:self.app appDelegate:self];
+	[[tabBarController.viewControllers objectAtIndex:1] pushViewController: btvc animated:YES];
+	[btvc release];
 
 }
 

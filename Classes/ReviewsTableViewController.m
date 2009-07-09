@@ -118,10 +118,19 @@
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
     }
     
+	NSArray* starsfmt=[NSArray arrayWithObjects:
+		@"☆☆☆☆☆ %@",
+		@"★☆☆☆☆ %@",
+		@"★★☆☆☆ %@",
+		@"★★★☆☆ %@",
+		@"★★★★☆ %@",
+		@"★★★★★ %@",
+		nil];
+
     // Set up the cell...
-	[cell.textLabel setText:[NSString stringWithFormat:@"%@:%@",
-						[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"user_id"],
-						[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"rating"]
+	[cell.textLabel setText:[NSString stringWithFormat:[starsfmt objectAtIndex:[[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"rating"] integerValue]],
+						[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"user_id"]
+						
 	]];
 
     return cell;

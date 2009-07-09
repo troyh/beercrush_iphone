@@ -10,6 +10,7 @@
 #import "BeerTableViewController.h"
 #import "ReviewsTableViewController.h"
 #import "PhoneNumberEditTableViewController.h"
+#import "RatingControl.h"
 
 @implementation BeerTableViewController
 
@@ -231,7 +232,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
 	tableView.allowsSelectionDuringEditing=YES;
@@ -250,25 +251,23 @@
 			case 1:
 			{
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
+				RatingControl* ratingctl=[[RatingControl alloc] initWithFrame:cell.contentView.frame];
 				
-				NSArray* ratings=[[NSArray alloc] initWithObjects:@" 1 ",@" 2 ",@" 3 ",@" 4 ",@" 5 ",nil];
-				UISegmentedControl* ratingctl=[[UISegmentedControl alloc] initWithItems:ratings];
-				[cell.contentView addSubview:ratingctl];
-				[ratings release];
-				
+				// Set current user's rating (if any)
 				NSString* user_rating=[self.beerObj.data objectForKey:@"user_rating"];
-				if (user_rating==nil) // No user review
-					ratingctl.selectedSegmentIndex=UISegmentedControlNoSegment;
-				else
-					ratingctl.selectedSegmentIndex=[user_rating integerValue] - 1;
+				if (user_rating!=nil) // No user review
+					ratingctl.currentRating=[user_rating integerValue];
 				
+				// Set the callback for a review
 				[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
 				
-				[ratingctl autorelease]; // TODO: necessary?
+				[cell.contentView addSubview:ratingctl];
+				[ratingctl release];
 				break;
 			}
 			case 2:
-				[cell.textLabel setText:@"Rating & Reviews"];
+				[cell.textLabel setText:@"Ratings & Reviews"];
 				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				break;
 			case 3:
@@ -349,9 +348,7 @@
 	//	UIActivityIndicatorView* spinner=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
 		self.spinner=[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0, 0.0, 25.0, 25.0)];
 		self.spinner.activityIndicatorViewStyle=UIActivityIndicatorViewStyleWhite;
-	//	[spinner sizeToFit];
 		self.spinner.center=self.overlay.center;
-	//	spinner.autoresizingMask=(UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
 		[self.overlay addSubview:self.spinner];
 		[self.spinner release];
 	}
@@ -361,12 +358,12 @@
 	[self.view addSubview:self.overlay];
 	[self.overlay release];
 	
-	UISegmentedControl* segctl=(UISegmentedControl*)sender;
-	NSInteger rating=segctl.selectedSegmentIndex;
+	RatingControl* ctl=(RatingControl*)sender;
+	NSInteger rating=ctl.currentRating;
 	
 	// Send the review to the site
 	
-	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&beer_id=%@", rating+1, beerID];
+	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&beer_id=%@", rating, beerID];
 	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 
 	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW]
@@ -674,8 +671,10 @@
     [connection release];
     [xmlPostResponse release];
 	
-	[self.spinner stopAnimating];
-	[self.overlay removeFromSuperview];
+	if (self.spinner!=nil)
+		[self.spinner stopAnimating];
+	if (self.overlay!=nil)
+		[self.overlay removeFromSuperview];
 	self.spinner=nil;
 	self.overlay=nil;
 }

@@ -274,7 +274,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>11</integer>
+									<integer>23</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -317,7 +317,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>ReviewsTableViewController.m</string>
+								<string>RatingControl.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -325,11 +325,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>ReviewsTableViewController.m</string>
+										<string>RatingControl.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>0577EB4E1003FC5A00A2468C</string>
+										<string>0577ED4D10069EEA00A2468C</string>
 										<key>history</key>
 										<array>
 											<string>05C9AA760F53458A0020B102</string>
@@ -346,8 +346,6 @@
 											<string>05944DAD0F72E26C0043D34C</string>
 											<string>05944DD60F72EC510043D34C</string>
 											<string>05944DE10F72EF640043D34C</string>
-											<string>0577E7DD0FF5551A00A2468C</string>
-											<string>0577E8020FF5781000A2468C</string>
 											<string>0577E9BE0FFD625C00A2468C</string>
 											<string>0577E9BF0FFD625C00A2468C</string>
 											<string>0577E9C20FFD625C00A2468C</string>
@@ -355,13 +353,18 @@
 											<string>0577EA621002B62900A2468C</string>
 											<string>0577EA7B1003CE1000A2468C</string>
 											<string>0577EAA41003D94C00A2468C</string>
-											<string>0577EAB21003E5F600A2468C</string>
 											<string>0577EAD71003EBA600A2468C</string>
-											<string>0577EADF1003ED2B00A2468C</string>
 											<string>0577EB1D1003F37500A2468C</string>
-											<string>0577EB271003F55800A2468C</string>
-											<string>0577EB4B1003FC5A00A2468C</string>
-											<string>0577EB4C1003FC5A00A2468C</string>
+											<string>0577EB62100512F600A2468C</string>
+											<string>0577EBDF10054C0200A2468C</string>
+											<string>0577EBEA10054CCB00A2468C</string>
+											<string>0577EBFC10054D6600A2468C</string>
+											<string>0577EC3810055CE300A2468C</string>
+											<string>0577EC3910055CE300A2468C</string>
+											<string>0577ECC910068CEF00A2468C</string>
+											<string>0577ED0B1006974F00A2468C</string>
+											<string>0577ED181006990700A2468C</string>
+											<string>0577ED191006990700A2468C</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -458,6 +461,77 @@
 											<string>0577EB291003F55800A2468C</string>
 											<string>0577EB2A1003F55800A2468C</string>
 											<string>0577EB4D1003FC5A00A2468C</string>
+											<string>0577EB64100512F600A2468C</string>
+											<string>0577EB65100512F600A2468C</string>
+											<string>0577EB66100512F600A2468C</string>
+											<string>0577EBA7100544B000A2468C</string>
+											<string>0577EBA8100544B000A2468C</string>
+											<string>0577EBB51005493E00A2468C</string>
+											<string>0577EBB61005493E00A2468C</string>
+											<string>0577EBB71005493E00A2468C</string>
+											<string>0577EBB81005493E00A2468C</string>
+											<string>0577EBB91005493E00A2468C</string>
+											<string>0577EBBA1005493E00A2468C</string>
+											<string>0577EBBB1005493E00A2468C</string>
+											<string>0577EBC4100549F000A2468C</string>
+											<string>0577EBC5100549F000A2468C</string>
+											<string>0577EBCC10054A1F00A2468C</string>
+											<string>0577EBCD10054A1F00A2468C</string>
+											<string>0577EBCE10054A1F00A2468C</string>
+											<string>0577EBCF10054A1F00A2468C</string>
+											<string>0577EBD710054AD900A2468C</string>
+											<string>0577EBD810054AD900A2468C</string>
+											<string>0577EBE210054C0200A2468C</string>
+											<string>0577EBE310054C0200A2468C</string>
+											<string>0577EBE410054C0200A2468C</string>
+											<string>0577EBE510054C0200A2468C</string>
+											<string>0577EBED10054CCB00A2468C</string>
+											<string>0577EBEE10054CCB00A2468C</string>
+											<string>0577EBEF10054CCB00A2468C</string>
+											<string>0577EBFD10054D6600A2468C</string>
+											<string>0577EC2C1005588600A2468C</string>
+											<string>0577EC2D1005588600A2468C</string>
+											<string>0577EC3B10055CE300A2468C</string>
+											<string>0577EC3C10055CE300A2468C</string>
+											<string>0577EC3D10055CE300A2468C</string>
+											<string>0577EC3E10055CE300A2468C</string>
+											<string>0577ECCD10068CEF00A2468C</string>
+											<string>0577ECCE10068CEF00A2468C</string>
+											<string>0577ECCF10068CEF00A2468C</string>
+											<string>0577ECD010068CEF00A2468C</string>
+											<string>0577ECD110068CEF00A2468C</string>
+											<string>0577ECD210068CEF00A2468C</string>
+											<string>0577ECD310068CEF00A2468C</string>
+											<string>0577ECD410068CEF00A2468C</string>
+											<string>0577ECD510068CEF00A2468C</string>
+											<string>0577ECD610068CEF00A2468C</string>
+											<string>0577ECD710068CEF00A2468C</string>
+											<string>0577ECD810068CEF00A2468C</string>
+											<string>0577ECD910068CEF00A2468C</string>
+											<string>0577ECDA10068CEF00A2468C</string>
+											<string>0577ECDB10068CEF00A2468C</string>
+											<string>0577ECDC10068CEF00A2468C</string>
+											<string>0577ECE510068E7100A2468C</string>
+											<string>0577ECF4100695C500A2468C</string>
+											<string>0577ECF5100695C500A2468C</string>
+											<string>0577ECF6100695C500A2468C</string>
+											<string>0577ECF7100695C500A2468C</string>
+											<string>0577ECF8100695C500A2468C</string>
+											<string>0577ECF9100695C500A2468C</string>
+											<string>0577ECFA100695C500A2468C</string>
+											<string>0577ECFB100695C500A2468C</string>
+											<string>0577ECFC100695C500A2468C</string>
+											<string>0577ECFD100695C500A2468C</string>
+											<string>0577ECFE100695C500A2468C</string>
+											<string>0577ECFF100695C500A2468C</string>
+											<string>0577ED00100695C500A2468C</string>
+											<string>0577ED01100695C500A2468C</string>
+											<string>0577ED02100695C500A2468C</string>
+											<string>0577ED03100695C500A2468C</string>
+											<string>0577ED0D1006974F00A2468C</string>
+											<string>0577ED0E1006974F00A2468C</string>
+											<string>0577ED1A1006990700A2468C</string>
+											<string>0577ED1B1006990700A2468C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -651,7 +725,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>0577EB491003FBFF00A2468C</string>
+		<string>0577ED4C10069ED100A2468C</string>
 		<string>0577E9F30FFD631D00A2468C</string>
 		<string>0577E9EC0FFD625C00A2468C</string>
 		<string>1CD10A99069EF8BA00B06720</string>
@@ -676,12 +750,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>BeerTableViewController.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
