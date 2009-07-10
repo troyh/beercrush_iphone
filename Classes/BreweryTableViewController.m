@@ -26,8 +26,16 @@
 -(id)init
 {
 	self.data=[[NSMutableDictionary alloc] initWithCapacity:10];
-	[self.data setObject:[[NSMutableDictionary alloc] initWithCapacity:4] forKey:@"address"];
+	[self.data release];
+	[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease] forKey:@"address"];
 	return self;
+}
+
+-(void)dealloc
+{
+	if (self.data)
+		[self.data release];
+	[super dealloc];
 }
 
 @end
@@ -47,7 +55,9 @@
 	self.breweryID=brewery_id;
 	self.app=a;
 	self.appdel=d;
-	self.xmlParserPath=[NSMutableArray arrayWithCapacity:10];
+	self.xmlParserPath=[[NSMutableArray arrayWithCapacity:10] autorelease];
+	self.xmlPostResponse=nil;
+	self.currentElemValue=nil;
 	
 	self.title=@"Brewery";
 	
@@ -60,9 +70,17 @@
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	[parser parse];
-
+	[parser	release];
 	
 	return self;
+}
+
+-(void)dealloc
+{
+	[self.breweryObject release];
+	[self.xmlPostResponse release];
+	[self.currentElemValue release];
+	[super dealloc];
 }
 
 /*
@@ -169,6 +187,8 @@
 		self.title=@"Brewery";
 	}
 }
+
+
 
 
 #pragma mark Table view methods
@@ -452,10 +472,6 @@
 */
 
 
-- (void)dealloc {
-    [super dealloc];
-}
-
 // NSXMLParser delegate methods
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
@@ -483,6 +499,7 @@
 	    [elementName isEqualToString:@"phone"]
 	)
 	{
+		[self.currentElemValue release];
 		self.currentElemValue=[NSMutableString string];
 	}
 }
@@ -570,6 +587,7 @@
 	
     // receivedData is declared as a method instance elsewhere
     [xmlPostResponse release];
+	xmlPostResponse=nil;
 	
     // inform the user
     NSLog(@"Connection failed! Error - %@ %@",
@@ -589,6 +607,7 @@
     // release the connection, and the data object
     [connection release];
     [xmlPostResponse release];
+	xmlPostResponse=nil;
 }
 
 @end

@@ -23,6 +23,9 @@
 {
 	self.breweryID=brewery_id;
 	self.app=a;
+	self.currentElemAttribs=nil;
+	self.currentElemValue=nil;
+	self.beerList=nil;
 	
 	self.title=@"Beer List";
 	
@@ -33,8 +36,20 @@
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	[parser parse];
+	[parser release];
 	
 	return self;
+}
+
+- (void)dealloc {
+//	NSLog(@"currentElemValue retainCount=%d",[self.currentElemValue retainCount]);
+//	NSLog(@"currentElemAttribs retainCount=%d",[self.currentElemAttribs retainCount]);
+	[self.breweryID release];
+	[self.beerList release];
+	[self.currentElemValue release];
+	[self.currentElemAttribs release];
+	
+    [super dealloc];
 }
 
 
@@ -130,7 +145,9 @@
 	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
 	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)self.app.delegate;
 	BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID:[beer.data valueForKey:@"id"]  app:self.app appDelegate:del];
+	NSLog(@"btvc retainCount=%d (post alloc)",[btvc retainCount]);
 	[del.nav pushViewController: btvc animated:YES];
+	NSLog(@"btvc retainCount=%d (post pushViewController)",[btvc retainCount]);
 	[btvc release];
 }
 
@@ -175,16 +192,17 @@
 */
 
 
-- (void)dealloc {
-    [super dealloc];
-}
 
 // NSXMLParser delegate methods
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
 	// Clear any old data
+	[self.currentElemValue release];
 	self.currentElemValue=nil;
+	
+	[self.currentElemAttribs release];
+	self.currentElemAttribs=nil;
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser
@@ -201,7 +219,10 @@
 	}
 	else if ([elementName isEqualToString:@"item"])
 	{
-		self.currentElemValue=[NSMutableString string];
+		[self.currentElemValue release];
+		self.currentElemValue=[[NSMutableString alloc] initWithCapacity:10];
+
+		[self.currentElemAttribs release];
 		self.currentElemAttribs=[[NSMutableDictionary alloc] initWithCapacity:10];
 		[self.currentElemAttribs addEntriesFromDictionary:attributeDict];
 	}
@@ -214,14 +235,19 @@
 		if ([elementName isEqualToString:@"name"])
 		{
 			BeerObject* beer=[[BeerObject alloc] init];
-			[beer.data setObject:currentElemValue forKey:@"name"];
-			[beer.data setObject:[currentElemAttribs objectForKey:@"id"] forKey:@"id"];
+			[beer.data setObject:self.currentElemValue forKey:@"name"];
+			[beer.data setObject:[[[currentElemAttribs objectForKey:@"id"] copy] autorelease] forKey:@"id"];
 			
 			[beerList addObject:beer];
+			[beer release];
 		}
 		
+		[self.currentElemValue release];
 		self.currentElemValue=nil;
 	}
+
+	[self.currentElemAttribs release];
+	self.currentElemAttribs=nil;
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError

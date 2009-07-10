@@ -27,11 +27,14 @@
 
 -(id) initWithBeerID:(NSString*)beer_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
 {
-	self.beerID=beer_id;
+	self.beerID=[beer_id copy];
+	NSLog(@"BeerTableViewController initWithBeerID beerID retainCount=%d",[beerID retainCount]);
 	self.app=a;
 	self.appdel=d;
 	self.overlay=nil;
 	self.spinner=nil;
+	self.xmlPostResponse=nil;
+	self.currentElemValue=nil;
 
 	self.beerObj=[[BeerObject alloc] init];
 	self.title=@"Beer";
@@ -43,11 +46,10 @@
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	BOOL retval=[parser parse];
+	[parser release];
 	
 	if (retval==YES)
 	{
-		[parser release];
-		
 		// Separate the brewery ID and the beer ID from the beerID
 		NSArray* idparts=[self.beerID componentsSeparatedByString:@":"];
 		
@@ -69,6 +71,20 @@
 	}
 	
 	return self;
+}
+
+- (void)dealloc
+{
+	NSLog(@"BeerTableViewController release: retainCount=%d",[self retainCount]);
+	NSLog(@"BeerTableViewController release: beerID retainCount=%d",[beerID retainCount]);
+	//	[beerID release];
+	if (self.beerObj)
+		[self.beerObj release];
+	if (self.currentElemValue)
+		[self.currentElemValue release];
+	if (xmlPostResponse)
+		[xmlPostResponse release];
+    [super dealloc];
 }
 
 /*
@@ -222,7 +238,7 @@
 				break;
 			}
 	}
-	return 44.0f; // 44 is the default iPhone table cell height
+	return 44.0f; // 44 is the default iPhone table cell height TODO: don't hardcode this
 }
 
 // Customize the appearance of table view cells.
@@ -313,11 +329,11 @@
 				NSString* ibu=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"ibu"];
 				NSString* abv=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"abv"];
 				if ([ibu length])
-					[cell.textLabel setText:[[NSString alloc] initWithFormat:@"%u%% ABV %u IBUs", 
+					[cell.textLabel setText:[[[NSString alloc] initWithFormat:@"%u%% ABV %u IBUs", 
 							   abv.intValue, 
-							   ibu.intValue]];
+							   ibu.intValue] autorelease]];
 				else
-					[cell.textLabel setText:[[NSString alloc] initWithFormat:@"%u%% ABV", abv.intValue]];
+					[cell.textLabel setText:[[[NSString alloc] initWithFormat:@"%u%% ABV", abv.intValue] autorelease]];
 				
 				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
@@ -503,9 +519,6 @@
 */
 
 
-- (void)dealloc {
-    [super dealloc];
-}
 
 
 // NSXMLParser delegate methods
@@ -513,7 +526,11 @@
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
 	// Clear any old data
-	self.currentElemValue=nil;
+	if (self.currentElemValue)
+	{
+		[self.currentElemValue release];
+		self.currentElemValue=nil;
+	}
 	xmlParseDepth=0;
 }
 
@@ -537,7 +554,9 @@
 	{
 		if ([elementName isEqualToString:@"rating"])
 		{
-			self.currentElemValue=[NSMutableString string];
+			if (currentElemValue)
+				[currentElemValue release];
+			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:5];
 		}
 	}
 	else
@@ -549,17 +568,29 @@
 		else if ([elementName isEqualToString:@"name"])
 		{
 			if (xmlParseDepth==2)
-				self.currentElemValue=[NSMutableString string];
+			{
+				if (currentElemValue)
+					[currentElemValue release];
+				self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
+			}
 		}
 		else if ([elementName isEqualToString:@"description"])
 		{
 			if (xmlParseDepth==2)
-				self.currentElemValue=[NSMutableString string];
+			{
+				if (currentElemValue)
+					[currentElemValue release];
+				self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
+			}
 		}
 		else if ([elementName isEqualToString:@"style"])
 		{
 			if (xmlParseDepth==3)
-				self.currentElemValue=[NSMutableString string];
+			{
+				if (currentElemValue)
+					[currentElemValue release];
+				self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
+			}
 		}
 	}
 }
@@ -573,6 +604,8 @@
 		if ([elementName isEqualToString:@"rating"])
 		{
 			[beerObj.data setObject:currentElemValue forKey:@"user_rating"];
+			[currentElemValue release];
+			currentElemValue=nil;
 		}
 	}
 	else
@@ -593,6 +626,7 @@
 					[beerObj.data setObject:currentElemValue forKey:@"style"];
 			}
 			
+			[currentElemValue release];
 			self.currentElemValue=nil;
 		}
 	}
@@ -653,6 +687,7 @@
 	
     // receivedData is declared as a method instance elsewhere
     [xmlPostResponse release];
+	xmlPostResponse=nil;
 	
     // inform the user
     NSLog(@"Connection failed! Error - %@ %@",
@@ -672,6 +707,7 @@
     // release the connection, and the data object
     [connection release];
     [xmlPostResponse release];
+	xmlPostResponse=nil;
 	
 	if (self.spinner!=nil)
 		[self.spinner stopAnimating];

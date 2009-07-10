@@ -27,7 +27,7 @@
 	
 	self.highestRating=kDefaultHighestRating;
 	self.currentRating=0; // Default is no rating
-	self.starImageViews=[NSMutableArray arrayWithCapacity:self.highestRating];
+	self.starImageViews=[[NSMutableArray alloc] initWithCapacity:self.highestRating];
 
 	// Shrink it a bit to make it look better
 	CGRect tmp=CGRectInset(aRect,kFramePadding,0);
@@ -65,6 +65,12 @@
 //	[self setStarsForRating:self.currentRating];
 	
 	return self;
+}
+
+-(void)dealloc
+{
+	[starImageViews release];
+	[super dealloc];
 }
 
 //-(void)drawRect:(CGRect)rect

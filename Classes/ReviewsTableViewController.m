@@ -187,6 +187,9 @@
 
 - (void)dealloc {
     [super dealloc];
+	
+	[beerID release];
+	currentElemValue=nil;
 }
 
 		

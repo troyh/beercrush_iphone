@@ -23,9 +23,18 @@
 
 -(id)init
 {
-	self.data=[[NSMutableDictionary alloc] initWithCapacity:5];
+//	NSLog(@"BeerObject init");
+	self.data=[[[NSMutableDictionary alloc] initWithCapacity:5] autorelease];
 	return self;
 }
+
+-(void)dealloc
+{
+//	NSLog(@"BeerObject dealloc");
+	[self.data release];
+	[super dealloc];
+}
+
 
 @end
 

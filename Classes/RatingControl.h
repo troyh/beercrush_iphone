@@ -16,10 +16,10 @@
 	CGRect starBox;
 }
 
-@property (nonatomic) NSUInteger highestRating;
-@property (nonatomic) NSUInteger currentRating;
+@property (nonatomic,assign) NSUInteger highestRating;
+@property (nonatomic,assign) NSUInteger currentRating;
 @property (nonatomic,retain) NSMutableArray* starImageViews;
-@property (nonatomic) CGRect starBox;
+@property (nonatomic,assign) CGRect starBox;
 
 - (void)setStarsForRating:(NSUInteger)rating;
 - (NSUInteger)setStarsForTouch:(UITouch*)pt;

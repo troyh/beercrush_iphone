@@ -87,6 +87,7 @@
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	[parser parse];
+	[parser release];
 	
 	// Get results back
 
