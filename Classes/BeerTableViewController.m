@@ -78,12 +78,11 @@
 	NSLog(@"BeerTableViewController release: retainCount=%d",[self retainCount]);
 	NSLog(@"BeerTableViewController release: beerID retainCount=%d",[beerID retainCount]);
 	//	[beerID release];
-	if (self.beerObj)
-		[self.beerObj release];
-	if (self.currentElemValue)
-		[self.currentElemValue release];
-	if (xmlPostResponse)
-		[xmlPostResponse release];
+	[self.beerObj release];
+	self.beerObj=nil;
+	[self.currentElemValue release];
+	self.currentElemValue=nil;
+	[xmlPostResponse release];
     [super dealloc];
 }
 
@@ -554,8 +553,7 @@
 	{
 		if ([elementName isEqualToString:@"rating"])
 		{
-			if (currentElemValue)
-				[currentElemValue release];
+			[self.currentElemValue release];
 			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:5];
 		}
 	}
@@ -569,8 +567,7 @@
 		{
 			if (xmlParseDepth==2)
 			{
-				if (currentElemValue)
-					[currentElemValue release];
+				[self.currentElemValue release];
 				self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
 			}
 		}
@@ -578,8 +575,7 @@
 		{
 			if (xmlParseDepth==2)
 			{
-				if (currentElemValue)
-					[currentElemValue release];
+				[self.currentElemValue release];
 				self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
 			}
 		}
@@ -587,8 +583,7 @@
 		{
 			if (xmlParseDepth==3)
 			{
-				if (currentElemValue)
-					[currentElemValue release];
+				[self.currentElemValue release];
 				self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
 			}
 		}
@@ -604,7 +599,7 @@
 		if ([elementName isEqualToString:@"rating"])
 		{
 			[beerObj.data setObject:currentElemValue forKey:@"user_rating"];
-			[currentElemValue release];
+			[self.currentElemValue release];
 			currentElemValue=nil;
 		}
 	}
@@ -626,7 +621,7 @@
 					[beerObj.data setObject:currentElemValue forKey:@"style"];
 			}
 			
-			[currentElemValue release];
+			[self.currentElemValue release];
 			self.currentElemValue=nil;
 		}
 	}

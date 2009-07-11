@@ -47,6 +47,7 @@
 	[self.breweryID release];
 	[self.beerList release];
 	[self.currentElemValue release];
+	self.currentElemValue=nil;
 	[self.currentElemAttribs release];
 	
     [super dealloc];
@@ -220,7 +221,8 @@
 	else if ([elementName isEqualToString:@"item"])
 	{
 		[self.currentElemValue release];
-		self.currentElemValue=[[NSMutableString alloc] initWithCapacity:10];
+		self.currentElemValue=nil;
+//		self.currentElemValue=[[NSMutableString alloc] initWithCapacity:10];
 
 		[self.currentElemAttribs release];
 		self.currentElemAttribs=[[NSMutableDictionary alloc] initWithCapacity:10];

@@ -244,6 +244,7 @@
 				case 1:
 				{
 					RatingControl* ratingctl=[[RatingControl alloc] initWithFrame:cell.contentView.frame];
+					NSLog(@"RatingControl retainCount=%d",[ratingctl retainCount]);
 					
 					// Set current user's rating (if any)
 					NSString* user_rating=[self.breweryObject.data objectForKey:@"user_rating"];

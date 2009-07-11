@@ -28,6 +28,7 @@
 	self.highestRating=kDefaultHighestRating;
 	self.currentRating=0; // Default is no rating
 	self.starImageViews=[[NSMutableArray alloc] initWithCapacity:self.highestRating];
+	NSLog(@"initWithFrame starImageViews retainCount=%d",[self.starImageViews retainCount]);
 
 	// Shrink it a bit to make it look better
 	CGRect tmp=CGRectInset(aRect,kFramePadding,0);
@@ -69,7 +70,8 @@
 
 -(void)dealloc
 {
-	[starImageViews release];
+	[self.starImageViews release];
+//	NSLog(@"starImageViews retainCount=%d",[self.starImageViews retainCount]);
 	[super dealloc];
 }
 
