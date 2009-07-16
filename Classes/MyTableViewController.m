@@ -82,39 +82,22 @@
 	searchResultsList_type=[[NSMutableArray alloc] initWithCapacity:10];
 	searchResultsList_id=[[NSMutableArray alloc] initWithCapacity:10];
 	
-	// TODO: Send the query off to the server
+	// Send the query off to the server
 	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY, qs ]];
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
-	[parser parse];
+	BOOL parse_ok=[parser parse];
+	if (parse_ok==NO)
+	{
+		NSError* err=[parser parserError];
+		UIAlertView* vw=[[UIAlertView alloc] initWithTitle:@"Oops" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[vw show];
+		[vw release];
+	}
 	[parser release];
 	
 	// Get results back
-
 	
-//	[searchResultsList_title addObject:@"Dogfish Head"];
-//	[searchResultsList_desc  addObject:@"A brewer in Delaware"];
-//	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
-//	[searchResultsList_id   addObject:@"Dogfish-Head-Craft-Brewery-Milton"];
-//
-//	[searchResultsList_title addObject:@"North Coast Brewing Co."];
-//	[searchResultsList_desc  addObject:@"A brewer in Northern California"];
-//	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
-//	[searchResultsList_id   addObject:@"North-Coast-Brewing-Co"];
-//
-//	[searchResultsList_title addObject:@"Russian River"];
-//	[searchResultsList_desc  addObject:@"A brewery in California"];
-//	[searchResultsList_type  addObject:[NSNumber numberWithInt:Brewer]];
-//	[searchResultsList_id   addObject:@"Russian-River-Brewing-Co"];
-
-//	[searchResultsList_title addObject:@"Old Rasputin Russian Imperial Stout"];
-//	[searchResultsList_desc  addObject:@"An Imperial Stout"];
-//	[searchResultsList_type  addObject:[NSNumber numberWithInt:Beer]];
-//	[searchResultsList_id   addObject:@"Old-Rasputin"];
-	
-//	SearchResultObject* obj=[[SearchResultObject alloc] initWithTitle:@"Dogfish Head" desc:@"A brewer in Delaware" type:Brewer uri:@"/xml/brewery/Dogfish-Head" ];
-	
-//	[searchResultsList addObject: obj ];
 }
 
 /*

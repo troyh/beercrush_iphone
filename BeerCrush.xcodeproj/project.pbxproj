@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		051102A1100FDC8300610251 /* UserReviewsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 051102A0100FDC8300610251 /* UserReviewsTVC.m */; };
 		053653960F703F99000389C1 /* PhoneNumberEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */; };
 		0577EA4D1002AC7700A2468C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0577EA4C1002AC7700A2468C /* Settings.bundle */; };
 		0577ECB910068A1300A2468C /* RatingControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 0577ECB810068A1300A2468C /* RatingControl.m */; };
@@ -32,6 +33,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0511029F100FDC8300610251 /* UserReviewsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserReviewsTVC.h; sourceTree = "<group>"; };
+		051102A0100FDC8300610251 /* UserReviewsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserReviewsTVC.m; sourceTree = "<group>"; };
 		053653940F703F99000389C1 /* PhoneNumberEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneNumberEditTableViewController.h; sourceTree = "<group>"; };
 		053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneNumberEditTableViewController.m; sourceTree = "<group>"; };
 		0577EA4C1002AC7700A2468C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -110,6 +113,8 @@
 				053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */,
 				0577ECB710068A1300A2468C /* RatingControl.h */,
 				0577ECB810068A1300A2468C /* RatingControl.m */,
+				0511029F100FDC8300610251 /* UserReviewsTVC.h */,
+				051102A0100FDC8300610251 /* UserReviewsTVC.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -238,6 +243,7 @@
 				05F3C18A0F6F150400603ED1 /* PlaceTableViewController.m in Sources */,
 				053653960F703F99000389C1 /* PhoneNumberEditTableViewController.m in Sources */,
 				0577ECB910068A1300A2468C /* RatingControl.m in Sources */,
+				051102A1100FDC8300610251 /* UserReviewsTVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,11 +268,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BeerCrush_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = BeerCrush;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphoneos3.0;
 			};
 			name = Release;
 		};

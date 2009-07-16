@@ -31,20 +31,23 @@
 
 @end
 
-//#define BEERCRUSH_API_URL_HOST					"http://troyandgay.com:2337"
-#define BEERCRUSH_API_URL_HOST					"http://192.168.63.128"
+#define BEERCRUSH_API_URL_HOST					"https://troy:voi42vod@troyandgay.com/beercrush"
+//#define BEERCRUSH_API_URL_HOST					"http://192.168.63.128"
 
+#define BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY	@BEERCRUSH_API_URL_HOST"/api/autocomplete.fcgi?output=xml&q=%@"
 #define BEERCRUSH_API_URL_LOGIN					@BEERCRUSH_API_URL_HOST"/api/login"
 #define BEERCRUSH_API_URL_GET_BREWERY_META_DOC	@BEERCRUSH_API_URL_HOST"/xml/brewery/%@"
 #define BEERCRUSH_API_URL_GET_BEER_DOC			@BEERCRUSH_API_URL_HOST"/xml/beer/%@"
 #define BEERCRUSH_API_URL_GET_BEER_REVIEW_DOC	@BEERCRUSH_API_URL_HOST"/xml/beer_review/%@/%@/%@"
 #define BEERCRUSH_API_URL_GET_BREWERY_DOC		@BEERCRUSH_API_URL_HOST"/xml/brewery/%@"
 #define BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/xml/beer_review/%@/%@/_all"
+#define BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/xml/user/%@/beer_reviews.xml"
+
+// The following are not yet working on the server
 #define BEERCRUSH_API_URL_EDIT_BEER_DOC			@BEERCRUSH_API_URL_HOST"/api/edit/beer"
 #define BEERCRUSH_API_URL_POST_BEER_REVIEW		@BEERCRUSH_API_URL_HOST"/api/beer/review"
 #define BEERCRUSH_API_URL_EDIT_BREWERY_DOC		@BEERCRUSH_API_URL_HOST"/api/edit/brewery"
 #define BEERCRUSH_API_URL_POST_PLACE_REVIEW		@BEERCRUSH_API_URL_HOST"/api/post/place_review"
-#define BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY	@BEERCRUSH_API_URL_HOST"/api/autocomplete.fcgi?output=xml&q=%@"
 #define BEERCRUSH_API_URL_NEARBY_QUERY			@BEERCRUSH_API_URL_HOST"/api/nearby.fcgi?lat=%f&lon=%f&within=5"
 #define BEERCRUSH_API_URL_GET_PLACE_DOC			@BEERCRUSH_API_URL_HOST"/api/xml/place/%@.xml"
 #define BEERCRUSH_API_URL_EDIT_PLACE_DOC		@BEERCRUSH_API_URL_HOST"/api/edit/place"

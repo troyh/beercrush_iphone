@@ -10,6 +10,7 @@
 #import "MyTableViewController.h"
 #import "NearbyTableViewController.h"
 #import "BreweryTableViewController.h"
+#import "UserReviewsTVC.h"
 
 @implementation BeerObject
 
@@ -82,7 +83,11 @@
 	ctl.title=@"Nearby";
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:3];
+	UserReviewsTVC* urtvc=[[UserReviewsTVC alloc] initWithStyle:UITableViewStylePlain];
+	[ctl pushViewController:urtvc animated:NO];
+	[urtvc release];
 	ctl.title=@"My Reviews";
+	
 	ctl=[tabBarController.viewControllers objectAtIndex:4];
 	ctl.title=@"Wish List";
 	

@@ -57,7 +57,7 @@
 		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_REVIEW_DOC, 
 								  [idparts objectAtIndex:0], 
 								  [idparts objectAtIndex:1], 
-								  @"troyh"]]; // TODO: get real user's id
+								  [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
 		parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 		[parser setDelegate:self];
 		retval=[parser parse];

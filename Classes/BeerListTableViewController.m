@@ -222,7 +222,7 @@
 	{
 		[self.currentElemValue release];
 		self.currentElemValue=nil;
-//		self.currentElemValue=[[NSMutableString alloc] initWithCapacity:10];
+		self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
 
 		[self.currentElemAttribs release];
 		self.currentElemAttribs=[[NSMutableDictionary alloc] initWithCapacity:10];
