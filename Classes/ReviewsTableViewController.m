@@ -27,10 +27,20 @@
 	// Separate the brewery ID and the beer ID from the beerID
 	NSArray* idparts=[self.beerID componentsSeparatedByString:@":"];
 
-	// Retrieve XML doc for this beer
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC, 
+	NSURL* url;
+	if ([idparts count]==2)
+	{	// Retrieve XML doc for this beer
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC, 
 									 [idparts objectAtIndex:0],
 									 [idparts objectAtIndex:1]]];
+	}
+	else // Retrieve XML doc for this brewery
+	{
+		// TODO: make this work
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_BREWERY_REVIEWS_DOC, 
+								  [idparts objectAtIndex:0]]];
+	}
+	
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	BOOL retval=[parser parse];
