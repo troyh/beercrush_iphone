@@ -228,6 +228,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -275,7 +277,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>4</integer>
+									<integer>25</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -300,7 +302,7 @@
 							<real>203</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>801 155 1323 1423 0 0 2560 1578 </string>
+						<string>1178 155 1323 1423 0 0 2560 1578 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -311,14 +313,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>BeerTableViewController.m</string>
+								<string>UserReviewsTVC.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -326,11 +326,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>BeerTableViewController.m</string>
+										<string>UserReviewsTVC.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>050A23C1100FF66400F49B5B</string>
+										<string>050A23E61010FB2400F49B5B</string>
 										<key>history</key>
 										<array>
 											<string>05C9AA760F53458A0020B102</string>
@@ -360,14 +360,14 @@
 											<string>05110260100FDA3A00610251</string>
 											<string>05110287100FDB6F00610251</string>
 											<string>051102A6100FDD2B00610251</string>
-											<string>050A22EC100FE67800F49B5B</string>
 											<string>050A22ED100FE67800F49B5B</string>
 											<string>050A231B100FE74300F49B5B</string>
 											<string>050A2348100FEB4E00F49B5B</string>
 											<string>050A238F100FEFED00F49B5B</string>
-											<string>050A23BC100FF66400F49B5B</string>
-											<string>050A23BD100FF66400F49B5B</string>
-											<string>050A23BE100FF66400F49B5B</string>
+											<string>050A23C41010F92900F49B5B</string>
+											<string>050A23DF1010FB1E00F49B5B</string>
+											<string>050A23E41010FB2400F49B5B</string>
+											<string>050A23DE1010FB1E00F49B5B</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -434,6 +434,10 @@
 											<string>050A2392100FEFED00F49B5B</string>
 											<string>050A23BF100FF66400F49B5B</string>
 											<string>050A23C0100FF66400F49B5B</string>
+											<string>050A23C61010F92900F49B5B</string>
+											<string>050A23E01010FB1E00F49B5B</string>
+											<string>050A23E11010FB1E00F49B5B</string>
+											<string>050A23E51010FB2400F49B5B</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -447,7 +451,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1098, 1176}}</string>
 								<key>RubberWindowFrame</key>
-								<string>801 155 1323 1423 0 0 2560 1578 </string>
+								<string>1178 155 1323 1423 0 0 2560 1578 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -467,7 +471,7 @@
 								<key>Frame</key>
 								<string>{{0, 1181}, {1098, 201}}</string>
 								<key>RubberWindowFrame</key>
-								<string>801 155 1323 1423 0 0 2560 1578 </string>
+								<string>1178 155 1323 1423 0 0 2560 1578 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -627,6 +631,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>050A23E31010FB1E00F49B5B</string>
 		<string>050A2311100FE67800F49B5B</string>
 		<string>050A2312100FE67800F49B5B</string>
 		<string>056D28710F5319CA00A1F223</string>
@@ -635,7 +640,7 @@
 		<string>/Users/troy/Documents/BeerCrush/BeerCrush.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>801 155 1323 1423 0 0 2560 1578 </string>
+	<string>1178 155 1323 1423 0 0 2560 1578 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

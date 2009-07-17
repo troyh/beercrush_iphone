@@ -125,7 +125,7 @@
     
     // Set up the cell...
 	NSMutableDictionary* review=[self.reviewsList objectAtIndex:indexPath.row];
-	NSString* s=[review objectForKey:@"beer_id"];
+	NSString* s=[review objectForKey:@"beer_name"];
 	if (s==nil)
 		[cell.textLabel setText:@"???"];
 	else
@@ -241,24 +241,29 @@
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
 	// FYI, the test for count here is just for performance to avoid the array compare if possible
-	if ([self.xmlParserPath count]==1 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer_reviews",nil]])
+	if ([elementName isEqualToString:@"beer_review"])
 	{
-		if ([elementName isEqualToString:@"beer_review"])
+		if ([self.xmlParserPath count]==1 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer_reviews",nil]])
 		{
 			// Create a new review item in the reviewsList array
 			[self.reviewsList addObject:[NSMutableDictionary dictionaryWithCapacity:5]];
 		}
 	}
-	else if ([self.xmlParserPath count]==2 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer_reviews",@"beer_review",nil]])
-	{ // Is a Beer Review
-		if ([elementName isEqualToString:@"type"] ||
+	else if ([elementName isEqualToString:@"type"] ||
 			[elementName isEqualToString:@"timestamp"] ||
 			[elementName isEqualToString:@"beer_id"] ||
 			[elementName isEqualToString:@"rating"])
-		{
+	{
+		if ([self.xmlParserPath count]==2 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer_reviews",@"beer_review",nil]])
+		{ // XPath is /beer_reviews/beer_review (i.e., it's a beer review
 			// Init the string to hold the value of this element
 			self.currentElemValue=[[NSMutableString string] retain];
 		}
+	}
+	else if ([elementName isEqualToString:@"name"])
+	{ // XPath is /beer_reviews/beer_review/beer
+		if ([self.xmlParserPath count]==3 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer_reviews",@"beer_review",@"beer",nil]])
+			self.currentElemValue=[[NSMutableString string] retain];
 	}
 
 	[self.xmlParserPath addObject:elementName];
@@ -270,16 +275,23 @@
 	
 	if (self.currentElemValue)
 	{
-		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer_reviews",@"beer_review",nil]])
-		{ // Is a Beer Review
-			if ([elementName isEqualToString:@"type"] ||
-				[elementName isEqualToString:@"timestamp"] ||
-				[elementName isEqualToString:@"beer_id"] ||
-				[elementName isEqualToString:@"rating"])
+		if ([elementName isEqualToString:@"type"] ||
+			[elementName isEqualToString:@"timestamp"] ||
+			[elementName isEqualToString:@"beer_id"] ||
+			[elementName isEqualToString:@"rating"])
+		{
+			if ([self.xmlParserPath count]==2 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer_reviews",@"beer_review",nil]])
+			{ // Is a Beer Review
+				NSMutableDictionary* review=[self.reviewsList lastObject];
+				[review setObject:self.currentElemValue forKey:elementName];
+			}
+		}
+		else if ([elementName isEqualToString:@"name"])
+		{
+			if ([self.xmlParserPath count]==3 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer_reviews",@"beer_review",@"beer",nil]])
 			{
 				NSMutableDictionary* review=[self.reviewsList lastObject];
-				if (review)
-					[review setObject:self.currentElemValue forKey:elementName];
+				[review setObject:self.currentElemValue forKey:@"beer_name"];
 			}
 		}
 			

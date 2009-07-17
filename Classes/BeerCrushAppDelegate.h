@@ -31,8 +31,8 @@
 
 @end
 
-#define BEERCRUSH_API_URL_HOST					"https://troy:voi42vod@troyandgay.com/beercrush"
-//#define BEERCRUSH_API_URL_HOST					"http://192.168.63.128"
+//#define BEERCRUSH_API_URL_HOST					"https://troy:voi42vod@troyandgay.com/beercrush"
+#define BEERCRUSH_API_URL_HOST					"http://192.168.63.128"
 
 #define BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY	@BEERCRUSH_API_URL_HOST"/api/autocomplete.fcgi?output=xml&q=%@"
 #define BEERCRUSH_API_URL_LOGIN					@BEERCRUSH_API_URL_HOST"/api/login"
