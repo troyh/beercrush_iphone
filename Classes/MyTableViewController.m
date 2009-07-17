@@ -201,7 +201,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
     // Set up the cell...
@@ -227,6 +227,14 @@
 	if (p)
 	{
 		[cell.textLabel setText:[NSString stringWithCString:p encoding:NSASCIIStringEncoding]];
+		if (strchr(p+strlen(p)+1,':'))
+		{ // Beer
+			[cell.imageView initWithImage:[UIImage imageNamed:@"star_filled.png"]];
+		}
+		else 
+		{ // Place
+			[cell.imageView initWithImage:[UIImage imageNamed:@"dot.png"]];
+		}
 		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 	}
 	

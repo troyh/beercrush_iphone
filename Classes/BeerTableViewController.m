@@ -248,7 +248,7 @@
 //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     UITableViewCell *cell = nil;
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     }
 
 	tableView.allowsSelectionDuringEditing=YES;
@@ -262,6 +262,7 @@
 			case 0:
 				[cell.textLabel setText:[beerObj.data objectForKey:@"name"]];
 				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
+				[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"brewery_id"]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
 			case 1:

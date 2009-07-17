@@ -275,7 +275,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>6</integer>
+									<integer>11</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -330,7 +330,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>050A243810111AC600F49B5B</string>
+										<string>050A245810111FF300F49B5B</string>
 										<key>history</key>
 										<array>
 											<string>05C9AA760F53458A0020B102</string>
@@ -363,11 +363,11 @@
 											<string>050A231B100FE74300F49B5B</string>
 											<string>050A2348100FEB4E00F49B5B</string>
 											<string>050A23DF1010FB1E00F49B5B</string>
-											<string>050A23FE1011163500F49B5B</string>
-											<string>050A23FF1011163500F49B5B</string>
 											<string>050A24001011163500F49B5B</string>
-											<string>050A243510111AC600F49B5B</string>
-											<string>050A243610111AC600F49B5B</string>
+											<string>050A243F10111CA900F49B5B</string>
+											<string>050A245210111FF300F49B5B</string>
+											<string>050A245310111FF300F49B5B</string>
+											<string>050A245410111FF300F49B5B</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -448,6 +448,11 @@
 											<string>050A24091011163500F49B5B</string>
 											<string>050A240A1011163500F49B5B</string>
 											<string>050A243710111AC600F49B5B</string>
+											<string>050A243B10111B4400F49B5B</string>
+											<string>050A244110111CA900F49B5B</string>
+											<string>050A245510111FF300F49B5B</string>
+											<string>050A245610111FF300F49B5B</string>
+											<string>050A245710111FF300F49B5B</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -641,7 +646,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>050A243110111A9000F49B5B</string>
+		<string>050A245910111FF300F49B5B</string>
 		<string>050A2311100FE67800F49B5B</string>
 		<string>050A2312100FE67800F49B5B</string>
 		<string>056D28710F5319CA00A1F223</string>
