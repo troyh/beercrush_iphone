@@ -60,11 +60,11 @@
 																	  nil];
 	
 	UINavigationController* ctl=[tabBarController.viewControllers objectAtIndex:0];
-	ctl.title=@"Beers";
+	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Beers" image:[UIImage imageNamed:@"dot.png"] tag:4422] autorelease];
 
 	ctl=[tabBarController.viewControllers objectAtIndex:1];
 	nav=ctl;
-	ctl.title=@"Places";
+	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag:42] autorelease];
 	tabBarController.selectedViewController=ctl;
 	
 	// Create the search bar
@@ -76,20 +76,20 @@
 	[ctl.view addSubview: mySearchBar];
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:2];
+	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Nearby" image:[UIImage imageNamed:@"dot.png"] tag:4422] autorelease];
 	NearbyTableViewController* ntvc=[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain];
 	ntvc.app=app;
 	ntvc.appdel=self;
 	[ctl pushViewController:ntvc animated:NO ];
-	ctl.title=@"Nearby";
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:3];
+	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Reviews" image:[UIImage imageNamed:@"star_filled.png"] tag:442] autorelease];
 	UserReviewsTVC* urtvc=[[UserReviewsTVC alloc] initWithStyle:UITableViewStylePlain];
 	[ctl pushViewController:urtvc animated:NO];
 	[urtvc release];
-	ctl.title=@"My Reviews";
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:4];
-	ctl.title=@"Wish List";
+	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Wish List" image:[UIImage imageNamed:@"star_empty.png"] tag:44422] autorelease];
 	
 
     // Add the tab bar controller's current view as a subview of the window

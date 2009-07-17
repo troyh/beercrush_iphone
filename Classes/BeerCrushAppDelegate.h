@@ -42,6 +42,7 @@
 #define BEERCRUSH_API_URL_GET_BREWERY_DOC		@BEERCRUSH_API_URL_HOST"/xml/brewery/%@"
 #define BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/xml/beer_review/%@/%@/_all"
 #define BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/xml/user/%@/beer_reviews.xml"
+#define BEERCRUSH_API_URL_GET_ALL_BREWERY_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/xml/place_review/%@/_all"
 
 // The following are not yet working on the server
 #define BEERCRUSH_API_URL_EDIT_BEER_DOC			@BEERCRUSH_API_URL_HOST"/api/edit/beer"
