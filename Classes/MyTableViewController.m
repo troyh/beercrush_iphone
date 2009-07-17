@@ -63,38 +63,66 @@
 @synthesize appdel;
 @synthesize currentElemValue;
 @synthesize bInResultElement;
+@synthesize autoCompleteResultsData;
+@synthesize autoCompleteResultsCount;
 
 -(void)query:(NSString*)qs 
 {
 	self.title=@"Places";
 
-	if (searchResultsList_title)
-		[searchResultsList_title release];
-	if (searchResultsList_desc)
-		[searchResultsList_desc release];
-	if (searchResultsList_type)
-		[searchResultsList_type release];
-	if (searchResultsList_id)
-		[searchResultsList_id release];
+//	if (searchResultsList_title)
+//		[searchResultsList_title release];
+//	if (searchResultsList_desc)
+//		[searchResultsList_desc release];
+//	if (searchResultsList_type)
+//		[searchResultsList_type release];
+//	if (searchResultsList_id)
+//		[searchResultsList_id release];
+//	
+//	searchResultsList_title=[[NSMutableArray alloc] initWithCapacity:10];
+//	searchResultsList_desc=[[NSMutableArray alloc] initWithCapacity:10];
+//	searchResultsList_type=[[NSMutableArray alloc] initWithCapacity:10];
+//	searchResultsList_id=[[NSMutableArray alloc] initWithCapacity:10];
 	
-	searchResultsList_title=[[NSMutableArray alloc] initWithCapacity:10];
-	searchResultsList_desc=[[NSMutableArray alloc] initWithCapacity:10];
-	searchResultsList_type=[[NSMutableArray alloc] initWithCapacity:10];
-	searchResultsList_id=[[NSMutableArray alloc] initWithCapacity:10];
+	self.autoCompleteResultsCount=0;
+	[self.autoCompleteResultsData release];
 	
 	// Send the query off to the server
 	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY, qs ]];
-	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-	[parser setDelegate:self];
-	BOOL parse_ok=[parser parse];
-	if (parse_ok==NO)
-	{
-		NSError* err=[parser parserError];
-		UIAlertView* vw=[[UIAlertView alloc] initWithTitle:@"Oops" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[vw show];
-		[vw release];
+	self.autoCompleteResultsData=[[NSData dataWithContentsOfURL:url] retain];
+
+	char* p=(char*)[autoCompleteResultsData bytes];
+	while (p)
+	{	// Count the number of items
+		char* tab=strchr(p,'\t');
+		if (!tab)
+			p=nil; // Quit
+		else
+		{
+			*tab='\0';
+			char* nl=strchr(tab+1, '\n');
+			if (!nl)
+				p=nil; // Quit
+			else
+			{
+				*nl='\0';
+				p=nl+1;
+				++self.autoCompleteResultsCount;
+			}
+		}
 	}
-	[parser release];
+	
+//	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+//	[parser setDelegate:self];
+//	BOOL parse_ok=[parser parse];
+//	if (parse_ok==NO)
+//	{
+//		NSError* err=[parser parserError];
+//		UIAlertView* vw=[[UIAlertView alloc] initWithTitle:@"Oops" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//		[vw show];
+//		[vw release];
+//	}
+//	[parser release];
 	
 	// Get results back
 	
@@ -162,7 +190,7 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return searchResultsList_title.count;
+    return autoCompleteResultsCount;
 }
 
 
@@ -177,8 +205,30 @@
     }
     
     // Set up the cell...
-	[cell.textLabel setText:[searchResultsList_title objectAtIndex:indexPath.row]];
-	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+	const char* p=(char*)[autoCompleteResultsData bytes];
+	NSUInteger n=0;
+	while (p && n<indexPath.row && n<autoCompleteResultsCount)
+	{	// Count the number of items
+		char* tab=strchr(p,'\0');
+		if (!tab)
+			p=nil; // Quit
+		else
+		{
+			const char* nl=strchr(tab+1, '\0');
+			if (!nl)
+				p=nil; // Quit
+			else
+			{
+				p=nl+1;
+				++n;
+			}
+		}
+	}
+	if (p)
+	{
+		[cell.textLabel setText:[NSString stringWithCString:p encoding:NSASCIIStringEncoding]];
+		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+	}
 	
     return cell;
 }
@@ -190,27 +240,56 @@
 	appdel.mySearchBar.hidden=YES;
 	appdel.nav.view.frame=app.keyWindow.frame;
 	appdel.nav.navigationBarHidden=NO;
+
 	
+	const char* p=(char*)[autoCompleteResultsData bytes];
+	NSUInteger n=0;
+	while (p && n<indexPath.row && n<autoCompleteResultsCount)
+	{	// Count the number of items
+		char* tab=strchr(p,'\0');
+		if (!tab)
+			p=nil; // Quit
+		else
+		{
+			const char* nl=strchr(tab+1, '\0');
+			if (!nl)
+				p=nil; // Quit
+			else
+			{
+				p=nl+1;
+				++n;
+			}
+		}
+	}
+	if (p)
+	{
+		ResultType t=Brewer;
+		const char* idp=p+strlen(p)+1;
+		if (strchr(idp,':'))
+			t=Beer;
+		else
+			t=Brewer;
+		if (t == Brewer)
+		{
+			BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:[NSString stringWithCString:idp] app:app appDelegate: appdel];
+			[appdel.nav pushViewController: btvc animated:YES];
+			[btvc release];
+		}
+		else if (t == Beer)
+		{
+			BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID: [NSString stringWithCString:idp] app:app appDelegate: appdel];
+			[appdel.nav pushViewController: btvc animated:YES];
+			[btvc release];
+		}
+		else if (t == Place)
+		{
+			//		PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID: [searchResultsList_id objectAtIndex:indexPath.row] app:app appDelegate: appdel];
+			//		[appdel.nav pushViewController: btvc animated:YES];
+			//		[btvc release];
+		}
+	}
+		
 //	ResultType t=[[searchResultsList_type objectAtIndex:indexPath.row] intValue];
-	ResultType t=Brewer;
-	if (t == Brewer)
-	{
-		BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:[searchResultsList_id objectAtIndex:indexPath.row] app:app appDelegate: appdel];
-		[appdel.nav pushViewController: btvc animated:YES];
-		[btvc release];
-	}
-	else if (t == Beer)
-	{
-		BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID: [searchResultsList_id objectAtIndex:indexPath.row] app:app appDelegate: appdel];
-		[appdel.nav pushViewController: btvc animated:YES];
-		[btvc release];
-	}
-	else if (t == Place)
-	{
-		PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID: [searchResultsList_id objectAtIndex:indexPath.row] app:app appDelegate: appdel];
-		[appdel.nav pushViewController: btvc animated:YES];
-		[btvc release];
-	}
 	
 	
 //	UIViewController *anotherViewController = [[UIViewController alloc] initWithNibName:nil bundle:nil];
@@ -297,10 +376,11 @@
 
 
 - (void)dealloc {
-	[searchResultsList_title release];
-	[searchResultsList_desc release];
-	[searchResultsList_type release];
-	[searchResultsList_id release];
+//	[searchResultsList_title release];
+//	[searchResultsList_desc release];
+//	[searchResultsList_type release];
+//	[searchResultsList_id release];
+	[autoCompleteResultsData release];
     [super dealloc];
 }
 
@@ -331,22 +411,22 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
-	if (self.currentElemValue)
-	{
-		if ([elementName isEqualToString:@"result"])
-		{
-			bInResultElement=NO;
-		}
-		else if (bInResultElement)
-		{
-			if ([elementName isEqualToString:@"text"])
-				[searchResultsList_title addObject:currentElemValue];
-			else if ([elementName isEqualToString:@"id"])
-				[searchResultsList_id addObject:currentElemValue];
-		}
-		
-		self.currentElemValue=nil;
-	}
+//	if (self.currentElemValue)
+//	{
+//		if ([elementName isEqualToString:@"result"])
+//		{
+//			bInResultElement=NO;
+//		}
+//		else if (bInResultElement)
+//		{
+//			if ([elementName isEqualToString:@"text"])
+//				[searchResultsList_title addObject:currentElemValue];
+//			else if ([elementName isEqualToString:@"id"])
+//				[searchResultsList_id addObject:currentElemValue];
+//		}
+//		
+//		self.currentElemValue=nil;
+//	}
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError

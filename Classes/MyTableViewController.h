@@ -10,10 +10,12 @@
 #import "BeerCrushAppDelegate.h"
 
 @interface MyTableViewController : UITableViewController {
-	NSMutableArray* searchResultsList_title;
-	NSMutableArray* searchResultsList_desc;
-	NSMutableArray* searchResultsList_type;
-	NSMutableArray* searchResultsList_id;
+//	NSMutableArray* searchResultsList_title;
+//	NSMutableArray* searchResultsList_desc;
+//	NSMutableArray* searchResultsList_type;
+//	NSMutableArray* searchResultsList_id;
+	NSInteger autoCompleteResultsCount;
+	NSData* autoCompleteResultsData;
 	UIApplication* app;
 	BeerCrushAppDelegate* appdel;
 	NSMutableString* currentElemValue;
@@ -24,6 +26,8 @@
 @property (nonatomic, retain) BeerCrushAppDelegate* appdel;
 @property (nonatomic, retain) NSMutableString* currentElemValue;
 @property (nonatomic) BOOL bInResultElement;
+@property (nonatomic) NSInteger autoCompleteResultsCount;
+@property (nonatomic, retain) NSData* autoCompleteResultsData;
 
 -(void)query:(NSString*)qs;
 
