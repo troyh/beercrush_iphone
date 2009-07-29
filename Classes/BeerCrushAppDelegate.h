@@ -27,7 +27,7 @@
 @property (nonatomic, retain) UIApplication* app;
 @property (nonatomic, retain) NSMutableData* xmlPostResponse;
 
--(void)login;
+-(BOOL)login;
 
 @end
 
@@ -43,10 +43,10 @@
 #define BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/xml/beer_review/%@/%@/_all"
 #define BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/xml/user/%@/beer_reviews.xml"
 #define BEERCRUSH_API_URL_GET_ALL_BREWERY_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/xml/place_review/%@/_all"
+#define BEERCRUSH_API_URL_POST_BEER_REVIEW		@BEERCRUSH_API_URL_HOST"/api/beer/review"
+#define BEERCRUSH_API_URL_EDIT_BEER_DOC			@BEERCRUSH_API_URL_HOST"/api/beer/edit"
 
 // The following are not yet working on the server
-#define BEERCRUSH_API_URL_EDIT_BEER_DOC			@BEERCRUSH_API_URL_HOST"/api/edit/beer"
-#define BEERCRUSH_API_URL_POST_BEER_REVIEW		@BEERCRUSH_API_URL_HOST"/api/beer/review"
 #define BEERCRUSH_API_URL_EDIT_BREWERY_DOC		@BEERCRUSH_API_URL_HOST"/api/edit/brewery"
 #define BEERCRUSH_API_URL_POST_PLACE_REVIEW		@BEERCRUSH_API_URL_HOST"/api/post/place_review"
 #define BEERCRUSH_API_URL_NEARBY_QUERY			@BEERCRUSH_API_URL_HOST"/api/nearby.fcgi?lat=%f&lon=%f&within=5"

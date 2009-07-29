@@ -21,6 +21,8 @@
 
 -(id)initWithBreweryID:(NSString*)brewery_id andApp:(UIApplication*)a
 {
+	[super initWithStyle:UITableViewStylePlain];
+	
 	self.breweryID=brewery_id;
 	self.app=a;
 	self.currentElemAttribs=nil;

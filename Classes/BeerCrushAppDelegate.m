@@ -12,6 +12,12 @@
 #import "BreweryTableViewController.h"
 #import "UserReviewsTVC.h"
 
+#define kTabBarItemTagBeers 1
+#define kTabBarItemTagSearch 2
+#define kTabBarItemTagNearby 3
+#define kTabBarItemTagMyReviews 4
+#define kTabBarItemTagWishList 5
+
 @implementation BeerObject
 
 @synthesize data;
@@ -60,11 +66,11 @@
 																	  nil];
 	
 	UINavigationController* ctl=[tabBarController.viewControllers objectAtIndex:0];
-	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Beers" image:[UIImage imageNamed:@"dot.png"] tag:4422] autorelease];
+	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Beers" image:[UIImage imageNamed:@"dot.png"] tag:kTabBarItemTagBeers] autorelease];
 
 	ctl=[tabBarController.viewControllers objectAtIndex:1];
 	nav=ctl;
-	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag:42] autorelease];
+	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag:kTabBarItemTagSearch] autorelease];
 	tabBarController.selectedViewController=ctl;
 	
 	// Create the search bar
@@ -76,20 +82,20 @@
 	[ctl.view addSubview: mySearchBar];
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:2];
-	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Nearby" image:[UIImage imageNamed:@"dot.png"] tag:4422] autorelease];
+	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Nearby" image:[UIImage imageNamed:@"dot.png"] tag:kTabBarItemTagNearby] autorelease];
 	NearbyTableViewController* ntvc=[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain];
 	ntvc.app=app;
 	ntvc.appdel=self;
 	[ctl pushViewController:ntvc animated:NO ];
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:3];
-	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Reviews" image:[UIImage imageNamed:@"star_filled.png"] tag:442] autorelease];
+	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Reviews" image:[UIImage imageNamed:@"star_filled.png"] tag:kTabBarItemTagMyReviews] autorelease];
 	UserReviewsTVC* urtvc=[[UserReviewsTVC alloc] initWithStyle:UITableViewStylePlain];
 	[ctl pushViewController:urtvc animated:NO];
 	[urtvc release];
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:4];
-	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Wish List" image:[UIImage imageNamed:@"star_empty.png"] tag:44422] autorelease];
+	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Wish List" image:[UIImage imageNamed:@"star_empty.png"] tag:kTabBarItemTagWishList] autorelease];
 	
 
     // Add the tab bar controller's current view as a subview of the window
@@ -169,7 +175,7 @@
 	
 	if (tbl==nil)
 	{
-		tbl=[[MyTableViewController alloc] initWithNibName:nil bundle:nil];
+		tbl=[[MyTableViewController alloc] initWithStyle:UITableViewStylePlain];
 		[nav pushViewController:tbl animated:NO];
 		tbl.app=app;
 		tbl.appdel=self;
@@ -217,7 +223,7 @@
 }
 
 // Login
--(void)login
+-(BOOL)login
 {
 	// Get the userid and password from App Preferences
 	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
@@ -240,8 +246,12 @@
 	if (theConnection) {
 		// We don't care about any response document, we just want the cookies to be stored (automatically)
 		xmlPostResponse=[[NSMutableData data] retain];
+		NSLog(@"login successful");
+		return YES;
 	} else {
-		// TODO: inform the user that the download could not be made
+		// TODO: inform the user that the login failed
+		NSLog(@"login failed");
+		return NO;
 	}	
 }
 
