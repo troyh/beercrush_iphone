@@ -169,16 +169,19 @@
 	{
 		self.title=@"Editing Beer";
 
-		UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editBeerCancelButtonClicked)] autorelease];
-		[self.navigationController.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:YES];
-		
-		// Resize cells
+//		UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editBeerCancelButtonClicked)] autorelease];
+//		[self.navigationController.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:YES];
+		self.navigationController.navigationBar.topItem.leftBarButtonItem=nil;
+
 	}
 	else
 	{
+		// TODO: only do this if the user actually changed anything
+		
 		// Save data to server
 		NSString* bodystr;
 		
+		// TODO: only send data that has changed
 		if (self.beerID)
 		{
 			bodystr=[[NSString alloc] initWithFormat:
@@ -268,11 +271,11 @@
     return 2;
 }
 
--(void)editBeerCancelButtonClicked
-{
-	self.navigationController.navigationBar.topItem.leftBarButtonItem=nil;
-	[self setEditing:NO animated:YES];
-}
+//-(void)editBeerCancelButtonClicked
+//{
+//	self.navigationController.navigationBar.topItem.leftBarButtonItem=nil;
+//	[self setEditing:NO animated:YES];
+//}
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
