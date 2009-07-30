@@ -12,6 +12,7 @@
 
 @interface BeerTableViewController : UITableViewController {
 	NSString* beerID;
+	NSString* breweryID;
 	UIApplication* app;
 	BeerCrushAppDelegate* appdel;
 	BeerObject* beerObj;
@@ -24,6 +25,7 @@
 }
 
 @property (nonatomic,retain) NSString* beerID;
+@property (nonatomic,retain) NSString* breweryID;
 @property (nonatomic,retain) UIApplication* app;
 @property (nonatomic,retain) BeerCrushAppDelegate* appdel;
 @property (nonatomic,retain) BeerObject* beerObj;

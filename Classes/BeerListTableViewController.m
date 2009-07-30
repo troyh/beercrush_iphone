@@ -8,7 +8,6 @@
 
 #import "BeerCrushAppDelegate.h"
 #import "BeerListTableViewController.h"
-#import "BeerTableViewController.h"
 
 
 @implementation BeerListTableViewController
@@ -18,6 +17,7 @@
 @synthesize	currentElemAttribs;
 @synthesize beerList;
 @synthesize app;
+@synthesize btvc;
 
 -(id)initWithBreweryID:(NSString*)brewery_id andApp:(UIApplication*)a
 {
@@ -65,14 +65,53 @@
 }
 */
 
-/*
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd	target:self action:@selector(newBeerPanel)] autorelease];
 }
-*/
+
+-(void)newBeerPanel
+{
+//	UIActionSheet* sheet=[[[UIActionSheet alloc] initWithTitle:@"New Beer" delegate:nil cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil] autorelease];
+//	[sheet showInView:self.tableView];
+
+	UIViewController* vc=[[UIViewController alloc] init];
+	UINavigationController* nc=[[UINavigationController alloc] initWithRootViewController:vc];
+	
+	self.btvc=[[BeerTableViewController alloc] initWithBeerID:nil app:self.app appDelegate:(BeerCrushAppDelegate*)self.app.delegate];
+	self.btvc.breweryID=self.breweryID;
+	[nc pushViewController:btvc	animated:NO];
+	
+	// Add cancel and save buttons
+	UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(newBeerCancelButtonClicked)] autorelease];
+	UIBarButtonItem* saveButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(newBeerSaveButtonClicked)] autorelease];
+	[nc.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:NO];
+	[nc.navigationBar.topItem setRightBarButtonItem:saveButton animated:NO];
+	
+	[btvc setEditing:YES animated:NO];
+	
+	[self presentModalViewController:nc animated:YES];
+	
+}
+
+-(void)newBeerSaveButtonClicked
+{
+	[self.btvc setEditing:NO animated:YES];
+	
+	[self.parentViewController dismissModalViewControllerAnimated:YES];
+}
+
+-(void)newBeerCancelButtonClicked
+{
+	[self.parentViewController dismissModalViewControllerAnimated:YES];
+}
+
+
 
 /*
 - (void)viewWillAppear:(BOOL)animated {
@@ -147,11 +186,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
 	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)self.app.delegate;
-	BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID:[beer.data valueForKey:@"id"]  app:self.app appDelegate:del];
-	NSLog(@"btvc retainCount=%d (post alloc)",[btvc retainCount]);
-	[del.nav pushViewController: btvc animated:YES];
-	NSLog(@"btvc retainCount=%d (post pushViewController)",[btvc retainCount]);
-	[btvc release];
+	BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:[beer.data valueForKey:@"id"]  app:self.app appDelegate:del] autorelease];
+
+	[del.nav pushViewController:vc animated:YES];
 }
 
 

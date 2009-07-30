@@ -15,6 +15,7 @@
 @implementation BeerTableViewController
 
 @synthesize beerID;
+@synthesize breweryID;
 @synthesize app;
 @synthesize appdel;
 @synthesize beerObj;
@@ -28,6 +29,7 @@
 -(id) initWithBeerID:(NSString*)beer_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
 {
 	self.beerID=[beer_id copy];
+	self.breweryID=nil;
 	NSLog(@"BeerTableViewController initWithBeerID beerID retainCount=%d",[beerID retainCount]);
 	self.app=a;
 	self.appdel=d;
@@ -40,35 +42,6 @@
 	self.title=@"Beer";
 	
 	[super initWithStyle:UITableViewStyleGrouped];
-	
-	// Retrieve XML doc for this beer
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_DOC, beerID ]];
-	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-	[parser setDelegate:self];
-	BOOL retval=[parser parse];
-	[parser release];
-	
-	if (retval==YES)
-	{
-		// Separate the brewery ID and the beer ID from the beerID
-		NSArray* idparts=[self.beerID componentsSeparatedByString:@":"];
-		
-		// Retrieve user's review for this beer
-		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_REVIEW_DOC, 
-								  [idparts objectAtIndex:0], 
-								  [idparts objectAtIndex:1], 
-								  [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
-		parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-		[parser setDelegate:self];
-		retval=[parser parse];
-		[parser release];
-		
-		if (retval==YES)
-		{
-			// The user has a review for this beer
-			NSLog(@"User rating:%@", [self.beerObj.data objectForKey:@"user_rating"]);
-		}
-	}
 	
 	return self;
 }
@@ -99,11 +72,63 @@
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+	if (self.beerID!=nil)
+		self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+	if (self.beerID==nil)
+	{
+//		UIToolbar* tb=[[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
+//		[tb sizeToFit];
+//		
+//		// Add cancel and save buttons
+//		UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(newBeerCancelButtonClicked)] autorelease];
+//		UIBarButtonItem* saveButton=[[[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(newBeerSaveButtonClicked)] autorelease];
+//		[tb setItems:[NSArray arrayWithObjects:cancelButton,saveButton,nil]];
+//		
+//		[self.view.superview addSubview:tb];
+//		CGRect vf=self.view.frame;
+//		vf.size.height-=tb.frame.size.height;
+//		vf.origin.y=0;
+//		self.view.frame=vf;
+//		[self.view sizeToFit];
+		self.title=@"New Beer";
+	}
+	else
+	{
+		// Retrieve XML doc for this beer
+		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_DOC, beerID ]];
+		NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+		[parser setDelegate:self];
+		BOOL retval=[parser parse];
+		[parser release];
+		
+		if (retval==YES)
+		{
+			// Separate the brewery ID and the beer ID from the beerID
+			NSArray* idparts=[self.beerID componentsSeparatedByString:@":"];
+			
+			// Retrieve user's review for this beer
+			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_REVIEW_DOC, 
+									  [idparts objectAtIndex:0], 
+									  [idparts objectAtIndex:1], 
+									  [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
+			parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+			[parser setDelegate:self];
+			retval=[parser parse];
+			[parser release];
+			
+			if (retval==YES)
+			{
+				// The user has a review for this beer
+				NSLog(@"User rating:%@", [self.beerObj.data objectForKey:@"user_rating"]);
+			}
+		}
+	}
+	
 	[self.tableView reloadData]; // Reload data because we may come back from an editing view controller
 }
 
@@ -143,17 +168,37 @@
 	if (editing==YES)
 	{
 		self.title=@"Editing Beer";
+
+		UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editBeerCancelButtonClicked)] autorelease];
+		[self.navigationController.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:YES];
+		
+		// Resize cells
 	}
 	else
 	{
 		// Save data to server
-		NSString* bodystr=[[NSString alloc] initWithFormat:
+		NSString* bodystr;
+		
+		if (self.beerID)
+		{
+			bodystr=[[NSString alloc] initWithFormat:
 						   @"beer_id=%@&"
 						   "description=%@&"
 						   "name=%@",
 						   self.beerID,
 						   [self.beerObj.data objectForKey:@"description"],
 						   [self.beerObj.data objectForKey:@"name"]];
+		}
+		else
+		{
+			bodystr=[[NSString alloc] initWithFormat:
+					 @"brewery_id=%@&"
+					 "description=%@&"
+					 "name=%@",
+					 self.breweryID,
+					 [self.beerObj.data objectForKey:@"description"],
+					 [self.beerObj.data objectForKey:@"name"]];
+		}
 		
 		NSLog(@"POST data:%@",bodystr);
 		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
@@ -223,6 +268,11 @@
     return 2;
 }
 
+-(void)editBeerCancelButtonClicked
+{
+	self.navigationController.navigationBar.topItem.leftBarButtonItem=nil;
+	[self setEditing:NO animated:YES];
+}
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -273,7 +323,8 @@
 				break;
 			}
 	}
-	return 44.0f; // 44 is the default iPhone table cell height TODO: don't hardcode this
+
+	return tableView.rowHeight;
 }
 
 // Customize the appearance of table view cells.
@@ -321,6 +372,7 @@
 				
 				[cell.contentView addSubview:ratingctl];
 				[ratingctl release];
+				
 				break;
 			}
 			case 2:
@@ -518,13 +570,54 @@
 }
 
 
-/*
-// Override to support conditional editing of the table view.
+
+// Support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
-    return YES;
+	switch (indexPath.section) 
+	{
+		case 0:
+			switch (indexPath.row)
+			{
+				case 0:
+					return YES;
+					break;
+				case 1:
+				case 2:
+					break;
+				case 3:
+					return YES;
+					break;
+				default:
+					break;
+			}
+			break;
+		case 1:
+			switch (indexPath.row)
+			{
+				case 0:
+				case 1:
+					return YES;
+				default:
+					break;
+			}
+			break;
+		default:
+			break;
+	}
+	return NO;
 }
-*/
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return UITableViewCellEditingStyleNone;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return NO;
+}
+
 
 
 /*
