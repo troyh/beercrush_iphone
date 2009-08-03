@@ -13,21 +13,22 @@
 #import "PhoneNumberEditTableViewController.h"
 #import "RatingControl.h"
 
+
+
 @implementation BreweryObject
 
 @synthesize data;
-//@synthesize name;
-//@synthesize street;
-//@synthesize city;
-//@synthesize state;
-//@synthesize zip;
-//@synthesize phone;
 
 -(id)init
 {
 	self.data=[[NSMutableDictionary alloc] initWithCapacity:10];
 	[self.data release];
 	[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease] forKey:@"address"];
+
+	// Init with blank values for URI and Phone
+	[self.data setObject:@"" forKey:@"uri"];
+	[self.data setObject:@"" forKey:@"phone"];
+
 	return self;
 }
 
@@ -55,7 +56,7 @@
 	self.breweryID=brewery_id;
 	self.app=a;
 	self.appdel=d;
-	self.xmlParserPath=[[NSMutableArray arrayWithCapacity:10] autorelease];
+	self.xmlParserPath=[NSMutableArray arrayWithCapacity:10];
 	self.xmlPostResponse=nil;
 	self.currentElemValue=nil;
 	
@@ -138,54 +139,104 @@
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
 	[super setEditing:editing animated:animated];
-	
+
 	if (editing==YES)
 	{
 		self.title=@"Editing Brewery";
+		NSArray* rows=[NSArray arrayWithObjects:
+					   [NSIndexPath indexPathForRow:1 inSection:0],
+					   [NSIndexPath indexPathForRow:2 inSection:0],
+					   [NSIndexPath indexPathForRow:3 inSection:0],
+					   nil];
+		[self.tableView beginUpdates];
+		[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView endUpdates];
 	}
 	else
 	{
 		// Save data to server
-		NSString* bodystr=[[NSString alloc] initWithFormat:
-						   @"brewery_id=%@&"
-						   "address/city=%@&"
-						   "address/state=%@&"
-						   "address/street=%@&"
-						   "address/zip=%@&"
-						   "name=%@&"			
-						   "phone=%@",
-						   self.breweryID,
-						   [[self.breweryObject.data objectForKey:@"address"] objectForKey:@"city"],
-						   [[self.breweryObject.data objectForKey:@"address"] objectForKey:@"state"],
-						   [[self.breweryObject.data objectForKey:@"address"] objectForKey:@"street"],
-						   [[self.breweryObject.data objectForKey:@"address"] objectForKey:@"zip"],
-						   [self.breweryObject.data objectForKey:@"name"],
-						   [self.breweryObject.data objectForKey:@"phone"]];
+		
+		NSMutableString* bodystr=[[NSMutableString alloc] initWithFormat:@"brewery_id=%@",self.breweryID];
+		// Add in changed fields to the POST data
+		// TODO: Only change the fields that were edited by the user
+		if (YES)
+			[bodystr appendFormat:@"&address:city=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"city"]];
+		if (YES)
+			[bodystr appendFormat:@"&address:state=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"state"]];
+		if (YES)
+			[bodystr appendFormat:@"&address:street=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"street"]];
+		if (YES)
+			[bodystr appendFormat:@"&address:zip=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"zip"]];
+		if (YES)
+			[bodystr appendFormat:@"&name=%@",[self.breweryObject.data objectForKey:@"name"]];
+		if (YES)
+			[bodystr appendFormat:@"&phone=%@",[self.breweryObject.data objectForKey:@"phone"]];
+		if (YES)
+			[bodystr appendFormat:@"&uri=%@",[self.breweryObject.data objectForKey:@"uri"]];
+		
 		
 		NSLog(@"POST data:%@",bodystr);
 		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 		
 		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BREWERY_DOC]
 																cachePolicy:NSURLRequestUseProtocolCachePolicy
-															timeoutInterval:60.0];
+															timeoutInterval:30.0];
 		[theRequest setHTTPMethod:@"POST"];
 		[theRequest setHTTPBody:body];
 		[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+
+		NSHTTPURLResponse* response=nil;
+		NSError* error;
+		int nTries=0;
+		BOOL bRetry=NO;
 		
-		// create the connection with the request and start loading the data
-		NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-		
-		if (theConnection) {
-			// Create the NSMutableData that will hold
-			// the received data
-			// receivedData is declared as a method instance elsewhere
-			xmlPostResponse=[[NSMutableData data] retain];
-		} else {
-			// TODO: inform the user that the download could not be made
-		}	
+		do
+		{
+			++nTries;
+			
+			NSData* rspdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+			
+			if (rspdata) {
+				NSLog(@"Response code:%d",[response statusCode]);
+				NSLog(@"Response data:%s",[rspdata bytes]);
+				
+				bRetry=NO;
+				int statuscode=[response statusCode];
+				if (statuscode==420)
+				{
+					if (nTries < 2) // Don't retry over and over, just do it once
+					{
+						if ([appdel login]==YES)
+						{
+							bRetry=YES;
+						}
+					}
+				}
+				else if (statuscode==200)
+				{
+					// Parse the XML response, which is the new brewery doc
+					NSXMLParser* parser=[[NSXMLParser alloc] initWithData:rspdata];
+					[parser setDelegate:self];
+					[parser parse];
+				}
+			} else {
+				// TODO: inform the user that the download could not be made
+			}	
+		}
+		while (bRetry);
 		
 		self.title=@"Brewery";
+
+		NSArray* rows=[NSArray arrayWithObjects:
+					   [NSIndexPath indexPathForRow:1 inSection:0],
+					   [NSIndexPath indexPathForRow:2 inSection:0],
+					   [NSIndexPath indexPathForRow:3 inSection:0],
+					   nil];
+		[self.tableView beginUpdates];
+		[self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView endUpdates];
 	}
+
 }
 
 
@@ -202,7 +253,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return 4;
+			return self.editing?1:4;
 			break;
 		case 1:
 			return 3;
@@ -274,7 +325,7 @@
 			switch (indexPath.row)
 			{
 				case 0:
-					[cell.textLabel setText:@"Web site"];
+					[cell.textLabel setText:[breweryObject.data objectForKey:@"uri"]];
 					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
 					[cell.textLabel setTextAlignment:UITextAlignmentCenter];
 					break;
@@ -433,13 +484,52 @@
 }
 
 
-/*
-// Override to support conditional editing of the table view.
+
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
+	switch (indexPath.section)
+	{
+		case 0:
+			switch (indexPath.row)
+			{
+				case 0:
+					return YES;
+					break;
+				case 1:
+				case 2:
+				case 3:
+				default:
+					break;
+			}
+			break;
+		case 1:
+			switch (indexPath.row)
+			{
+				case 0:
+				case 1:
+				case 2:
+					return YES;
+					break;
+				default:
+					break;
+			}
+		default:
+			break;
+	}
+			
     return YES;
 }
-*/
+
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return UITableViewCellEditingStyleNone;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return NO;
+}
 
 
 /*
@@ -478,12 +568,16 @@
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
 	// Clear any old data
+	[self.currentElemValue release];
 	self.currentElemValue=nil;
 	[self.xmlParserPath removeAllObjects];
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser
 {
+	[self.currentElemValue release];
+	self.currentElemValue=nil;
+	[self.xmlParserPath removeAllObjects];
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
@@ -497,7 +591,8 @@
 	    [elementName isEqualToString:@"state"] ||
 	    [elementName isEqualToString:@"zip"] ||
 	    [elementName isEqualToString:@"country"] ||
-	    [elementName isEqualToString:@"phone"]
+	    [elementName isEqualToString:@"phone"] ||
+	    [elementName isEqualToString:@"uri"]
 	)
 	{
 		[self.currentElemValue release];
@@ -529,6 +624,8 @@
 			[[breweryObject.data objectForKey:@"address"] setObject:currentElemValue forKey:@"zip"];
 		else if ([elementName isEqualToString:@"phone"])
 			[breweryObject.data setObject:currentElemValue forKey:@"phone"];
+		else if ([elementName isEqualToString:@"uri"])
+			[breweryObject.data setObject:currentElemValue forKey:@"uri"];
 		
 		self.currentElemValue=nil;
 	}

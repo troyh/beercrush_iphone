@@ -166,7 +166,12 @@
 			fld.adjustsFontSizeToFitWidth=YES;
 			
 			if (editableValueType==kBeerCrushEditableValueTypeURI)
+			{
 				fld.keyboardType=UIKeyboardTypeURL;
+				fld.autocorrectionType=UITextAutocorrectionTypeNo;
+				fld.autocapitalizationType=UITextAutocapitalizationTypeNone;
+				fld.enablesReturnKeyAutomatically=YES;
+			}
 			else if (editableValueType==kBeerCrushEditableValueTypePhoneNumber)
 				fld.keyboardType=UIKeyboardTypePhonePad;
 			else if (editableValueType==kBeerCrushEditableValueTypeText)
