@@ -99,8 +99,11 @@
 	}
 	else
 	{
+		// Separate the brewery ID and the beer ID from the beerID
+		NSArray* idparts=[self.beerID componentsSeparatedByString:@":"];
+
 		// Retrieve XML doc for this beer
-		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_DOC, beerID ]];
+		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_DOC, [idparts objectAtIndex:1], [idparts objectAtIndex:2] ]];
 		NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 		[parser setDelegate:self];
 		BOOL retval=[parser parse];
@@ -108,13 +111,11 @@
 		
 		if (retval==YES)
 		{
-			// Separate the brewery ID and the beer ID from the beerID
-			NSArray* idparts=[self.beerID componentsSeparatedByString:@":"];
 			
 			// Retrieve user's review for this beer
 			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_REVIEW_DOC, 
-									  [idparts objectAtIndex:0], 
 									  [idparts objectAtIndex:1], 
+									  [idparts objectAtIndex:2], 
 									  [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
 			parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 			[parser setDelegate:self];

@@ -68,7 +68,7 @@
 
 -(void)query:(NSString*)qs 
 {
-	self.title=@"Places";
+	self.title=@"Search";
 
 //	if (searchResultsList_title)
 //		[searchResultsList_title release];
@@ -228,14 +228,19 @@
 	if (p)
 	{
 		[cell.textLabel setText:[NSString stringWithCString:p encoding:NSASCIIStringEncoding]];
-		if (strchr(p+strlen(p)+1,':'))
+		if (!strncmp(p+strlen(p)+1,"beer:",5))
 		{ // Beer
 			[cell.imageView initWithImage:[UIImage imageNamed:@"star_filled.png"]];
 		}
-		else 
+		else if (!strncmp(p+strlen(p)+1,"place:",6))
 		{ // Place
 			[cell.imageView initWithImage:[UIImage imageNamed:@"dot.png"]];
 		}
+		else if (!strncmp(p+strlen(p)+1,"brewery:",8))
+		{ // Brewery
+			[cell.imageView initWithImage:[UIImage imageNamed:@"dot.png"]];
+		}
+		
 		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 	}
 	
@@ -274,10 +279,13 @@
 	{
 		ResultType t=Brewer;
 		const char* idp=p+strlen(p)+1;
-		if (strchr(idp,':'))
+		if (!strncmp(idp,"beer:",5))
 			t=Beer;
-		else
+		else if (!strncmp(idp,"brewery:",8))
 			t=Brewer;
+		else if (!strncmp(idp, "place:", 6))
+			t=Place;
+		
 		if (t == Brewer)
 		{
 			BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:[NSString stringWithCString:idp] app:app appDelegate: appdel];
@@ -292,9 +300,9 @@
 		}
 		else if (t == Place)
 		{
-			//		PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID: [searchResultsList_id objectAtIndex:indexPath.row] app:app appDelegate: appdel];
-			//		[appdel.nav pushViewController: btvc animated:YES];
-			//		[btvc release];
+			PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID: [NSString stringWithCString:idp] app:app appDelegate: appdel];
+			[appdel.nav pushViewController: btvc animated:YES];
+			[btvc release];
 		}
 	}
 		

@@ -11,6 +11,7 @@
 #import "ReviewsTableViewController.h"
 #import "BeerListTableViewController.h"
 #import "PhoneNumberEditTableViewController.h"
+#import "RatingControl.h"
 
 
 @implementation PlaceTableViewController
@@ -21,12 +22,18 @@
 @synthesize appdel;
 @synthesize currentElemValue;
 @synthesize xmlPostResponse;
+@synthesize overlay;
+@synthesize spinner;
 
 -(id) initWithPlaceID:(NSString*)place_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
 {
 	self.placeID=place_id;
 	self.app=a;
 	self.appdel=d;
+	self.overlay=nil;
+	self.spinner=nil;
+	self.xmlPostResponse=nil;
+	self.currentElemValue=nil;
 	
 	self.title=@"Place";
 	
@@ -34,13 +41,22 @@
 	
 	placeObject=[[PlaceObject alloc] init];
 	
+	
+	NSArray* parts=[self.placeID componentsSeparatedByString:@":"];
+	
 	// Retrieve XML doc from server
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_DOC, placeID ]];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_DOC, [parts objectAtIndex:1]]];
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	[parser parse];
 	
 	return self;
+}
+
+- (void)dealloc {
+	[self.placeID release];
+	[self.placeObject release];
+	[super dealloc];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
@@ -213,11 +229,22 @@
 				break;
 			case 1:
 			{
-				NSArray* ratings=[NSArray arrayWithObjects:@" 1 ",@" 2 ",@" 3 ",@" 4 ",@" 5 ",nil];
-				UISegmentedControl* ratingctl=[[UISegmentedControl alloc] initWithItems:ratings];
-				[cell.contentView addSubview:ratingctl];
+				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				
+				RatingControl* ratingctl=[[RatingControl alloc] initWithFrame:cell.contentView.frame];
+				
+				// Set current user's rating (if any)
+				NSString* user_rating=[self.placeObject.data objectForKey:@"user_rating"];
+				if (user_rating!=nil) // No user review
+					ratingctl.currentRating=[user_rating integerValue];
+				NSLog(@"Current rating:%d",ratingctl.currentRating);
+				
+				// Set the callback for a review
 				[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
+				
+				[cell.contentView addSubview:ratingctl];
+				[ratingctl release];
+				
 				break;
 			}
 			case 2:
@@ -273,17 +300,43 @@
 
 -(void)ratingButtonTapped:(id)sender event:(id)event
 {
-	UISegmentedControl* segctl=(UISegmentedControl*)sender;
-	NSInteger rating=segctl.selectedSegmentIndex;
+	//	[self.view addSubview:spinner];
+	//	CGRect frame=CGRectMake(0.0, 0.0, 100.0, 100.0);
+	CGRect frame=self.view.frame;
+	
+	if (self.overlay==nil)
+	{
+		self.overlay=[[UIView alloc] initWithFrame:frame];
+		self.overlay.backgroundColor=[UIColor blackColor];
+		self.overlay.alpha=0.7;
+	}
+	
+	if (self.spinner==nil)
+	{
+		//	UIActivityIndicatorView* spinner=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+		self.spinner=[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0, 0.0, 25.0, 25.0)];
+		self.spinner.activityIndicatorViewStyle=UIActivityIndicatorViewStyleWhite;
+		self.spinner.center=self.overlay.center;
+		[self.overlay addSubview:self.spinner];
+		[self.spinner release];
+	}
+	
+	[self.spinner startAnimating];
+	self.spinner.hidden=NO;
+	[self.view addSubview:self.overlay];
+	[self.overlay release];
+	
+	RatingControl* ctl=(RatingControl*)sender;
+	NSInteger rating=ctl.currentRating;
 	
 	// Send the review to the site
 	
-	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&place_id=%@", rating+1, placeID];
+	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&place_id=%@", rating, placeID];
 	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 	
 	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_POST_PLACE_REVIEW]
 															cachePolicy:NSURLRequestUseProtocolCachePolicy
-														timeoutInterval:60.0];
+														timeoutInterval:30.0];
 	[theRequest setHTTPMethod:@"POST"];
 	[theRequest setHTTPBody:body];
 	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
@@ -300,6 +353,7 @@
 		// TODO: inform the user that the download could not be made
 	}	
 }
+
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -411,12 +465,6 @@
 	}
 }
 
-// The accessory view is on the right side of each cell. We'll use a "disclosure" indicator in editing mode,
-// to indicate to the user that selecting the row will navigate to a new view where details can be edited.
-- (UITableViewCellAccessoryType)tableView:(UITableView *)aTableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {
-    return (self.editing) ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-}
-
 
  // Override to support conditional editing of the table view.
  - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -491,15 +539,12 @@
  */
 
 
-- (void)dealloc {
-    [super dealloc];
-}
-
 // NSXMLParser delegate methods
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
 	// Clear any old data
+	[self.currentElemValue release];
 	self.currentElemValue=nil;
 }
 
@@ -632,6 +677,15 @@
     // release the connection, and the data object
     [connection release];
     [xmlPostResponse release];
+	xmlPostResponse=nil;
+
+	if (self.spinner!=nil)
+		[self.spinner stopAnimating];
+	if (self.overlay!=nil)
+		[self.overlay removeFromSuperview];
+	self.spinner=nil;
+	self.overlay=nil;
+	
 }
 
 

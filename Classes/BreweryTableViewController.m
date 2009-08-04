@@ -65,9 +65,11 @@
 	[super initWithStyle:UITableViewStyleGrouped];
 
 	breweryObject=[[BreweryObject alloc] init];
-	
+
+	NSArray* parts=[self.breweryID componentsSeparatedByString:@":"];
+
 	// Retrieve XML doc from server
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC, breweryID ]];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC, [parts objectAtIndex:1] ]];
 	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 	[parser setDelegate:self];
 	[parser parse];

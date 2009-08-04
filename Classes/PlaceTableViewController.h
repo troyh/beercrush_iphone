@@ -18,6 +18,8 @@
 	PlaceObject* placeObject;
 	NSMutableString* currentElemValue;
 	NSMutableData* xmlPostResponse;
+	UIView* overlay;
+	UIActivityIndicatorView* spinner;
 }
 
 @property (nonatomic,retain) NSString* placeID;
@@ -26,6 +28,8 @@
 @property (nonatomic,retain) BeerCrushAppDelegate* appdel;
 @property (nonatomic,retain) NSMutableString* currentElemValue;
 @property (nonatomic,retain) NSMutableData* xmlPostResponse;
+@property (nonatomic, retain) UIView* overlay;
+@property (nonatomic, retain) UIActivityIndicatorView* spinner;
 
 -(id) initWithPlaceID:(NSString*)place_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d;
 //- (void)editPlace:(id)sender;
