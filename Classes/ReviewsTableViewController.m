@@ -11,45 +11,21 @@
 
 @implementation ReviewsTableViewController
 
-@synthesize beerID;
+@synthesize reviewedDocID;
 @synthesize xmlParserPath;
 @synthesize currentElemValue;
 @synthesize reviewsList;
+@synthesize totalReviews;
 
--(id)initWithID:(NSString*)beerid dataType:(ResultType)t
+-(id)initWithID:(NSString*)docid dataType:(ResultType)t
 {
-	self.beerID=beerid;
+	self.reviewedDocID=docid;
 	self.xmlParserPath=[NSMutableArray arrayWithCapacity:5];
 	self.reviewsList=[NSMutableArray arrayWithCapacity:10];
+	self.totalReviews=0;
 
 	self.title=@"Reviews";
 
-	// Separate the brewery ID and the beer ID from the beerID
-	NSArray* idparts=[self.beerID componentsSeparatedByString:@":"];
-
-	NSURL* url;
-	if ([idparts count]==2)
-	{	// Retrieve XML doc for this beer
-		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC, 
-									 [idparts objectAtIndex:0],
-									 [idparts objectAtIndex:1]]];
-	}
-	else // Retrieve XML doc for this brewery
-	{
-		// TODO: make this work
-		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_BREWERY_REVIEWS_DOC, 
-								  [idparts objectAtIndex:0]]];
-	}
-	
-	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-	[parser setDelegate:self];
-	BOOL retval=[parser parse];
-	
-	if (retval==NO)
-	{
-		// TODO: handle this error
-	}
-	
 	return self;
 }
 
@@ -71,11 +47,48 @@
 }
 */
 
-/*
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+	// Separate the parts of the reviewedDocID to determine what kind of doc it is
+	NSArray* idparts=[self.reviewedDocID componentsSeparatedByString:@":"];
+	
+	NSURL* url=nil;
+	if ([[idparts objectAtIndex:0] isEqualToString:@"beer"])
+	{	// Retrieve XML doc for this beer
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC, 
+								  [idparts objectAtIndex:1],
+								  [idparts objectAtIndex:2],
+								  0]];
+	}
+	else if ([[idparts objectAtIndex:0] isEqualToString:@"brewery"])
+	{ // Retrieve XML doc for this brewery
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_BREWERY_REVIEWS_DOC, 
+								  [idparts objectAtIndex:1],
+								  0]];
+	}
+	else if ([[idparts objectAtIndex:0] isEqualToString:@"place"]) 
+	{ // Retrieve XML doc for this place
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_PLACE_REVIEWS_DOC, 
+								  [idparts objectAtIndex:1],
+								  0]];
+	}
+	
+	if (url)
+	{
+		NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+		[parser setDelegate:self];
+		BOOL retval=[parser parse];
+		
+		if (retval==NO)
+		{
+			// TODO: handle this error
+		}
+	}
+
 }
-*/
+
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -114,6 +127,8 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	if (self.totalReviews>[self.reviewsList count])
+		return [self.reviewsList count]+1; // Extra row for the button to get more reviews
     return [self.reviewsList count];
 }
 
@@ -127,21 +142,28 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
     }
-    
-	NSArray* starsfmt=[NSArray arrayWithObjects:
-		@"☆☆☆☆☆ %@",
-		@"★☆☆☆☆ %@",
-		@"★★☆☆☆ %@",
-		@"★★★☆☆ %@",
-		@"★★★★☆ %@",
-		@"★★★★★ %@",
-		nil];
+	
+	if (indexPath.row > [self.reviewsList count])
+	{
+		[cell.textLabel setText:[NSString stringWithFormat:@"%d more reviews",(self.totalReviews-[self.reviewsList count]),nil]];
+	}
+	else
+	{
+		NSArray* starsfmt=[NSArray arrayWithObjects:
+			@"☆☆☆☆☆ %@",
+			@"★☆☆☆☆ %@",
+			@"★★☆☆☆ %@",
+			@"★★★☆☆ %@",
+			@"★★★★☆ %@",
+			@"★★★★★ %@",
+			nil];
 
-    // Set up the cell...
-	[cell.textLabel setText:[NSString stringWithFormat:[starsfmt objectAtIndex:[[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"rating"] integerValue]],
-						[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"user_id"]
-						
-	]];
+		// Set up the cell...
+		[cell.textLabel setText:[NSString stringWithFormat:[starsfmt objectAtIndex:[[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"rating"] integerValue]],
+							[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"user_id"]
+							
+		]];
+	}
 
     return cell;
 }
@@ -198,7 +220,7 @@
 - (void)dealloc {
     [super dealloc];
 	
-	[beerID release];
+	[reviewedDocID release];
 	currentElemValue=nil;
 }
 
@@ -208,23 +230,47 @@
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
 	// Clear any old data
+	[self.currentElemValue release];
 	self.currentElemValue=nil;
 	[self.xmlParserPath removeAllObjects];
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser
 {
+	[self.currentElemValue release];
+	self.currentElemValue=nil;
+	[self.xmlParserPath removeAllObjects];
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	// Add the element to the xmlParserPath
-	[self.xmlParserPath addObject:elementName];
+	/*
+	 Sample reviews doc:
+	<reviews total="1" start="0" count="1" seqnum="0" seqmax="0">
+		<review>
+			<type>review</type>
+			<timestamp>1249427886</timestamp>
+			<user_id>troyh</user_id>
+			<place_id>place:Elliot-Bay-Brewhouse-and-Pub-Burien-Washington</place_id>
+			<rating>4</rating>
+		</review>
+	</reviews>
+	 */
 	
-	if ([elementName isEqualToString:@"beer_review"])
+	if ([elementName isEqualToString:@"reviews"])
 	{
-		// Add a new review dictionary object to the list of reviews
-		[self.reviewsList addObject:[NSMutableDictionary dictionaryWithCapacity:3]]; // 3 matches the number of elements we know we're going to add
+		if ([self.xmlParserPath count]==0)
+		{
+			self.totalReviews=[[attributeDict objectForKey:@"total"] integerValue];
+		}
+	}
+	else if ([elementName isEqualToString:@"review"])
+	{
+		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",nil]])
+		{
+			// Add a new review dictionary object to the list of reviews
+			[self.reviewsList addObject:[NSMutableDictionary dictionaryWithCapacity:3]]; // 3 matches the number of elements we know we're going to add
+		}
 	}
 	else if (
 		[elementName isEqualToString:@"timestamp"] ||
@@ -232,8 +278,14 @@
 	    [elementName isEqualToString:@"rating"]
 		)
 	{
-		self.currentElemValue=[NSMutableString string];
+		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",nil]])
+		{
+			self.currentElemValue=[NSMutableString string];
+		}
 	}
+
+	// Add the element to the xmlParserPath
+	[self.xmlParserPath addObject:elementName];
 }
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
@@ -244,9 +296,8 @@
 	if (self.currentElemValue) // If we care about capturing this data
 	{
 		// Is it the element under //beer_reviews/beer_review?
-		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer_reviews",@"beer_review",nil]])
+		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",nil]])
 		{
-//			NSMutableDictionary* currentReviewObject=[self.reviewsList lastObject];
 			if ([elementName isEqualToString:@"timestamp"])
 				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"timestamp"];
 			else if ([elementName isEqualToString:@"user_id"])

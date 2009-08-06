@@ -33,13 +33,6 @@
 	
 	beerList=[[NSMutableArray alloc] initWithCapacity:10];
 	
-	// Retrieve XML doc from server
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_META_DOC, breweryID ]];
-	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-	[parser setDelegate:self];
-	[parser parse];
-	[parser release];
-	
 	return self;
 }
 
@@ -113,11 +106,24 @@
 
 
 
-/*
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+	// Retrieve XML doc from server
+	NSArray* idparts=[breweryID componentsSeparatedByString:@":"];
+	if ([idparts count]==2) // What we expect
+	{
+		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_META_DOC, [idparts objectAtIndex:1]]];
+		if (url)
+		{
+			NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+			[parser setDelegate:self];
+			[parser parse];
+			[parser release];
+		}
+	}
 }
-*/
+
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
