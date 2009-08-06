@@ -24,6 +24,7 @@
 @synthesize xmlPostResponse;
 @synthesize overlay;
 @synthesize spinner;
+@synthesize xmlParserPath;
 
 -(id) initWithPlaceID:(NSString*)place_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
 {
@@ -34,6 +35,7 @@
 	self.spinner=nil;
 	self.xmlPostResponse=nil;
 	self.currentElemValue=nil;
+	self.xmlParserPath=[NSMutableArray arrayWithCapacity:10];
 	
 	self.title=@"Place";
 	
@@ -42,13 +44,13 @@
 	placeObject=[[PlaceObject alloc] init];
 	
 	
-	NSArray* parts=[self.placeID componentsSeparatedByString:@":"];
-	
-	// Retrieve XML doc from server
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_DOC, [parts objectAtIndex:1]]];
-	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-	[parser setDelegate:self];
-	[parser parse];
+//	NSArray* parts=[self.placeID componentsSeparatedByString:@":"];
+//	
+//	// Retrieve XML doc from server
+//	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_DOC, [parts objectAtIndex:1]]];
+//	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+//	[parser setDelegate:self];
+//	[parser parse];
 	
 	return self;
 }
@@ -147,10 +149,60 @@
  }
 
 
- - (void)viewWillAppear:(BOOL)animated {
-	 [super viewWillAppear:animated];
-	 [self.tableView reloadData]; // Reload data because we may come back from an editing view controller
- }
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+	
+	if (self.placeID==nil)
+	{
+		//		UIToolbar* tb=[[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
+		//		[tb sizeToFit];
+		//		
+		//		// Add cancel and save buttons
+		//		UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(newBeerCancelButtonClicked)] autorelease];
+		//		UIBarButtonItem* saveButton=[[[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(newBeerSaveButtonClicked)] autorelease];
+		//		[tb setItems:[NSArray arrayWithObjects:cancelButton,saveButton,nil]];
+		//		
+		//		[self.view.superview addSubview:tb];
+		//		CGRect vf=self.view.frame;
+		//		vf.size.height-=tb.frame.size.height;
+		//		vf.origin.y=0;
+		//		self.view.frame=vf;
+		//		[self.view sizeToFit];
+		self.title=@"New Place";
+	}
+	else
+	{
+		// Separate the 2 parts of the place ID
+		NSArray* idparts=[self.placeID componentsSeparatedByString:@":"];
+
+		// Retrieve XML doc for this place
+		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_DOC, [idparts objectAtIndex:1]]];
+		NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+		[parser setDelegate:self];
+		BOOL retval=[parser parse];
+		[parser release];
+		
+		if (retval==YES)
+		{
+			// Retrieve user's review for this place (if any)
+			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_REVIEW_DOC, 
+									  [idparts objectAtIndex:1], 
+									  [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
+			parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+			[parser setDelegate:self];
+			retval=[parser parse];
+			[parser release];
+			
+			if (retval==YES)
+			{
+				// The user has a review for this place
+				NSLog(@"User rating:%@", [self.placeObject.data objectForKey:@"user_rating"]);
+			}
+		}
+	}
+	
+	[self.tableView reloadData]; // Reload data because we may come back from an editing view controller
+}
 
 /*
  - (void)viewDidAppear:(BOOL)animated {
@@ -546,59 +598,143 @@
 	// Clear any old data
 	[self.currentElemValue release];
 	self.currentElemValue=nil;
+	[self.xmlParserPath removeAllObjects];
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser
 {
+	[self.currentElemValue release];
+	self.currentElemValue=nil;
+	[self.xmlParserPath removeAllObjects];
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if ([elementName isEqualToString:@"name"] ||
-	    [elementName isEqualToString:@"street"] ||
-	    [elementName isEqualToString:@"city"] ||
-	    [elementName isEqualToString:@"state"] ||
-	    [elementName isEqualToString:@"zip"] ||
-	    [elementName isEqualToString:@"country"] ||
-	    [elementName isEqualToString:@"uri"] ||
-	    [elementName isEqualToString:@"phone"]
-		)
+	/*
+	 Sample Review:
+	 
+	<review>
+	<type>review</type>
+	<timestamp>1249427886</timestamp>
+	<user_id>troyh</user_id>
+	<place_id>place:Elliot-Bay-Brewhouse-and-Pub-Burien-Washington</place_id>
+	<rating>4</rating>
+	</review>
+
+	 Sample Place:
+	<place id="place:Elliot-Bay-Brewhouse-and-Pub-Burien-Washington" in_operation="yes" specializes_in_beer="yes" tied="no" bottled_beer_to_go="no" growlers_to_go="no" kegs_to_go="no" brew_on_premises="no" taps="" casks="" bottles="" wheelchair_accessible="" music="" wifi="">
+	<_id>place:Elliot-Bay-Brewhouse-and-Pub-Burien-Washington</_id>
+	<_rev>3183007484</_rev>
+	<type>place</type>
+	<timestamp>1249415199</timestamp>
+	<name>Elliot Bay Brewhouse &amp; Pub</name>
+	<description/>
+	<phone/>
+	<uri/>
+	<established/>
+	<address>
+    <street/>
+    <city>Burien</city>
+    <state>Washington</state>
+    <zip/>
+    <country>United States</country>
+    <neighborhood/>
+	</address>
+	<hours>
+    <open/>
+    <tour/>
+    <tasting/>
+	</hours>
+	<tour_info/>
+	<restaurant reservations="" alcohol="" accepts_credit_cards="" good_for_groups="" outdoor_seating="" smoking="">
+    <food_description/>
+    <menu_uri/>
+    <price_range/>
+    <attire/>
+    <waiter_service>
+	</waiter_service>
+	</restaurant>
+	<parking/>
+	<kid_friendly/>
+	</place>
+	 */
+	
+	if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"place",nil]])
 	{
-		self.currentElemValue=[NSMutableString string];
+		if ([elementName isEqualToString:@"name"] ||
+			[elementName isEqualToString:@"uri"] ||
+			[elementName isEqualToString:@"phone"])
+			self.currentElemValue=[NSMutableString string];
 	}
+	else if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"place",@"address",nil]])
+	{
+		if ([elementName isEqualToString:@"street"] ||
+			[elementName isEqualToString:@"city"] ||
+			[elementName isEqualToString:@"state"] ||
+			[elementName isEqualToString:@"zip"] ||
+			[elementName isEqualToString:@"country"])
+		{
+			self.currentElemValue=[NSMutableString string];
+		}
+	}
+	else if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
+	{
+		if ([elementName isEqualToString:@"rating"])
+		{
+			self.currentElemValue=[NSMutableString string];
+		}
+	}
+	
+	// Add the element to the xmlParserPath
+	[self.xmlParserPath addObject:elementName];
+	
 }
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
+	// Pop the element name off the XML parser path array
+	[self.xmlParserPath removeLastObject];
+	
 	if (self.currentElemValue)
 	{
-		if ([elementName isEqualToString:@"name"])
-			[placeObject.data setObject:currentElemValue forKey:@"name"];
-		else if ([elementName isEqualToString:@"street"])
+		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"place",nil]])
 		{
-			NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
-			[addr setObject:currentElemValue forKey:@"street"];
+			if ([elementName isEqualToString:@"name"])
+				[placeObject.data setObject:currentElemValue forKey:@"name"];
+			else if ([elementName isEqualToString:@"uri"])
+				[placeObject.data setObject:currentElemValue forKey:@"uri"];
+			else if ([elementName isEqualToString:@"phone"])
+				[placeObject.data setObject:currentElemValue forKey:@"phone"];
 		}
-		else if ([elementName isEqualToString:@"city"])
+		else if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"place",@"address",nil]])
 		{
-			NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
-			[addr setObject:currentElemValue forKey:@"city"];
+			if ([elementName isEqualToString:@"street"])
+			{
+				NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+				[addr setObject:currentElemValue forKey:@"street"];
+			}
+			else if ([elementName isEqualToString:@"city"])
+			{
+				NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+				[addr setObject:currentElemValue forKey:@"city"];
+			}
+			else if ([elementName isEqualToString:@"state"])
+			{
+				NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+				[addr setObject:currentElemValue forKey:@"state"];
+			}
+			else if ([elementName isEqualToString:@"zip"])
+			{
+				NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+				[addr setObject:currentElemValue forKey:@"zip"];
+			}
 		}
-		else if ([elementName isEqualToString:@"state"])
+		else if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
 		{
-			NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
-			[addr setObject:currentElemValue forKey:@"state"];
+			if ([elementName isEqualToString:@"rating"])
+				[placeObject.data setObject:currentElemValue forKey:@"user_rating"];
 		}
-		else if ([elementName isEqualToString:@"zip"])
-		{
-			NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
-			[addr setObject:currentElemValue forKey:@"zip"];
-		}
-		else if ([elementName isEqualToString:@"uri"])
-			[placeObject.data setObject:currentElemValue forKey:@"uri"];
-		else if ([elementName isEqualToString:@"phone"])
-			[placeObject.data setObject:currentElemValue forKey:@"phone"];
-		
+			
 		self.currentElemValue=nil;
 	}
 }

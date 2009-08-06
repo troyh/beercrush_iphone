@@ -20,6 +20,7 @@
 	NSMutableData* xmlPostResponse;
 	UIView* overlay;
 	UIActivityIndicatorView* spinner;
+	NSMutableArray* xmlParserPath;
 }
 
 @property (nonatomic,retain) NSString* placeID;
@@ -30,6 +31,7 @@
 @property (nonatomic,retain) NSMutableData* xmlPostResponse;
 @property (nonatomic, retain) UIView* overlay;
 @property (nonatomic, retain) UIActivityIndicatorView* spinner;
+@property (nonatomic, retain) NSMutableArray* xmlParserPath;
 
 -(id) initWithPlaceID:(NSString*)place_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d;
 //- (void)editPlace:(id)sender;
