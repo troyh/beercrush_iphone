@@ -19,6 +19,7 @@
 
 @synthesize place_id;
 @synthesize data;
+@synthesize editeddata;
 @synthesize distanceAway;
 //@synthesize name;
 //@synthesize loc;
@@ -32,6 +33,7 @@
 -(id)init
 {
 	self.data=[[NSMutableDictionary alloc] initWithCapacity:10];
+	self.editeddata=nil;
 	if (self.data)
 	{
 		[self.data setObject:@"" forKey:@"name"];

@@ -15,6 +15,7 @@
 {
 	NSString* place_id;
 	NSMutableDictionary* data;
+	NSMutableDictionary* editeddata;
 	CLLocationDistance distanceAway;
 //	NSString* name;
 //	CLLocation* loc;
@@ -29,6 +30,7 @@
 
 @property (nonatomic,retain) NSString* place_id;
 @property (nonatomic,retain) NSMutableDictionary* data;
+@property (nonatomic,retain) NSMutableDictionary* editeddata;
 @property (nonatomic) CLLocationDistance distanceAway;
 //@property (nonatomic,retain) NSString* name;
 //@property (nonatomic,retain) CLLocation* loc;

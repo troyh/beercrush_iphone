@@ -13,6 +13,7 @@
 
 @synthesize editingControls;
 @synthesize data;
+@synthesize initialdata;
 @synthesize editableValueName;
 @synthesize editableValueType;
 @synthesize editableChoices;
@@ -55,15 +56,17 @@
 		case kBeerCrushEditableValueTypeAddress:
 		{
 			// Get the value from each cell's editing control
+			[self.data setObject:self.initialdata forKey:self.editableValueName];
 			NSMutableDictionary* addr=[self.data objectForKey:self.editableValueName];
-			for (NSUInteger i=0; i<[self.editingControls count]; ++i) {
-				UIControl* ctl=[self.editingControls objectAtIndex:i];
-				if ([ctl isKindOfClass:[UITextField class]])
-				{
-					UITextField* txtfld=(UITextField*)ctl;
-					[addr setObject:txtfld.text forKey:@"street"];
-				}
-			}
+			
+			UITextField* txtfld=(UITextField*)[self.editingControls objectAtIndex:0];
+			[addr setObject:txtfld.text forKey:@"street"];
+			txtfld=(UITextField*)[self.editingControls objectAtIndex:1];
+			[addr setObject:txtfld.text forKey:@"city"];
+			txtfld=(UITextField*)[self.editingControls objectAtIndex:2];
+			[addr setObject:txtfld.text forKey:@"state"];
+			txtfld=(UITextField*)[self.editingControls objectAtIndex:3];
+			[addr setObject:txtfld.text forKey:@"zip"];
 			break;
 		}
 	}
@@ -156,8 +159,10 @@
 //			f.origin.y+=5;
 			UITextField* fld=[[UITextField alloc] initWithFrame:f];
 
-			if ([[self.data objectForKey:self.editableValueName] isKindOfClass:[NSString class]])
-				fld.text=[self.data objectForKey:self.editableValueName];
+			if ([self.initialdata isKindOfClass:[NSString class]])
+			{
+				fld.text=(NSString*)self.initialdata;
+			}
 			else
 				fld.text=@"";
 			fld.font=[UIFont systemFontOfSize: 40.0];
@@ -233,11 +238,15 @@
 			f.origin.x+=10;
 			UITextField* fld=[[UITextField alloc] initWithFrame:f];
 			
-			NSMutableDictionary* addr=[self.data objectForKey:self.editableValueName];
-			if ([[addr objectForKey:addr_field] isKindOfClass:[NSString class]])
-				fld.text=[addr objectForKey:addr_field];
-			else
-				fld.text=@"";
+			if ([self.initialdata isKindOfClass:[NSDictionary class]]) // It better be!
+			{
+				NSDictionary* addr=(NSDictionary*)self.initialdata;
+				if ([[addr objectForKey:addr_field] isKindOfClass:[NSString class]])
+					fld.text=[addr objectForKey:addr_field];
+				else
+					fld.text=@"";
+			}
+			
 			fld.font=[UIFont systemFontOfSize:40.0];
 			fld.textAlignment=UITextAlignmentCenter;
 			fld.clearButtonMode=UITextFieldViewModeWhileEditing;

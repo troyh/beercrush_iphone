@@ -61,6 +61,37 @@
 	[super dealloc];
 }
 
+void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* orig,NSDictionary* newvalues,NSString* prefix)
+{
+	NSEnumerator* iter=[newvalues keyEnumerator];
+	id key;
+	while ((key=[iter nextObject])!=nil)
+	{
+		[orig setObject:[newvalues objectForKey:key] forKey:key];
+		
+		if ([key isKindOfClass:[NSString class]]) // Just make sure, they should always be NSStrings
+		{
+			id obj=[newvalues objectForKey:key];
+			if ([obj isKindOfClass:[NSDictionary class]])
+			{
+//				[bodystr appendFormat:@"&address:city=%@",[s stringByReplacingOccurrencesOfString:@"&" withString:@"%26"]];
+				NSMutableString* newprefix=[NSMutableString string];
+				[newprefix appendFormat:@"%@%@:",prefix,key];
+//				[newprefix appendString:prefix];
+//				[newprefix appendString:key];
+//				[newprefix appendString:@":"];
+					
+				appendValuesToPostBodyString(bodystr,orig,obj,newprefix);
+			}
+			else if ([obj isKindOfClass:[NSString class]])
+			{
+				NSString* s=obj;
+				[bodystr appendFormat:@"&%@%@=%@",prefix,key,[s stringByReplacingOccurrencesOfString:@"&" withString:@"%26"]];
+			}
+		}
+	}
+}
+
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
 	[super setEditing:editing animated:animated];
@@ -68,51 +99,66 @@
 	if (editing==YES)
 	{
 		self.title=@"Editing Place";
+		NSArray* rows=[NSArray arrayWithObjects:
+					   [NSIndexPath indexPathForRow:1 inSection:0],
+					   [NSIndexPath indexPathForRow:2 inSection:0],
+					   [NSIndexPath indexPathForRow:3 inSection:0],
+					   nil];
+		[self.tableView beginUpdates];
+		[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView endUpdates];
+		
+		// Initialize editeddata
+		if (self.placeObject.editeddata)
+			[self.placeObject.editeddata release];
+		self.placeObject.editeddata=[[NSMutableDictionary alloc] initWithCapacity:10];
 	}
 	else
 	{
-		// Save data to server
-		NSString* bodystr=[[NSString alloc] initWithFormat:
-									@"place_id=%@&"
-									"address/city=%@&"
-									"address/state=%@&"
-									"address/street=%@&"
-									"address/zip=%@&"
-									"name=%@&"			
-									"phone=%@&"
-									"uri=%@",
-									self.placeID,
-									[[self.placeObject.data objectForKey:@"address"] objectForKey:@"city"],
-									[[self.placeObject.data objectForKey:@"address"] objectForKey:@"state"],
-									[[self.placeObject.data objectForKey:@"address"] objectForKey:@"street"],
-									[[self.placeObject.data objectForKey:@"address"] objectForKey:@"zip"],
-									[self.placeObject.data objectForKey:@"name"],
-									[self.placeObject.data objectForKey:@"phone"],
-									[self.placeObject.data objectForKey:@"uri"]];
-		
-		NSLog(@"POST data:%@",bodystr);
-		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
-		
-		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_PLACE_DOC]
-																cachePolicy:NSURLRequestUseProtocolCachePolicy
-															timeoutInterval:60.0];
-		[theRequest setHTTPMethod:@"POST"];
-		[theRequest setHTTPBody:body];
-		[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
-		
-		// create the connection with the request and start loading the data
-		NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-		
-		if (theConnection) {
-			// Create the NSMutableData that will hold
-			// the received data
-			// receivedData is declared as a method instance elsewhere
-			xmlPostResponse=[[NSMutableData data] retain];
-		} else {
-			// TODO: inform the user that the download could not be made
-		}	
+		if (self.placeObject.editeddata && [self.placeObject.editeddata count])
+		{
+			// Save data to server
+			NSMutableString* bodystr=[[NSMutableString alloc] initWithFormat:@"place_id=%@",self.placeID];
+			// Copy edited data fields to the real data fields
+			appendValuesToPostBodyString(bodystr,self.placeObject.data,self.placeObject.editeddata,@"");
+			
+			NSLog(@"POST data:%@",bodystr);
+			NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
+			
+			NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_PLACE_DOC]
+																	cachePolicy:NSURLRequestUseProtocolCachePolicy
+																timeoutInterval:60.0];
+			[theRequest setHTTPMethod:@"POST"];
+			[theRequest setHTTPBody:body];
+			[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+			
+			// create the connection with the request and start loading the data
+			NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+			
+			if (theConnection) {
+				// Create the NSMutableData that will hold
+				// the received data
+				// receivedData is declared as a method instance elsewhere
+				xmlPostResponse=[[NSMutableData data] retain];
+			} else {
+				// TODO: inform the user that the download could not be made
+			}	
+			
+			[self.placeObject.editeddata removeAllObjects];
+			[self.placeObject.editeddata release];
+			self.placeObject.editeddata=nil;
+		}
 		
 		self.title=@"Place";
+
+		NSArray* rows=[NSArray arrayWithObjects:
+					   [NSIndexPath indexPathForRow:1 inSection:0],
+					   [NSIndexPath indexPathForRow:2 inSection:0],
+					   [NSIndexPath indexPathForRow:3 inSection:0],
+					   nil];
+		[self.tableView beginUpdates];
+		[self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView endUpdates];
 	}
 }
 
@@ -172,31 +218,37 @@
 	}
 	else
 	{
-		// Separate the 2 parts of the place ID
-		NSArray* idparts=[self.placeID componentsSeparatedByString:@":"];
-
-		// Retrieve XML doc for this place
-		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_DOC, [idparts objectAtIndex:1]]];
-		NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-		[parser setDelegate:self];
-		BOOL retval=[parser parse];
-		[parser release];
-		
-		if (retval==YES)
+		if (self.editing==YES)
 		{
-			// Retrieve user's review for this place (if any)
-			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_REVIEW_DOC, 
-									  [idparts objectAtIndex:1], 
-									  [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
-			parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+		}
+		else
+		{
+			// Separate the 2 parts of the place ID
+			NSArray* idparts=[self.placeID componentsSeparatedByString:@":"];
+
+			// Retrieve XML doc for this place
+			NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_DOC, [idparts objectAtIndex:1]]];
+			NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 			[parser setDelegate:self];
-			retval=[parser parse];
+			BOOL retval=[parser parse];
 			[parser release];
 			
 			if (retval==YES)
 			{
-				// The user has a review for this place
-				NSLog(@"User rating:%@", [self.placeObject.data objectForKey:@"user_rating"]);
+				// Retrieve user's review for this place (if any)
+				url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_REVIEW_DOC, 
+										  [idparts objectAtIndex:1], 
+										  [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
+				parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+				[parser setDelegate:self];
+				retval=[parser parse];
+				[parser release];
+				
+				if (retval==YES)
+				{
+					// The user has a review for this place
+					NSLog(@"User rating:%@", [self.placeObject.data objectForKey:@"user_rating"]);
+				}
 			}
 		}
 	}
@@ -244,7 +296,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return 4;
+			return self.editing?1:4;
 			break;
 		case 1:
 			return 3;
@@ -261,7 +313,8 @@
     
     static NSString *CellIdentifier = @"Cell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = nil;
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
     }
@@ -275,10 +328,16 @@
 			switch (indexPath.row)
 			{
 			case 0:
-				[cell.textLabel setText:[placeObject.data valueForKey:@"name"]];
+			{
+				if (self.editing && [placeObject.editeddata valueForKey:@"name"])
+					[cell.textLabel setText:[placeObject.editeddata valueForKey:@"name"]];
+				else
+					[cell.textLabel setText:[placeObject.data valueForKey:@"name"]];
+				
 				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				break;
+			}
 			case 1:
 			{
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
@@ -315,13 +374,20 @@
 			switch (indexPath.row)
 			{
 			case 0:
-				[cell.textLabel setText:[placeObject.data valueForKey:@"uri"]];
+				if (self.editing && [placeObject.editeddata valueForKey:@"uri"])
+					[cell.textLabel setText:[placeObject.editeddata valueForKey:@"uri"]];
+				else
+					[cell.textLabel setText:[placeObject.data valueForKey:@"uri"]];
 				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
 				[cell.textLabel setTextAlignment:UITextAlignmentCenter];
 				break;
 			case 1:
 			{
-				NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+				NSDictionary* addr;
+				if (self.editing && [placeObject.editeddata valueForKey:@"address"])
+					addr=[placeObject.editeddata valueForKey:@"address"];
+				else
+					addr=[placeObject.data objectForKey:@"address"];
 					
 				[cell.textLabel setText:[NSString stringWithFormat:@"%@, %@ %@ %@",
 						[addr objectForKey:@"street"],
@@ -334,7 +400,10 @@
 				break;
 			}
 			case 2:
-				[cell.textLabel setText:[placeObject.data valueForKey:@"phone"]];
+				if (self.editing && [placeObject.editeddata valueForKey:@"phone"])
+					[cell.textLabel setText:[placeObject.editeddata valueForKey:@"phone"]];
+				else
+					[cell.textLabel setText:[placeObject.data valueForKey:@"phone"]];
 				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
 //				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
@@ -415,7 +484,8 @@
 		if (self.tableView.editing==YES)
 		{
 			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=placeObject.data;
+			pnetvc.data=placeObject.editeddata;
+			pnetvc.initialdata=[placeObject.data objectForKey:@"name"];
 			pnetvc.editableValueName=@"name";
 			pnetvc.editableValueType=kBeerCrushEditableValueTypeText;
 			[self.navigationController pushViewController:pnetvc animated:YES];
@@ -454,7 +524,8 @@
 		{
 			// Go to view to edit URL
 			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=placeObject.data;
+			pnetvc.data=placeObject.editeddata;
+			pnetvc.initialdata=[placeObject.data objectForKey:@"uri"];
 			pnetvc.editableValueName=@"uri";
 			pnetvc.editableValueType=kBeerCrushEditableValueTypeURI;
 			[self.navigationController pushViewController:pnetvc animated:YES];
@@ -471,7 +542,8 @@
 		{
 			// Go to view to edit address
 			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=placeObject.data;
+			pnetvc.data=placeObject.editeddata;
+			pnetvc.initialdata=[placeObject.data objectForKey:@"address"];
 			pnetvc.editableValueName=@"address";
 			pnetvc.editableValueType=kBeerCrushEditableValueTypeAddress;
 			[self.navigationController pushViewController:pnetvc animated:YES];
@@ -498,7 +570,8 @@
 			// Go to view to edit phone number
 			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
 			pnetvc.editableValueName=@"phone";
-			pnetvc.data=placeObject.data;
+			pnetvc.data=placeObject.editeddata;
+			pnetvc.initialdata=[placeObject.data objectForKey:@"phone"];
 			pnetvc.editableValueType=kBeerCrushEditableValueTypePhoneNumber;
 			[self.navigationController pushViewController:pnetvc animated:YES];
 			[pnetvc release];
@@ -521,21 +594,17 @@
  // Override to support conditional editing of the table view.
  - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
  // Return NO if you do not want the specified item to be editable.
-	 switch (indexPath.section) 
+	 switch (indexPath.section)
 	 {
 		 case 0:
 			 switch (indexPath.row)
 		 {
 			 case 0:
+				 return YES;
 				 break;
 			 case 1:
-				 break;
 			 case 2:
-				 return NO;
-				 break;
 			 case 3:
-				 return NO;
-				 break;
 			 default:
 				 break;
 		 }
@@ -544,20 +613,19 @@
 			 switch (indexPath.row)
 		 {
 			 case 0:
-				 break;
 			 case 1:
-				 break;
 			 case 2:
-//				 return NO;
+				 return YES;
 				 break;
 			 default:
 				 break;
 		 }
+		 default:
+			 break;
 	 }
 	 
 	 return YES;
- }
-
+}	 
 
 
 /*
@@ -590,6 +658,16 @@
  }
  */
 
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return UITableViewCellEditingStyleNone;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return NO;
+}
 
 // NSXMLParser delegate methods
 
