@@ -174,6 +174,13 @@
 //		[self.navigationController.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:YES];
 		self.navigationController.navigationBar.topItem.leftBarButtonItem=nil;
 
+		NSArray* rows=[NSArray arrayWithObjects:
+					   [NSIndexPath indexPathForRow:1 inSection:0],
+					   [NSIndexPath indexPathForRow:2 inSection:0],
+					   nil];
+		[self.tableView beginUpdates];
+		[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView endUpdates];
 	}
 	else
 	{
@@ -263,6 +270,14 @@
 		while (bRetry);
 		
 		self.title=@"Beer";
+
+		NSArray* rows=[NSArray arrayWithObjects:
+					   [NSIndexPath indexPathForRow:1 inSection:0],
+					   [NSIndexPath indexPathForRow:2 inSection:0],
+					   nil];
+		[self.tableView beginUpdates];
+		[self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView endUpdates];
 	}
 }
 
@@ -282,7 +297,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return 4;
+			return self.editing?2:4;
 			break;
 		case 1:
 			return 2;
@@ -295,10 +310,18 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	NSInteger adjusted_row=indexPath.row;
+	if (self.editing && indexPath.section==0)
+	{
+		// When editing a beer, section 0 has 2 less rows
+		if (adjusted_row>0)
+			adjusted_row+=2;
+	}
+
 	switch (indexPath.section) 
 	{
 		case 0:
-			switch (indexPath.row)
+			switch (adjusted_row)
 			{
 			case 0:
 				break;
@@ -347,11 +370,19 @@
 
 	tableView.allowsSelectionDuringEditing=YES;
 
+	NSInteger adjusted_row=indexPath.row;
+	if (self.editing && indexPath.section==0)
+	{
+		// When editing a beer, section 0 has 2 less rows
+		if (adjusted_row>0)
+			adjusted_row-=2;
+	}
+	
     // Set up the cell...
 	switch (indexPath.section) 
 	{
 		case 0:
-			switch (indexPath.row)
+			switch (adjusted_row)
 		{
 			case 0:
 				[cell.textLabel setText:[beerObj.data objectForKey:@"name"]];

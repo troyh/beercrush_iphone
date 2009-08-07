@@ -83,12 +83,12 @@
 	// Add cancel and save buttons
 	UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(newBeerCancelButtonClicked)] autorelease];
 	UIBarButtonItem* saveButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(newBeerSaveButtonClicked)] autorelease];
-	[nc.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:NO];
-	[nc.navigationBar.topItem setRightBarButtonItem:saveButton animated:NO];
 	
 	[btvc setEditing:YES animated:NO];
 	
 	[self presentModalViewController:nc animated:YES];
+	[nc.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:NO];
+	[nc.navigationBar.topItem setRightBarButtonItem:saveButton animated:NO];
 	
 }
 
