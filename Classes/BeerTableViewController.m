@@ -711,7 +711,7 @@
 
 	if (xmlParseDepth==1) // Figure out what document type we're parsing
 	{
-		if ([elementName isEqualToString:@"beer_review"])
+		if ([elementName isEqualToString:@"review"])
 			self.bParsingBeerReview=YES;
 		else
 			self.bParsingBeerReview=NO;
