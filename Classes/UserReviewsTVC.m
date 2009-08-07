@@ -27,13 +27,17 @@
     return self;
 }
 
-
+/*
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-	
+}
+*/
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 	// Fetch list of user's beer reviews from the server
 	NSString* user_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
 	if (user_id==nil)
@@ -55,14 +59,9 @@
 		}
 		[parser release];
 	}
-	
-}
+ 
+ }
 
-/*
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-*/
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -130,8 +129,8 @@
 		[cell.textLabel setText:@"???"];
 	else
 	{
-		NSLog(@"Requested %d of %d",indexPath.row,[self.reviewsList count]);
 		[cell.textLabel setText:s];
+//		[cell.detailTextLabel setText:[review objectForKey:@"brewery_name"]];
 
 		NSArray* starsfmt=[NSArray arrayWithObjects:
 						   @"☆☆☆☆☆",
@@ -290,6 +289,11 @@
 			{
 				NSMutableDictionary* review=[self.reviewsList lastObject];
 				[review setObject:self.currentElemValue forKey:@"beer_name"];
+			}
+			else if ([self.xmlParserPath count]==4 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"beer",@"brewery",nil]])
+			{
+				NSMutableDictionary* review=[self.reviewsList lastObject];
+				[review setObject:self.currentElemValue forKey:@"brewery_name"];
 			}
 		}
 			
