@@ -128,8 +128,8 @@
 	UIViewController* vc=[[UIViewController alloc] init];
 	UINavigationController* nc=[[UINavigationController alloc] initWithRootViewController:vc];
 	
-	self.btvc=[[BrowseBrewersTVC alloc] init];
-	[nc pushViewController:btvc	animated:NO];
+	BrowseBrewersTVC* bbtvc=[[BrowseBrewersTVC alloc] init];
+	[nc pushViewController:bbtvc animated:NO];
 	
 	// Add cancel buttons
 	UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(browseBrewersCancelButtonClicked)] autorelease];
@@ -137,7 +137,10 @@
 	[self presentModalViewController:nc animated:YES];
 	[nc.navigationBar.topItem setLeftBarButtonItem:nil animated:NO];
 	[nc.navigationBar.topItem setRightBarButtonItem:cancelButton animated:NO];
-	
+
+	// Set onBeerSelected selector so we're called when the user selects a beer
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[delegate setOnBeerSelectedAction:@selector(addBeerToMenu:) target:self];
 }
 
 -(void)browseBrewersCancelButtonClicked
@@ -145,7 +148,29 @@
 	[self.parentViewController dismissModalViewControllerAnimated:YES];
 }
 
+-(void)addBeerToMenu:(NSString*)beerID
+{
+	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_MENU_DOC];
+	NSString* postdata=[[NSString alloc] initWithFormat:
+			 @"place_id=%@&"
+			 "add_item=%@",
+			 self.placeID,
+			 beerID];
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSData* answer=nil;
+	[delegate sendRequest:url usingMethod:@"POST" withData:postdata returningData:&answer];
 
+	if (answer)
+	{  // Parse the XML doc
+		NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
+		[parser setDelegate:self];
+		[parser parse];
+		
+		[answer release];
+	}
+	
+	[postdata release];
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -232,10 +257,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
-//	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:[beer.data valueForKey:@"id"]] autorelease];
-
-	[self.navigationController pushViewController:vc animated:YES];
+	
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	if ([delegate onBeerSelected:[beer.data valueForKey:@"id"]]==NO)
+	{
+		BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:[beer.data valueForKey:@"id"]] autorelease];
+		[self.navigationController pushViewController:vc animated:YES];
+	}
 }
 
 

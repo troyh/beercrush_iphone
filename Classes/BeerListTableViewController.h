@@ -29,5 +29,6 @@
 -(void)newBeerPanel;
 -(void)newBeerSaveButtonClicked;
 -(void)newBeerCancelButtonClicked;
+-(void)addBeerToMenu:(NSString*)beerID;
 
 @end

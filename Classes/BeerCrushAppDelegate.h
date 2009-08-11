@@ -14,10 +14,11 @@
 	UINavigationController* nav;
 	UISearchBar* mySearchBar;
 	UIApplication* app;
+	SEL onBeerSelectedAction;
+	id onBeerSelectedTarget;
 	
 //	NSArray* searchResultsList;
 	NSMutableData* xmlPostResponse;
-
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -26,18 +27,25 @@
 @property (nonatomic, retain) UISearchBar* mySearchBar;
 @property (nonatomic, retain) UIApplication* app;
 @property (nonatomic, retain) NSMutableData* xmlPostResponse;
+@property(nonatomic) SEL onBeerSelectedAction;
+@property(nonatomic,assign) id onBeerSelectedTarget;
+
 
 -(BOOL)login;
+-(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSString*)data returningData:(NSData**)responseData;
+-(void)setOnBeerSelectedAction:(SEL)s target:(id)t;
+-(BOOL)onBeerSelected:(id)obj;
 
 @end
 
-//#define BEERCRUSH_API_URL_HOST					"https://troy:voi42vod@troyandgay.com/beercrush"
+//#define BEERCRUSH_API_URL_HOST					"http://beercrush.com"
 #define BEERCRUSH_API_URL_HOST					"http://macdev"
 
 #define BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY			@BEERCRUSH_API_URL_HOST"/api/autocomplete.fcgi?q=%@"
 #define BEERCRUSH_API_URL_EDIT_BEER_DOC					@BEERCRUSH_API_URL_HOST"/api/beer/edit"
 #define BEERCRUSH_API_URL_EDIT_BREWERY_DOC				@BEERCRUSH_API_URL_HOST"/api/brewery/edit"
 #define BEERCRUSH_API_URL_EDIT_PLACE_DOC				@BEERCRUSH_API_URL_HOST"/api/place/edit"
+#define BEERCRUSH_API_URL_EDIT_MENU_DOC					@BEERCRUSH_API_URL_HOST"/api/menu/edit"
 #define BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC		@BEERCRUSH_API_URL_HOST"/xml/review/beer/%@/%@/_all.%d.xml"
 #define BEERCRUSH_API_URL_GET_ALL_BREWERIES_DOC			@BEERCRUSH_API_URL_HOST"/xml/breweries.xml"
 #define BEERCRUSH_API_URL_GET_ALL_BREWERY_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/xml/review/brewery/%@/_all.%d.xml"

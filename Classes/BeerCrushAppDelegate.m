@@ -53,6 +53,8 @@
 @synthesize mySearchBar;
 @synthesize app;
 @synthesize xmlPostResponse;
+@synthesize onBeerSelectedAction;
+@synthesize onBeerSelectedTarget;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
     
@@ -253,6 +255,92 @@
 		NSLog(@"login failed");
 		return NO;
 	}	
+}
+
+-(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSString*)data returningData:(NSData**)responseData
+{
+	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:url 
+													cachePolicy:NSURLRequestUseProtocolCachePolicy
+													timeoutInterval:30.0];
+	
+	if ([method isEqualToString:@"POST"])
+	{
+		if (data)
+		{
+			NSLog(@"POST data:%@",data);
+			NSData* body=[NSData dataWithBytes:[data UTF8String] length:[data length]];
+			[theRequest setHTTPBody:body];
+			[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+		}
+	}
+	else if ([method isEqualToString:@"GET"])
+	{
+	}
+	
+	[theRequest setHTTPMethod:method];
+	
+	NSHTTPURLResponse* response=nil;
+	NSError* error;
+	int nTries=0;
+	BOOL bRetry=NO;
+	
+	do
+	{
+		++nTries;
+		
+		NSData* rspdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+		
+		if (rspdata) {
+			NSLog(@"Response code:%d",[response statusCode]);
+			NSLog(@"Response data:%s",[rspdata bytes]);
+			
+			bRetry=NO;
+			int statuscode=[response statusCode];
+			if (statuscode==420)
+			{
+				if (nTries < 2) // Don't retry over and over, just do it once
+				{
+					if ([self login]==YES)
+					{
+						bRetry=YES; // Successfully logged in, retry original request
+					}
+				}
+			}
+			else if (statuscode==200)
+			{
+				if (responseData)
+					*responseData=rspdata;
+			}
+			
+			// Create the NSMutableData that will hold
+			// the received data
+			// receivedData is declared as a method instance elsewhere
+			//				xmlPostResponse=[[NSMutableData data] retain];
+		} else {
+			// TODO: inform the user that the download could not be made
+		}	
+	}
+	while (bRetry);
+	
+	return response;
+}
+
+
+
+-(void)setOnBeerSelectedAction:(SEL)s target:(id)t
+{
+	self.onBeerSelectedAction=s;
+	self.onBeerSelectedTarget=t;
+}
+
+-(BOOL)onBeerSelected:(id)obj
+{
+	if ([onBeerSelectedTarget respondsToSelector:onBeerSelectedAction])
+	{
+		[onBeerSelectedTarget performSelector:onBeerSelectedAction withObject:obj];
+		return YES;
+	}
+	return NO;
 }
 
 
