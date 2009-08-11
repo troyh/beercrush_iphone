@@ -363,7 +363,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				break;
 			case 3:
-				[cell.textLabel setText:@"List of Beers"];
+				[cell.textLabel setText:@"Now Serving"];
 				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				break;
 			default:
@@ -513,7 +513,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 		}
 		else
 		{
-			BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.placeID andApp:self.app];
+			BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.placeID];
 			[self.navigationController pushViewController: bltvc animated:YES];
 			[bltvc release];
 		}

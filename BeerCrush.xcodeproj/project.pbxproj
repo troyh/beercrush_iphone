@@ -14,6 +14,7 @@
 		0577ECC410068CCB00A2468C /* star_empty.png in Resources */ = {isa = PBXBuildFile; fileRef = 0577ECC110068CCB00A2468C /* star_empty.png */; };
 		0577ECC510068CCB00A2468C /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 0577ECC210068CCB00A2468C /* dot.png */; };
 		0577ECC610068CCB00A2468C /* star_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = 0577ECC310068CCB00A2468C /* star_filled.png */; };
+		058FF38D1030C41E00DA6D81 /* BrowseBrewersTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 058FF38C1030C41E00DA6D81 /* BrowseBrewersTVC.m */; };
 		05944DBD0F72E2BB0043D34C /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05944DBC0F72E2BB0043D34C /* MainWindow.xib */; };
 		05944DC50F72E7C30043D34C /* BeerCrush.png in Resources */ = {isa = PBXBuildFile; fileRef = 05944DC40F72E7C30043D34C /* BeerCrush.png */; };
 		05C6364D0F55C03C00B1C78A /* BreweryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */; };
@@ -43,6 +44,8 @@
 		0577ECC110068CCB00A2468C /* star_empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star_empty.png; sourceTree = "<group>"; };
 		0577ECC210068CCB00A2468C /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dot.png; sourceTree = "<group>"; };
 		0577ECC310068CCB00A2468C /* star_filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star_filled.png; sourceTree = "<group>"; };
+		058FF38B1030C41E00DA6D81 /* BrowseBrewersTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrowseBrewersTVC.h; sourceTree = "<group>"; };
+		058FF38C1030C41E00DA6D81 /* BrowseBrewersTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrowseBrewersTVC.m; sourceTree = "<group>"; };
 		05944DBC0F72E2BB0043D34C /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		05944DC40F72E7C30043D34C /* BeerCrush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BeerCrush.png; sourceTree = "<group>"; };
 		05C6364B0F55C03C00B1C78A /* BreweryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreweryTableViewController.h; sourceTree = "<group>"; };
@@ -91,6 +94,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				058FF38B1030C41E00DA6D81 /* BrowseBrewersTVC.h */,
+				058FF38C1030C41E00DA6D81 /* BrowseBrewersTVC.m */,
 				28216C950DB411BC00E5133A /* FirstViewController.h */,
 				28216C960DB411BC00E5133A /* FirstViewController.m */,
 				1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */,
@@ -244,6 +249,7 @@
 				053653960F703F99000389C1 /* PhoneNumberEditTableViewController.m in Sources */,
 				0577ECB910068A1300A2468C /* RatingControl.m in Sources */,
 				051102A1100FDC8300610251 /* UserReviewsTVC.m in Sources */,
+				058FF38D1030C41E00DA6D81 /* BrowseBrewersTVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

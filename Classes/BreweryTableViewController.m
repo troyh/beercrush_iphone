@@ -148,7 +148,6 @@
 		NSArray* rows=[NSArray arrayWithObjects:
 					   [NSIndexPath indexPathForRow:1 inSection:0],
 					   [NSIndexPath indexPathForRow:2 inSection:0],
-					   [NSIndexPath indexPathForRow:3 inSection:0],
 					   nil];
 		[self.tableView beginUpdates];
 		[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
@@ -232,7 +231,6 @@
 		NSArray* rows=[NSArray arrayWithObjects:
 					   [NSIndexPath indexPathForRow:1 inSection:0],
 					   [NSIndexPath indexPathForRow:2 inSection:0],
-					   [NSIndexPath indexPathForRow:3 inSection:0],
 					   nil];
 		[self.tableView beginUpdates];
 		[self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
@@ -255,7 +253,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return self.editing?1:4;
+			return self.editing?1:3;
 			break;
 		case 1:
 			return 3;
@@ -311,11 +309,11 @@
 					[ratingctl release];
 					break;
 				}
+//				case 2:
+//					[cell.textLabel setText:@"Ratings & Reviews"];
+//					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+//					break;
 				case 2:
-					[cell.textLabel setText:@"Ratings & Reviews"];
-					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-					break;
-				case 3:
 					[cell.textLabel setText:@"List of Beers"];
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 					break;
@@ -405,15 +403,15 @@
 			[pnetvc release];
 		}
 	}
-	else if (indexPath.section == 0 && indexPath.row == 2) // Reviews is the 2nd row in the 1st section
+//	else if (indexPath.section == 0 && indexPath.row == 2) // Reviews is the 2nd row in the 1st section
+//	{
+//		ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.breweryID dataType:Brewer];
+//		[self.navigationController pushViewController: rtvc animated:YES];
+//		[rtvc release];
+//	}
+	else if (indexPath.section == 0 && indexPath.row == 2) // List of beers is the 3rd row in the 1st section
 	{
-		ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.breweryID dataType:Brewer];
-		[self.navigationController pushViewController: rtvc animated:YES];
-		[rtvc release];
-	}
-	else if (indexPath.section == 0 && indexPath.row == 3) // List of beers is the 3rd row in the 1st section
-	{
-		BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.breweryID andApp:self.app];
+		BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.breweryID];
 		[self.navigationController pushViewController: bltvc animated:YES];
 		[bltvc release];
 	}

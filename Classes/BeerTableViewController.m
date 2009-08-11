@@ -16,8 +16,6 @@
 
 @synthesize beerID;
 @synthesize breweryID;
-@synthesize app;
-@synthesize appdel;
 @synthesize beerObj;
 @synthesize currentElemValue;
 @synthesize xmlParseDepth;
@@ -26,13 +24,11 @@
 @synthesize overlay;
 @synthesize spinner;
 
--(id) initWithBeerID:(NSString*)beer_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
+-(id) initWithBeerID:(NSString*)beer_id
 {
 	self.beerID=[beer_id copy];
 	self.breweryID=nil;
 	NSLog(@"BeerTableViewController initWithBeerID beerID retainCount=%d",[beerID retainCount]);
-	self.app=a;
-	self.appdel=d;
 	self.overlay=nil;
 	self.spinner=nil;
 	self.xmlPostResponse=nil;
@@ -245,7 +241,8 @@
 				{
 					if (nTries < 2) // Don't retry over and over, just do it once
 					{
-						if ([appdel login]==YES)
+						BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+						if ([del login]==YES)
 						{
 								bRetry=YES;
 						}
@@ -830,7 +827,8 @@
 	if (n==201)
 	{
 		NSLog(@"Need to login...");
-		[appdel login];
+		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[del login];
 		// TODO: retry
 	}
 	else

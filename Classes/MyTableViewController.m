@@ -294,7 +294,7 @@
 		}
 		else if (t == Beer)
 		{
-			BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID: [NSString stringWithCString:idp] app:app appDelegate: appdel];
+			BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID: [NSString stringWithCString:idp]];
 			[appdel.nav pushViewController: btvc animated:YES];
 			[btvc release];
 		}

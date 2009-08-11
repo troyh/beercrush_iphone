@@ -8,23 +8,30 @@
 
 #import "BeerCrushAppDelegate.h"
 #import "BeerListTableViewController.h"
-
+#import "BrowseBrewersTVC.h"
 
 @implementation BeerListTableViewController
 
 @synthesize breweryID;
+@synthesize placeID;
 @synthesize currentElemValue;
 @synthesize	currentElemAttribs;
 @synthesize beerList;
-@synthesize app;
 @synthesize btvc;
 
--(id)initWithBreweryID:(NSString*)brewery_id andApp:(UIApplication*)a
+-(id)initWithBreweryID:(NSString*)brewery_id
 {
 	[super initWithStyle:UITableViewStylePlain];
 	
-	self.breweryID=brewery_id;
-	self.app=a;
+	self.placeID=nil;
+	self.breweryID=nil;
+	
+	NSArray* parts=[brewery_id componentsSeparatedByString:@":"];
+	if ([[parts objectAtIndex:0] isEqualToString:@"place"])
+		self.placeID=brewery_id;
+	else if ([[parts objectAtIndex:0] isEqualToString:@"brewery"])
+		self.breweryID=brewery_id;
+	
 	self.currentElemAttribs=nil;
 	self.currentElemValue=nil;
 	self.beerList=nil;
@@ -65,9 +72,15 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
-    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd	target:self action:@selector(newBeerPanel)] autorelease];
+	if (self.placeID)
+		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd	target:self action:@selector(browseBrewersPanel)] autorelease];
+	else if (self.breweryID)
+		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd	target:self action:@selector(newBeerPanel)] autorelease];
 }
 
+/*
+ * New beers panel
+ */
 -(void)newBeerPanel
 {
 //	UIActionSheet* sheet=[[[UIActionSheet alloc] initWithTitle:@"New Beer" delegate:nil cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil] autorelease];
@@ -76,7 +89,7 @@
 	UIViewController* vc=[[UIViewController alloc] init];
 	UINavigationController* nc=[[UINavigationController alloc] initWithRootViewController:vc];
 	
-	self.btvc=[[BeerTableViewController alloc] initWithBeerID:nil app:self.app appDelegate:(BeerCrushAppDelegate*)self.app.delegate];
+	self.btvc=[[BeerTableViewController alloc] initWithBeerID:nil];
 	self.btvc.breweryID=self.breweryID;
 	[nc pushViewController:btvc	animated:NO];
 	
@@ -100,6 +113,34 @@
 }
 
 -(void)newBeerCancelButtonClicked
+{
+	[self.parentViewController dismissModalViewControllerAnimated:YES];
+}
+
+/*
+ * Browse Brewers panel
+ */
+-(void)browseBrewersPanel
+{
+	//	UIActionSheet* sheet=[[[UIActionSheet alloc] initWithTitle:@"New Beer" delegate:nil cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil] autorelease];
+	//	[sheet showInView:self.tableView];
+	
+	UIViewController* vc=[[UIViewController alloc] init];
+	UINavigationController* nc=[[UINavigationController alloc] initWithRootViewController:vc];
+	
+	self.btvc=[[BrowseBrewersTVC alloc] init];
+	[nc pushViewController:btvc	animated:NO];
+	
+	// Add cancel buttons
+	UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(browseBrewersCancelButtonClicked)] autorelease];
+	
+	[self presentModalViewController:nc animated:YES];
+	[nc.navigationBar.topItem setLeftBarButtonItem:nil animated:NO];
+	[nc.navigationBar.topItem setRightBarButtonItem:cancelButton animated:NO];
+	
+}
+
+-(void)browseBrewersCancelButtonClicked
 {
 	[self.parentViewController dismissModalViewControllerAnimated:YES];
 }
@@ -191,10 +232,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
-	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)self.app.delegate;
-	BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:[beer.data valueForKey:@"id"]  app:self.app appDelegate:del] autorelease];
+//	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:[beer.data valueForKey:@"id"]] autorelease];
 
-	[del.nav pushViewController:vc animated:YES];
+	[self.navigationController pushViewController:vc animated:YES];
 }
 
 

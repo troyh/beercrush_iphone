@@ -13,8 +13,6 @@
 @interface BeerTableViewController : UITableViewController {
 	NSString* beerID;
 	NSString* breweryID;
-	UIApplication* app;
-	BeerCrushAppDelegate* appdel;
 	BeerObject* beerObj;
 	NSMutableString* currentElemValue;
 	int xmlParseDepth;
@@ -26,8 +24,6 @@
 
 @property (nonatomic,retain) NSString* beerID;
 @property (nonatomic,retain) NSString* breweryID;
-@property (nonatomic,retain) UIApplication* app;
-@property (nonatomic,retain) BeerCrushAppDelegate* appdel;
 @property (nonatomic,retain) BeerObject* beerObj;
 @property (nonatomic,retain) NSMutableString* currentElemValue;
 @property (nonatomic) int xmlParseDepth;
@@ -36,6 +32,6 @@
 @property (nonatomic, retain) UIView* overlay;
 @property (nonatomic, retain) UIActivityIndicatorView* spinner;
 
--(id) initWithBeerID:(NSString*)beer_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d;
+-(id) initWithBeerID:(NSString*)beer_id;
 
 @end
