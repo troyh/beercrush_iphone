@@ -288,8 +288,12 @@
 	{
 		++nTries;
 		
+		NSLog(@"%@ URL:%@",method,[url absoluteString]);
 		NSData* rspdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
-		
+
+		if (responseData)
+			*responseData=rspdata;
+
 		if (rspdata) {
 			NSLog(@"Response code:%d",[response statusCode]);
 			NSLog(@"Response data:%s",[rspdata bytes]);
@@ -308,14 +312,7 @@
 			}
 			else if (statuscode==200)
 			{
-				if (responseData)
-					*responseData=rspdata;
 			}
-			
-			// Create the NSMutableData that will hold
-			// the received data
-			// receivedData is declared as a method instance elsewhere
-			//				xmlPostResponse=[[NSMutableData data] retain];
 		} else {
 			// TODO: inform the user that the download could not be made
 		}	

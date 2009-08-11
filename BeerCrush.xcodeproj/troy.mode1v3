@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>058FF6DD10321E8E00DA6D81</string>
+						<string>058FF77210322C8D00DA6D81</string>
 						<key>history</key>
 						<array>
 							<string>058FF56D1031E34B00DA6D81</string>
@@ -269,6 +269,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -316,7 +318,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>17</integer>
+									<integer>27</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -352,14 +354,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>BeerListTableViewController.m</string>
+								<string>UserReviewsTVC.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -367,11 +367,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>BeerListTableViewController.m</string>
+										<string>UserReviewsTVC.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>058FF6DC10321E8E00DA6D81</string>
+										<string>058FF77110322C8D00DA6D81</string>
 										<key>history</key>
 										<array>
 											<string>05C9AA760F53458A0020B102</string>
@@ -389,14 +389,11 @@
 											<string>0511025F100FDA3A00610251</string>
 											<string>050A22ED100FE67800F49B5B</string>
 											<string>050A2839102B5CB100F49B5B</string>
-											<string>050A285F102B613700F49B5B</string>
 											<string>050A2875102B649500F49B5B</string>
 											<string>050A2876102B649500F49B5B</string>
 											<string>050A2877102B649500F49B5B</string>
 											<string>050A28B5102B765600F49B5B</string>
-											<string>050A2A07102CCA9500F49B5B</string>
 											<string>050A2A11102CCAB400F49B5B</string>
-											<string>058FF3931030C44000DA6D81</string>
 											<string>058FF4601030E4F200DA6D81</string>
 											<string>058FF4A41030E80700DA6D81</string>
 											<string>058FF4D91030EA2200DA6D81</string>
@@ -406,11 +403,14 @@
 											<string>058FF65D1032127800DA6D81</string>
 											<string>058FF65E1032127800DA6D81</string>
 											<string>058FF65F1032127800DA6D81</string>
-											<string>058FF68D1032141800DA6D81</string>
 											<string>058FF6981032172000DA6D81</string>
-											<string>058FF6B1103217AF00DA6D81</string>
 											<string>058FF6D810321E8E00DA6D81</string>
-											<string>058FF6D910321E8E00DA6D81</string>
+											<string>058FF6E3103221AE00DA6D81</string>
+											<string>058FF6E5103221AE00DA6D81</string>
+											<string>058FF7221032297600DA6D81</string>
+											<string>058FF76810322C5E00DA6D81</string>
+											<string>058FF76910322C5E00DA6D81</string>
+											<string>058FF76A10322C5E00DA6D81</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -740,6 +740,19 @@
 											<string>058FF6C510321D8D00DA6D81</string>
 											<string>058FF6DA10321E8E00DA6D81</string>
 											<string>058FF6DB10321E8E00DA6D81</string>
+											<string>058FF6E8103221AE00DA6D81</string>
+											<string>058FF6E9103221AE00DA6D81</string>
+											<string>058FF6EA103221AE00DA6D81</string>
+											<string>058FF6EB103221AE00DA6D81</string>
+											<string>058FF6EC103221AE00DA6D81</string>
+											<string>058FF6ED103221AE00DA6D81</string>
+											<string>058FF6FB1032227500DA6D81</string>
+											<string>058FF7011032229100DA6D81</string>
+											<string>058FF7241032297600DA6D81</string>
+											<string>058FF7251032297600DA6D81</string>
+											<string>058FF76B10322C5E00DA6D81</string>
+											<string>058FF76C10322C5E00DA6D81</string>
+											<string>058FF76D10322C5E00DA6D81</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -933,7 +946,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>058FF6D510321E5A00DA6D81</string>
 		<string>058FF3771030BABB00DA6D81</string>
 		<string>058FF3791030BABB00DA6D81</string>
 		<string>1CD10A99069EF8BA00B06720</string>

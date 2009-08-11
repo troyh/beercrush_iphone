@@ -37,7 +37,6 @@
 */
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
 	// Fetch list of user's beer reviews from the server
 	NSString* user_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
 	if (user_id==nil)
@@ -46,20 +45,27 @@
 	}
 	else
 	{
+		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSData* answer=nil;
 		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC, user_id, 0]];
-		NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-		[parser setDelegate:self];
-		BOOL parse_ok=[parser parse];
-		if (parse_ok==NO)
+		NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+		if ([response statusCode]==200)
 		{
-			NSError* err=[parser parserError];
-			UIAlertView* vw=[[UIAlertView alloc] initWithTitle:@"Oops" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[vw show];
-			[vw release];
+			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
+			[parser setDelegate:self];
+			BOOL parse_ok=[parser parse];
+			if (parse_ok==NO)
+			{
+				NSError* err=[parser parserError];
+				UIAlertView* vw=[[UIAlertView alloc] initWithTitle:@"Oops" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+				[vw show];
+				[vw release];
+			}
+			[parser release];
 		}
-		[parser release];
 	}
  
+    [super viewWillAppear:animated];
  }
 
 /*
@@ -308,10 +314,7 @@
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if (self.currentElemValue)
-	{
-		[self.currentElemValue appendString:string];
-	}
+	[self.currentElemValue appendString:string];
 }
 
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
