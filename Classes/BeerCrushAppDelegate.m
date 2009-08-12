@@ -66,7 +66,7 @@
 	// If we don't know the username/password for the user, give them the login screen
 	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
 	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
-	if (YES || userid==nil || password==nil)
+	if (userid==nil || password==nil)
 	{
 		[self askUserForCredentials];
 	}

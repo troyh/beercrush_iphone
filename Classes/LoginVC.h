@@ -10,10 +10,12 @@
 
 
 @interface LoginVC : UIViewController {
+	BOOL bCreateAccount;
 	UITextField* usernameTextField;
 	UITextField* passwordTextField;
 }
 
+@property (nonatomic, assign) BOOL bCreateAccount;
 @property (nonatomic, retain) UITextField* usernameTextField;
 @property (nonatomic, retain) UITextField* passwordTextField;
 
