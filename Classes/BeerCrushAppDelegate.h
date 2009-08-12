@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LoginVC.h"
 
 @interface BeerCrushAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate> {
     UIWindow *window;
+	LoginVC* loginVC;
     UITabBarController *tabBarController;
 	UINavigationController* nav;
 	UISearchBar* mySearchBar;
@@ -22,6 +24,7 @@
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (nonatomic, retain) LoginVC* loginVC;
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 @property (nonatomic, retain) UINavigationController* nav;
 @property (nonatomic, retain) UISearchBar* mySearchBar;
@@ -30,7 +33,8 @@
 @property(nonatomic) SEL onBeerSelectedAction;
 @property(nonatomic,assign) id onBeerSelectedTarget;
 
-
+-(void)startApp;
+-(void)askUserForCredentials;
 -(BOOL)login;
 -(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSString*)data returningData:(NSData**)responseData;
 -(void)setOnBeerSelectedAction:(SEL)s target:(id)t;

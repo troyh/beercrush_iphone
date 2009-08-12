@@ -11,6 +11,7 @@
 #import "NearbyTableViewController.h"
 #import "BreweryTableViewController.h"
 #import "UserReviewsTVC.h"
+#import "LoginVC.h"
 
 #define kTabBarItemTagBeers 1
 #define kTabBarItemTagSearch 2
@@ -48,6 +49,7 @@
 @implementation BeerCrushAppDelegate
 
 @synthesize window;
+@synthesize loginVC;
 @synthesize tabBarController;
 @synthesize nav;
 @synthesize mySearchBar;
@@ -59,24 +61,56 @@
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
     
 	self.app=application;
+	loginVC=nil;
+	
+	// If we don't know the username/password for the user, give them the login screen
+	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
+	if (YES || userid==nil || password==nil)
+	{
+		[self askUserForCredentials];
+	}
+	else
+	{
+		[self startApp];
+	}
+
+}
+
+-(void)askUserForCredentials
+{
+	if (loginVC==nil) // Don't create and show it if it's already up
+	{
+		loginVC=[[LoginVC alloc] initWithNibName:nil bundle:nil];
+		[window addSubview:loginVC.view];
+	}
+}
+
+-(void)startApp
+{
+	if (loginVC)
+	{
+		//[loginVC release];
+		loginVC=nil; // releases it too
+	}
 	
 	tabBarController.viewControllers=[[NSArray alloc] initWithObjects:[[UINavigationController alloc] initWithNibName:nil bundle:nil],
-																	  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
-																	  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
-																	  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
-																	  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
-																	  nil];
+									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
+									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
+									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
+									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
+									  nil];
 	
 	UINavigationController* ctl=[tabBarController.viewControllers objectAtIndex:0];
 	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Beers" image:[UIImage imageNamed:@"dot.png"] tag:kTabBarItemTagBeers] autorelease];
-
+	
 	ctl=[tabBarController.viewControllers objectAtIndex:1];
 	nav=ctl;
 	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag:kTabBarItemTagSearch] autorelease];
 	tabBarController.selectedViewController=ctl;
 	
 	// Create the search bar
-	CGRect sbf=application.keyWindow.frame;
+	CGRect sbf=[UIApplication sharedApplication].keyWindow.frame;
 	sbf.size.height=nav.navigationBar.frame.size.height;
 	mySearchBar=[[UISearchBar alloc] initWithFrame:nav.navigationBar.frame];
 	mySearchBar.delegate=self;
@@ -99,15 +133,15 @@
 	ctl=[tabBarController.viewControllers objectAtIndex:4];
 	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Wish List" image:[UIImage imageNamed:@"star_empty.png"] tag:kTabBarItemTagWishList] autorelease];
 	
-
-    // Add the tab bar controller's current view as a subview of the window
-    [window addSubview:tabBarController.view];
 	
-//	UIViewController* searchResultsController=[[[UIViewController alloc] initWithNibName:nil bundle:nil] autorelease];
-//	nav=[[UINavigationController alloc] initWithRootViewController:searchResultsController];
-//	nav=[[UINavigationController alloc] initWithNibName:nil bundle:nil];
-//	nav=[tabBarController.viewControllers objectAtIndex:0];
-//	nav.navigationBarHidden=YES;
+	// Add the tab bar controller's current view as a subview of the window
+	[window addSubview:tabBarController.view];
+	
+	//	UIViewController* searchResultsController=[[[UIViewController alloc] initWithNibName:nil bundle:nil] autorelease];
+	//	nav=[[UINavigationController alloc] initWithRootViewController:searchResultsController];
+	//	nav=[[UINavigationController alloc] initWithNibName:nil bundle:nil];
+	//	nav=[tabBarController.viewControllers objectAtIndex:0];
+	//	nav.navigationBarHidden=YES;
 	nav.delegate=self;
 	
 	[tabBarController retain];
@@ -115,20 +149,18 @@
 	//
 	// Automatically navigate to where the user last closed the app
 	//
-
-//	// Hide search bar
-//	[mySearchBar resignFirstResponder];
-//	mySearchBar.hidden=YES;
-//	self.nav.view.frame=app.keyWindow.frame;
-//	self.nav.navigationBarHidden=NO;
-
+	
+	//	// Hide search bar
+	//	[mySearchBar resignFirstResponder];
+	//	mySearchBar.hidden=YES;
+	//	self.nav.view.frame=app.keyWindow.frame;
+	//	self.nav.navigationBarHidden=NO;
+	
 	// Start the navigation
-//	BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:@"Dogfish-Head-Craft-Brewery-Milton" app:self.app appDelegate:self];
-//	[[tabBarController.viewControllers objectAtIndex:1] pushViewController: btvc animated:YES];
-//	[btvc release];
-
+	//	BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:@"Dogfish-Head-Craft-Brewery-Milton" app:self.app appDelegate:self];
+	//	[[tabBarController.viewControllers objectAtIndex:1] pushViewController: btvc animated:YES];
+	//	[btvc release];
 }
-
 
 /*
 // Optional UITabBarControllerDelegate method
@@ -243,18 +275,25 @@
 	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
 	
 	// create the connection with the request and start loading the data
-	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+//	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+	NSHTTPURLResponse* response;
+	NSError* error;
 
-	if (theConnection) {
+	[UIApplication sharedApplication].networkActivityIndicatorVisible=YES;
+	[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+	[UIApplication sharedApplication].networkActivityIndicatorVisible=NO;
+
+	NSLog(@"status code=%d",[response statusCode]);
+	if ([response statusCode]==200)
+	{
+		NSLog(@"Login successful");
 		// We don't care about any response document, we just want the cookies to be stored (automatically)
-		xmlPostResponse=[[NSMutableData data] retain];
-		NSLog(@"login successful");
 		return YES;
 	} else {
-		// TODO: inform the user that the login failed
-		NSLog(@"login failed");
+		NSLog(@"Login failed.");
 		return NO;
 	}	
+
 }
 
 -(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSString*)data returningData:(NSData**)responseData
@@ -289,7 +328,11 @@
 		++nTries;
 		
 		NSLog(@"%@ URL:%@",method,[url absoluteString]);
+		[UIApplication sharedApplication].networkActivityIndicatorVisible=YES;
+
 		NSData* rspdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+
+		[UIApplication sharedApplication].networkActivityIndicatorVisible=NO;
 
 		if (responseData)
 			*responseData=rspdata;
@@ -318,7 +361,7 @@
 		}	
 	}
 	while (bRetry);
-	
+
 	return response;
 }
 

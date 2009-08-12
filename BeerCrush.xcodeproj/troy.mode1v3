@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>058FF78C103323CB00DA6D81</string>
+						<string>058FF8E610336C3D00DA6D81</string>
 						<key>history</key>
 						<array>
 							<string>058FF56D1031E34B00DA6D81</string>
@@ -269,6 +269,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -316,7 +318,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>19</integer>
+									<integer>9</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -352,14 +354,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>NearbyTableViewController.m</string>
+								<string>BeerCrushAppDelegate.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -367,11 +367,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>NearbyTableViewController.m</string>
+										<string>BeerCrushAppDelegate.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>058FF78B103323CB00DA6D81</string>
+										<string>058FF8E510336C3D00DA6D81</string>
 										<key>history</key>
 										<array>
 											<string>05C9AA760F53458A0020B102</string>
@@ -408,9 +408,11 @@
 											<string>058FF6E5103221AE00DA6D81</string>
 											<string>058FF7221032297600DA6D81</string>
 											<string>058FF7761032306D00DA6D81</string>
-											<string>058FF785103323CB00DA6D81</string>
-											<string>058FF786103323CB00DA6D81</string>
-											<string>058FF787103323CB00DA6D81</string>
+											<string>058FF79910332F3A00DA6D81</string>
+											<string>058FF84A103360B600DA6D81</string>
+											<string>058FF8DD10336C3D00DA6D81</string>
+											<string>058FF8DE10336C3D00DA6D81</string>
+											<string>058FF8DF10336C3D00DA6D81</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -762,6 +764,68 @@
 											<string>058FF788103323CB00DA6D81</string>
 											<string>058FF789103323CB00DA6D81</string>
 											<string>058FF78A103323CB00DA6D81</string>
+											<string>058FF79D10332F3A00DA6D81</string>
+											<string>058FF79E10332F3A00DA6D81</string>
+											<string>058FF79F10332F3A00DA6D81</string>
+											<string>058FF7A010332F3A00DA6D81</string>
+											<string>058FF7A110332F3A00DA6D81</string>
+											<string>058FF7A210332F3A00DA6D81</string>
+											<string>058FF7A310332F3A00DA6D81</string>
+											<string>058FF7A410332F3A00DA6D81</string>
+											<string>058FF7AE10332FEF00DA6D81</string>
+											<string>058FF84C103360B600DA6D81</string>
+											<string>058FF84D103360B600DA6D81</string>
+											<string>058FF84E103360B600DA6D81</string>
+											<string>058FF84F103360B600DA6D81</string>
+											<string>058FF859103363DA00DA6D81</string>
+											<string>058FF85A103363DA00DA6D81</string>
+											<string>058FF85B103363DA00DA6D81</string>
+											<string>058FF8621033642900DA6D81</string>
+											<string>058FF8631033642900DA6D81</string>
+											<string>058FF8641033642900DA6D81</string>
+											<string>058FF8651033642900DA6D81</string>
+											<string>058FF86F103364A200DA6D81</string>
+											<string>058FF870103364A200DA6D81</string>
+											<string>058FF871103364A200DA6D81</string>
+											<string>058FF87C1033657800DA6D81</string>
+											<string>058FF8821033659600DA6D81</string>
+											<string>058FF8831033659600DA6D81</string>
+											<string>058FF88A103365AD00DA6D81</string>
+											<string>058FF88B103365AD00DA6D81</string>
+											<string>058FF894103367B900DA6D81</string>
+											<string>058FF895103367B900DA6D81</string>
+											<string>058FF896103367B900DA6D81</string>
+											<string>058FF897103367B900DA6D81</string>
+											<string>058FF898103367B900DA6D81</string>
+											<string>058FF899103367B900DA6D81</string>
+											<string>058FF89A103367B900DA6D81</string>
+											<string>058FF8A2103367F700DA6D81</string>
+											<string>058FF8A3103367F700DA6D81</string>
+											<string>058FF8A4103367F700DA6D81</string>
+											<string>058FF8B4103369BA00DA6D81</string>
+											<string>058FF8B5103369BA00DA6D81</string>
+											<string>058FF8B6103369BA00DA6D81</string>
+											<string>058FF8B7103369BA00DA6D81</string>
+											<string>058FF8B8103369BA00DA6D81</string>
+											<string>058FF8B9103369BA00DA6D81</string>
+											<string>058FF8BA103369BA00DA6D81</string>
+											<string>058FF8BB103369BA00DA6D81</string>
+											<string>058FF8BC103369BA00DA6D81</string>
+											<string>058FF8CD10336ACC00DA6D81</string>
+											<string>058FF8CE10336ACC00DA6D81</string>
+											<string>058FF8CF10336ACC00DA6D81</string>
+											<string>058FF8D010336ACC00DA6D81</string>
+											<string>058FF8D110336ACC00DA6D81</string>
+											<string>058FF8D210336ACC00DA6D81</string>
+											<string>058FF8D310336ACC00DA6D81</string>
+											<string>058FF8D410336ACC00DA6D81</string>
+											<string>058FF8D510336ACC00DA6D81</string>
+											<string>058FF8D610336ACC00DA6D81</string>
+											<string>058FF8E010336C3D00DA6D81</string>
+											<string>058FF8E110336C3D00DA6D81</string>
+											<string>058FF8E210336C3D00DA6D81</string>
+											<string>058FF8E310336C3D00DA6D81</string>
+											<string>058FF8E410336C3D00DA6D81</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -955,7 +1019,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>058FF78D103323CB00DA6D81</string>
+		<string>058FF8D910336ACC00DA6D81</string>
 		<string>058FF3771030BABB00DA6D81</string>
 		<string>058FF3791030BABB00DA6D81</string>
 		<string>1CD10A99069EF8BA00B06720</string>
