@@ -87,26 +87,27 @@
 */
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-	
-	self.title=@"Nearby";
-}
-
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-
 	if (myLocation==nil || [myLocation.timestamp timeIntervalSinceNow] > 60)
 	{
 		// Get location
-	//	CLLocationManager* locman=[[[CLLocationManager alloc] init] autorelease];
+		//	CLLocationManager* locman=[[[CLLocationManager alloc] init] autorelease];
 		CLLocationManager* locman=[[CLLocationManager alloc] init];
 		locman.delegate=self;
 		locman.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
 		[locman startUpdatingLocation];
 	}
+	
+	self.title=@"Nearby";
+
+    [super viewWillAppear:animated];
 }
 
+/*
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
+}
+*/
 /*
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
@@ -272,11 +273,16 @@
 	[myLocation retain];
 	
 	// Ask server for nearby places
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_NEARBY_QUERY, myLocation.coordinate.latitude, myLocation.coordinate.longitude]];
-	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-	[parser setDelegate:self];
-	[parser parse];
-	
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_NEARBY_QUERY, myLocation.coordinate.latitude, myLocation.coordinate.longitude, 50]];
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSData* data;
+	NSHTTPURLResponse* answer=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&data];
+	if ([answer statusCode]==200)
+	{
+		NSXMLParser* parser=[[NSXMLParser alloc] initWithData:data];
+		[parser setDelegate:self];
+		[parser parse];
+	}
 }
 		  
 // Called when there is an error getting the location

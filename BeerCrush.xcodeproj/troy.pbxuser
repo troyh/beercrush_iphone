@@ -5,7 +5,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 44";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3049;
 		vrLoc = 0;
@@ -96,7 +96,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 44";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3049;
 		vrLoc = 0;
@@ -306,7 +306,7 @@
 		ignoreCount = 0;
 		lineNumber = 228;
 		location = BeerCrush;
-		modificationTime = 271723616.408127;
+		modificationTime = 271786973.325314;
 		state = 2;
 	};
 	050A2316100FE69B00F49B5B /* UserReviewsTVC.m:244 */ = {
@@ -323,7 +323,7 @@
 		ignoreCount = 0;
 		lineNumber = 244;
 		location = BeerCrush;
-		modificationTime = 271723616.408205;
+		modificationTime = 271786973.325334;
 		state = 2;
 	};
 	050A2318100FE69C00F49B5B /* UserReviewsTVC.m:275 */ = {
@@ -340,7 +340,7 @@
 		ignoreCount = 0;
 		lineNumber = 275;
 		location = BeerCrush;
-		modificationTime = 271723616.408275;
+		modificationTime = 271786973.325352;
 		state = 2;
 	};
 	050A231B100FE74300F49B5B /* PBXTextBookmark */ = {
@@ -597,7 +597,7 @@
 		ignoreCount = 0;
 		lineNumber = 122;
 		location = BeerCrush;
-		modificationTime = 271723616.408345;
+		modificationTime = 271786973.32537;
 		state = 2;
 	};
 	050A2358100FEC7000F49B5B /* PBXTextBookmark */ = {
@@ -624,7 +624,7 @@
 		ignoreCount = 0;
 		lineNumber = 116;
 		location = BeerCrush;
-		modificationTime = 271723616.408414;
+		modificationTime = 271786973.325388;
 		state = 2;
 	};
 	050A235C100FEC7600F49B5B /* PBXTextBookmark */ = {
@@ -711,7 +711,7 @@
 		ignoreCount = 0;
 		lineNumber = 206;
 		location = BeerCrush;
-		modificationTime = 271723618.583457;
+		modificationTime = 271786977.164827;
 		state = 1;
 	};
 	050A2372100FEDE700F49B5B /* PBXTextBookmark */ = {
@@ -778,7 +778,7 @@
 		ignoreCount = 0;
 		lineNumber = 289;
 		location = BeerCrush;
-		modificationTime = 271723616.408554;
+		modificationTime = 271786973.325424;
 		state = 2;
 	};
 	050A238B100FEF3100F49B5B /* PBXTextBookmark */ = {
@@ -1203,7 +1203,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 37";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3038;
 		vrLoc = 0;
@@ -1253,7 +1253,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 37";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3038;
 		vrLoc = 0;
@@ -1342,7 +1342,7 @@
 		ignoreCount = 0;
 		lineNumber = 92;
 		location = BeerCrush;
-		modificationTime = 271723616.408623;
+		modificationTime = 271786973.325442;
 		state = 2;
 	};
 	050A240F1011166300F49B5B /* PBXTextBookmark */ = {
@@ -1429,7 +1429,7 @@
 		ignoreCount = 0;
 		lineNumber = 91;
 		location = BeerCrush;
-		modificationTime = 271723616.408642;
+		modificationTime = 271786973.325459;
 		state = 2;
 	};
 	050A243410111AA300F49B5B /* PBXTextBookmark */ = {
@@ -1611,7 +1611,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 37";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3038;
 		vrLoc = 0;
@@ -1651,7 +1651,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 37";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3038;
 		vrLoc = 0;
@@ -1780,7 +1780,7 @@
 		ignoreCount = 0;
 		lineNumber = 406;
 		location = BeerCrush;
-		modificationTime = 271723616.408659;
+		modificationTime = 271786973.325477;
 		state = 2;
 	};
 	050A2478101126D200F49B5B /* PBXTextBookmark */ = {
@@ -1827,7 +1827,7 @@
 		ignoreCount = 0;
 		lineNumber = 20;
 		location = BeerCrush;
-		modificationTime = 271723616.408676;
+		modificationTime = 271786973.325495;
 		state = 2;
 	};
 	050A24801011270500F49B5B /* PBXTextBookmark */ = {
@@ -1885,7 +1885,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 37";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3038;
 		vrLoc = 0;
@@ -1935,7 +1935,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 37";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3038;
 		vrLoc = 0;
@@ -1955,7 +1955,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 45";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -1985,7 +1985,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 45";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -2171,7 +2171,7 @@
 		ignoreCount = 0;
 		lineNumber = 187;
 		location = BeerCrush;
-		modificationTime = 271723616.408692;
+		modificationTime = 271786973.325513;
 		state = 2;
 	};
 	050A24AE10112E2500F49B5B /* BeerCrushAppDelegate.m:186 */ = {
@@ -2188,7 +2188,7 @@
 		ignoreCount = 0;
 		lineNumber = 186;
 		location = BeerCrush;
-		modificationTime = 271723616.408709;
+		modificationTime = 271786973.32553;
 		state = 2;
 	};
 	050A24AF10112E3D00F49B5B /* PBXTextBookmark */ = {
@@ -2677,7 +2677,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 45";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -2857,7 +2857,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 45";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -2877,7 +2877,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 45";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -2917,7 +2917,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 45";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -2967,7 +2967,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 46";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -2977,7 +2977,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 47";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -2997,7 +2997,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 47";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -3017,7 +3017,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 47";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -3097,7 +3097,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 47";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -3147,7 +3147,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 47";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -3177,7 +3177,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 47";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3143;
 		vrLoc = 0;
@@ -5567,7 +5567,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 49";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3136;
 		vrLoc = 0;
@@ -5607,7 +5607,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 49";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3136;
 		vrLoc = 0;
@@ -5997,7 +5997,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 50";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3136;
 		vrLoc = 0;
@@ -6047,7 +6047,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 50";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3136;
 		vrLoc = 0;
@@ -6097,7 +6097,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 40";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3139;
 		vrLoc = 0;
@@ -6157,7 +6157,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 40";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3139;
 		vrLoc = 0;
@@ -6217,7 +6217,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 51";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3139;
 		vrLoc = 0;
@@ -6417,7 +6417,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 51";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3139;
 		vrLoc = 0;
@@ -6587,7 +6587,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 51";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3139;
 		vrLoc = 0;
@@ -6607,7 +6607,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 45";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3340;
 		vrLoc = 0;
@@ -6617,7 +6617,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 37";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3454;
 		vrLoc = 0;
@@ -6986,7 +6986,7 @@
 		ignoreCount = 0;
 		lineNumber = 771;
 		location = BeerCrush;
-		modificationTime = 271723616.408726;
+		modificationTime = 271786973.325548;
 		state = 2;
 	};
 	050A280A102B4E1300F49B5B /* PBXTextBookmark */ = {
@@ -7013,7 +7013,7 @@
 		ignoreCount = 0;
 		lineNumber = 689;
 		location = BeerCrush;
-		modificationTime = 271723616.408742;
+		modificationTime = 271786973.325566;
 		state = 2;
 	};
 	050A280E102B4E8000F49B5B /* PBXTextBookmark */ = {
@@ -7317,7 +7317,7 @@
 		ignoreCount = 0;
 		lineNumber = 51;
 		location = BeerCrush;
-		modificationTime = 271723616.408759;
+		modificationTime = 271786973.325583;
 		state = 2;
 	};
 	050A2849102B5E9A00F49B5B /* PBXTextBookmark */ = {
@@ -7918,7 +7918,7 @@
 		ignoreCount = 0;
 		lineNumber = 117;
 		location = BeerCrush;
-		modificationTime = 271723616.408776;
+		modificationTime = 271786973.325601;
 		state = 2;
 	};
 	050A2896102B64B600F49B5B /* PBXTextBookmark */ = {
@@ -8435,7 +8435,7 @@
 		ignoreCount = 0;
 		lineNumber = 198;
 		location = BeerCrush;
-		modificationTime = 271723616.408792;
+		modificationTime = 271786973.325619;
 		state = 2;
 	};
 	050A2904102B829B00F49B5B /* PBXTextBookmark */ = {
@@ -8612,7 +8612,7 @@
 		ignoreCount = 0;
 		lineNumber = 213;
 		location = BeerCrush;
-		modificationTime = 271723616.408809;
+		modificationTime = 271786973.325637;
 		state = 2;
 	};
 	050A2940102B964F00F49B5B /* PBXTextBookmark */ = {
@@ -8796,7 +8796,7 @@
 		ignoreCount = 0;
 		lineNumber = 386;
 		location = BeerCrush;
-		modificationTime = 271723616.40883;
+		modificationTime = 271786973.325655;
 		state = 2;
 	};
 	050A295A102B978400F49B5B /* PBXTextBookmark */ = {
@@ -8873,7 +8873,7 @@
 		ignoreCount = 0;
 		lineNumber = 59;
 		location = BeerCrush;
-		modificationTime = 271723616.40885;
+		modificationTime = 271786973.325672;
 		state = 2;
 	};
 	050A2962102B984600F49B5B /* PBXTextBookmark */ = {
@@ -9278,7 +9278,7 @@
 		ignoreCount = 0;
 		lineNumber = 86;
 		location = BeerCrush;
-		modificationTime = 271723616.408867;
+		modificationTime = 271786973.32569;
 		state = 2;
 	};
 	050A299B102BA1F900F49B5B /* PBXTextBookmark */ = {
@@ -9335,7 +9335,7 @@
 		ignoreCount = 0;
 		lineNumber = 110;
 		location = BeerCrush;
-		modificationTime = 271723618.627774;
+		modificationTime = 271786977.219667;
 		state = 1;
 	};
 	050A29A3102BA22400F49B5B /* BeerListTableViewController.m:117 */ = {
@@ -9352,7 +9352,7 @@
 		ignoreCount = 0;
 		lineNumber = 117;
 		location = BeerCrush;
-		modificationTime = 271723616.409107;
+		modificationTime = 271786973.325888;
 		state = 2;
 	};
 	050A29A6102BA25D00F49B5B /* PBXTextBookmark */ = {
@@ -9509,7 +9509,7 @@
 		ignoreCount = 0;
 		lineNumber = 161;
 		location = BeerCrush;
-		modificationTime = 271723616.409214;
+		modificationTime = 271786973.325997;
 		state = 2;
 	};
 	050A29BE102BA43800F49B5B /* PBXTextBookmark */ = {
@@ -9830,7 +9830,7 @@
 		ignoreCount = 0;
 		lineNumber = 110;
 		location = BeerCrush;
-		modificationTime = 271723616.409233;
+		modificationTime = 271786973.326017;
 		state = 2;
 	};
 	050A29F3102CBF4300F49B5B /* PBXTextBookmark */ = {
@@ -10176,7 +10176,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 44";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3049;
 		vrLoc = 0;
@@ -10299,7 +10299,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 44";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 3049;
 		vrLoc = 0;
@@ -10772,7 +10772,7 @@
 		ignoreCount = 0;
 		lineNumber = 462;
 		location = BeerCrush;
-		modificationTime = 271723616.40524;
+		modificationTime = 271786973.32027;
 		state = 2;
 	};
 	0526959F0F68489800032627 /* BeerListTableViewController.m:252 */ = {
@@ -10789,7 +10789,7 @@
 		ignoreCount = 0;
 		lineNumber = 252;
 		location = BeerCrush;
-		modificationTime = 271723616.405431;
+		modificationTime = 271786973.320793;
 		state = 2;
 	};
 	052695A10F68489B00032627 /* BeerListTableViewController.m:258 */ = {
@@ -10806,7 +10806,7 @@
 		ignoreCount = 0;
 		lineNumber = 258;
 		location = BeerCrush;
-		modificationTime = 271723616.405538;
+		modificationTime = 271786973.320898;
 		state = 2;
 	};
 	052695AD0F6849B800032627 /* BeerListTableViewController.m:474 */ = {
@@ -10823,7 +10823,7 @@
 		ignoreCount = 0;
 		lineNumber = 474;
 		location = BeerCrush;
-		modificationTime = 271723616.405641;
+		modificationTime = 271786973.321115;
 		state = 2;
 	};
 	052695EA0F685BE900032627 /* PBXTextBookmark */ = {
@@ -10850,7 +10850,7 @@
 		ignoreCount = 0;
 		lineNumber = 274;
 		location = BeerCrush;
-		modificationTime = 271723616.405744;
+		modificationTime = 271786973.321216;
 		state = 2;
 	};
 	0526962F0F685CB400032627 /* BeerListTableViewController.m:23 */ = {
@@ -10867,7 +10867,7 @@
 		ignoreCount = 0;
 		lineNumber = 23;
 		location = BeerCrush;
-		modificationTime = 271723616.405846;
+		modificationTime = 271786973.321315;
 		state = 2;
 	};
 	052696A50F68630500032627 /* BeerTableViewController.m:355 */ = {
@@ -10884,7 +10884,7 @@
 		ignoreCount = 0;
 		lineNumber = 355;
 		location = BeerCrush;
-		modificationTime = 271723616.40595;
+		modificationTime = 271786973.321414;
 		state = 2;
 	};
 	052697200F68687700032627 /* BeerTableViewController.m:705 */ = {
@@ -10901,7 +10901,7 @@
 		ignoreCount = 0;
 		lineNumber = 705;
 		location = BeerCrush;
-		modificationTime = 271723616.405974;
+		modificationTime = 271786973.321434;
 		state = 2;
 	};
 	052697310F68695600032627 /* BeerTableViewController.m:706 */ = {
@@ -10918,7 +10918,7 @@
 		ignoreCount = 0;
 		lineNumber = 706;
 		location = BeerCrush;
-		modificationTime = 271723616.405994;
+		modificationTime = 271786973.321452;
 		state = 2;
 	};
 	052697330F68696800032627 /* BeerTableViewController.m:414 */ = {
@@ -10935,7 +10935,7 @@
 		ignoreCount = 0;
 		lineNumber = 414;
 		location = BeerCrush;
-		modificationTime = 271723616.406011;
+		modificationTime = 271786973.32147;
 		state = 2;
 	};
 	0526978E0F686F7900032627 /* PBXTextBookmark */ = {
@@ -10986,7 +10986,7 @@
 		ignoreCount = 0;
 		lineNumber = 332;
 		location = BeerCrush;
-		modificationTime = 271723616.406027;
+		modificationTime = 271786973.321489;
 		state = 2;
 	};
 	052698AB0F68A21A00032627 /* BeerTableViewController.m:861 */ = {
@@ -11003,7 +11003,7 @@
 		ignoreCount = 0;
 		lineNumber = 861;
 		location = BeerCrush;
-		modificationTime = 271723616.406044;
+		modificationTime = 271786973.321507;
 		state = 2;
 	};
 	052698AD0F68A21C00032627 /* BeerTableViewController.m:845 */ = {
@@ -11020,7 +11020,7 @@
 		ignoreCount = 0;
 		lineNumber = 845;
 		location = BeerCrush;
-		modificationTime = 271723616.406061;
+		modificationTime = 271786973.321525;
 		state = 2;
 	};
 	052698AF0F68A21D00032627 /* BeerTableViewController.m:838 */ = {
@@ -11037,7 +11037,7 @@
 		ignoreCount = 0;
 		lineNumber = 838;
 		location = BeerCrush;
-		modificationTime = 271723616.406078;
+		modificationTime = 271786973.321542;
 		state = 2;
 	};
 	052698B10F68A21E00032627 /* BeerTableViewController.m:814 */ = {
@@ -11054,7 +11054,7 @@
 		ignoreCount = 0;
 		lineNumber = 814;
 		location = BeerCrush;
-		modificationTime = 271723616.406094;
+		modificationTime = 271786973.32156;
 		state = 2;
 	};
 	052698E70F68AFF900032627 /* BeerCrushAppDelegate.m:346 */ = {
@@ -11071,7 +11071,7 @@
 		ignoreCount = 0;
 		lineNumber = 346;
 		location = BeerCrush;
-		modificationTime = 271723616.406111;
+		modificationTime = 271786973.321578;
 		state = 2;
 	};
 	052699020F68B04100032627 /* BeerCrushAppDelegate.m:228 */ = {
@@ -11088,7 +11088,7 @@
 		ignoreCount = 0;
 		lineNumber = 228;
 		location = BeerCrush;
-		modificationTime = 271723616.406128;
+		modificationTime = 271786973.321596;
 		state = 2;
 	};
 	052699AD0F699E2300032627 /* BreweryTableViewController.m:297 */ = {
@@ -11105,7 +11105,7 @@
 		ignoreCount = 0;
 		lineNumber = 297;
 		location = BeerCrush;
-		modificationTime = 271723616.406145;
+		modificationTime = 271786973.321614;
 		state = 2;
 	};
 	052699E50F69AC5100032627 /* BreweryTableViewController.m:360 */ = {
@@ -11122,7 +11122,7 @@
 		ignoreCount = 0;
 		lineNumber = 360;
 		location = BeerCrush;
-		modificationTime = 271723618.292265;
+		modificationTime = 271786976.820137;
 		state = 1;
 	};
 	053653940F703F99000389C1 /* PhoneNumberEditTableViewController.h */ = {
@@ -11163,7 +11163,7 @@
 		ignoreCount = 0;
 		lineNumber = 480;
 		location = BeerCrush;
-		modificationTime = 271723616.406622;
+		modificationTime = 271786973.323355;
 		state = 2;
 	};
 	0536548D0F705F97000389C1 /* PhoneNumberEditTableViewController.m:140 */ = {
@@ -11180,7 +11180,7 @@
 		ignoreCount = 0;
 		lineNumber = 140;
 		location = BeerCrush;
-		modificationTime = 271723616.406638;
+		modificationTime = 271786973.323373;
 		state = 2;
 	};
 	053654B60F7063FC000389C1 /* PhoneNumberEditTableViewController.m:39 */ = {
@@ -11197,7 +11197,7 @@
 		ignoreCount = 0;
 		lineNumber = 39;
 		location = BeerCrush;
-		modificationTime = 271723616.406655;
+		modificationTime = 271786973.323391;
 		state = 2;
 	};
 	053654C10F70670A000389C1 /* PlaceTableViewController.m:312 */ = {
@@ -11214,7 +11214,7 @@
 		ignoreCount = 0;
 		lineNumber = 312;
 		location = BeerCrush;
-		modificationTime = 271723616.406676;
+		modificationTime = 271786973.323418;
 		state = 2;
 	};
 	053654C30F70681C000389C1 /* PlaceTableViewController.m:571 */ = {
@@ -11231,7 +11231,7 @@
 		ignoreCount = 0;
 		lineNumber = 571;
 		location = BeerCrush;
-		modificationTime = 271723616.406695;
+		modificationTime = 271786973.323438;
 		state = 2;
 	};
 	053655D40F70978B000389C1 /* PBXTextBookmark */ = {
@@ -11258,7 +11258,7 @@
 		ignoreCount = 0;
 		lineNumber = 417;
 		location = BeerCrush;
-		modificationTime = 271723616.405107;
+		modificationTime = 271786973.320128;
 		state = 2;
 	};
 	0562C02E0F5861BA003482B9 /* MyTableViewController.m:429 */ = {
@@ -11275,7 +11275,7 @@
 		ignoreCount = 0;
 		lineNumber = 429;
 		location = BeerCrush;
-		modificationTime = 271723616.405124;
+		modificationTime = 271786973.320146;
 		state = 2;
 	};
 	0562C0360F5862FB003482B9 /* MyTableViewController.m:413 */ = {
@@ -11292,7 +11292,7 @@
 		ignoreCount = 0;
 		lineNumber = 413;
 		location = BeerCrush;
-		modificationTime = 271723616.405141;
+		modificationTime = 271786973.320163;
 		state = 2;
 	};
 	0562C0380F58631A003482B9 /* MyTableViewController.m:192 */ = {
@@ -11309,7 +11309,7 @@
 		ignoreCount = 0;
 		lineNumber = 192;
 		location = BeerCrush;
-		modificationTime = 271723616.405157;
+		modificationTime = 271786973.320181;
 		state = 2;
 	};
 	0562C03A0F58631F003482B9 /* MyTableViewController.m:198 */ = {
@@ -11326,7 +11326,7 @@
 		ignoreCount = 0;
 		lineNumber = 198;
 		location = BeerCrush;
-		modificationTime = 271723616.405174;
+		modificationTime = 271786973.320199;
 		state = 2;
 	};
 	0562C0580F5866BA003482B9 /* MyTableViewController.m:251 */ = {
@@ -11343,7 +11343,7 @@
 		ignoreCount = 0;
 		lineNumber = 251;
 		location = BeerCrush;
-		modificationTime = 271723616.405191;
+		modificationTime = 271786973.320216;
 		state = 2;
 	};
 	0562C0770F586CBC003482B9 /* BeerCrushAppDelegate.m:153 */ = {
@@ -11360,7 +11360,7 @@
 		ignoreCount = 0;
 		lineNumber = 153;
 		location = BeerCrush;
-		modificationTime = 271723616.405207;
+		modificationTime = 271786973.320234;
 		state = 2;
 	};
 	0562C0AA0F588709003482B9 /* BreweryTableViewController.m:391 */ = {
@@ -11377,7 +11377,7 @@
 		ignoreCount = 0;
 		lineNumber = 391;
 		location = BeerCrush;
-		modificationTime = 271723616.405224;
+		modificationTime = 271786973.320252;
 		state = 2;
 	};
 	056CFED0100F8FE900AB3BE4 /* PlistBookmark */ = {
@@ -11475,7 +11475,7 @@
 		ignoreCount = 0;
 		lineNumber = 473;
 		location = BeerCrush;
-		modificationTime = 271723616.406863;
+		modificationTime = 271786973.323929;
 		state = 2;
 	};
 	0577E83E0FFAA74900A2468C /* BreweryTableViewController.m:59 */ = {
@@ -11492,7 +11492,7 @@
 		ignoreCount = 0;
 		lineNumber = 59;
 		location = BeerCrush;
-		modificationTime = 271723616.406967;
+		modificationTime = 271786973.324031;
 		state = 2;
 	};
 	0577E8560FFAA91E00A2468C /* BreweryTableViewController.m:614 */ = {
@@ -11509,7 +11509,7 @@
 		ignoreCount = 0;
 		lineNumber = 614;
 		location = BeerCrush;
-		modificationTime = 271723616.406986;
+		modificationTime = 271786973.324051;
 		state = 2;
 	};
 	0577E85E0FFAA94F00A2468C /* BreweryTableViewController.m:613 */ = {
@@ -11526,7 +11526,7 @@
 		ignoreCount = 0;
 		lineNumber = 613;
 		location = BeerCrush;
-		modificationTime = 271723616.407003;
+		modificationTime = 271786973.324069;
 		state = 2;
 	};
 	0577E8960FFC0F5800A2468C /* BeerTableViewController.m:40 */ = {
@@ -11543,7 +11543,7 @@
 		ignoreCount = 0;
 		lineNumber = 40;
 		location = BeerCrush;
-		modificationTime = 271723616.40702;
+		modificationTime = 271786973.324087;
 		state = 2;
 	};
 	0577E8B60FFC101C00A2468C /* BeerTableViewController.m:40 */ = {
@@ -11560,7 +11560,7 @@
 		ignoreCount = 0;
 		lineNumber = 40;
 		location = BeerCrush;
-		modificationTime = 271723616.407037;
+		modificationTime = 271786973.324105;
 		state = 2;
 	};
 	0577E8B80FFC101F00A2468C /* BeerTableViewController.m:40 */ = {
@@ -11577,7 +11577,7 @@
 		ignoreCount = 0;
 		lineNumber = 40;
 		location = BeerCrush;
-		modificationTime = 271723616.407054;
+		modificationTime = 271786973.324123;
 		state = 2;
 	};
 	0577E8BF0FFC105900A2468C /* BeerTableViewController.m:690 */ = {
@@ -11594,7 +11594,7 @@
 		ignoreCount = 0;
 		lineNumber = 690;
 		location = BeerCrush;
-		modificationTime = 271723616.407071;
+		modificationTime = 271786973.32414;
 		state = 2;
 	};
 	0577E8C10FFC105D00A2468C /* BeerTableViewController.m:701 */ = {
@@ -11611,7 +11611,7 @@
 		ignoreCount = 0;
 		lineNumber = 701;
 		location = BeerCrush;
-		modificationTime = 271723616.407088;
+		modificationTime = 271786973.324158;
 		state = 2;
 	};
 	0577E8CA0FFC10D000A2468C /* BeerTableViewController.m:719 */ = {
@@ -11628,7 +11628,7 @@
 		ignoreCount = 0;
 		lineNumber = 719;
 		location = BeerCrush;
-		modificationTime = 271723616.407105;
+		modificationTime = 271786973.324175;
 		state = 2;
 	};
 	0577E8CC0FFC10FD00A2468C /* BeerTableViewController.m:758 */ = {
@@ -11645,7 +11645,7 @@
 		ignoreCount = 0;
 		lineNumber = 758;
 		location = BeerCrush;
-		modificationTime = 271723616.407121;
+		modificationTime = 271786973.324194;
 		state = 2;
 	};
 	0577E92B0FFC1ACE00A2468C /* BeerTableViewController.m:406 */ = {
@@ -11662,7 +11662,7 @@
 		ignoreCount = 0;
 		lineNumber = 406;
 		location = BeerCrush;
-		modificationTime = 271723616.407138;
+		modificationTime = 271786973.324211;
 		state = 2;
 	};
 	0577E9BC0FFD625A00A2468C /* ReviewsTableViewController.m:139 */ = {
@@ -11679,7 +11679,7 @@
 		ignoreCount = 0;
 		lineNumber = 139;
 		location = BeerCrush;
-		modificationTime = 271723616.407155;
+		modificationTime = 271786973.324229;
 		state = 2;
 	};
 	0577E9F50FFD634900A2468C /* ReviewsTableViewController.m:271 */ = {
@@ -11696,7 +11696,7 @@
 		ignoreCount = 0;
 		lineNumber = 271;
 		location = BeerCrush;
-		modificationTime = 271723616.407172;
+		modificationTime = 271786973.324246;
 		state = 2;
 	};
 	0577E9F70FFD634F00A2468C /* ReviewsTableViewController.m:259 */ = {
@@ -11713,7 +11713,7 @@
 		ignoreCount = 0;
 		lineNumber = 259;
 		location = BeerCrush;
-		modificationTime = 271723616.407189;
+		modificationTime = 271786973.324264;
 		state = 2;
 	};
 	0577E9F90FFD635400A2468C /* ReviewsTableViewController.m:299 */ = {
@@ -11730,7 +11730,7 @@
 		ignoreCount = 0;
 		lineNumber = 299;
 		location = BeerCrush;
-		modificationTime = 271723616.407205;
+		modificationTime = 271786973.324282;
 		state = 2;
 	};
 	0577E9FC0FFD636900A2468C /* ReviewsTableViewController.m:29 */ = {
@@ -11746,7 +11746,7 @@
 		ignoreCount = 0;
 		lineNumber = 29;
 		location = BeerCrush;
-		modificationTime = 271723616.407222;
+		modificationTime = 271786973.324299;
 		state = 2;
 	};
 	0577EA110FFD644300A2468C /* ReviewsTableViewController.m:230 */ = {
@@ -11763,7 +11763,7 @@
 		ignoreCount = 0;
 		lineNumber = 230;
 		location = BeerCrush;
-		modificationTime = 271723616.407238;
+		modificationTime = 271786973.324317;
 		state = 2;
 	};
 	0577EA130FFD644400A2468C /* ReviewsTableViewController.m:238 */ = {
@@ -11780,7 +11780,7 @@
 		ignoreCount = 0;
 		lineNumber = 238;
 		location = BeerCrush;
-		modificationTime = 271723616.407255;
+		modificationTime = 271786973.324335;
 		state = 2;
 	};
 	0577EA260FFD65C200A2468C /* ReviewsTableViewController.m:129 */ = {
@@ -11797,7 +11797,7 @@
 		ignoreCount = 0;
 		lineNumber = 129;
 		location = BeerCrush;
-		modificationTime = 271723616.407271;
+		modificationTime = 271786973.324353;
 		state = 2;
 	};
 	0577EA601002B26600A2468C /* Root.plist */ = {
@@ -11905,7 +11905,7 @@
 		ignoreCount = 0;
 		lineNumber = 15;
 		location = BeerCrush;
-		modificationTime = 271723616.407288;
+		modificationTime = 271786973.32437;
 		state = 2;
 	};
 	0577ECB710068A1300A2468C /* RatingControl.h */ = {
@@ -11958,7 +11958,7 @@
 		ignoreCount = 0;
 		lineNumber = 34;
 		location = BeerCrush;
-		modificationTime = 271723616.407305;
+		modificationTime = 271786973.324388;
 		state = 2;
 	};
 	0577ED761006A2DF00A2468C /* RatingControl.m:152 */ = {
@@ -11975,7 +11975,7 @@
 		ignoreCount = 0;
 		lineNumber = 152;
 		location = BeerCrush;
-		modificationTime = 271723616.407326;
+		modificationTime = 271786973.324406;
 		state = 2;
 	};
 	0577ED791006A2EE00A2468C /* RatingControl.m:152 */ = {
@@ -11992,7 +11992,7 @@
 		ignoreCount = 0;
 		lineNumber = 152;
 		location = BeerCrush;
-		modificationTime = 271723616.407344;
+		modificationTime = 271786973.324424;
 		state = 2;
 	};
 	0577EDA61006A90B00A2468C /* RatingControl.m:78 */ = {
@@ -12009,7 +12009,7 @@
 		ignoreCount = 0;
 		lineNumber = 78;
 		location = BeerCrush;
-		modificationTime = 271723616.407361;
+		modificationTime = 271786973.324442;
 		state = 2;
 	};
 	0577EDB71006AA3500A2468C /* RatingControl.m:85 */ = {
@@ -12026,7 +12026,7 @@
 		ignoreCount = 0;
 		lineNumber = 85;
 		location = BeerCrush;
-		modificationTime = 271723616.407378;
+		modificationTime = 271786973.32446;
 		state = 2;
 	};
 	0577EDED1006AC7000A2468C /* BeerTableViewController.m:397 */ = {
@@ -12043,7 +12043,7 @@
 		ignoreCount = 0;
 		lineNumber = 397;
 		location = BeerCrush;
-		modificationTime = 271723616.407394;
+		modificationTime = 271786973.324478;
 		state = 2;
 	};
 	0577EDF21006AC9300A2468C /* BeerTableViewController.m:766 */ = {
@@ -12060,7 +12060,7 @@
 		ignoreCount = 0;
 		lineNumber = 766;
 		location = BeerCrush;
-		modificationTime = 271723616.407411;
+		modificationTime = 271786973.324496;
 		state = 2;
 	};
 	0577EDF71006AD0900A2468C /* RatingControl.m:66 */ = {
@@ -12077,7 +12077,7 @@
 		ignoreCount = 0;
 		lineNumber = 66;
 		location = BeerCrush;
-		modificationTime = 271723616.407427;
+		modificationTime = 271786973.324514;
 		state = 2;
 	};
 	0577EE471006B14F00A2468C /* PBXTextBookmark */ = {
@@ -12115,7 +12115,7 @@
 		fRef = 05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */;
 		name = "NearbyTableViewController.m: 303";
 		rLen = 0;
-		rLoc = 9128;
+		rLoc = 9391;
 		rType = 0;
 		vrLen = 3697;
 		vrLoc = 3803;
@@ -12194,7 +12194,7 @@
 		ignoreCount = 0;
 		lineNumber = 686;
 		location = BeerCrush;
-		modificationTime = 271723616.407444;
+		modificationTime = 271786973.324532;
 		state = 2;
 	};
 	0577EFDC1007BDB800A2468C /* BeerTableViewController.m:27 */ = {
@@ -12211,7 +12211,7 @@
 		ignoreCount = 0;
 		lineNumber = 27;
 		location = BeerCrush;
-		modificationTime = 271723618.453755;
+		modificationTime = 271786976.953879;
 		state = 1;
 	};
 	0577EFE11007BDEB00A2468C /* BeerTableViewController.m:67 */ = {
@@ -12228,7 +12228,7 @@
 		ignoreCount = 0;
 		lineNumber = 67;
 		location = BeerCrush;
-		modificationTime = 271723616.407477;
+		modificationTime = 271786973.324567;
 		state = 2;
 	};
 	0577EFE31007BDED00A2468C /* BeerTableViewController.m:75 */ = {
@@ -12245,7 +12245,7 @@
 		ignoreCount = 0;
 		lineNumber = 75;
 		location = BeerCrush;
-		modificationTime = 271723616.407497;
+		modificationTime = 271786973.32461;
 		state = 2;
 	};
 	0577EFE51007BDF000A2468C /* BeerTableViewController.m:156 */ = {
@@ -12262,7 +12262,7 @@
 		ignoreCount = 0;
 		lineNumber = 156;
 		location = BeerCrush;
-		modificationTime = 271723618.514261;
+		modificationTime = 271786976.997878;
 		state = 1;
 	};
 	0577EFE71007BE3C00A2468C /* BeerTableViewController.m:530 */ = {
@@ -12279,7 +12279,7 @@
 		ignoreCount = 0;
 		lineNumber = 530;
 		location = BeerCrush;
-		modificationTime = 271723616.407533;
+		modificationTime = 271786973.324655;
 		state = 2;
 	};
 	0577EFF31007BF0B00A2468C /* BeerListTableViewController.m:283 */ = {
@@ -12296,7 +12296,7 @@
 		ignoreCount = 0;
 		lineNumber = 283;
 		location = BeerCrush;
-		modificationTime = 271723616.40755;
+		modificationTime = 271786973.324679;
 		state = 2;
 	};
 	0577F05F1007C48300A2468C /* BeerTableViewController.m:686 */ = {
@@ -12313,7 +12313,7 @@
 		ignoreCount = 0;
 		lineNumber = 686;
 		location = BeerCrush;
-		modificationTime = 271723616.407652;
+		modificationTime = 271786973.32479;
 		state = 2;
 	};
 	0577F0B31007CB8200A2468C /* BeerListTableViewController.m:326 */ = {
@@ -12330,7 +12330,7 @@
 		ignoreCount = 0;
 		lineNumber = 326;
 		location = BeerCrush;
-		modificationTime = 271723616.407671;
+		modificationTime = 271786973.324811;
 		state = 2;
 	};
 	0577F0B51007CB8600A2468C /* PBXTextBookmark */ = {
@@ -12367,7 +12367,7 @@
 		ignoreCount = 0;
 		lineNumber = 54;
 		location = BeerCrush;
-		modificationTime = 271723616.407771;
+		modificationTime = 271786973.324911;
 		state = 2;
 	};
 	0577F1DA1007EFED00A2468C /* BreweryTableViewController.m:81 */ = {
@@ -12384,7 +12384,7 @@
 		ignoreCount = 0;
 		lineNumber = 81;
 		location = BeerCrush;
-		modificationTime = 271723616.40779;
+		modificationTime = 271786973.324931;
 		state = 2;
 	};
 	0577F1DC1007EFF700A2468C /* BreweryTableViewController.m:269 */ = {
@@ -12401,7 +12401,7 @@
 		ignoreCount = 0;
 		lineNumber = 269;
 		location = BeerCrush;
-		modificationTime = 271723616.407807;
+		modificationTime = 271786973.324949;
 		state = 2;
 	};
 	0577F1DE1007EFFB00A2468C /* BreweryTableViewController.m:247 */ = {
@@ -12418,7 +12418,7 @@
 		ignoreCount = 0;
 		lineNumber = 247;
 		location = BeerCrush;
-		modificationTime = 271723616.407823;
+		modificationTime = 271786973.324967;
 		state = 2;
 	};
 	0577F1E11007F01A00A2468C /* BreweryTableViewController.m:253 */ = {
@@ -12435,7 +12435,7 @@
 		ignoreCount = 0;
 		lineNumber = 253;
 		location = BeerCrush;
-		modificationTime = 271723616.40784;
+		modificationTime = 271786973.324985;
 		state = 2;
 	};
 	0577F1E61007F05100A2468C /* BreweryTableViewController.m:22 */ = {
@@ -12452,7 +12452,7 @@
 		ignoreCount = 0;
 		lineNumber = 22;
 		location = BeerCrush;
-		modificationTime = 271723616.407857;
+		modificationTime = 271786973.325017;
 		state = 2;
 	};
 	0577F1E81007F05300A2468C /* BreweryTableViewController.m:35 */ = {
@@ -12469,7 +12469,7 @@
 		ignoreCount = 0;
 		lineNumber = 35;
 		location = BeerCrush;
-		modificationTime = 271723616.407873;
+		modificationTime = 271786973.325042;
 		state = 2;
 	};
 	0577F1FB1007F17500A2468C /* PBXTextBookmark */ = {
@@ -12496,7 +12496,7 @@
 		ignoreCount = 0;
 		lineNumber = 22;
 		location = BeerCrush;
-		modificationTime = 271723616.40789;
+		modificationTime = 271786973.32506;
 		state = 2;
 	};
 	0577F23F1007F37000A2468C /* BeerListTableViewController.m:48 */ = {
@@ -12513,7 +12513,7 @@
 		ignoreCount = 0;
 		lineNumber = 48;
 		location = BeerCrush;
-		modificationTime = 271723616.407906;
+		modificationTime = 271786973.325092;
 		state = 2;
 	};
 	0577F2DF1007FE0000A2468C /* PBXTextBookmark */ = {
@@ -12540,7 +12540,7 @@
 		ignoreCount = 0;
 		lineNumber = 71;
 		location = BeerCrush;
-		modificationTime = 271723616.408008;
+		modificationTime = 271786973.325196;
 		state = 2;
 	};
 	0577F3721008059D00A2468C /* PBXTextBookmark */ = {
@@ -12577,7 +12577,7 @@
 		ignoreCount = 0;
 		lineNumber = 506;
 		location = BeerCrush;
-		modificationTime = 271723616.408027;
+		modificationTime = 271786973.325216;
 		state = 2;
 	};
 	0577F41E100BD3EB00A2468C /* PBXTextBookmark */ = {
@@ -12636,7 +12636,7 @@
 		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
 		name = "BeerCrushAppDelegate.h: 38";
 		rLen = 0;
-		rLoc = 3288;
+		rLoc = 3396;
 		rType = 0;
 		vrLen = 2890;
 		vrLoc = 0;
@@ -13504,7 +13504,7 @@
 		ignoreCount = 0;
 		lineNumber = 231;
 		location = BeerCrush;
-		modificationTime = 271723616.409333;
+		modificationTime = 271786973.326036;
 		state = 2;
 	};
 	058FF3FE1030DB5D00DA6D81 /* PBXTextBookmark */ = {
@@ -13561,7 +13561,7 @@
 		ignoreCount = 0;
 		lineNumber = 113;
 		location = BeerCrush;
-		modificationTime = 271723616.409353;
+		modificationTime = 271786973.326054;
 		state = 2;
 	};
 	058FF4081030DCCD00DA6D81 /* BrowseBrewersTVC.m:119 */ = {
@@ -13578,7 +13578,7 @@
 		ignoreCount = 0;
 		lineNumber = 119;
 		location = BeerCrush;
-		modificationTime = 271723616.40937;
+		modificationTime = 271786973.326073;
 		state = 2;
 	};
 	058FF40A1030DCCE00DA6D81 /* BrowseBrewersTVC.m:125 */ = {
@@ -13595,7 +13595,7 @@
 		ignoreCount = 0;
 		lineNumber = 125;
 		location = BeerCrush;
-		modificationTime = 271723616.409387;
+		modificationTime = 271786973.326091;
 		state = 2;
 	};
 	058FF40C1030DCD000DA6D81 /* BrowseBrewersTVC.m:140 */ = {
@@ -13612,7 +13612,7 @@
 		ignoreCount = 0;
 		lineNumber = 140;
 		location = BeerCrush;
-		modificationTime = 271723616.409412;
+		modificationTime = 271786973.326109;
 		state = 2;
 	};
 	058FF40D1030DCED00DA6D81 /* PBXTextBookmark */ = {
@@ -13639,7 +13639,7 @@
 		ignoreCount = 0;
 		lineNumber = 248;
 		location = BeerCrush;
-		modificationTime = 271723616.409446;
+		modificationTime = 271786973.326127;
 		state = 2;
 	};
 	058FF4101030DD3900DA6D81 /* PBXTextBookmark */ = {
@@ -13666,7 +13666,7 @@
 		ignoreCount = 0;
 		lineNumber = 55;
 		location = BeerCrush;
-		modificationTime = 271723616.409466;
+		modificationTime = 271786973.326145;
 		state = 2;
 	};
 	058FF4131030DD8600DA6D81 /* PBXTextBookmark */ = {
@@ -14180,7 +14180,7 @@
 		ignoreCount = 0;
 		lineNumber = 212;
 		location = BeerCrush;
-		modificationTime = 271723616.409483;
+		modificationTime = 271786973.326163;
 		state = 2;
 	};
 	058FF4731030E57700DA6D81 /* PBXTextBookmark */ = {
@@ -14347,7 +14347,7 @@
 		ignoreCount = 0;
 		lineNumber = 223;
 		location = BeerCrush;
-		modificationTime = 271723616.4095;
+		modificationTime = 271786973.326181;
 		state = 2;
 	};
 	058FF4911030E6E100DA6D81 /* PBXTextBookmark */ = {
@@ -14381,7 +14381,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = libSystem.B.dylib;
-		modificationTime = 271723619.078;
+		modificationTime = 271786977.670874;
 		state = 1;
 		symbolName = malloc_error_break;
 	};
@@ -14416,7 +14416,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = libSystem.B.dylib;
-		modificationTime = 271723619.078182;
+		modificationTime = 271786977.671041;
 		state = 1;
 		symbolName = malloc_error_break;
 	};
@@ -15471,7 +15471,7 @@
 		ignoreCount = 0;
 		lineNumber = 333;
 		location = BeerCrush;
-		modificationTime = 271723616.409518;
+		modificationTime = 271786973.326199;
 		state = 2;
 	};
 	058FF54B1031E33100DA6D81 /* BeerCrushAppDelegate.m:327 */ = {
@@ -15488,7 +15488,7 @@
 		ignoreCount = 0;
 		lineNumber = 327;
 		location = BeerCrush;
-		modificationTime = 271723616.409535;
+		modificationTime = 271786973.326218;
 		state = 2;
 	};
 	058FF54D1031E34300DA6D81 /* BeerListTableViewController.m:125 */ = {
@@ -15505,7 +15505,7 @@
 		ignoreCount = 0;
 		lineNumber = 125;
 		location = BeerCrush;
-		modificationTime = 271723616.409552;
+		modificationTime = 271786973.326235;
 		state = 2;
 	};
 	058FF54F1031E34B00DA6D81 /* PBXTextBookmark */ = {
@@ -15986,7 +15986,7 @@
 		ignoreCount = 0;
 		lineNumber = 153;
 		location = BeerCrush;
-		modificationTime = 271723618.719433;
+		modificationTime = 271786977.274004;
 		state = 1;
 	};
 	058FF5891031E45E00DA6D81 /* PBXTextBookmark */ = {
@@ -17585,7 +17585,7 @@
 		ignoreCount = 0;
 		lineNumber = 260;
 		location = BeerCrush;
-		modificationTime = 271723616.409761;
+		modificationTime = 271786973.326433;
 		state = 2;
 	};
 	058FF65A1032127800DA6D81 /* PBXTextBookmark */ = {
@@ -18252,7 +18252,7 @@
 		ignoreCount = 0;
 		lineNumber = 421;
 		location = BeerCrush;
-		modificationTime = 271723616.409786;
+		modificationTime = 271786973.326453;
 		state = 2;
 	};
 	058FF6A61032175900DA6D81 /* PBXTextBookmark */ = {
@@ -18329,7 +18329,7 @@
 		ignoreCount = 0;
 		lineNumber = 432;
 		location = BeerCrush;
-		modificationTime = 271723616.409893;
+		modificationTime = 271786973.326589;
 		state = 2;
 	};
 	058FF6B1103217AF00DA6D81 /* PBXTextBookmark */ = {
@@ -18520,7 +18520,7 @@
 		ignoreCount = 0;
 		lineNumber = 482;
 		location = BeerCrush;
-		modificationTime = 271723616.409996;
+		modificationTime = 271786973.326695;
 		state = 2;
 	};
 	058FF6CF10321DDD00DA6D81 /* PBXTextBookmark */ = {
@@ -18650,11 +18650,11 @@
 		delayBeforeContinue = 0;
 		fileReference = 051102A0100FDC8300610251 /* UserReviewsTVC.m */;
 		functionName = "-viewWillAppear:";
-		hitCount = 1;
+		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 39;
 		location = BeerCrush;
-		modificationTime = 271723641.783394;
+		modificationTime = 271786977.361658;
 		state = 1;
 	};
 	058FF6E3103221AE00DA6D81 /* PBXTextBookmark */ = {
@@ -18952,11 +18952,11 @@
 		delayBeforeContinue = 0;
 		fileReference = 051102A0100FDC8300610251 /* UserReviewsTVC.m */;
 		functionName = "-parserDidEndDocument:";
-		hitCount = 1;
+		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 237;
 		location = BeerCrush;
-		modificationTime = 271723644.899592;
+		modificationTime = 271786977.446863;
 		state = 1;
 	};
 	058FF7121032283100DA6D81 /* PBXTextBookmark */ = {
@@ -19169,11 +19169,11 @@
 		delayBeforeContinue = 0;
 		fileReference = 051102A0100FDC8300610251 /* UserReviewsTVC.m */;
 		functionName = "-viewWillAppear:";
-		hitCount = 1;
+		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 68;
 		location = BeerCrush;
-		modificationTime = 271723645.636935;
+		modificationTime = 271786977.488332;
 		state = 1;
 	};
 	058FF74110322AEC00DA6D81 /* PBXTextBookmark */ = {
@@ -19206,11 +19206,11 @@
 		delayBeforeContinue = 0;
 		fileReference = 051102A0100FDC8300610251 /* UserReviewsTVC.m */;
 		functionName = "-viewWillAppear:";
-		hitCount = 1;
+		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 48;
 		location = BeerCrush;
-		modificationTime = 271723644.253619;
+		modificationTime = 271786977.580916;
 		state = 1;
 	};
 	058FF74810322B4200DA6D81 /* PBXTextBookmark */ = {
@@ -19473,6 +19473,206 @@
 		vrLen = 1664;
 		vrLoc = 5342;
 	};
+	058FF7761032306D00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 051102A0100FDC8300610251 /* UserReviewsTVC.m */;
+		name = "UserReviewsTVC.m: 66";
+		rLen = 0;
+		rLoc = 2022;
+		rType = 0;
+		vrLen = 2394;
+		vrLoc = 647;
+	};
+	058FF7771032306D00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
+		name = "BeerCrushAppDelegate.h: 66";
+		rLen = 0;
+		rLoc = 3396;
+		rType = 0;
+		vrLen = 4011;
+		vrLoc = 0;
+	};
+	058FF7781032306D00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */;
+		name = "NearbyTableViewController.m: 281";
+		rLen = 0;
+		rLoc = 8684;
+		rType = 0;
+		vrLen = 2708;
+		vrLoc = 6930;
+	};
+	058FF7791032306D00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */;
+		name = "BeerCrushAppDelegate.m: 292";
+		rLen = 22;
+		rLoc = 9347;
+		rType = 0;
+		vrLen = 2128;
+		vrLoc = 8123;
+	};
+	058FF77A1032306D00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 051102A0100FDC8300610251 /* UserReviewsTVC.m */;
+		name = "UserReviewsTVC.m: 66";
+		rLen = 0;
+		rLoc = 2022;
+		rType = 0;
+		vrLen = 2394;
+		vrLoc = 647;
+	};
+	058FF77B1032306D00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */;
+		name = "NearbyTableViewController.m: 93";
+		rLen = 0;
+		rLoc = 2179;
+		rType = 0;
+		vrLen = 2742;
+		vrLoc = 1811;
+	};
+	058FF77C1032306D00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
+		name = "BeerCrushAppDelegate.h: 66";
+		rLen = 0;
+		rLoc = 3396;
+		rType = 0;
+		vrLen = 4011;
+		vrLoc = 0;
+	};
+	058FF77D1032306D00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */;
+		name = "NearbyTableViewController.m: 276";
+		rLen = 0;
+		rLoc = 8300;
+		rType = 0;
+		vrLen = 2652;
+		vrLoc = 6930;
+	};
+	058FF77E1032306D00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
+		name = "BeerCrushAppDelegate.h: 66";
+		rLen = 0;
+		rLoc = 3396;
+		rType = 0;
+		vrLen = 4011;
+		vrLoc = 0;
+	};
+	058FF77F1032306D00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */;
+		name = "NearbyTableViewController.m: 281";
+		rLen = 0;
+		rLoc = 8684;
+		rType = 0;
+		vrLen = 2708;
+		vrLoc = 6930;
+	};
+	058FF7801032306D00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */;
+		name = "BeerCrushAppDelegate.m: 292";
+		rLen = 22;
+		rLoc = 9347;
+		rType = 0;
+		vrLen = 3798;
+		vrLoc = 949;
+	};
+	058FF7811032306D00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C637F30F56087F00B1C78A /* BeerListTableViewController.m */;
+		name = "BeerListTableViewController.m: 278";
+		rLen = 0;
+		rLoc = 9031;
+		rType = 0;
+		vrLen = 1584;
+		vrLoc = 5342;
+	};
+	058FF785103323CB00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */;
+		name = "BeerCrushAppDelegate.m: 292";
+		rLen = 22;
+		rLoc = 9347;
+		rType = 0;
+		vrLen = 3798;
+		vrLoc = 949;
+	};
+	058FF786103323CB00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
+		name = "BeerCrushAppDelegate.h: 62";
+		rLen = 0;
+		rLoc = 3109;
+		rType = 0;
+		vrLen = 3961;
+		vrLoc = 0;
+	};
+	058FF787103323CB00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */;
+		name = "NearbyTableViewController.m: 281";
+		rLen = 0;
+		rLoc = 8684;
+		rType = 0;
+		vrLen = 2864;
+		vrLoc = 7258;
+	};
+	058FF788103323CB00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */;
+		name = "BeerCrushAppDelegate.m: 292";
+		rLen = 22;
+		rLoc = 9347;
+		rType = 0;
+		vrLen = 3798;
+		vrLoc = 949;
+	};
+	058FF789103323CB00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */;
+		name = "NearbyTableViewController.m: 281";
+		rLen = 0;
+		rLoc = 8684;
+		rType = 0;
+		vrLen = 2864;
+		vrLoc = 7258;
+	};
+	058FF78A103323CB00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */;
+		name = "BeerCrushAppDelegate.h: 62";
+		rLen = 0;
+		rLoc = 3109;
+		rType = 0;
+		vrLen = 3961;
+		vrLoc = 0;
+	};
+	058FF78B103323CB00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */;
+		name = "NearbyTableViewController.m: 276";
+		rLen = 0;
+		rLoc = 8424;
+		rType = 0;
+		vrLen = 2868;
+		vrLoc = 7258;
+	};
+	058FF78C103323CB00DA6D81 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C637F30F56087F00B1C78A /* BeerListTableViewController.m */;
+		name = "BeerListTableViewController.m: 278";
+		rLen = 0;
+		rLoc = 9031;
+		rType = 0;
+		vrLen = 1584;
+		vrLoc = 5342;
+	};
 	05944A3C0F7178330043D34C /* PlaceTableViewController.m:544 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
@@ -19487,7 +19687,7 @@
 		ignoreCount = 0;
 		lineNumber = 544;
 		location = BeerCrush;
-		modificationTime = 271723616.406712;
+		modificationTime = 271786973.323456;
 		state = 2;
 	};
 	05944A5C0F7181C10043D34C /* PhoneNumberEditTableViewController.m:95 */ = {
@@ -19504,7 +19704,7 @@
 		ignoreCount = 0;
 		lineNumber = 95;
 		location = BeerCrush;
-		modificationTime = 271723616.406728;
+		modificationTime = 271786973.323474;
 		state = 2;
 	};
 	05944B480F719CB50043D34C /* BeerTableViewController.m:454 */ = {
@@ -19521,7 +19721,7 @@
 		ignoreCount = 0;
 		lineNumber = 454;
 		location = BeerCrush;
-		modificationTime = 271723616.406745;
+		modificationTime = 271786973.323492;
 		state = 2;
 	};
 	05944B530F719D7B0043D34C /* BeerTableViewController.m:727 */ = {
@@ -19538,7 +19738,7 @@
 		ignoreCount = 0;
 		lineNumber = 727;
 		location = BeerCrush;
-		modificationTime = 271723616.406762;
+		modificationTime = 271786973.32351;
 		state = 2;
 	};
 	05944B670F71A1510043D34C /* PlaceTableViewController.m:97 */ = {
@@ -19555,7 +19755,7 @@
 		ignoreCount = 0;
 		lineNumber = 97;
 		location = BeerCrush;
-		modificationTime = 271723616.406779;
+		modificationTime = 271786973.323528;
 		state = 2;
 	};
 	05944B920F71A7210043D34C /* PlaceTableViewController.m:124 */ = {
@@ -19572,7 +19772,7 @@
 		ignoreCount = 0;
 		lineNumber = 124;
 		location = BeerCrush;
-		modificationTime = 271723616.406796;
+		modificationTime = 271786973.323546;
 		state = 2;
 	};
 	05944C7C0F71CC770043D34C /* NearbyTableViewController.m:89 */ = {
@@ -19589,10 +19789,10 @@
 		ignoreCount = 0;
 		lineNumber = 89;
 		location = BeerCrush;
-		modificationTime = 271723616.406813;
+		modificationTime = 271786973.323564;
 		state = 2;
 	};
-	05944C920F71CFF90043D34C /* NearbyTableViewController.m:316 */ = {
+	05944C920F71CFF90043D34C /* NearbyTableViewController.m:322 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -19604,12 +19804,12 @@
 		functionName = "-parser:didStartElement:namespaceURI:qualifiedName:attributes:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 316;
+		lineNumber = 322;
 		location = BeerCrush;
-		modificationTime = 271723616.406829;
+		modificationTime = 271786973.323677;
 		state = 2;
 	};
-	05944C940F71D0300043D34C /* NearbyTableViewController.m:301 */ = {
+	05944C940F71D0300043D34C /* NearbyTableViewController.m:307 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -19621,9 +19821,9 @@
 		functionName = "-parserDidEndDocument:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 301;
+		lineNumber = 307;
 		location = BeerCrush;
-		modificationTime = 271723616.406846;
+		modificationTime = 271786973.323794;
 		state = 2;
 	};
 	05944D6A0F72DE700043D34C /* CLLocationManager.h */ = {
@@ -19824,9 +20024,9 @@
 	};
 	05C637F30F56087F00B1C78A /* BeerListTableViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1170, 7098}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1170, 7111}}";
 			sepNavSelRange = "{9031, 0}";
-			sepNavVisRange = "{5342, 1664}";
+			sepNavVisRange = "{5342, 1584}";
 			sepNavWindowFrame = "{{1098, 256}, {857, 852}}";
 		};
 	};
@@ -19864,7 +20064,7 @@
 		ignoreCount = 0;
 		lineNumber = 568;
 		location = BeerCrush;
-		modificationTime = 271723616.404899;
+		modificationTime = 271786973.319915;
 		state = 2;
 	};
 	05C6383F0F573BBA00B1C78A /* BreweryTableViewController.m:576 */ = {
@@ -19881,7 +20081,7 @@
 		ignoreCount = 0;
 		lineNumber = 576;
 		location = BeerCrush;
-		modificationTime = 271723616.404916;
+		modificationTime = 271786973.319933;
 		state = 2;
 	};
 	05C638410F573BBB00B1C78A /* BreweryTableViewController.m:583 */ = {
@@ -19898,7 +20098,7 @@
 		ignoreCount = 0;
 		lineNumber = 583;
 		location = BeerCrush;
-		modificationTime = 271723616.404933;
+		modificationTime = 271786973.31995;
 		state = 2;
 	};
 	05C638430F573BBC00B1C78A /* BreweryTableViewController.m:603 */ = {
@@ -19915,7 +20115,7 @@
 		ignoreCount = 0;
 		lineNumber = 603;
 		location = BeerCrush;
-		modificationTime = 271723616.404954;
+		modificationTime = 271786973.319968;
 		state = 2;
 	};
 	05C638450F573BBD00B1C78A /* BreweryTableViewController.m:634 */ = {
@@ -19932,7 +20132,7 @@
 		ignoreCount = 0;
 		lineNumber = 634;
 		location = BeerCrush;
-		modificationTime = 271723616.404973;
+		modificationTime = 271786973.319986;
 		state = 2;
 	};
 	05C638470F573BBE00B1C78A /* BreweryTableViewController.m:638 */ = {
@@ -19949,7 +20149,7 @@
 		ignoreCount = 0;
 		lineNumber = 638;
 		location = BeerCrush;
-		modificationTime = 271723616.40499;
+		modificationTime = 271786973.320004;
 		state = 2;
 	};
 	05C638490F573BBF00B1C78A /* BreweryTableViewController.m:646 */ = {
@@ -19966,7 +20166,7 @@
 		ignoreCount = 0;
 		lineNumber = 646;
 		location = BeerCrush;
-		modificationTime = 271723616.405007;
+		modificationTime = 271786973.320021;
 		state = 2;
 	};
 	05C638500F573BE800B1C78A /* BreweryTableViewController.m:72 */ = {
@@ -19983,7 +20183,7 @@
 		ignoreCount = 0;
 		lineNumber = 72;
 		location = BeerCrush;
-		modificationTime = 271723616.405024;
+		modificationTime = 271786973.320038;
 		state = 2;
 	};
 	05C638620F573C1A00B1C78A /* BreweryTableViewController.m:74 */ = {
@@ -20000,7 +20200,7 @@
 		ignoreCount = 0;
 		lineNumber = 74;
 		location = BeerCrush;
-		modificationTime = 271723616.40504;
+		modificationTime = 271786973.320056;
 		state = 2;
 	};
 	05C638690F573C3C00B1C78A /* BreweryTableViewController.m:73 */ = {
@@ -20017,7 +20217,7 @@
 		ignoreCount = 0;
 		lineNumber = 73;
 		location = BeerCrush;
-		modificationTime = 271723616.405057;
+		modificationTime = 271786973.320074;
 		state = 2;
 	};
 	05C638AB0F57435000B1C78A /* BreweryTableViewController.m:617 */ = {
@@ -20034,7 +20234,7 @@
 		ignoreCount = 0;
 		lineNumber = 617;
 		location = BeerCrush;
-		modificationTime = 271723616.405074;
+		modificationTime = 271786973.320092;
 		state = 2;
 	};
 	05C638C00F5743FA00B1C78A /* BreweryTableViewController.m:642 */ = {
@@ -20051,7 +20251,7 @@
 		ignoreCount = 0;
 		lineNumber = 642;
 		location = BeerCrush;
-		modificationTime = 271723616.405091;
+		modificationTime = 271786973.32011;
 		state = 2;
 	};
 	05C9A9CD0F531FC00020B102 /* PBXTextBookmark */ = {
@@ -20160,8 +20360,8 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = "";
-		modificationTime = 271723659.994264;
-		state = 1;
+		modificationTime = 271786974.222794;
+		state = 0;
 		symbolName = "BeerCrushAppDelegate.m.applicationDidFinishLaunching:";
 	};
 	05C9AAB50F534C4D0020B102 /* BeerCrushAppDelegate.m:applicationDidFinishLaunching: */ = {
@@ -20175,8 +20375,8 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = "";
-		modificationTime = 271723659.994173;
-		state = 1;
+		modificationTime = 271786974.323713;
+		state = 0;
 		symbolName = "BeerCrushAppDelegate.m:applicationDidFinishLaunching:";
 	};
 	05C9AAB60F534C6B0020B102 /* BeerCrushAppDelegate.m::applicationDidFinishLaunching: */ = {
@@ -20190,8 +20390,8 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = "";
-		modificationTime = 271723659.994238;
-		state = 1;
+		modificationTime = 271786974.359895;
+		state = 0;
 		symbolName = "BeerCrushAppDelegate.m::applicationDidFinishLaunching:";
 	};
 	05C9AAC10F534CAD0020B102 /* FirstViewController.m:52 */ = {
@@ -20208,7 +20408,7 @@
 		ignoreCount = 0;
 		lineNumber = 52;
 		location = BeerCrush;
-		modificationTime = 271723616.404815;
+		modificationTime = 271786973.319832;
 		state = 2;
 	};
 	05C9AC3E0F53756F0020B102 /* MyTableViewController.h */ = {
@@ -20260,7 +20460,7 @@
 		ignoreCount = 0;
 		lineNumber = 8;
 		location = BeerCrush;
-		modificationTime = 271723616.404856;
+		modificationTime = 271786973.319877;
 		state = 2;
 	};
 	05C9ACC00F5385450020B102 /* MyTableViewController.m:8 */ = {
@@ -20277,7 +20477,7 @@
 		ignoreCount = 0;
 		lineNumber = 8;
 		location = BeerCrush;
-		modificationTime = 271723616.404879;
+		modificationTime = 271786973.319896;
 		state = 2;
 	};
 	05F3BDBF0F6ED64100603ED1 /* MyTableViewController.m:69 */ = {
@@ -20294,7 +20494,7 @@
 		ignoreCount = 0;
 		lineNumber = 69;
 		location = BeerCrush;
-		modificationTime = 271723616.406178;
+		modificationTime = 271786973.32165;
 		state = 2;
 	};
 	05F3BDEF0F6ED8CD00603ED1 /* BeerCrushAppDelegate.m:210 */ = {
@@ -20311,7 +20511,7 @@
 		ignoreCount = 0;
 		lineNumber = 210;
 		location = BeerCrush;
-		modificationTime = 271723616.406199;
+		modificationTime = 271786973.321668;
 		state = 2;
 	};
 	05F3BE130F6EDB7B00603ED1 /* BeerCrushAppDelegate.m:223 */ = {
@@ -20328,7 +20528,7 @@
 		ignoreCount = 0;
 		lineNumber = 223;
 		location = BeerCrush;
-		modificationTime = 271723616.406218;
+		modificationTime = 271786973.321686;
 		state = 2;
 	};
 	05F3BE160F6EDBAA00603ED1 /* BeerCrushAppDelegate.m:146 */ = {
@@ -20345,7 +20545,7 @@
 		ignoreCount = 0;
 		lineNumber = 146;
 		location = BeerCrush;
-		modificationTime = 271723616.406235;
+		modificationTime = 271786973.321714;
 		state = 2;
 	};
 	05F3BF160F6EE47000603ED1 /* MyTableViewController.m:395 */ = {
@@ -20362,7 +20562,7 @@
 		ignoreCount = 0;
 		lineNumber = 395;
 		location = BeerCrush;
-		modificationTime = 271723618.370265;
+		modificationTime = 271786976.859936;
 		state = 1;
 	};
 	05F3BFB10F6EEDCB00603ED1 /* NearbyTableViewController.h */ = {
@@ -20374,9 +20574,9 @@
 	};
 	05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1037, 5070}}";
-			sepNavSelRange = "{712, 62}";
-			sepNavVisRange = "{0, 2043}";
+			sepNavIntBoundsRect = "{{0, 0}, {1182, 4758}}";
+			sepNavSelRange = "{8424, 0}";
+			sepNavVisRange = "{7258, 2868}";
 		};
 	};
 	05F3BFBF0F6EF02B00603ED1 /* PBXTextBookmark */ = {
@@ -20399,7 +20599,7 @@
 		vrLen = 2249;
 		vrLoc = 1387;
 	};
-	05F3C0950F6EF79500603ED1 /* NearbyTableViewController.m:96 */ = {
+	05F3C0950F6EF79500603ED1 /* NearbyTableViewController.m:106 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20411,12 +20611,12 @@
 		functionName = "-viewDidAppear:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 96;
+		lineNumber = 106;
 		location = BeerCrush;
-		modificationTime = 271723616.406272;
+		modificationTime = 271786973.321752;
 		state = 2;
 	};
-	05F3C0980F6EF7A800603ED1 /* NearbyTableViewController.m:258 */ = {
+	05F3C0980F6EF7A800603ED1 /* NearbyTableViewController.m:259 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20428,12 +20628,12 @@
 		functionName = "-locationManager:didUpdateToLocation:fromLocation:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 258;
+		lineNumber = 259;
 		location = BeerCrush;
-		modificationTime = 271723616.406291;
+		modificationTime = 271786973.321879;
 		state = 2;
 	};
-	05F3C09A0F6EF7AA00603ED1 /* NearbyTableViewController.m:283 */ = {
+	05F3C09A0F6EF7AA00603ED1 /* NearbyTableViewController.m:289 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20445,12 +20645,12 @@
 		functionName = "-locationManager:didFailWithError:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 283;
+		lineNumber = 289;
 		location = BeerCrush;
-		modificationTime = 271723616.406308;
+		modificationTime = 271786973.322008;
 		state = 2;
 	};
-	05F3C0E40F6F076D00603ED1 /* NearbyTableViewController.m:290 */ = {
+	05F3C0E40F6F076D00603ED1 /* NearbyTableViewController.m:296 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20462,12 +20662,12 @@
 		functionName = "-parserDidStartDocument:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 290;
+		lineNumber = 296;
 		location = BeerCrush;
-		modificationTime = 271723616.406325;
+		modificationTime = 271786973.322124;
 		state = 2;
 	};
-	05F3C0E60F6F077000603ED1 /* NearbyTableViewController.m:308 */ = {
+	05F3C0E60F6F077000603ED1 /* NearbyTableViewController.m:314 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20479,12 +20679,12 @@
 		functionName = "-parser:didStartElement:namespaceURI:qualifiedName:attributes:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 308;
+		lineNumber = 314;
 		location = BeerCrush;
-		modificationTime = 271723616.406342;
+		modificationTime = 271786973.322264;
 		state = 2;
 	};
-	05F3C0E80F6F077200603ED1 /* NearbyTableViewController.m:327 */ = {
+	05F3C0E80F6F077200603ED1 /* NearbyTableViewController.m:333 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20496,12 +20696,12 @@
 		functionName = "-parser:didEndElement:namespaceURI:qualifiedName:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 327;
+		lineNumber = 333;
 		location = BeerCrush;
-		modificationTime = 271723616.406358;
+		modificationTime = 271786973.322386;
 		state = 2;
 	};
-	05F3C0EA0F6F07BC00603ED1 /* NearbyTableViewController.m:148 */ = {
+	05F3C0EA0F6F07BC00603ED1 /* NearbyTableViewController.m:149 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20513,12 +20713,12 @@
 		functionName = "-tableView:cellForRowAtIndexPath:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 148;
+		lineNumber = 149;
 		location = BeerCrush;
-		modificationTime = 271723616.406379;
+		modificationTime = 271786973.32249;
 		state = 2;
 	};
-	05F3C0F70F6F080300603ED1 /* NearbyTableViewController.m:142 */ = {
+	05F3C0F70F6F080300603ED1 /* NearbyTableViewController.m:143 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20530,12 +20730,12 @@
 		functionName = "-tableView:numberOfRowsInSection:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 142;
+		lineNumber = 143;
 		location = BeerCrush;
-		modificationTime = 271723616.406398;
+		modificationTime = 271786973.322594;
 		state = 2;
 	};
-	05F3C0FB0F6F082100603ED1 /* NearbyTableViewController.m:136 */ = {
+	05F3C0FB0F6F082100603ED1 /* NearbyTableViewController.m:137 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20547,12 +20747,12 @@
 		functionName = "-numberOfSectionsInTableView:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 136;
+		lineNumber = 137;
 		location = BeerCrush;
-		modificationTime = 271723616.406415;
+		modificationTime = 271786973.322697;
 		state = 2;
 	};
-	05F3C1080F6F08E900603ED1 /* NearbyTableViewController.m:342 */ = {
+	05F3C1080F6F08E900603ED1 /* NearbyTableViewController.m:348 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20564,12 +20764,12 @@
 		functionName = "-parser:didEndElement:namespaceURI:qualifiedName:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 342;
+		lineNumber = 348;
 		location = BeerCrush;
-		modificationTime = 271723616.406431;
+		modificationTime = 271786973.3228;
 		state = 2;
 	};
-	05F3C1150F6F09A100603ED1 /* NearbyTableViewController.m:337 */ = {
+	05F3C1150F6F09A100603ED1 /* NearbyTableViewController.m:343 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20581,12 +20781,12 @@
 		functionName = "-parser:didEndElement:namespaceURI:qualifiedName:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 337;
+		lineNumber = 343;
 		location = BeerCrush;
-		modificationTime = 271723616.406448;
+		modificationTime = 271786973.322904;
 		state = 2;
 	};
-	05F3C1210F6F0AC500603ED1 /* NearbyTableViewController.m:173 */ = {
+	05F3C1210F6F0AC500603ED1 /* NearbyTableViewController.m:174 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20598,9 +20798,9 @@
 		functionName = "-tableView:cellForRowAtIndexPath:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 173;
+		lineNumber = 174;
 		location = BeerCrush;
-		modificationTime = 271723616.406465;
+		modificationTime = 271786973.323007;
 		state = 2;
 	};
 	05F3C1880F6F150400603ED1 /* PlaceTableViewController.h */ = {
@@ -20637,7 +20837,7 @@
 		vrLen = 1469;
 		vrLoc = 0;
 	};
-	05F3C1FF0F6F1B0E00603ED1 /* NearbyTableViewController.m:178 */ = {
+	05F3C1FF0F6F1B0E00603ED1 /* NearbyTableViewController.m:179 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20649,9 +20849,9 @@
 		functionName = "-tableView:didSelectRowAtIndexPath:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 178;
+		lineNumber = 179;
 		location = BeerCrush;
-		modificationTime = 271723616.406481;
+		modificationTime = 271786973.323111;
 		state = 2;
 	};
 	05F3C21D0F6F1CE800603ED1 /* malloc_error_break */ = {
@@ -20665,11 +20865,11 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = libSystem.B.dylib;
-		modificationTime = 271723618.991314;
+		modificationTime = 271786977.581145;
 		state = 1;
 		symbolName = malloc_error_break;
 	};
-	05F3C2220F6F1D1600603ED1 /* NearbyTableViewController.m:92 */ = {
+	05F3C2220F6F1D1600603ED1 /* NearbyTableViewController.m:100 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -20681,9 +20881,9 @@
 		functionName = "-viewWillAppear:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 92;
+		lineNumber = 100;
 		location = BeerCrush;
-		modificationTime = 271723616.406567;
+		modificationTime = 271786973.323214;
 		state = 2;
 	};
 	05F3C24B0F6F221400603ED1 /* PlaceTableViewController.m:29 */ = {
@@ -20700,7 +20900,7 @@
 		ignoreCount = 0;
 		lineNumber = 29;
 		location = BeerCrush;
-		modificationTime = 271723616.406588;
+		modificationTime = 271786973.323317;
 		state = 2;
 	};
 	05F3C2680F6F232600603ED1 /* PlaceTableViewController.m:166 */ = {
@@ -20717,21 +20917,21 @@
 		ignoreCount = 0;
 		lineNumber = 166;
 		location = BeerCrush;
-		modificationTime = 271723616.406605;
+		modificationTime = 271786973.323337;
 		state = 2;
 	};
 	1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1037, 1183}}";
-			sepNavSelRange = "{2590, 0}";
-			sepNavVisRange = "{0, 4010}";
+			sepNavIntBoundsRect = "{{0, 0}, {1037, 1157}}";
+			sepNavSelRange = "{3109, 0}";
+			sepNavVisRange = "{0, 3961}";
 		};
 	};
 	1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1037, 5785}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1037, 5408}}";
 			sepNavSelRange = "{9347, 22}";
-			sepNavVisRange = "{8124, 2058}";
+			sepNavVisRange = "{949, 3798}";
 			sepNavWindowFrame = "{{107, 637}, {857, 852}}";
 		};
 	};
@@ -20821,21 +21021,21 @@
 			05F3BE130F6EDB7B00603ED1 /* BeerCrushAppDelegate.m:223 */,
 			05F3BE160F6EDBAA00603ED1 /* BeerCrushAppDelegate.m:146 */,
 			05F3BF160F6EE47000603ED1 /* MyTableViewController.m:395 */,
-			05F3C0950F6EF79500603ED1 /* NearbyTableViewController.m:96 */,
-			05F3C0980F6EF7A800603ED1 /* NearbyTableViewController.m:258 */,
-			05F3C09A0F6EF7AA00603ED1 /* NearbyTableViewController.m:283 */,
-			05F3C0E40F6F076D00603ED1 /* NearbyTableViewController.m:290 */,
-			05F3C0E60F6F077000603ED1 /* NearbyTableViewController.m:308 */,
-			05F3C0E80F6F077200603ED1 /* NearbyTableViewController.m:327 */,
-			05F3C0EA0F6F07BC00603ED1 /* NearbyTableViewController.m:148 */,
-			05F3C0F70F6F080300603ED1 /* NearbyTableViewController.m:142 */,
-			05F3C0FB0F6F082100603ED1 /* NearbyTableViewController.m:136 */,
-			05F3C1080F6F08E900603ED1 /* NearbyTableViewController.m:342 */,
-			05F3C1150F6F09A100603ED1 /* NearbyTableViewController.m:337 */,
-			05F3C1210F6F0AC500603ED1 /* NearbyTableViewController.m:173 */,
-			05F3C1FF0F6F1B0E00603ED1 /* NearbyTableViewController.m:178 */,
+			05F3C0950F6EF79500603ED1 /* NearbyTableViewController.m:106 */,
+			05F3C0980F6EF7A800603ED1 /* NearbyTableViewController.m:259 */,
+			05F3C09A0F6EF7AA00603ED1 /* NearbyTableViewController.m:289 */,
+			05F3C0E40F6F076D00603ED1 /* NearbyTableViewController.m:296 */,
+			05F3C0E60F6F077000603ED1 /* NearbyTableViewController.m:314 */,
+			05F3C0E80F6F077200603ED1 /* NearbyTableViewController.m:333 */,
+			05F3C0EA0F6F07BC00603ED1 /* NearbyTableViewController.m:149 */,
+			05F3C0F70F6F080300603ED1 /* NearbyTableViewController.m:143 */,
+			05F3C0FB0F6F082100603ED1 /* NearbyTableViewController.m:137 */,
+			05F3C1080F6F08E900603ED1 /* NearbyTableViewController.m:348 */,
+			05F3C1150F6F09A100603ED1 /* NearbyTableViewController.m:343 */,
+			05F3C1210F6F0AC500603ED1 /* NearbyTableViewController.m:174 */,
+			05F3C1FF0F6F1B0E00603ED1 /* NearbyTableViewController.m:179 */,
 			05F3C21D0F6F1CE800603ED1 /* malloc_error_break */,
-			05F3C2220F6F1D1600603ED1 /* NearbyTableViewController.m:92 */,
+			05F3C2220F6F1D1600603ED1 /* NearbyTableViewController.m:100 */,
 			05F3C24B0F6F221400603ED1 /* PlaceTableViewController.m:29 */,
 			05F3C2680F6F232600603ED1 /* PlaceTableViewController.m:166 */,
 			053653AE0F70412D000389C1 /* PlaceTableViewController.m:480 */,
@@ -20850,8 +21050,8 @@
 			05944B670F71A1510043D34C /* PlaceTableViewController.m:97 */,
 			05944B920F71A7210043D34C /* PlaceTableViewController.m:124 */,
 			05944C7C0F71CC770043D34C /* NearbyTableViewController.m:89 */,
-			05944C920F71CFF90043D34C /* NearbyTableViewController.m:316 */,
-			05944C940F71D0300043D34C /* NearbyTableViewController.m:301 */,
+			05944C920F71CFF90043D34C /* NearbyTableViewController.m:322 */,
+			05944C940F71D0300043D34C /* NearbyTableViewController.m:307 */,
 			0577E81B0FFA827E00A2468C /* BeerListTableViewController.m:473 */,
 			0577E83E0FFAA74900A2468C /* BreweryTableViewController.m:59 */,
 			0577E8560FFAA91E00A2468C /* BreweryTableViewController.m:614 */,
@@ -22743,6 +22943,26 @@
 			058FF76F10322C5E00DA6D81 /* PBXTextBookmark */ = 058FF76F10322C5E00DA6D81 /* PBXTextBookmark */;
 			058FF77110322C8D00DA6D81 /* PBXTextBookmark */ = 058FF77110322C8D00DA6D81 /* PBXTextBookmark */;
 			058FF77210322C8D00DA6D81 /* PBXTextBookmark */ = 058FF77210322C8D00DA6D81 /* PBXTextBookmark */;
+			058FF7761032306D00DA6D81 /* PBXTextBookmark */ = 058FF7761032306D00DA6D81 /* PBXTextBookmark */;
+			058FF7771032306D00DA6D81 /* PBXTextBookmark */ = 058FF7771032306D00DA6D81 /* PBXTextBookmark */;
+			058FF7781032306D00DA6D81 /* PBXTextBookmark */ = 058FF7781032306D00DA6D81 /* PBXTextBookmark */;
+			058FF7791032306D00DA6D81 /* PBXTextBookmark */ = 058FF7791032306D00DA6D81 /* PBXTextBookmark */;
+			058FF77A1032306D00DA6D81 /* PBXTextBookmark */ = 058FF77A1032306D00DA6D81 /* PBXTextBookmark */;
+			058FF77B1032306D00DA6D81 /* PBXTextBookmark */ = 058FF77B1032306D00DA6D81 /* PBXTextBookmark */;
+			058FF77C1032306D00DA6D81 /* PBXTextBookmark */ = 058FF77C1032306D00DA6D81 /* PBXTextBookmark */;
+			058FF77D1032306D00DA6D81 /* PBXTextBookmark */ = 058FF77D1032306D00DA6D81 /* PBXTextBookmark */;
+			058FF77E1032306D00DA6D81 /* PBXTextBookmark */ = 058FF77E1032306D00DA6D81 /* PBXTextBookmark */;
+			058FF77F1032306D00DA6D81 /* PBXTextBookmark */ = 058FF77F1032306D00DA6D81 /* PBXTextBookmark */;
+			058FF7801032306D00DA6D81 /* PBXTextBookmark */ = 058FF7801032306D00DA6D81 /* PBXTextBookmark */;
+			058FF7811032306D00DA6D81 /* PBXTextBookmark */ = 058FF7811032306D00DA6D81 /* PBXTextBookmark */;
+			058FF785103323CB00DA6D81 /* PBXTextBookmark */ = 058FF785103323CB00DA6D81 /* PBXTextBookmark */;
+			058FF786103323CB00DA6D81 /* PBXTextBookmark */ = 058FF786103323CB00DA6D81 /* PBXTextBookmark */;
+			058FF787103323CB00DA6D81 /* PBXTextBookmark */ = 058FF787103323CB00DA6D81 /* PBXTextBookmark */;
+			058FF788103323CB00DA6D81 /* PBXTextBookmark */ = 058FF788103323CB00DA6D81 /* PBXTextBookmark */;
+			058FF789103323CB00DA6D81 /* PBXTextBookmark */ = 058FF789103323CB00DA6D81 /* PBXTextBookmark */;
+			058FF78A103323CB00DA6D81 /* PBXTextBookmark */ = 058FF78A103323CB00DA6D81 /* PBXTextBookmark */;
+			058FF78B103323CB00DA6D81 /* PBXTextBookmark */ = 058FF78B103323CB00DA6D81 /* PBXTextBookmark */;
+			058FF78C103323CB00DA6D81 /* PBXTextBookmark */ = 058FF78C103323CB00DA6D81 /* PBXTextBookmark */;
 			05944D710F72DEAB0043D34C = 05944D710F72DEAB0043D34C /* PBXTextBookmark */;
 			05944D8F0F72DEAB0043D34C = 05944D8F0F72DEAB0043D34C /* PBXTextBookmark */;
 			059FF942100F85C400960819 = 059FF942100F85C400960819 /* PBXTextBookmark */;
