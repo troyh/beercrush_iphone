@@ -28,7 +28,7 @@
 {
 	self.beerID=[beer_id copy];
 	self.breweryID=nil;
-	NSLog(@"BeerTableViewController initWithBeerID beerID retainCount=%d",[beerID retainCount]);
+	DLog(@"BeerTableViewController initWithBeerID beerID retainCount=%d",[beerID retainCount]);
 	self.overlay=nil;
 	self.spinner=nil;
 	self.xmlPostResponse=nil;
@@ -44,8 +44,8 @@
 
 - (void)dealloc
 {
-	NSLog(@"BeerTableViewController release: retainCount=%d",[self retainCount]);
-	NSLog(@"BeerTableViewController release: beerID retainCount=%d",[beerID retainCount]);
+	DLog(@"BeerTableViewController release: retainCount=%d",[self retainCount]);
+	DLog(@"BeerTableViewController release: beerID retainCount=%d",[beerID retainCount]);
 	//	[beerID release];
 	[self.beerObj release];
 	self.beerObj=nil;
@@ -121,7 +121,7 @@
 			if (retval==YES)
 			{
 				// The user has a review for this beer
-				NSLog(@"User rating:%@", [self.beerObj.data objectForKey:@"user_rating"]);
+				DLog(@"User rating:%@", [self.beerObj.data objectForKey:@"user_rating"]);
 			}
 		}
 	}
@@ -207,7 +207,7 @@
 					 [self.beerObj.data objectForKey:@"name"]];
 		}
 		
-		NSLog(@"POST data:%@",bodystr);
+		DLog(@"POST data:%@",bodystr);
 		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 		
 		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC]
@@ -232,8 +232,8 @@
 			NSData* rspdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
 			
 			if (rspdata) {
-				NSLog(@"Response code:%d",[response statusCode]);
-				NSLog(@"Response data:%s",[rspdata bytes]);
+				DLog(@"Response code:%d",[response statusCode]);
+				DLog(@"Response data:%s",[rspdata bytes]);
 				
 				bRetry=NO;
 				int statuscode=[response statusCode];
@@ -400,7 +400,7 @@
 				NSString* user_rating=[self.beerObj.data objectForKey:@"user_rating"];
 				if (user_rating!=nil) // No user review
 					ratingctl.currentRating=[user_rating integerValue];
-				NSLog(@"Current rating:%d",ratingctl.currentRating);
+				DLog(@"Current rating:%d",ratingctl.currentRating);
 				
 				// Set the callback for a review
 				[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
@@ -865,13 +865,13 @@
 	
 	if (n==201)
 	{
-		NSLog(@"Need to login...");
+		DLog(@"Need to login...");
 		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 		[del login];
 		// TODO: retry
 	}
 	else
-		NSLog(@"Status code:%u",n);
+		DLog(@"Status code:%u",n);
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -891,7 +891,7 @@
 	xmlPostResponse=nil;
 	
     // inform the user
-    NSLog(@"Connection failed! Error - %@ %@",
+    DLog(@"Connection failed! Error - %@ %@",
           [error localizedDescription],
           [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
 	
@@ -902,8 +902,8 @@
 {
     // do something with the data
     // receivedData is declared as a method instance elsewhere
-    NSLog(@"Succeeded! Received %d bytes of data",[xmlPostResponse length]);
-	NSLog(@"Response doc:%s",(char*)[xmlPostResponse mutableBytes]);
+    DLog(@"Succeeded! Received %d bytes of data",[xmlPostResponse length]);
+	DLog(@"Response doc:%s",(char*)[xmlPostResponse mutableBytes]);
 	
     // release the connection, and the data object
     [connection release];

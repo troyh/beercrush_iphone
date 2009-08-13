@@ -176,7 +176,7 @@
 			[bodystr appendFormat:@"&uri=%@",[self.breweryObject.data objectForKey:@"uri"]];
 		
 		
-		NSLog(@"POST data:%@",bodystr);
+		DLog(@"POST data:%@",bodystr);
 		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 		
 		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BREWERY_DOC]
@@ -198,8 +198,8 @@
 			NSData* rspdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
 			
 			if (rspdata) {
-				NSLog(@"Response code:%d",[response statusCode]);
-				NSLog(@"Response data:%s",[rspdata bytes]);
+				DLog(@"Response code:%d",[response statusCode]);
+				DLog(@"Response data:%s",[rspdata bytes]);
 				
 				bRetry=NO;
 				int statuscode=[response statusCode];
@@ -295,7 +295,7 @@
 				case 1:
 				{
 					RatingControl* ratingctl=[[RatingControl alloc] initWithFrame:cell.contentView.frame];
-					NSLog(@"RatingControl retainCount=%d",[ratingctl retainCount]);
+					DLog(@"RatingControl retainCount=%d",[ratingctl retainCount]);
 					
 					// Set current user's rating (if any)
 					NSString* user_rating=[self.breweryObject.data objectForKey:@"user_rating"];
@@ -455,7 +455,7 @@
 							[addr valueForKey:@"state"],
 							[addr valueForKey:@"zip"]] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 			
-			NSLog(@"Opening URL:%@",url);
+			DLog(@"Opening URL:%@",url);
 			[[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:url ]];
 		}
 	}
@@ -477,7 +477,7 @@
 						  stringByReplacingOccurrencesOfString:@"(" withString:@""] 
 						 stringByReplacingOccurrencesOfString:@")" withString:@""];
 			NSString* url=[NSString stringWithFormat:@"tel:%@",s];
-			NSLog(@"Opening URL:%@", url);
+			DLog(@"Opening URL:%@", url);
 			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 		}
 	}
@@ -664,11 +664,11 @@
 	
 	if (n==401)
 	{
-		NSLog(@"Need to login...");
+		DLog(@"Need to login...");
 		[appdel login];
 	}
 	else
-		NSLog(@"Status code:%u",n);
+		DLog(@"Status code:%u",n);
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -688,7 +688,7 @@
 	xmlPostResponse=nil;
 	
     // inform the user
-    NSLog(@"Connection failed! Error - %@ %@",
+    DLog(@"Connection failed! Error - %@ %@",
           [error localizedDescription],
           [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
 	
@@ -699,8 +699,8 @@
 {
     // do something with the data
     // receivedData is declared as a method instance elsewhere
-    NSLog(@"Succeeded! Received %d bytes of data",[xmlPostResponse length]);
-	NSLog(@"Response doc:%s",(char*)[xmlPostResponse mutableBytes]);
+    DLog(@"Succeeded! Received %d bytes of data",[xmlPostResponse length]);
+	DLog(@"Response doc:%s",(char*)[xmlPostResponse mutableBytes]);
 	
     // release the connection, and the data object
     [connection release];

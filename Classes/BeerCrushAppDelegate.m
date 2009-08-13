@@ -32,14 +32,14 @@
 
 -(id)init
 {
-//	NSLog(@"BeerObject init");
+//	DLog(@"BeerObject init");
 	self.data=[[[NSMutableDictionary alloc] initWithCapacity:5] autorelease];
 	return self;
 }
 
 -(void)dealloc
 {
-//	NSLog(@"BeerObject dealloc");
+//	DLog(@"BeerObject dealloc");
 	[self.data release];
 	[super dealloc];
 }
@@ -266,7 +266,7 @@
 	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
 	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
 	
-	NSLog(@"Logging in...");
+	DLog(@"Logging in...");
 	NSString* bodystr=[[NSString alloc] initWithFormat:@"userid=%@&password=%@", userid, password];
 	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 
@@ -286,14 +286,14 @@
 	[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
 	[UIApplication sharedApplication].networkActivityIndicatorVisible=NO;
 
-	NSLog(@"status code=%d",[response statusCode]);
+	DLog(@"status code=%d",[response statusCode]);
 	if ([response statusCode]==200)
 	{
-		NSLog(@"Login successful");
+		DLog(@"Login successful");
 		// We don't care about any response document, we just want the cookies to be stored (automatically)
 		return YES;
 	} else {
-		NSLog(@"Login failed.");
+		DLog(@"Login failed.");
 		return NO;
 	}	
 
@@ -309,7 +309,7 @@
 	{
 		if (data)
 		{
-			NSLog(@"POST data:%@",data);
+			DLog(@"POST data:%@",data);
 			NSData* body=[NSData dataWithBytes:[data UTF8String] length:[data length]];
 			[theRequest setHTTPBody:body];
 			[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
@@ -330,7 +330,7 @@
 	{
 		++nTries;
 		
-		NSLog(@"%@ URL:%@",method,[url absoluteString]);
+		DLog(@"%@ URL:%@",method,[url absoluteString]);
 		[UIApplication sharedApplication].networkActivityIndicatorVisible=YES;
 
 		NSData* rspdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
@@ -341,8 +341,8 @@
 			*responseData=rspdata;
 
 		if (rspdata) {
-			NSLog(@"Response code:%d",[response statusCode]);
-			NSLog(@"Response data:%s",[rspdata bytes]);
+			DLog(@"Response code:%d",[response statusCode]);
+			DLog(@"Response data:%s",[rspdata bytes]);
 			
 			bRetry=NO;
 			int statuscode=[response statusCode];
@@ -403,22 +403,22 @@
 	
 	if (n!=200)
 	{
-		NSLog(@"Headers:");
+		DLog(@"Headers:");
 		NSDictionary* hdrdict=[httprsp allHeaderFields];
 		NSArray* headers=[hdrdict allKeys];
 		for (NSUInteger i=0;i<[headers count];++i)
 		{
-			NSLog(@"%@:%@",[headers objectAtIndex:i],[hdrdict objectForKey:[headers objectAtIndex:i]]);
+			DLog(@"%@:%@",[headers objectAtIndex:i],[hdrdict objectForKey:[headers objectAtIndex:i]]);
 		}
 		// TODO: alert the user that the login failed
 		UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"Login Failed" message:@"Check username and password in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
 		[alert release];
-//		NSLog(@"Login failed.");
+//		DLog(@"Login failed.");
 	}
 	else
 	{
-		NSLog(@"Login successful.");
+		DLog(@"Login successful.");
 //		NSArray* cookies=[NSHTTPCookie cookiesWithResponseHeaderFields:httprsp.allHeaderFields forURL:@""];
 //		// Look through cookies and find userid and usrkey
 //		for (int i=0; i < [cookies count]; ++i) {
@@ -450,7 +450,7 @@
     // receivedData is declared as a method instance elsewhere
 	
     // inform the user
-    NSLog(@"Login failed! Error - %@ %@",
+    DLog(@"Login failed! Error - %@ %@",
           [error localizedDescription],
           [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
 	
@@ -461,8 +461,8 @@
 {
     // do something with the data
     // receivedData is declared as a method instance elsewhere
-//    NSLog(@"Succeeded! Received %d bytes of data",[reviewPostResponse length]);
-	NSLog(@"Login response:%s",(char*)[xmlPostResponse mutableBytes]);
+//    DLog(@"Succeeded! Received %d bytes of data",[reviewPostResponse length]);
+	DLog(@"Login response:%s",(char*)[xmlPostResponse mutableBytes]);
 	
     // release the connection, and the data object
     [connection release];

@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>058FFA2A1034A56F00DA6D81</string>
+						<string>058FFA541034A83D00DA6D81</string>
 						<key>history</key>
 						<array>
 							<string>058FF56D1031E34B00DA6D81</string>
@@ -269,8 +269,6 @@
 			<key>Layout</key>
 			<array>
 				<dict>
-					<key>BecomeActive</key>
-					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -354,6 +352,8 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -371,7 +371,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>058FFA291034A56F00DA6D81</string>
+										<string>058FFA531034A83D00DA6D81</string>
 										<key>history</key>
 										<array>
 											<string>05C9AA760F53458A0020B102</string>
@@ -382,7 +382,6 @@
 											<string>0577EA621002B62900A2468C</string>
 											<string>0577EAD71003EBA600A2468C</string>
 											<string>0577F3721008059D00A2468C</string>
-											<string>0577F3CF10080A5B00A2468C</string>
 											<string>059FF95F100F8A6A00960819</string>
 											<string>0511025C100FDA3A00610251</string>
 											<string>0511025F100FDA3A00610251</string>
@@ -393,26 +392,27 @@
 											<string>050A2877102B649500F49B5B</string>
 											<string>050A28B5102B765600F49B5B</string>
 											<string>050A2A11102CCAB400F49B5B</string>
-											<string>058FF4601030E4F200DA6D81</string>
 											<string>058FF4A41030E80700DA6D81</string>
 											<string>058FF4D91030EA2200DA6D81</string>
 											<string>058FF4F110310EC000DA6D81</string>
 											<string>058FF6341031FFBD00DA6D81</string>
-											<string>058FF65B1032127800DA6D81</string>
 											<string>058FF65D1032127800DA6D81</string>
 											<string>058FF65E1032127800DA6D81</string>
 											<string>058FF6E5103221AE00DA6D81</string>
 											<string>058FF7221032297600DA6D81</string>
-											<string>058FF79910332F3A00DA6D81</string>
 											<string>058FF9121033728E00DA6D81</string>
 											<string>058FF94910347B3400DA6D81</string>
-											<string>058FF96210347D3F00DA6D81</string>
 											<string>058FF9C21034902300DA6D81</string>
 											<string>058FF9E01034916800DA6D81</string>
-											<string>058FFA0B1034A35E00DA6D81</string>
-											<string>058FFA0C1034A35E00DA6D81</string>
 											<string>058FFA271034A56F00DA6D81</string>
-											<string>058FFA1E1034A54100DA6D81</string>
+											<string>058FFA2C1034A6A500DA6D81</string>
+											<string>058FFA2D1034A6A500DA6D81</string>
+											<string>058FFA2E1034A6A500DA6D81</string>
+											<string>058FFA2F1034A6A500DA6D81</string>
+											<string>058FFA301034A6A500DA6D81</string>
+											<string>058FFA311034A6A500DA6D81</string>
+											<string>058FFA501034A83D00DA6D81</string>
+											<string>058FFA511034A83D00DA6D81</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -886,6 +886,16 @@
 											<string>058FFA201034A54100DA6D81</string>
 											<string>058FFA211034A54100DA6D81</string>
 											<string>058FFA281034A56F00DA6D81</string>
+											<string>058FFA331034A6A500DA6D81</string>
+											<string>058FFA341034A6A500DA6D81</string>
+											<string>058FFA351034A6A500DA6D81</string>
+											<string>058FFA361034A6A500DA6D81</string>
+											<string>058FFA371034A6A500DA6D81</string>
+											<string>058FFA381034A6A500DA6D81</string>
+											<string>058FFA391034A6A500DA6D81</string>
+											<string>058FFA4B1034A75C00DA6D81</string>
+											<string>058FFA4C1034A75C00DA6D81</string>
+											<string>058FFA521034A83D00DA6D81</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -1104,14 +1114,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>BeerCrush_Prefix.pch</string>
+								<string>BeerCrushAppDelegate.h</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -1128,6 +1136,8 @@
 							<string>604pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>

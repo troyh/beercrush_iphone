@@ -260,10 +260,10 @@
 {
 	// TODO: check timestamp of newLocation and if it's within a few seconds, stop updating location.
 	
-	NSLog(@"newLocation timestamp=%@ timeIntervalSinceNow=%d",newLocation.timestamp.description,[newLocation.timestamp timeIntervalSinceNow]);
+	DLog(@"newLocation timestamp=%@ timeIntervalSinceNow=%d",newLocation.timestamp.description,[newLocation.timestamp timeIntervalSinceNow]);
 	if ([newLocation.timestamp timeIntervalSinceNow] > -3)
 	{
-		NSLog(@"Stopping updating Location");
+		DLog(@"Stopping updating Location");
 		[manager stopUpdatingLocation];
 	}
 	
@@ -335,9 +335,9 @@
 	if ([elementName isEqualToString:@"place"])
 	{
 		// TODO: store object
-		//	NSLog(@"MyLocation Lat:%f Lon:%f",myLocation.coordinate.latitude,myLocation.coordinate.longitude);
+		//	DLog(@"MyLocation Lat:%f Lon:%f",myLocation.coordinate.latitude,myLocation.coordinate.longitude);
 		CLLocation* pl=[placeObject.data valueForKey:@"loc"];
-		//	NSLog(@"PlaceLoctn Lat:%f Lon:%f",pl.coordinate.latitude,pl.coordinate.longitude);
+		//	DLog(@"PlaceLoctn Lat:%f Lon:%f",pl.coordinate.latitude,pl.coordinate.longitude);
 		placeObject.distanceAway=[pl getDistanceFrom:myLocation];
 		
 		[places addObject:placeObject];

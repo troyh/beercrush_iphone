@@ -122,7 +122,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 			// Copy edited data fields to the real data fields
 			appendValuesToPostBodyString(bodystr,self.placeObject.data,self.placeObject.editeddata,@"");
 			
-			NSLog(@"POST data:%@",bodystr);
+			DLog(@"POST data:%@",bodystr);
 			NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 			
 			NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_PLACE_DOC]
@@ -247,7 +247,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 				if (retval==YES)
 				{
 					// The user has a review for this place
-					NSLog(@"User rating:%@", [self.placeObject.data objectForKey:@"user_rating"]);
+					DLog(@"User rating:%@", [self.placeObject.data objectForKey:@"user_rating"]);
 				}
 			}
 		}
@@ -348,7 +348,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 				NSString* user_rating=[self.placeObject.data objectForKey:@"user_rating"];
 				if (user_rating!=nil) // No user review
 					ratingctl.currentRating=[user_rating integerValue];
-				NSLog(@"Current rating:%d",ratingctl.currentRating);
+				DLog(@"Current rating:%d",ratingctl.currentRating);
 				
 				// Set the callback for a review
 				[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
@@ -558,7 +558,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 															[addr valueForKey:@"state"],
 															[addr valueForKey:@"zip"]] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 			
-			NSLog(@"Opening URL:%@",url);
+			DLog(@"Opening URL:%@",url);
 			[[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:url ]];
 //			[url release];
 		}
@@ -582,7 +582,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 																	stringByReplacingOccurrencesOfString:@"(" withString:@""] 
 																	stringByReplacingOccurrencesOfString:@")" withString:@""];
 			NSString* url=[NSString stringWithFormat:@"tel:%@",s];
-			NSLog(@"Opening URL:%@", url);
+			DLog(@"Opening URL:%@", url);
 			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 //			[s release];
 //			[url release];
@@ -850,12 +850,12 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 	
 	if (n==401)
 	{
-		NSLog(@"Need to login...");
+		DLog(@"Need to login...");
 		[appdel login];
 		// TODO: once logged in, re-try the HTTP request
 	}
 	else
-		NSLog(@"Status code:%u",n);
+		DLog(@"Status code:%u",n);
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -874,7 +874,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
     [xmlPostResponse release];
 	
     // inform the user
-    NSLog(@"Connection failed! Error - %@ %@",
+    DLog(@"Connection failed! Error - %@ %@",
           [error localizedDescription],
           [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
 	
@@ -885,8 +885,8 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 {
     // do something with the data
     // receivedData is declared as a method instance elsewhere
-    NSLog(@"PlaceTableViewController:connectionDidFinishLoading Succeeded! Received %d bytes of data",[xmlPostResponse length]);
-	NSLog(@"Response doc:%s",(char*)[xmlPostResponse mutableBytes]);
+    DLog(@"PlaceTableViewController:connectionDidFinishLoading Succeeded! Received %d bytes of data",[xmlPostResponse length]);
+	DLog(@"Response doc:%s",(char*)[xmlPostResponse mutableBytes]);
 	
     // release the connection, and the data object
     [connection release];

@@ -59,8 +59,8 @@
 }
 
 - (void)dealloc {
-//	NSLog(@"currentElemValue retainCount=%d",[self.currentElemValue retainCount]);
-//	NSLog(@"currentElemAttribs retainCount=%d",[self.currentElemAttribs retainCount]);
+//	DLog(@"currentElemValue retainCount=%d",[self.currentElemValue retainCount]);
+//	DLog(@"currentElemAttribs retainCount=%d",[self.currentElemAttribs retainCount]);
 	[self.breweryID release];
 	[self.beerList release];
 	[self.currentElemValue release];
