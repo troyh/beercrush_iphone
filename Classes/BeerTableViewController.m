@@ -208,63 +208,22 @@
 		}
 		
 		DLog(@"POST data:%@",bodystr);
-		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 		
-		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC]
-																cachePolicy:NSURLRequestUseProtocolCachePolicy
-															timeoutInterval:30.0];
-		[theRequest setHTTPMethod:@"POST"];
-		[theRequest setHTTPBody:body];
-		[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
-		
-		// create the connection with the request and start loading the data
-//		NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-		
-		NSHTTPURLResponse* response=nil;
-		NSError* error;
-		int nTries=0;
-		BOOL bRetry=NO;
-		
-		do
+		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSData* answer;
+		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC];
+		NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
+		if ([response statusCode]==200)
 		{
-			++nTries;
-			
-			NSData* rspdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
-			
-			if (rspdata) {
-				DLog(@"Response code:%d",[response statusCode]);
-				DLog(@"Response data:%s",[rspdata bytes]);
-				
-				bRetry=NO;
-				int statuscode=[response statusCode];
-				if (statuscode==420)
-				{
-					if (nTries < 2) // Don't retry over and over, just do it once
-					{
-						BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-						if ([del login]==YES)
-						{
-								bRetry=YES;
-						}
-					}
-				}
-				else if (statuscode==200)
-				{
-					// Parse the XML response, which is the new beer doc
-					NSXMLParser* parser=[[NSXMLParser alloc] initWithData:rspdata];
-					[parser setDelegate:self];
-					[parser parse];
-				}
-				
-				// Create the NSMutableData that will hold
-				// the received data
-				// receivedData is declared as a method instance elsewhere
-//				xmlPostResponse=[[NSMutableData data] retain];
-			} else {
-				// TODO: inform the user that the download could not be made
-			}	
+			// Parse the XML response, which is the new beer doc
+			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
+			[parser setDelegate:self];
+			[parser parse];
 		}
-		while (bRetry);
+		else
+		{
+			// TODO: alert the user that it failed and/or give a chance to retry
+		}
 		
 		self.title=@"Beer";
 
