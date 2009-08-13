@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>058FF98B10347FA300DA6D81</string>
+						<string>058FFA0210349D8600DA6D81</string>
 						<key>history</key>
 						<array>
 							<string>058FF56D1031E34B00DA6D81</string>
@@ -359,7 +359,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>BeerTableViewController.m</string>
+								<string>BeerListTableViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -367,11 +367,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>BeerTableViewController.m</string>
+										<string>BeerListTableViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>058FF98A10347FA300DA6D81</string>
+										<string>058FFA0110349D8600DA6D81</string>
 										<key>history</key>
 										<array>
 											<string>05C9AA760F53458A0020B102</string>
@@ -406,13 +406,13 @@
 											<string>058FF7221032297600DA6D81</string>
 											<string>058FF79910332F3A00DA6D81</string>
 											<string>058FF9121033728E00DA6D81</string>
-											<string>058FF9381033769B00DA6D81</string>
 											<string>058FF94910347B3400DA6D81</string>
-											<string>058FF94A10347B3400DA6D81</string>
 											<string>058FF96210347D3F00DA6D81</string>
-											<string>058FF98110347F5400DA6D81</string>
-											<string>058FF98710347FA300DA6D81</string>
-											<string>058FF98810347FA300DA6D81</string>
+											<string>058FF9C21034902300DA6D81</string>
+											<string>058FF9C31034902300DA6D81</string>
+											<string>058FF9E01034916800DA6D81</string>
+											<string>058FF9F510349D2000DA6D81</string>
+											<string>058FF9F610349D2000DA6D81</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -864,6 +864,21 @@
 											<string>058FF97D10347E8E00DA6D81</string>
 											<string>058FF98310347F5400DA6D81</string>
 											<string>058FF98910347FA300DA6D81</string>
+											<string>058FF99610348AF700DA6D81</string>
+											<string>058FF99710348AF700DA6D81</string>
+											<string>058FF99810348AF700DA6D81</string>
+											<string>058FF99910348AF700DA6D81</string>
+											<string>058FF9C51034902300DA6D81</string>
+											<string>058FF9C61034902300DA6D81</string>
+											<string>058FF9C71034902300DA6D81</string>
+											<string>058FF9C81034902300DA6D81</string>
+											<string>058FF9C91034902300DA6D81</string>
+											<string>058FF9CA1034902300DA6D81</string>
+											<string>058FF9D81034913A00DA6D81</string>
+											<string>058FF9DD1034916000DA6D81</string>
+											<string>058FF9E21034916800DA6D81</string>
+											<string>058FF9F710349D2000DA6D81</string>
+											<string>058FF9F810349D2000DA6D81</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -1057,6 +1072,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>058FFA0310349D8600DA6D81</string>
 		<string>058FF3771030BABB00DA6D81</string>
 		<string>058FF3791030BABB00DA6D81</string>
 		<string>1CD10A99069EF8BA00B06720</string>

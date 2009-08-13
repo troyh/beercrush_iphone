@@ -281,7 +281,7 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 //-(void)editBeerCancelButtonClicked
@@ -298,6 +298,9 @@
 			break;
 		case 1:
 			return 2;
+			break;
+		case 2:
+			return 1;
 			break;
 		default:
 			break;
@@ -441,34 +444,70 @@
 			break;
 		case 1:
 			switch (indexPath.row)
-		{
-			case 0:
-				[cell.textLabel setText:[beerObj.data objectForKey:@"style"]];
-				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-				cell.selectionStyle=UITableViewCellSelectionStyleNone;
-				break;
-			case 1:
 			{
-				NSString* ibu=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"ibu"];
-				NSString* abv=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"abv"];
-				if ([ibu length])
-					[cell.textLabel setText:[[[NSString alloc] initWithFormat:@"%u%% ABV %u IBUs", 
-							   abv.intValue, 
-							   ibu.intValue] autorelease]];
-				else
-					[cell.textLabel setText:[[[NSString alloc] initWithFormat:@"%u%% ABV", abv.intValue] autorelease]];
-				
-				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-				cell.selectionStyle=UITableViewCellSelectionStyleNone;
-				break;
+				case 0:
+					[cell.textLabel setText:[beerObj.data objectForKey:@"style"]];
+					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+					break;
+				case 1:
+				{
+					NSString* ibu=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"ibu"];
+					NSString* abv=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"abv"];
+					if ([ibu length])
+						[cell.textLabel setText:[[[NSString alloc] initWithFormat:@"%u%% ABV %u IBUs", 
+								   abv.intValue, 
+								   ibu.intValue] autorelease]];
+					else
+						[cell.textLabel setText:[[[NSString alloc] initWithFormat:@"%u%% ABV", abv.intValue] autorelease]];
+					
+					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+					break;
+				}
+				default:
+					break;
 			}
-			default:
-				break;
+			break;
+		case 2:
+		{
+			UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+			transparentBackground.backgroundColor=[UIColor clearColor];
+			cell.backgroundView=transparentBackground;
+			
+			UIButton* button=[UIButton buttonWithType:UIButtonTypeRoundedRect];
+			button.frame=CGRectMake(20, 0, 200, 30);
+			[button setTitle:@"Add to Wish List" forState:UIControlStateNormal];
+			[button addTarget:self action:@selector(addToWishListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+			[cell addSubview:button];
+			break;
 		}
+		default:
+			break;
 	}
 	
 	
     return cell;
+}
+
+-(void)addToWishListButtonClicked
+{
+	// Add beerID to wish list
+	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_WISHLIST_DOC];
+	NSString* bodystr=[NSString stringWithFormat:@"add_item=%@",self.beerID];
+	
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSData* answer;
+	NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
+	if ([response statusCode]==200)
+	{
+		// TODO: signify somehow that it worked
+		// TODO: store new wishlist locally (the returned doc)
+	}
+	else
+	{
+		// TODO: tell the user it didn't work
+	}
 }
 
 -(void)ratingButtonTapped:(id)sender event:(id)event

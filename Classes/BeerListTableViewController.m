@@ -211,6 +211,7 @@
 
 	if (url)
 	{
+		[beerList removeAllObjects];
 		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 		NSData* answer;
 		NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
@@ -221,6 +222,7 @@
 			[parser parse];
 			[parser release];
 		}
+		[self.tableView reloadData];
 	}
 }
 
