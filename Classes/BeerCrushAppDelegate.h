@@ -42,8 +42,11 @@
 
 @end
 
-//#define BEERCRUSH_API_URL_HOST					"http://beercrush.com"
+#ifdef DEBUG
 #define BEERCRUSH_API_URL_HOST					"http://macdev"
+#else
+#define BEERCRUSH_API_URL_HOST					"http://beercrush.com"
+#endif
 
 #define BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY			@BEERCRUSH_API_URL_HOST"/api/autocomplete.fcgi?q=%@"
 #define BEERCRUSH_API_URL_CREATE_ACCOUNT				@BEERCRUSH_API_URL_HOST"/api/createlogin"
