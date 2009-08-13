@@ -12,6 +12,7 @@
 #import "BreweryTableViewController.h"
 #import "UserReviewsTVC.h"
 #import "LoginVC.h"
+#import "BeerListTableViewController.h"
 
 #define kTabBarItemTagBeers 1
 #define kTabBarItemTagSearch 2
@@ -132,7 +133,9 @@
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:4];
 	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Wish List" image:[UIImage imageNamed:@"star_empty.png"] tag:kTabBarItemTagWishList] autorelease];
-	
+	BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
+	[ctl pushViewController:bltvc animated:NO];
+	[bltvc release];
 	
 	// Add the tab bar controller's current view as a subview of the window
 	[window addSubview:tabBarController.view];

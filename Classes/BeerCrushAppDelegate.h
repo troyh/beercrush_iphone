@@ -63,6 +63,7 @@
 #define BEERCRUSH_API_URL_GET_PLACE_REVIEW_DOC			@BEERCRUSH_API_URL_HOST"/xml/review/place/%@/%@"
 #define BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC		@BEERCRUSH_API_URL_HOST"/xml/user/%@/reviews/beer.%d.xml"
 #define BEERCRUSH_API_URL_GET_USER_PLACE_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/xml/user/%@/reviews/place.%d.xml"
+#define BEERCRUSH_API_URL_GET_USER_WISHLIST_DOC			@BEERCRUSH_API_URL_HOST"/xml/user/%@/wishlist"
 #define BEERCRUSH_API_URL_LOGIN							@BEERCRUSH_API_URL_HOST"/api/login"
 #define BEERCRUSH_API_URL_NEARBY_QUERY					@BEERCRUSH_API_URL_HOST"/api/nearby.fcgi?lat=%f&lon=%f&within=%d"
 #define BEERCRUSH_API_URL_POST_BEER_REVIEW				@BEERCRUSH_API_URL_HOST"/api/beer/review"

@@ -14,6 +14,8 @@
 
 @synthesize breweryID;
 @synthesize placeID;
+@synthesize wishlistID;
+// TODO: just use one ID string above and use an enum to signify the type of ID it is
 @synthesize currentElemValue;
 @synthesize	currentElemAttribs;
 @synthesize xmlParserPath;
@@ -26,19 +28,30 @@
 	
 	self.placeID=nil;
 	self.breweryID=nil;
+	self.wishlistID=nil;
 	
 	NSArray* parts=[brewery_id componentsSeparatedByString:@":"];
 	if ([[parts objectAtIndex:0] isEqualToString:@"place"])
+	{
 		self.placeID=brewery_id;
+		self.title=@"Beer List";
+	}
 	else if ([[parts objectAtIndex:0] isEqualToString:@"brewery"])
+	{
 		self.breweryID=brewery_id;
+		self.title=@"Beer List";
+	}
+	else if ([[parts objectAtIndex:0] isEqualToString:@"wishlist"])
+	{
+		self.wishlistID=brewery_id;
+		self.title=@"Wish List";
+	}
 	
 	self.currentElemAttribs=nil;
 	self.currentElemValue=nil;
 	self.xmlParserPath=nil;
 	self.beerList=nil;
 	
-	self.title=@"Beer List";
 	
 	beerList=[[NSMutableArray alloc] initWithCapacity:10];
 	
@@ -189,6 +202,11 @@
 	{	// Get the place menu doc
 		NSArray* idparts=[placeID componentsSeparatedByString:@":"];
 		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_MENU_DOC, [idparts objectAtIndex:0], [idparts objectAtIndex:1]]];
+	}
+	else if (wishlistID)
+	{	 // Get the wishlist doc
+		NSArray* idparts=[wishlistID componentsSeparatedByString:@":"];
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_WISHLIST_DOC, [idparts objectAtIndex:1]]];
 	}
 
 	if (url)
@@ -393,6 +411,28 @@
 //		</item>
 //	</items>
 //</menu>
+//
+// Sample wishlist doc:
+//
+//<wishlist id="wishlist:troyh" rev="824165725">
+//	<type>wishlist</type>
+//	<meta>
+//		<timestamp>1250120366</timestamp>
+//		<mtime>1250123226</mtime>
+//	</meta>
+//	<items>
+//		<item>
+//			<type>item</type>
+//			<meta>
+//				<timestamp>1250122973</timestamp>
+//				<mtime>1250123226</mtime>
+//			</meta>
+//			<item_id>beer:Dogfish-Head-Craft-Brewery-Milton:120-Minute-IPA</item_id>
+//			<name>120 Minute IPA</name>
+//		</item>
+//	</items>
+//</wishlist>
+
 
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
@@ -445,10 +485,32 @@
 			self.currentElemAttribs=[[NSMutableDictionary alloc] initWithCapacity:10];
 			[self.currentElemAttribs addEntriesFromDictionary:attributeDict];
 		}
+		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"wishlist",@"items",nil]]) // Is it the /wishlist/items/item element?
+		{
+			// Create a new BeerObject in the beerList
+			BeerObject* beer=[[BeerObject alloc] init];
+			[beerList addObject:beer];
+			[beer release];
+		}
 	}
 	else if ([elementName isEqualToString:@"name"])
 	{
 		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"menu",@"items",@"item",nil]]) // Is it the /menu/items/item/name element?
+		{
+			[self.currentElemValue release];
+			self.currentElemValue=nil;
+			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
+		}
+		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"wishlist",@"items",@"item",nil]]) // Is it the /wishlist/items/item/name element?
+		{
+			[self.currentElemValue release];
+			self.currentElemValue=nil;
+			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
+		}
+	}
+	else if ([elementName isEqualToString:@"item_id"])
+	{
+		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"wishlist",@"items",@"item",nil]]) // Is it the /wishlist/items/item/name element?
 		{
 			[self.currentElemValue release];
 			self.currentElemValue=nil;
@@ -485,6 +547,23 @@
 				
 				[beerList addObject:beer];
 				[beer release];
+			}
+			// Is it the /wishlist/items/item/name element?
+			else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"wishlist",@"items",@"item",nil]])
+			{
+				// Get the last BeerObject in beerList, that's our current beer
+				BeerObject* beer=[beerList lastObject];
+				[beer.data setObject:currentElemValue forKey:@"name"];
+			}
+		}
+		else if ([elementName isEqualToString:@"item_id"])
+		{
+			// Is it the /wishlist/items/item/item_id element?
+			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"wishlist",@"items",@"item",nil]])
+			{
+				// Get the last BeerObject in beerList, that's our current beer
+				BeerObject* beer=[beerList lastObject];
+				[beer.data setObject:currentElemValue forKey:@"id"];
 			}
 		}
 		
