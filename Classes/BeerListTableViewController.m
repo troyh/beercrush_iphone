@@ -456,7 +456,7 @@
 	[self.currentElemAttribs release];
 	self.currentElemAttribs=nil;
 	
-	xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5]; // This also releases a previous xmlParserPath
+	xmlParserPath=nil; // This also releases a previous xmlParserPath
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict

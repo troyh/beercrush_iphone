@@ -8,8 +8,8 @@
 
 #import "PhoneNumberEditTableViewController.h"
 
-@implementation PhoneNumberEditTableViewController
 
+@implementation PhoneNumberEditTableViewController
 
 @synthesize editingControls;
 @synthesize data;

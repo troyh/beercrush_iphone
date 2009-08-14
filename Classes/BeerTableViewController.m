@@ -11,6 +11,7 @@
 #import "ReviewsTableViewController.h"
 #import "PhoneNumberEditTableViewController.h"
 #import "RatingControl.h"
+#import "FullBeerReviewTVC.h"
 
 @implementation BeerTableViewController
 
@@ -20,18 +21,12 @@
 @synthesize currentElemValue;
 @synthesize xmlParseDepth;
 @synthesize bParsingBeerReview;
-@synthesize xmlPostResponse;
-@synthesize overlay;
-@synthesize spinner;
 
 -(id) initWithBeerID:(NSString*)beer_id
 {
 	self.beerID=[beer_id copy];
 	self.breweryID=nil;
 	DLog(@"BeerTableViewController initWithBeerID beerID retainCount=%d",[beerID retainCount]);
-	self.overlay=nil;
-	self.spinner=nil;
-	self.xmlPostResponse=nil;
 	self.currentElemValue=nil;
 
 	self.beerObj=[[BeerObject alloc] init];
@@ -51,7 +46,6 @@
 	self.beerObj=nil;
 	[self.currentElemValue release];
 	self.currentElemValue=nil;
-	[xmlPostResponse release];
     [super dealloc];
 }
 
@@ -486,55 +480,19 @@
 
 -(void)ratingButtonTapped:(id)sender event:(id)event
 {
-//	[self.view addSubview:spinner];
-//	CGRect frame=CGRectMake(0.0, 0.0, 100.0, 100.0);
-	CGRect frame=self.view.frame;
-	
-	if (self.overlay==nil)
-	{
-		self.overlay=[[UIView alloc] initWithFrame:frame];
-		self.overlay.backgroundColor=[UIColor blackColor];
-		self.overlay.alpha=0.7;
-	}
-	
-	if (self.spinner==nil)
-	{
-	//	UIActivityIndicatorView* spinner=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-		self.spinner=[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0, 0.0, 25.0, 25.0)];
-		self.spinner.activityIndicatorViewStyle=UIActivityIndicatorViewStyleWhite;
-		self.spinner.center=self.overlay.center;
-		[self.overlay addSubview:self.spinner];
-		[self.spinner release];
-	}
-
-	[self.spinner startAnimating];
-	self.spinner.hidden=NO;
-	[self.view addSubview:self.overlay];
-	[self.overlay release];
-	
 	RatingControl* ctl=(RatingControl*)sender;
 	NSInteger rating=ctl.currentRating;
 	
 	// Send the review to the site
 	
+	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
 	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&beer_id=%@", rating, beerID];
-	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
-
-	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW]
-											cachePolicy:NSURLRequestUseProtocolCachePolicy
-											timeoutInterval:60.0];
-	[theRequest setHTTPMethod:@"POST"];
-	[theRequest setHTTPBody:body];
-	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:nil];
 	
-	// create the connection with the request and start loading the data
-	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-	
-	if (theConnection) {
-		// Create the NSMutableData that will hold
-		// the received data
-		// receivedData is declared as a method instance elsewhere
-		xmlPostResponse=[[NSMutableData data] retain];
+	if ([response statusCode]==200) {
+		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithBeerObject:self.beerObj] autorelease];
+		[self.navigationController pushViewController:fbrtvc animated:YES];
 	} else {
 		// TODO: inform the user that the download could not be made
 	}	
@@ -819,77 +777,6 @@
 
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
 {
-}
-
-
-// NSURLConnection delegate methods
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    // this method is called when the server has determined that it
-    // has enough information to create the NSURLResponse
-	
-    // it can be called multiple times, for example in the case of a
-    // redirect, so each time we reset the data.
-    // receivedData is declared as a method instance elsewhere
-    [xmlPostResponse setLength:0];
-	
-	NSHTTPURLResponse* httprsp=(NSHTTPURLResponse*)response;
-	NSInteger n=httprsp.statusCode;
-	
-	if (n==201)
-	{
-		DLog(@"Need to login...");
-		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[del login];
-		// TODO: retry
-	}
-	else
-		DLog(@"Status code:%u",n);
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    // append the new data to the receivedData
-    // receivedData is declared as a method instance elsewhere
-    [xmlPostResponse appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    // release the connection, and the data object
-    [connection release];
-	
-    // receivedData is declared as a method instance elsewhere
-    [xmlPostResponse release];
-	xmlPostResponse=nil;
-	
-    // inform the user
-    DLog(@"Connection failed! Error - %@ %@",
-          [error localizedDescription],
-          [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
-	
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-
-{
-    // do something with the data
-    // receivedData is declared as a method instance elsewhere
-    DLog(@"Succeeded! Received %d bytes of data",[xmlPostResponse length]);
-	DLog(@"Response doc:%s",(char*)[xmlPostResponse mutableBytes]);
-	
-    // release the connection, and the data object
-    [connection release];
-    [xmlPostResponse release];
-	xmlPostResponse=nil;
-	
-	if (self.spinner!=nil)
-		[self.spinner stopAnimating];
-	if (self.overlay!=nil)
-		[self.overlay removeFromSuperview];
-	self.spinner=nil;
-	self.overlay=nil;
 }
 
 @end
