@@ -188,7 +188,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+	[super viewWillAppear:animated];
 
 	// Retrieve an XML doc from server
 	NSURL* url=nil;
@@ -225,7 +225,6 @@
 		[self.tableView reloadData];
 	}
 }
-
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];

@@ -171,8 +171,8 @@
 		self.navigationController.navigationBar.topItem.leftBarButtonItem=nil;
 
 		NSArray* rows=[NSArray arrayWithObjects:
-					   [NSIndexPath indexPathForRow:1 inSection:0],
-					   [NSIndexPath indexPathForRow:2 inSection:0],
+					   [NSIndexPath indexPathForRow:1 inSection:1],
+					   [NSIndexPath indexPathForRow:2 inSection:1],
 					   nil];
 		[self.tableView beginUpdates];
 		[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
@@ -228,8 +228,8 @@
 		self.title=@"Beer";
 
 		NSArray* rows=[NSArray arrayWithObjects:
-					   [NSIndexPath indexPathForRow:1 inSection:0],
-					   [NSIndexPath indexPathForRow:2 inSection:0],
+					   [NSIndexPath indexPathForRow:1 inSection:1],
+					   [NSIndexPath indexPathForRow:2 inSection:1],
 					   nil];
 		[self.tableView beginUpdates];
 		[self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
@@ -240,7 +240,7 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 //-(void)editBeerCancelButtonClicked
@@ -253,12 +253,15 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return self.editing?2:4;
+			return 1;
 			break;
 		case 1:
-			return 2;
+			return self.editing?1:3;
 			break;
 		case 2:
+			return 2;
+			break;
+		case 3:
 			return 1;
 			break;
 		default:
@@ -280,6 +283,8 @@
 	switch (indexPath.section) 
 	{
 		case 0:
+			break;
+		case 1:
 			switch (adjusted_row)
 			{
 			case 0:
@@ -287,8 +292,6 @@
 			case 1:
 				break;
 			case 2:
-				break;
-			case 3:
 			{
 				CGSize sz=[[beerObj.data objectForKey:@"description"] sizeWithFont:[UIFont systemFontOfSize: [UIFont smallSystemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
 				return sz.height+20.0f;
@@ -298,7 +301,7 @@
 				break;
 			}
 			break;
-		case 1:
+		case 2:
 			switch (indexPath.row)
 			{
 			case 0:
@@ -330,7 +333,7 @@
 	tableView.allowsSelectionDuringEditing=YES;
 
 	NSInteger adjusted_row=indexPath.row;
-	if (self.editing && indexPath.section==0)
+	if (self.editing && indexPath.section==1)
 	{
 		// When editing a beer, section 0 has 2 less rows
 		if (adjusted_row>0)
@@ -341,15 +344,27 @@
 	switch (indexPath.section) 
 	{
 		case 0:
+			[cell.textLabel setText:[beerObj.data objectForKey:@"name"]];
+			[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
+			[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"brewery_id"]];
+			cell.selectionStyle=UITableViewCellSelectionStyleNone;
+			
+			UIView* transparentBackground=[[UIView alloc] initWithFrame:CGRectZero];
+			transparentBackground.backgroundColor=[UIColor clearColor];
+			cell.backgroundView=transparentBackground;
+			
+			cell.textLabel.backgroundColor=[UIColor clearColor];
+			cell.detailTextLabel.backgroundColor=[UIColor clearColor];
+			
+			CGRect f=cell.textLabel.frame;
+			f.size.width-=100;
+			f.origin.x+=100;
+			cell.textLabel.frame=f;
+			break;
+		case 1:
 			switch (adjusted_row)
-		{
+			{
 			case 0:
-				[cell.textLabel setText:[beerObj.data objectForKey:@"name"]];
-				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
-				[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"brewery_id"]];
-				cell.selectionStyle=UITableViewCellSelectionStyleNone;
-				break;
-			case 1:
 			{
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 
@@ -369,11 +384,11 @@
 				
 				break;
 			}
-			case 2:
+			case 1:
 				[cell.textLabel setText:@"Ratings & Reviews"];
 				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				break;
-			case 3:
+			case 2:
 			{
 //				cell.text=beerObj.description;
 				CGRect contentRect=CGRectMake(10, 10, 0, 0);
@@ -401,7 +416,7 @@
 				break;
 		}
 			break;
-		case 1:
+		case 2:
 			switch (indexPath.row)
 			{
 				case 0:
@@ -428,7 +443,7 @@
 					break;
 			}
 			break;
-		case 2:
+		case 3:
 		{
 			UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
 			transparentBackground.backgroundColor=[UIColor clearColor];
@@ -542,13 +557,13 @@
 		{
 		}
 	}
-	else if (indexPath.section == 0 && indexPath.row == 2) // Ratings & Reviews
+	else if (indexPath.section == 1 && indexPath.row == 1) // Ratings & Reviews
 	{
 		ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.beerID dataType:Beer];
 		[self.navigationController pushViewController: rtvc animated:YES];
 		[rtvc release];
 	}
-	else if (indexPath.section == 0 && indexPath.row == 3) // Beer description
+	else if (indexPath.section == 1 && indexPath.row == 2) // Beer description
 	{
 		if (self.tableView.editing==YES)
 		{
@@ -564,7 +579,7 @@
 		{
 		}
 	}
-	else if (indexPath.section == 1 && indexPath.row == 0) // Beer style
+	else if (indexPath.section == 2 && indexPath.row == 0) // Beer style
 	{
 		if (self.tableView.editing==YES)
 		{
@@ -581,7 +596,7 @@
 		{
 		}
 	}
-	else if (indexPath.section == 1 && indexPath.row == 1) // Beer ABV & IBUs
+	else if (indexPath.section == 2 && indexPath.row == 1) // Beer ABV & IBUs
 	{
 		if (self.tableView.editing==YES)
 		{

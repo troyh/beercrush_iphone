@@ -252,7 +252,6 @@
     // Navigation logic may go here. Create and push another view controller.
 
 	appdel.mySearchBar.hidden=YES;
-	appdel.nav.view.frame=app.keyWindow.frame;
 	appdel.nav.navigationBarHidden=NO;
 
 	
@@ -289,19 +288,19 @@
 		if (t == Brewer)
 		{
 			BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:[NSString stringWithCString:idp] app:app appDelegate: appdel];
-			[appdel.nav pushViewController: btvc animated:YES];
+			[self.navigationController pushViewController: btvc animated:YES];
 			[btvc release];
 		}
 		else if (t == Beer)
 		{
 			BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID: [NSString stringWithCString:idp]];
-			[appdel.nav pushViewController: btvc animated:YES];
+			[self.navigationController pushViewController:btvc animated:YES];
 			[btvc release];
 		}
 		else if (t == Place)
 		{
 			PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID: [NSString stringWithCString:idp] app:app appDelegate: appdel];
-			[appdel.nav pushViewController: btvc animated:YES];
+			[self.navigationController pushViewController: btvc animated:YES];
 			[btvc release];
 		}
 	}
