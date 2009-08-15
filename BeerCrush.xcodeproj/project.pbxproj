@@ -16,6 +16,8 @@
 		0577ECC610068CCB00A2468C /* star_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = 0577ECC310068CCB00A2468C /* star_filled.png */; };
 		058FF38D1030C41E00DA6D81 /* BrowseBrewersTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 058FF38C1030C41E00DA6D81 /* BrowseBrewersTVC.m */; };
 		058FF79210332E2100DA6D81 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 058FF79110332E2100DA6D81 /* LoginVC.m */; };
+		058FFBCA1035DE4200DA6D81 /* FullBeerReviewTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 058FFBC91035DE4200DA6D81 /* FullBeerReviewTVC.m */; };
+		058FFCA410360A1E00DA6D81 /* FlavorsAromasTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 058FFCA310360A1E00DA6D81 /* FlavorsAromasTVC.m */; };
 		05944DBD0F72E2BB0043D34C /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05944DBC0F72E2BB0043D34C /* MainWindow.xib */; };
 		05944DC50F72E7C30043D34C /* BeerCrush.png in Resources */ = {isa = PBXBuildFile; fileRef = 05944DC40F72E7C30043D34C /* BeerCrush.png */; };
 		05C6364D0F55C03C00B1C78A /* BreweryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */; };
@@ -49,6 +51,10 @@
 		058FF38C1030C41E00DA6D81 /* BrowseBrewersTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrowseBrewersTVC.m; sourceTree = "<group>"; };
 		058FF79010332E2100DA6D81 /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		058FF79110332E2100DA6D81 /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
+		058FFBC81035DE4200DA6D81 /* FullBeerReviewTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullBeerReviewTVC.h; sourceTree = "<group>"; };
+		058FFBC91035DE4200DA6D81 /* FullBeerReviewTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullBeerReviewTVC.m; sourceTree = "<group>"; };
+		058FFCA210360A1E00DA6D81 /* FlavorsAromasTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlavorsAromasTVC.h; sourceTree = "<group>"; };
+		058FFCA310360A1E00DA6D81 /* FlavorsAromasTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlavorsAromasTVC.m; sourceTree = "<group>"; };
 		05944DBC0F72E2BB0043D34C /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		05944DC40F72E7C30043D34C /* BeerCrush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BeerCrush.png; sourceTree = "<group>"; };
 		05C6364B0F55C03C00B1C78A /* BreweryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreweryTableViewController.h; sourceTree = "<group>"; };
@@ -97,6 +103,10 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				058FFCA210360A1E00DA6D81 /* FlavorsAromasTVC.h */,
+				058FFCA310360A1E00DA6D81 /* FlavorsAromasTVC.m */,
+				058FFBC81035DE4200DA6D81 /* FullBeerReviewTVC.h */,
+				058FFBC91035DE4200DA6D81 /* FullBeerReviewTVC.m */,
 				058FF79010332E2100DA6D81 /* LoginVC.h */,
 				058FF79110332E2100DA6D81 /* LoginVC.m */,
 				058FF38B1030C41E00DA6D81 /* BrowseBrewersTVC.h */,
@@ -256,6 +266,8 @@
 				051102A1100FDC8300610251 /* UserReviewsTVC.m in Sources */,
 				058FF38D1030C41E00DA6D81 /* BrowseBrewersTVC.m in Sources */,
 				058FF79210332E2100DA6D81 /* LoginVC.m in Sources */,
+				058FFBCA1035DE4200DA6D81 /* FullBeerReviewTVC.m in Sources */,
+				058FFCA410360A1E00DA6D81 /* FlavorsAromasTVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

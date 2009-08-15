@@ -13,13 +13,16 @@
 @implementation FullBeerReviewTVC
 
 @synthesize beerObj;
+@synthesize balanceSlider;
+@synthesize bodySlider;
+@synthesize aftertasteSlider;
+@synthesize ratingControl;
 
 -(id)initWithBeerObject:(BeerObject*)beer
 {
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.beerObj=beer;
 		self.title=@"Review";
-//		self.title=[beerObj.data objectForKey:@"name"];
     }
     return self;
 }
@@ -33,14 +36,36 @@
 }
 */
 
-/*
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)] autorelease];
 }
-*/
+
+-(void)doneButtonClicked
+{
+	// Post the review
+	NSString* bodystr=[NSString stringWithFormat:@"beer_id=%@&rating=%d&body=%.0f&aftertaste=%.0f&balance=%.0f",
+														[beerObj.data objectForKey:@"beer_id"],
+													    ratingControl.currentRating,
+														round(bodySlider.value),
+														round(aftertasteSlider.value),
+														round(balanceSlider.value)];
+
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
+	NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:nil];
+	if ([response statusCode]==200)
+	{
+		[self.navigationController popViewControllerAnimated:YES];
+	}
+	else
+	{
+		// TODO: handle this gracefully
+	}
+}
 
 /*
 - (void)viewWillAppear:(BOOL)animated {
@@ -176,19 +201,15 @@
 					cell.detailTextLabel.backgroundColor=[UIColor clearColor];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					
-					RatingControl* ratingctl=[[[RatingControl alloc] initWithFrame:CGRectMake(80,(tableView.rowHeight-30)/2,260,30)] autorelease];
+					ratingControl=[[[RatingControl alloc] initWithFrame:CGRectMake(80,(tableView.rowHeight-30)/2,260,30)] autorelease];
 					
 					// Set current user's rating (if any)
 					NSString* user_rating=[beerObj.data objectForKey:@"user_rating"];
 					if (user_rating!=nil) // No user review
-						ratingctl.currentRating=[user_rating integerValue];
-					DLog(@"Current rating:%d",ratingctl.currentRating);
+						ratingControl.currentRating=[user_rating integerValue];
+					DLog(@"Current rating:%d",ratingControl.currentRating);
 					
-					// Set the callback for a review
-//					[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
-					
-					[cell.contentView addSubview:ratingctl];
-					
+					[cell.contentView addSubview:ratingControl];
 					break;
 				default:
 					break;
@@ -211,8 +232,10 @@
 					cell.detailTextLabel.backgroundColor=[UIColor clearColor];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					
-					UISlider* slider=[[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)] autorelease];
-					[cell.contentView addSubview:slider];
+					bodySlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
+					bodySlider.minimumValue=1.0;
+					bodySlider.maximumValue=5.0;
+					[cell.contentView addSubview:bodySlider];
 					break;
 				}
 				case 1:
@@ -221,8 +244,10 @@
 					cell.detailTextLabel.backgroundColor=[UIColor clearColor];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					
-					UISlider* slider=[[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)] autorelease];
-					[cell.contentView addSubview:slider];
+					balanceSlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
+					balanceSlider.minimumValue=1.0;
+					balanceSlider.maximumValue=5.0;
+					[cell.contentView addSubview:balanceSlider];
 					break;
 				}
 				case 2:
@@ -231,8 +256,10 @@
 					cell.detailTextLabel.backgroundColor=[UIColor clearColor];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					
-					UISlider* slider=[[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)] autorelease];
-					[cell.contentView addSubview:slider];
+					aftertasteSlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
+					aftertasteSlider.minimumValue=1.0;
+					aftertasteSlider.maximumValue=5.0;
+					[cell.contentView addSubview:aftertasteSlider];
 					break;
 				}
 				default:
@@ -336,6 +363,10 @@
 
 - (void)dealloc {
 	[beerObj release];
+	[balanceSlider release];
+	[bodySlider release];
+	[aftertasteSlider release];
+	[ratingControl release];
     [super dealloc];
 }
 

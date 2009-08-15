@@ -30,6 +30,7 @@
 	self.currentElemValue=nil;
 
 	self.beerObj=[[BeerObject alloc] init];
+	[self.beerObj.data setObject:beer_id forKey:@"beer_id"];
 	self.title=@"Beer";
 	
 	[super initWithStyle:UITableViewStyleGrouped];
@@ -491,6 +492,8 @@
 	NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:nil];
 	
 	if ([response statusCode]==200) {
+		[self.beerObj.data setObject:[NSString stringWithFormat:@"%d",rating] forKey:@"user_rating"];
+		
 		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithBeerObject:self.beerObj] autorelease];
 		[self.navigationController pushViewController:fbrtvc animated:YES];
 	} else {
