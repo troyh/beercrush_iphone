@@ -342,7 +342,7 @@
 
 		if (rspdata) {
 			DLog(@"Response code:%d",[response statusCode]);
-			DLog(@"Response data:%s",[rspdata bytes]);
+			DLog(@"Response data:%.*s", [rspdata length], [rspdata bytes]);
 			
 			bRetry=NO;
 			int statuscode=[response statusCode];

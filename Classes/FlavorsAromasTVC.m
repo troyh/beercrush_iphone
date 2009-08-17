@@ -13,8 +13,10 @@
 
 @synthesize xmlParserPath;
 @synthesize currentElemValue;
+@synthesize currentElemID;
 @synthesize flavorTitles;
 @synthesize flavorsList;
+@synthesize delegate;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -30,13 +32,16 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	// Get Flavors & Aromas doc from server
-	// TODO: cache this doc
+	// Put Done button on NavBar
+	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)] autorelease];
 	
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	// Get Flavors & Aromas doc from server
+	// TODO: cache this doc, it will rarely change
+	
+	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_GET_FLAVORS_DOC];
 	NSData* answer;
-	NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+	NSHTTPURLResponse* response=[del sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
 	if ([response statusCode]==200)
 	{
 		NSXMLParser* parser=[[[NSXMLParser alloc] initWithData:answer] autorelease];
@@ -48,6 +53,12 @@
 		// TODO: handle this gracefully
 	}
 	
+}
+
+-(void)doneButtonClicked
+{
+	if ([self.delegate respondsToSelector:@selector(doneSelectingFlavors)])
+		[self.delegate performSelector:@selector(doneSelectingFlavors)];
 }
 
 /*
@@ -116,7 +127,7 @@
     }
     
     // Set up the cell...
-	[cell.textLabel setText:[[flavorsList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+	[cell.textLabel setText:[[[flavorsList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectAtIndex:0]];
 	
     return cell;
 }
@@ -131,6 +142,31 @@
 	// AnotherViewController *anotherViewController = [[AnotherViewController alloc] initWithNibName:@"AnotherView" bundle:nil];
 	// [self.navigationController pushViewController:anotherViewController];
 	// [anotherViewController release];
+	
+	// Put a checkmark on the row
+	UITableViewCell* cell=[tableView cellForRowAtIndexPath:indexPath];
+	if (cell.accessoryType==UITableViewCellAccessoryCheckmark) // Currently selected
+	{
+		cell.accessoryType=UITableViewCellAccessoryNone;
+
+		// Call delegate's didUnselectFlavor method
+		if ([self.delegate respondsToSelector:@selector(didUnselectFlavor:)])
+		{
+			// Send the ID
+			[delegate performSelector:@selector(didUnselectFlavor:) withObject:[[[flavorsList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectAtIndex:1]];
+		}
+	}
+	else
+	{
+		cell.accessoryType=UITableViewCellAccessoryCheckmark;
+	
+		// Call delegate's didSelectFlavor method
+		if ([self.delegate respondsToSelector:@selector(didSelectFlavor:)])
+		{
+			// Send the ID
+			[delegate performSelector:@selector(didSelectFlavor:) withObject:[[[flavorsList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectAtIndex:1]];
+		}
+	}
 }
 
 
@@ -178,6 +214,7 @@
 	[flavorTitles release];
 	[flavorsList release];
 	[currentElemValue release];
+	[currentElemID release];
 	[xmlParserPath release];
     [super dealloc];
 }
@@ -192,26 +229,15 @@
 //	<group>
 //		<title>Berry</title>
 //		<flavors>
-//			<flavor>Black Currant/Cassis</flavor>
-//			<flavor>Blackberry</flavor>
-//			<flavor>Blueberry</flavor>
-//			<flavor>Raspberry</flavor>
-//			<flavor>Strawberry</flavor>
+//			<flavor id="blackcurrant">Black Currant/Cassis</flavor>
+//			<flavor id="blackberry">Blackberry</flavor>
 //		</flavors>
 //	</group>
 //	<group>
 //		<title>Chemical</title>
 //		<flavors>
-//			<flavor>Alcohol</flavor>
-//			<flavor>Burnt Match</flavor>
-//			<flavor>Medicinal</flavor>
-//			<flavor>Menthold</flavor>
-//			<flavor>Metallic</flavor>
-//			<flavor>Mineral</flavor>
-//			<flavor>Paint Thinner</flavor>
-//			<flavor>Petroleum</flavor>
-//			<flavor>Plastic</flavor>
-//			<flavor>Rubber</flavor>
+//			<flavor id="alcohol">Alcohol</flavor>
+//			<flavor id="burntmatch">Burnt Match</flavor>
 //		</flavors>
 //	</group>
 //</flavors>
@@ -221,7 +247,7 @@
 	// Clear any old data
 	[self.currentElemValue release];
 	self.currentElemValue=nil;
-	
+	self.currentElemID=nil;
 	xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5]; // This also releases a previous xmlParserPath
 }
 
@@ -229,8 +255,8 @@
 {
 	[self.currentElemValue release];
 	self.currentElemValue=nil;
-	
-	xmlParserPath=nil; // This also releases a previous xmlParserPath
+	self.currentElemID=nil;
+	xmlParserPath=nil;
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
@@ -252,6 +278,8 @@
 			[self.currentElemValue release];
 			self.currentElemValue=nil;
 			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
+			
+			self.currentElemID=[[attributeDict objectForKey:@"id"] copy];
 		}
 	}
 	
@@ -277,7 +305,7 @@
 		{
 			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",@"flavors",nil]]) // Is it the /flavors/group/flavors/flavor element?
 			{
-				[[flavorsList lastObject] addObject:currentElemValue];
+				[[flavorsList lastObject] addObject:[NSArray arrayWithObjects:currentElemValue,currentElemID,nil]];
 			}
 		}
 		

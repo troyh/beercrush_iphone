@@ -9,6 +9,7 @@
 #import "FullBeerReviewTVC.h"
 #import "RatingControl.h"
 #import "FlavorsAromasTVC.h"
+#import "BeerCrushAppDelegate.h"
 
 @implementation FullBeerReviewTVC
 
@@ -17,12 +18,18 @@
 @synthesize bodySlider;
 @synthesize aftertasteSlider;
 @synthesize ratingControl;
+@synthesize selectedFlavors;
+@synthesize delegate;
+
+const int kViewTagFlavorsLabel=1;
+const int kViewTagCommentsTextView=2;
 
 -(id)initWithBeerObject:(BeerObject*)beer
 {
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.beerObj=beer;
 		self.title=@"Review";
+		selectedFlavors=[[NSMutableArray alloc] initWithCapacity:150];
     }
     return self;
 }
@@ -47,19 +54,21 @@
 -(void)doneButtonClicked
 {
 	// Post the review
-	NSString* bodystr=[NSString stringWithFormat:@"beer_id=%@&rating=%d&body=%.0f&aftertaste=%.0f&balance=%.0f",
+	NSString* bodystr=[NSString stringWithFormat:@"beer_id=%@&rating=%d&body=%.0f&aftertaste=%.0f&balance=%.0f&flavors=%@&comments=%@",
 														[beerObj.data objectForKey:@"beer_id"],
 													    ratingControl.currentRating,
 														round(bodySlider.value),
 														round(aftertasteSlider.value),
-														round(balanceSlider.value)];
+														round(balanceSlider.value),
+														[self.selectedFlavors componentsJoinedByString:@" "],
+														[(UITextView*)[self.view viewWithTag:kViewTagCommentsTextView] text]];
 
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
-	NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:nil];
+	NSHTTPURLResponse* response=[del sendRequest:url usingMethod:@"POST" withData:bodystr returningData:nil];
 	if ([response statusCode]==200)
 	{
-		[self.navigationController popViewControllerAnimated:YES];
+		[delegate fullBeerReviewPosted];
 	}
 	else
 	{
@@ -67,11 +76,23 @@
 	}
 }
 
-/*
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+	
+	// Populate the fields with values from the user's review (if there is one)
+	if ([delegate hasUserReview])
+	{
+		NSDictionary* review=[delegate getUserReview];
+		DLog(@"User's rating=%@",[review objectForKey:@"rating"]);
+		DLog(@"User's body=%@",[review objectForKey:@"body"]);
+		DLog(@"User's aftertaste=%@",[review objectForKey:@"aftertaste"]);
+		DLog(@"User's balance=%@",[review objectForKey:@"balance"]);
+		DLog(@"User's comments=%@",[review objectForKey:@"comments"]);
+		
+		
+	}
 }
-*/
+
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -108,6 +129,34 @@
 	// e.g. self.myOutlet = nil;
 }
 
+// FlavorsAromasTVCDelegate protocol methods
+
+-(void)didSelectFlavor:(NSString*)flavorID
+{
+	DLog(@"Flavor selected:%@",flavorID);
+	if ([selectedFlavors indexOfObjectIdenticalTo:flavorID]==NSNotFound)
+	{
+		[selectedFlavors addObject:flavorID];
+	}
+}
+
+-(void)didUnselectFlavor:(NSString*)flavorID
+{
+	DLog(@"Flavor unselected:%@",flavorID);
+	NSUInteger idx=[selectedFlavors indexOfObjectIdenticalTo:flavorID];
+	if (idx!=NSNotFound)
+	{
+		[selectedFlavors removeObjectAtIndex:idx];
+	}
+}
+
+-(void)doneSelectingFlavors
+{
+	// Populate Flavors & Aromas text field with the text names for the flavor ids in selectedFlavors
+	[(UILabel*)[self.view viewWithTag:kViewTagFlavorsLabel] setText:[selectedFlavors componentsJoinedByString:@", "]];
+	
+	[self.navigationController popViewControllerAnimated:YES];
+}
 
 #pragma mark Table view methods
 
@@ -152,6 +201,16 @@
 	}
 	return nil;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	if (indexPath.section==4 && indexPath.row==0)
+	{
+		return tableView.rowHeight*3;
+	}
+	return tableView.rowHeight;
+}
+
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -204,10 +263,13 @@
 					ratingControl=[[[RatingControl alloc] initWithFrame:CGRectMake(80,(tableView.rowHeight-30)/2,260,30)] autorelease];
 					
 					// Set current user's rating (if any)
-					NSString* user_rating=[beerObj.data objectForKey:@"user_rating"];
-					if (user_rating!=nil) // No user review
-						ratingControl.currentRating=[user_rating integerValue];
-					DLog(@"Current rating:%d",ratingControl.currentRating);
+					if ([delegate hasUserReview])
+					{
+						NSString* user_rating=[[delegate getUserReview] objectForKey:@"rating"];
+						if (user_rating!=nil) // No user review
+							ratingControl.currentRating=[user_rating integerValue];
+						DLog(@"Current rating:%d",ratingControl.currentRating);
+					}
 					
 					[cell.contentView addSubview:ratingControl];
 					break;
@@ -235,6 +297,10 @@
 					bodySlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
 					bodySlider.minimumValue=1.0;
 					bodySlider.maximumValue=5.0;
+					
+					if ([delegate hasUserReview])
+						bodySlider.value=[[[delegate getUserReview] objectForKey:@"body"] integerValue];
+					
 					[cell.contentView addSubview:bodySlider];
 					break;
 				}
@@ -247,6 +313,10 @@
 					balanceSlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
 					balanceSlider.minimumValue=1.0;
 					balanceSlider.maximumValue=5.0;
+
+					if ([delegate hasUserReview])
+						balanceSlider.value=[[[delegate getUserReview] objectForKey:@"balance"] integerValue];
+
 					[cell.contentView addSubview:balanceSlider];
 					break;
 				}
@@ -259,6 +329,10 @@
 					aftertasteSlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
 					aftertasteSlider.minimumValue=1.0;
 					aftertasteSlider.maximumValue=5.0;
+
+					if ([delegate hasUserReview])
+						aftertasteSlider.value=[[[delegate getUserReview] objectForKey:@"aftertaste"] integerValue];
+
 					[cell.contentView addSubview:aftertasteSlider];
 					break;
 				}
@@ -279,7 +353,20 @@
 			switch (indexPath.row)
 			{
 				case 0: // Flavors & Aromas
+				{
+					UILabel* label=[[UILabel alloc] initWithFrame:CGRectInset(cell.contentView.frame,25.0,5.0)];
+					label.tag=kViewTagFlavorsLabel;
+					label.text=[selectedFlavors componentsJoinedByString:@", "];
+					label.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+					label.textAlignment=UITextAlignmentLeft;
+					label.lineBreakMode=UILineBreakModeWordWrap;
+					label.numberOfLines=0;
+					
+					[cell.contentView addSubview:label];
+					
+					[label release];
 					break;
+				}
 				default:
 					break;
 			}
@@ -287,7 +374,7 @@
 		}
 		case 4:
 		{
-			static NSString *CellIdentifier = @"DefaultCell";
+			static NSString *CellIdentifier = @"CommentsCell";
 			
 			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 			if (cell == nil) {
@@ -297,8 +384,22 @@
 			switch (indexPath.row)
 			{
 				case 0:  // Comments
+				{
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+					
+					UITextView* tv=[[UITextView alloc] initWithFrame:CGRectMake(10, 10, tableView.frame.size.width-40, 100)];
+					if ([delegate hasUserReview])
+					{
+						tv.text=[[delegate getUserReview] objectForKey:@"comments"];
+					}
+					tv.contentSize=CGSizeMake(100,100);
+					tv.tag=kViewTagCommentsTextView;
+
+					[cell.contentView addSubview:tv];
+
+					[tv release];
 					break;
+				}
 				default:
 					break;
 			}
@@ -316,6 +417,7 @@
 	if (indexPath.section==3 && indexPath.row==0) // Selected the Flavors & Aromas cell
 	{
 		FlavorsAromasTVC* fatvc=[[FlavorsAromasTVC alloc] initWithStyle:UITableViewStyleGrouped];
+		fatvc.delegate=self;
 		[self.navigationController pushViewController:fatvc animated:YES];
 	}
 }
@@ -366,7 +468,8 @@
 	[balanceSlider release];
 	[bodySlider release];
 	[aftertasteSlider release];
-	[ratingControl release];
+	[selectedFlavors release];
+	
     [super dealloc];
 }
 
