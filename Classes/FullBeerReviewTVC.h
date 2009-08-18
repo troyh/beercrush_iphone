@@ -37,5 +37,6 @@
 @property (assign) id<FullBeerReviewTVCDelegate> delegate;
 
 -(id)initWithBeerObject:(BeerObject*)beer;
+-(NSString*)getFlavorsCellText;
 
 @end

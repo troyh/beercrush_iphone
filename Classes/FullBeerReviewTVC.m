@@ -135,6 +135,11 @@ const int kViewTagCommentsTextView=2;
 
 // FlavorsAromasTVCDelegate protocol methods
 
+-(NSArray*)getCurrentFlavors
+{
+	return [[delegate getUserReview] objectForKey:@"flavors"];
+}
+
 -(void)didSelectFlavor:(NSString*)flavorID
 {
 	DLog(@"Flavor selected:%@",flavorID);
@@ -176,10 +181,27 @@ const int kViewTagCommentsTextView=2;
 -(void)doneSelectingFlavors
 {
 	// Populate Flavors & Aromas text field with the text names for the flavor ids in the review's flavors array
-	if ([delegate hasUserReview])
-		[(UILabel*)[self.view viewWithTag:kViewTagFlavorsLabel] setText:[[[delegate getUserReview] objectForKey:@"flavors"] componentsJoinedByString:@", "]];
+	[(UILabel*)[self.view viewWithTag:kViewTagFlavorsLabel] setText:[self getFlavorsCellText]];
 	
 	[self.navigationController popViewControllerAnimated:YES];
+}
+
+-(NSString*)getFlavorsCellText
+{
+	if ([delegate hasUserReview])
+	{
+		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSDictionary* flavorsdict=[[del getFlavorsDictionary] objectForKey:@"byid"];
+		
+		NSArray* flavors=[[delegate getUserReview] objectForKey:@"flavors"];
+		NSMutableArray* flavornames=[NSMutableArray arrayWithCapacity:10];
+		for (NSUInteger i=0; i<[flavors count]; ++i) {
+			[flavornames addObject:[flavorsdict objectForKey:[flavors objectAtIndex:i]]];
+		}
+		
+		return [flavornames componentsJoinedByString:@", "];
+	}
+	return @"";
 }
 
 #pragma mark Table view methods
@@ -383,9 +405,7 @@ const int kViewTagCommentsTextView=2;
 				{
 					UILabel* label=[[UILabel alloc] initWithFrame:CGRectInset(cell.contentView.frame,25.0,5.0)];
 					label.tag=kViewTagFlavorsLabel;
-					
-					if ([delegate hasUserReview])
-						label.text=[[[delegate getUserReview] objectForKey:@"flavors"] componentsJoinedByString:@", "];
+					label.text=[self getFlavorsCellText];
 					
 					label.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 					label.textAlignment=UITextAlignmentLeft;

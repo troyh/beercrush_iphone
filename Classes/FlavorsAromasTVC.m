@@ -11,19 +11,12 @@
 
 @implementation FlavorsAromasTVC
 
-@synthesize xmlParserPath;
-@synthesize currentElemValue;
-@synthesize currentElemID;
-@synthesize flavorTitles;
-@synthesize flavorsList;
+@synthesize flavorsDictionary;
 @synthesize delegate;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:UITableViewStylePlain]) { // Ignores style argument
-		flavorTitles=[[NSMutableArray alloc] initWithCapacity:10];
-		flavorsList=[[NSMutableArray alloc] initWithCapacity:10];
-
 		self.title=@"Flavors & Aromas";
     }
     return self;
@@ -34,25 +27,9 @@
 
 	// Put Done button on NavBar
 	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)] autorelease];
-	
-	// Get Flavors & Aromas doc from server
-	// TODO: cache this doc, it will rarely change
-	
+
 	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_GET_FLAVORS_DOC];
-	NSData* answer;
-	NSHTTPURLResponse* response=[del sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-	if ([response statusCode]==200)
-	{
-		NSXMLParser* parser=[[[NSXMLParser alloc] initWithData:answer] autorelease];
-		[parser setDelegate:self];
-		[parser parse];
-	}
-	else
-	{
-		// TODO: handle this gracefully
-	}
-	
+	flavorsDictionary=[del getFlavorsDictionary];
 }
 
 -(void)doneButtonClicked
@@ -106,13 +83,13 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [flavorTitles count];
+    return [[flavorsDictionary objectForKey:@"titles"] count];
 }
 
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [[flavorsList objectAtIndex:section] count];
+	return [[[flavorsDictionary objectForKey:@"groups"] objectAtIndex:section] count];
 }
 
 
@@ -127,22 +104,27 @@
     }
     
     // Set up the cell...
-	[cell.textLabel setText:[[[flavorsList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectAtIndex:0]];
+	NSString* flavorid=[[[flavorsDictionary objectForKey:@"groups"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+	[cell.textLabel setText:[[flavorsDictionary objectForKey:@"byid"] objectForKey:flavorid]];
+	
+	// Turn on checkmark, if it's selected in the user's review
+	NSArray* flavors=[delegate getCurrentFlavors];
+	if ([flavors containsObject:flavorid])
+	{
+		cell.accessoryType=UITableViewCellAccessoryCheckmark;
+	}
+
 	
     return cell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-	return [flavorTitles objectAtIndex:section];
+	return [[flavorsDictionary objectForKey:@"titles"] objectAtIndex:section];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	// AnotherViewController *anotherViewController = [[AnotherViewController alloc] initWithNibName:@"AnotherView" bundle:nil];
-	// [self.navigationController pushViewController:anotherViewController];
-	// [anotherViewController release];
-	
+
 	// Put a checkmark on the row
 	UITableViewCell* cell=[tableView cellForRowAtIndexPath:indexPath];
 	if (cell.accessoryType==UITableViewCellAccessoryCheckmark) // Currently selected
@@ -153,7 +135,7 @@
 		if ([self.delegate respondsToSelector:@selector(didUnselectFlavor:)])
 		{
 			// Send the ID
-			[delegate performSelector:@selector(didUnselectFlavor:) withObject:[[[flavorsList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectAtIndex:1]];
+			[delegate performSelector:@selector(didUnselectFlavor:) withObject:[[[flavorsDictionary objectForKey:@"groups"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
 		}
 	}
 	else
@@ -164,7 +146,7 @@
 		if ([self.delegate respondsToSelector:@selector(didSelectFlavor:)])
 		{
 			// Send the ID
-			[delegate performSelector:@selector(didSelectFlavor:) withObject:[[[flavorsList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectAtIndex:1]];
+			[delegate performSelector:@selector(didSelectFlavor:) withObject:[[[flavorsDictionary objectForKey:@"groups"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
 		}
 	}
 }
@@ -211,123 +193,10 @@
 
 
 - (void)dealloc {
-	[flavorTitles release];
-	[flavorsList release];
-	[currentElemValue release];
-	[currentElemID release];
-	[xmlParserPath release];
+	[flavorsDictionary release];
+	
     [super dealloc];
 }
-
-
-// NSXMLParser delegate methods
-
-// Sample Flavors doc:
-//
-//<?xml version="1.0"?>
-//<flavors>
-//	<group>
-//		<title>Berry</title>
-//		<flavors>
-//			<flavor id="blackcurrant">Black Currant/Cassis</flavor>
-//			<flavor id="blackberry">Blackberry</flavor>
-//		</flavors>
-//	</group>
-//	<group>
-//		<title>Chemical</title>
-//		<flavors>
-//			<flavor id="alcohol">Alcohol</flavor>
-//			<flavor id="burntmatch">Burnt Match</flavor>
-//		</flavors>
-//	</group>
-//</flavors>
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser
-{
-	// Clear any old data
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	self.currentElemID=nil;
-	xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5]; // This also releases a previous xmlParserPath
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	self.currentElemID=nil;
-	xmlParserPath=nil;
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	if ([elementName isEqualToString:@"title"])
-	{
-		// Is it the /flavors/group/title element?
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=nil;
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
-		}
-	}
-	else if ([elementName isEqualToString:@"flavor"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",@"flavors",nil]]) // Is it the /flavors/group/flavors/flavor element?
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=nil;
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
-			
-			self.currentElemID=[[attributeDict objectForKey:@"id"] copy];
-		}
-	}
-	
-	[xmlParserPath addObject:elementName];
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	[xmlParserPath removeLastObject];
-	
-	if (self.currentElemValue)
-	{
-		if ([elementName isEqualToString:@"title"])
-		{
-			// Is it the /flavors/group/title element?
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",nil]])
-			{
-				[flavorTitles addObject:currentElemValue];
-				[flavorsList addObject:[NSMutableArray arrayWithCapacity:3]];
-			}
-		}
-		else if ([elementName isEqualToString:@"flavor"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",@"flavors",nil]]) // Is it the /flavors/group/flavors/flavor element?
-			{
-				[[flavorsList lastObject] addObject:[NSArray arrayWithObjects:currentElemValue,currentElemID,nil]];
-			}
-		}
-		
-		[self.currentElemValue release];
-		self.currentElemValue=nil;
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	[self.currentElemValue appendString:string];
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
-}
-
-
 
 @end
 

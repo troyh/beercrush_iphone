@@ -59,6 +59,11 @@
 @synthesize xmlPostResponse;
 @synthesize onBeerSelectedAction;
 @synthesize onBeerSelectedTarget;
+@synthesize xmlParserPath;
+@synthesize currentElemValue;
+@synthesize currentElemID;
+@synthesize flavorsDictionary;
+
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
     
@@ -183,6 +188,8 @@
 	[nav release];
     [tabBarController release];
     [window release];
+	[flavorsDictionary release];
+
     [super dealloc];
 }
 
@@ -369,7 +376,40 @@
 	return response;
 }
 
-
+-(NSDictionary*)getFlavorsDictionary
+{
+	if (flavorsDictionary==nil)
+	{
+		NSArray* paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+		NSString* filename=[[paths objectAtIndex:0] stringByAppendingString:@"/flavors.dict"];
+		
+		flavorsDictionary=[[NSMutableDictionary alloc] initWithContentsOfFile:filename];
+		if (flavorsDictionary==nil)
+		{
+			flavorsDictionary=[[NSMutableDictionary alloc] initWithCapacity:128];
+			
+			// Download the Flavors & Aromas doc from server
+			BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_GET_FLAVORS_DOC];
+			NSData* answer;
+			NSHTTPURLResponse* response=[del sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+			if ([response statusCode]==200)
+			{
+				NSXMLParser* parser=[[[NSXMLParser alloc] initWithData:answer] autorelease];
+				[parser setDelegate:self];
+				[parser parse];
+				
+				[flavorsDictionary writeToFile:filename atomically:YES];
+			}
+			else
+			{
+				// TODO: handle this gracefully
+			}
+		}
+	}
+	
+	return flavorsDictionary;
+}
 
 -(void)setOnBeerSelectedAction:(SEL)s target:(id)t
 {
@@ -469,6 +509,97 @@
     [connection release];
 //    [reviewPostResponse release];
 }
+
+
+- (void)parserDidStartDocument:(NSXMLParser *)parser
+{
+	// Clear any old data
+	[self.currentElemValue release];
+	self.currentElemValue=nil;
+	self.currentElemID=nil;
+	xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5]; // This also releases a previous xmlParserPath
+}
+
+- (void)parserDidEndDocument:(NSXMLParser *)parser
+{
+	[self.currentElemValue release];
+	self.currentElemValue=nil;
+	self.currentElemID=nil;
+	xmlParserPath=nil;
+}
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
+{
+	if ([elementName isEqualToString:@"title"])
+	{
+		// Is it the /flavors/group/title element?
+		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",nil]])
+		{
+			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
+		}
+	}
+	else if ([elementName isEqualToString:@"flavor"])
+	{
+		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",@"flavors",nil]]) // Is it the /flavors/group/flavors/flavor element?
+		{
+			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
+			self.currentElemID=[[attributeDict objectForKey:@"id"] copy];
+		}
+	}
+	
+	[xmlParserPath addObject:elementName];
+}
+
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+{
+	[xmlParserPath removeLastObject];
+	
+	if (self.currentElemValue)
+	{
+		if ([elementName isEqualToString:@"title"])
+		{
+			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",nil]]) // Is it the /flavors/group/title element?
+			{
+				if ([flavorsDictionary objectForKey:@"titles"]==nil)
+					[flavorsDictionary setObject:[NSMutableArray arrayWithCapacity:24] forKey:@"titles"];
+				[[flavorsDictionary objectForKey:@"titles"] addObject:currentElemValue];
+				
+				// Add an array in groups for this title
+				if ([flavorsDictionary objectForKey:@"groups"]==nil)
+					[flavorsDictionary setObject:[NSMutableArray arrayWithCapacity:24] forKey:@"groups"];
+				[[flavorsDictionary objectForKey:@"groups"] addObject:[[NSMutableArray alloc] initWithCapacity:10]];
+			}
+		}
+		else if ([elementName isEqualToString:@"flavor"])
+		{
+			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",@"flavors",nil]]) // Is it the /flavors/group/flavors/flavor element?
+			{
+				if ([flavorsDictionary objectForKey:@"byid"]==nil)
+					[flavorsDictionary setObject:[NSMutableDictionary dictionaryWithCapacity:128] forKey:@"byid"];
+				[[flavorsDictionary objectForKey:@"byid"] setObject:currentElemValue forKey:currentElemID];
+
+				[[[flavorsDictionary objectForKey:@"groups"] lastObject] addObject:currentElemID];
+			}
+		}
+		
+		self.currentElemValue=nil;
+	}
+}
+
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
+{
+}
+
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
+	[self.currentElemValue appendString:string];
+}
+
+- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
+{
+}
+
+
 
 @end
 

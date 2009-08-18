@@ -36,6 +36,11 @@
 	
 //	NSArray* searchResultsList;
 	NSMutableData* xmlPostResponse;
+
+	NSMutableArray* xmlParserPath;
+	NSMutableString* currentElemValue;
+	NSMutableString* currentElemID;
+	NSMutableDictionary* flavorsDictionary;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -47,6 +52,10 @@
 @property (nonatomic, retain) NSMutableData* xmlPostResponse;
 @property(nonatomic) SEL onBeerSelectedAction;
 @property(nonatomic,assign) id onBeerSelectedTarget;
+@property (nonatomic, retain) NSMutableArray* xmlParserPath;
+@property (nonatomic, retain) NSMutableString* currentElemValue;
+@property (nonatomic, retain) NSMutableString* currentElemID;
+@property (nonatomic, retain) NSMutableDictionary* flavorsDictionary;
 
 -(void)startApp;
 -(void)askUserForCredentials;
@@ -54,6 +63,7 @@
 -(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSString*)data returningData:(NSData**)responseData;
 -(void)setOnBeerSelectedAction:(SEL)s target:(id)t;
 -(BOOL)onBeerSelected:(id)obj;
+-(NSDictionary*)getFlavorsDictionary;
 
 @end
 
