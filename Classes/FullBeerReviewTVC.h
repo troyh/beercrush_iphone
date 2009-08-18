@@ -15,7 +15,7 @@
 @optional
 
 -(BOOL)hasUserReview;
--(NSDictionary*)getUserReview;
+-(NSMutableDictionary*)getUserReview;
 -(void)fullBeerReviewPosted;
 
 @end
@@ -26,7 +26,6 @@
 	UISlider* bodySlider;
 	UISlider* aftertasteSlider;
 	RatingControl* ratingControl;
-	NSMutableArray* selectedFlavors;
 	id<FullBeerReviewTVCDelegate> delegate;
 }
 
@@ -35,7 +34,6 @@
 @property (nonatomic, retain) UISlider* bodySlider;
 @property (nonatomic, retain) UISlider* aftertasteSlider;
 @property (nonatomic, retain) RatingControl* ratingControl;
-@property (nonatomic, retain) NSMutableArray* selectedFlavors;
 @property (assign) id<FullBeerReviewTVCDelegate> delegate;
 
 -(id)initWithBeerObject:(BeerObject*)beer;

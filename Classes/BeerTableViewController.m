@@ -499,7 +499,6 @@
 	
 	if ([response statusCode]==200) {
 		[self.userReviewData setObject:[NSString stringWithFormat:@"%d",rating] forKey:@"rating"];
-		
 		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithBeerObject:self.beerObj] autorelease];
 		fbrtvc.delegate=self;
 		[self.navigationController pushViewController:fbrtvc animated:YES];
@@ -670,7 +669,7 @@
 	return (userReviewData!=nil && [userReviewData count]);
 }
 
--(NSDictionary*)getUserReview
+-(NSMutableDictionary*)getUserReview
 {
 	return userReviewData;
 }
@@ -742,7 +741,15 @@
 		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
 		{
 			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:5];
+			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
+		}
+	}
+	else if ([elementName isEqualToString:@"item"])
+	{
+		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",@"flavors",nil]])
+		{
+			[self.currentElemValue release];
+			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:32];
 		}
 	}
 	else if ([elementName isEqualToString:@"beer"])
@@ -819,6 +826,20 @@
 			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
 			{
 				[userReviewData setObject:currentElemValue forKey:@"comments"];
+			}
+		}
+		else if ([elementName isEqualToString:@"item"])
+		{
+			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",@"flavors",nil]])
+			{
+				NSMutableArray* flavors=[userReviewData objectForKey:@"flavors"];
+				if (flavors==nil)
+				{
+					flavors=[NSMutableArray arrayWithObjects:currentElemValue,nil];
+					[userReviewData setObject:flavors forKey:@"flavors"];
+				}
+				else
+					[flavors addObject:currentElemValue];
 			}
 		}
 		else if ([elementName isEqualToString:@"name"])

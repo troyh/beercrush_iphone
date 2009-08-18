@@ -112,7 +112,7 @@
 	return YES;
 }
 
--(NSDictionary*)getUserReview
+-(NSMutableDictionary*)getUserReview
 {
 	return [reviewsList objectAtIndex:self.selectedRow];
 }
@@ -291,6 +291,11 @@
 			self.currentElemValue=[[NSMutableString string] retain];
 		}
 	}
+	else if ([elementName isEqualToString:@"item"])
+	{ // XPath is /reviews/review/flavors
+		if ([self.xmlParserPath count]==3 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"flavors",nil]])
+			self.currentElemValue=[[NSMutableString string] retain];
+	}
 	else if ([elementName isEqualToString:@"name"])
 	{ // XPath is /reviews/review/beer
 		if ([self.xmlParserPath count]==3 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"beer",nil]])
@@ -319,6 +324,20 @@
 			{ // Is a Beer Review
 				NSMutableDictionary* review=[self.reviewsList lastObject];
 				[review setObject:self.currentElemValue forKey:elementName];
+			}
+		}
+		else if ([elementName isEqualToString:@"item"])
+		{ // XPath is /reviews/review/flavors
+			if ([self.xmlParserPath count]==3 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"flavors",nil]])
+			{
+				NSMutableDictionary* review=[self.reviewsList lastObject];
+				NSMutableArray* flavors=[review objectForKey:@"flavors"];
+				if (flavors==nil)
+				{ // Create an array to store the flavors
+					flavors=[NSMutableArray arrayWithCapacity:10];
+					[review setObject:flavors forKey:@"flavors"];
+				}
+				[flavors addObject:currentElemValue];
 			}
 		}
 		else if ([elementName isEqualToString:@"name"])

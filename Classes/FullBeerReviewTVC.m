@@ -18,7 +18,6 @@
 @synthesize bodySlider;
 @synthesize aftertasteSlider;
 @synthesize ratingControl;
-@synthesize selectedFlavors;
 @synthesize delegate;
 
 const int kViewTagFlavorsLabel=1;
@@ -29,7 +28,8 @@ const int kViewTagCommentsTextView=2;
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.beerObj=beer;
 		self.title=@"Review";
-		selectedFlavors=[[NSMutableArray alloc] initWithCapacity:150];
+		
+		// TODO: if the review is not the user's, all controls should be read-only
     }
     return self;
 }
@@ -46,33 +46,43 @@ const int kViewTagCommentsTextView=2;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)] autorelease];
 }
 
 -(void)doneButtonClicked
 {
 	// Post the review
-	NSString* bodystr=[NSString stringWithFormat:@"beer_id=%@&rating=%d&body=%.0f&aftertaste=%.0f&balance=%.0f&flavors=%@&comments=%@",
-														[beerObj.data objectForKey:@"beer_id"],
-													    ratingControl.currentRating,
-														round(bodySlider.value),
-														round(aftertasteSlider.value),
-														round(balanceSlider.value),
-														[self.selectedFlavors componentsJoinedByString:@" "],
-														[(UITextView*)[self.view viewWithTag:kViewTagCommentsTextView] text]];
-
-	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
-	NSHTTPURLResponse* response=[del sendRequest:url usingMethod:@"POST" withData:bodystr returningData:nil];
-	if ([response statusCode]==200)
+	
+	NSArray* flavors=nil;
+	if ([delegate hasUserReview])
 	{
-		[delegate fullBeerReviewPosted];
+		flavors=[[delegate getUserReview] objectForKey:@"flavors"];
 	}
-	else
+	
+	NSMutableArray* values=[NSMutableArray arrayWithCapacity:10];
+	if (values)
 	{
-		// TODO: handle this gracefully
+		[values addObject:[NSString stringWithFormat:@"beer_id=%@",[beerObj.data objectForKey:@"beer_id"]]];
+		[values addObject:[NSString stringWithFormat:@"rating=%d",ratingControl.currentRating]];
+		[values addObject:[NSString stringWithFormat:@"body=%.0f",round(bodySlider.value)]];
+		[values addObject:[NSString stringWithFormat:@"aftertaste=%.0f",round(aftertasteSlider.value)]];
+		[values addObject:[NSString stringWithFormat:@"balance=%.0f",round(balanceSlider.value)]];
+		[values addObject:[NSString stringWithFormat:@"comments=%@",[(UITextView*)[self.view viewWithTag:kViewTagCommentsTextView] text]]];
+		[values addObject:[NSString stringWithFormat:@"flavors=%@",[flavors componentsJoinedByString:@" "]]];
+
+		NSString* bodystr=[values componentsJoinedByString:@"&"];
+
+		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
+		NSHTTPURLResponse* response=[del sendRequest:url usingMethod:@"POST" withData:bodystr returningData:nil];
+		if ([response statusCode]==200)
+		{
+			[delegate fullBeerReviewPosted];
+		}
+		else
+		{
+			// TODO: handle this gracefully
+		}
 	}
 }
 
@@ -83,13 +93,7 @@ const int kViewTagCommentsTextView=2;
 	if ([delegate hasUserReview])
 	{
 		NSDictionary* review=[delegate getUserReview];
-		DLog(@"User's rating=%@",[review objectForKey:@"rating"]);
-		DLog(@"User's body=%@",[review objectForKey:@"body"]);
-		DLog(@"User's aftertaste=%@",[review objectForKey:@"aftertaste"]);
-		DLog(@"User's balance=%@",[review objectForKey:@"balance"]);
-		DLog(@"User's comments=%@",[review objectForKey:@"comments"]);
-		
-		
+		DLog(@"User's review=%@",review);
 	}
 }
 
@@ -134,26 +138,46 @@ const int kViewTagCommentsTextView=2;
 -(void)didSelectFlavor:(NSString*)flavorID
 {
 	DLog(@"Flavor selected:%@",flavorID);
-	if ([selectedFlavors indexOfObjectIdenticalTo:flavorID]==NSNotFound)
+	// It is the delegate's responsibility to provide a user review NSMutableDictionary. If the delegate doesn't have a review, we ignore this.
+	if ([delegate hasUserReview])
 	{
-		[selectedFlavors addObject:flavorID];
+		NSMutableArray* flavors=[[delegate getUserReview] objectForKey:@"flavors"];
+		if (flavors==nil)
+		{
+			flavors=[NSMutableArray arrayWithCapacity:10];
+			[[delegate getUserReview] setObject:flavors	forKey:@"flavors"];
+		}
+		
+		if ([flavors indexOfObjectIdenticalTo:flavorID]==NSNotFound)
+		{
+			[flavors addObject:flavorID];
+		}
 	}
 }
 
 -(void)didUnselectFlavor:(NSString*)flavorID
 {
 	DLog(@"Flavor unselected:%@",flavorID);
-	NSUInteger idx=[selectedFlavors indexOfObjectIdenticalTo:flavorID];
-	if (idx!=NSNotFound)
+	// It is the delegate's responsibility to provide a user review NSMutableDictionary. If the delegate doesn't have a review, we ignore this.
+	if ([delegate hasUserReview])
 	{
-		[selectedFlavors removeObjectAtIndex:idx];
+		NSMutableArray* flavors=[[delegate getUserReview] objectForKey:@"flavors"];
+		if (flavors)
+		{
+			NSUInteger idx=[flavors indexOfObjectIdenticalTo:flavorID];
+			if (idx!=NSNotFound)
+			{
+				[flavors removeObjectAtIndex:idx];
+			}
+		}
 	}
 }
 
 -(void)doneSelectingFlavors
 {
-	// Populate Flavors & Aromas text field with the text names for the flavor ids in selectedFlavors
-	[(UILabel*)[self.view viewWithTag:kViewTagFlavorsLabel] setText:[selectedFlavors componentsJoinedByString:@", "]];
+	// Populate Flavors & Aromas text field with the text names for the flavor ids in the review's flavors array
+	if ([delegate hasUserReview])
+		[(UILabel*)[self.view viewWithTag:kViewTagFlavorsLabel] setText:[[[delegate getUserReview] objectForKey:@"flavors"] componentsJoinedByString:@", "]];
 	
 	[self.navigationController popViewControllerAnimated:YES];
 }
@@ -359,7 +383,10 @@ const int kViewTagCommentsTextView=2;
 				{
 					UILabel* label=[[UILabel alloc] initWithFrame:CGRectInset(cell.contentView.frame,25.0,5.0)];
 					label.tag=kViewTagFlavorsLabel;
-					label.text=[selectedFlavors componentsJoinedByString:@", "];
+					
+					if ([delegate hasUserReview])
+						label.text=[[[delegate getUserReview] objectForKey:@"flavors"] componentsJoinedByString:@", "];
+					
 					label.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 					label.textAlignment=UITextAlignmentLeft;
 					label.lineBreakMode=UILineBreakModeWordWrap;
@@ -471,7 +498,6 @@ const int kViewTagCommentsTextView=2;
 	[balanceSlider release];
 	[bodySlider release];
 	[aftertasteSlider release];
-	[selectedFlavors release];
 	
     [super dealloc];
 }
