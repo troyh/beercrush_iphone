@@ -7,16 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FullBeerReviewTVC.h"
 
-
-@interface UserReviewsTVC : UITableViewController {
+@interface UserReviewsTVC : UITableViewController <FullBeerReviewTVCDelegate> {
 	NSMutableArray* reviewsList;
 	NSMutableArray* xmlParserPath;
 	NSMutableString* currentElemValue;
+	NSUInteger selectedRow;
 }
 
 @property (nonatomic,retain) NSMutableArray* reviewsList;
 @property (nonatomic,retain) NSMutableArray* xmlParserPath;
 @property (nonatomic,retain) NSMutableString* currentElemValue;
+@property (nonatomic,assign) NSUInteger selectedRow;
 
 @end

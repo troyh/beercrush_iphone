@@ -667,7 +667,7 @@
 
 -(BOOL)hasUserReview
 {
-	return userReviewData!=nil;
+	return (userReviewData!=nil && [userReviewData count]);
 }
 
 -(NSDictionary*)getUserReview

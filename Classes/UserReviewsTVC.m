@@ -8,13 +8,14 @@
 
 #import "BeerCrushAppDelegate.h"
 #import "UserReviewsTVC.h"
-
+#import "FullBeerReviewTVC.h"
 
 @implementation UserReviewsTVC
 
 @synthesize reviewsList;
 @synthesize xmlParserPath;
 @synthesize currentElemValue;
+@synthesize selectedRow;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -104,6 +105,27 @@
 	// e.g. self.myOutlet = nil;
 }
 
+// FullBeerReviewTVCDelegate methods
+
+-(BOOL)hasUserReview
+{
+	return YES;
+}
+
+-(NSDictionary*)getUserReview
+{
+	return [reviewsList objectAtIndex:self.selectedRow];
+}
+
+-(void)fullBeerReviewPosted
+{
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+
+
+
+
 
 #pragma mark Table view methods
 
@@ -156,12 +178,13 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	// AnotherViewController *anotherViewController = [[AnotherViewController alloc] initWithNibName:@"AnotherView" bundle:nil];
-	// [self.navigationController pushViewController:anotherViewController];
-	// [anotherViewController release];
+	self.selectedRow=indexPath.row;
+	BeerObject* beerObj=[[BeerObject alloc] init];
+	beerObj.data=[[reviewsList objectAtIndex:selectedRow] copy];
+	FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithBeerObject:beerObj];
+	fbrtvc.delegate=self;
+	[self.navigationController pushViewController:fbrtvc animated:YES];
 }
-
 
 /*
 // Override to support conditional editing of the table view.
@@ -228,7 +251,7 @@
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
 	// Clear any old data
-	[self.xmlParserPath release];
+//	[self.xmlParserPath release];
 	self.xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5];
 	[self.currentElemValue release];
 	self.currentElemValue=nil;
@@ -236,7 +259,8 @@
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser
 {
-	[self.xmlParserPath release];
+//	[self.xmlParserPath release];
+	self.xmlParserPath=nil;
 	[self.currentElemValue release];
 	self.currentElemValue=nil;
 }
@@ -255,7 +279,11 @@
 	else if ([elementName isEqualToString:@"type"] ||
 			[elementName isEqualToString:@"timestamp"] ||
 			[elementName isEqualToString:@"beer_id"] ||
-			[elementName isEqualToString:@"rating"])
+			[elementName isEqualToString:@"rating"] ||
+			 [elementName isEqualToString:@"aftertaste"] ||
+			 [elementName isEqualToString:@"balance"] ||
+			 [elementName isEqualToString:@"comments"] ||
+			[elementName isEqualToString:@"body"])
 	{
 		if ([self.xmlParserPath count]==2 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",nil]])
 		{ // XPath is /reviews/review (i.e., it's a beer review
@@ -281,7 +309,11 @@
 		if ([elementName isEqualToString:@"type"] ||
 			[elementName isEqualToString:@"timestamp"] ||
 			[elementName isEqualToString:@"beer_id"] ||
-			[elementName isEqualToString:@"rating"])
+			[elementName isEqualToString:@"rating"] ||
+			[elementName isEqualToString:@"aftertaste"] ||
+			[elementName isEqualToString:@"balance"] ||
+			[elementName isEqualToString:@"comments"] ||
+			[elementName isEqualToString:@"body"])
 		{
 			if ([self.xmlParserPath count]==2 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",nil]])
 			{ // Is a Beer Review

@@ -232,7 +232,10 @@ const int kViewTagCommentsTextView=2;
 			switch (indexPath.row)
 			{
 				case 0:
-					[cell.textLabel setText:[beerObj.data objectForKey:@"name"]];
+					if ([beerObj.data objectForKey:@"beer_name"])
+						[cell.textLabel setText:[beerObj.data objectForKey:@"beer_name"]];
+					else
+						[cell.textLabel setText:[beerObj.data objectForKey:@"name"]];
 					UIView* transparentBackground=[[UIView alloc] initWithFrame:CGRectZero];
 					transparentBackground.backgroundColor=[UIColor clearColor];
 					cell.backgroundView=transparentBackground;
