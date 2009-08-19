@@ -7,7 +7,7 @@
 //
 
 #import "ReviewsTableViewController.h"
-
+#import "FullBeerReviewTVC.h"
 
 @implementation ReviewsTableViewController
 
@@ -16,6 +16,7 @@
 @synthesize currentElemValue;
 @synthesize reviewsList;
 @synthesize totalReviews;
+@synthesize beerTVC;
 
 -(id)initWithID:(NSString*)docid dataType:(ResultType)t
 {
@@ -77,14 +78,20 @@
 	
 	if (url)
 	{
-		NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-		[parser setDelegate:self];
-		BOOL retval=[parser parse];
-		
-		if (retval==NO)
+		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSData* answer;
+		NSHTTPURLResponse* response=[del sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+		if ([response statusCode]==200)
 		{
-			// TODO: handle this error
-		}
+			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
+			[parser setDelegate:self];
+			BOOL retval=[parser parse];
+			
+			if (retval==NO)
+			{
+				// TODO: handle this error
+			}
+		:		}
 	}
 
 }
@@ -168,10 +175,26 @@
     return cell;
 }
 
-/*
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	// Find out what type of document this review is for...
+	UIViewController* vc=nil;
+	
+	if ([[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"beer_id"]!=nil) // It's a beer review
+	{
+		BeerObject* beerObj=[[[BeerObject alloc] init] autorelease];
+		[beerObj.data setObject:[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"beer_id"] forKey:@"beer_id"];
+		[beerObj.data setObject:[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"name"] forKey:@"name"];
+	
+		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithBeerObject:beerObj] autorelease];
+		fbrtvc.delegate=self.beerTVC;
+		vc=fbrtvc;
+	}
+	
+	if (vc!=nil)
+		[self.navigationController pushViewController:vc animated:YES];
 }
-*/
+
 
 /*
 // Override to support conditional editing of the table view.
@@ -214,10 +237,13 @@
 
 
 - (void)dealloc {
-    [super dealloc];
-	
 	[reviewedDocID release];
 	currentElemValue=nil;
+	[reviewsList release];
+	[xmlParserPath release];
+	[beerTVC release];
+
+    [super dealloc];
 }
 
 		
@@ -271,13 +297,19 @@
 	else if (
 		[elementName isEqualToString:@"timestamp"] ||
 	    [elementName isEqualToString:@"user_id"] ||
+		[elementName isEqualToString:@"beer_id"] ||
 	    [elementName isEqualToString:@"rating"]
 		)
 	{
 		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",nil]])
 		{
-			self.currentElemValue=[NSMutableString string];
+			currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
 		}
+	}
+	else if ([elementName isEqualToString:@"name"])
+	{
+		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"beer",nil]])
+			currentElemValue=[[NSMutableString alloc] initWithCapacity:128];
 	}
 
 	// Add the element to the xmlParserPath
@@ -298,8 +330,15 @@
 				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"timestamp"];
 			else if ([elementName isEqualToString:@"user_id"])
 				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"user_id"];
+			else if ([elementName isEqualToString:@"beer_id"])
+				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"beer_id"];
 			else if ([elementName isEqualToString:@"rating"])
 				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"rating"];
+		}
+		else if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"beer",nil]])
+		{
+			if ([elementName isEqualToString:@"name"])
+				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"name"];
 		}
 		
 		self.currentElemValue=nil;
@@ -312,10 +351,7 @@
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if (self.currentElemValue)
-	{
-		[self.currentElemValue appendString:string];
-	}
+	[self.currentElemValue appendString:string];
 }
 
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock

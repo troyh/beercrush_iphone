@@ -378,6 +378,8 @@
 
 -(NSDictionary*)getFlavorsDictionary
 {
+	// TODO: If the file is older than 7 days and we have good network connectivity (WiFi), ask the server for a newer version using If-Modified-Since
+	
 	if (flavorsDictionary==nil)
 	{
 		NSArray* paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);

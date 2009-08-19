@@ -527,6 +527,7 @@
 	else if (indexPath.section == 1 && indexPath.row == 1) // Ratings & Reviews
 	{
 		ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.beerID dataType:Beer];
+		rtvc.beerTVC=self;
 		[self.navigationController pushViewController: rtvc animated:YES];
 		[rtvc release];
 	}
