@@ -16,6 +16,10 @@
 @synthesize xmlParserPath;
 @synthesize currentElemValue;
 @synthesize selectedRow;
+@synthesize totalReviews;
+@synthesize seqNext;
+@synthesize seqMax;
+@synthesize retrievedReviewsCount;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -28,27 +32,29 @@
     return self;
 }
 
-/*
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-*/
 
-- (void)viewWillAppear:(BOOL)animated {
+	[self retrieveReviews:0]; // Get the first batch
+}
+
+-(void)retrieveReviews:(NSUInteger)seqnum
+{
 	// Fetch list of user's beer reviews from the server
 	NSString* user_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
 	if (user_id==nil)
 	{
-		// TODO: alert the user
+		// TODO: ask the user to login
 	}
 	else
 	{
 		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 		NSData* answer=nil;
-		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC, user_id, 0]];
+		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC, user_id, seqnum]];
 		NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
 		if ([response statusCode]==200)
 		{
@@ -65,10 +71,13 @@
 			[parser release];
 		}
 	}
- 
+}
+
+/*
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
  }
-
+*/
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -136,54 +145,91 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.reviewsList count];
+    return [self.reviewsList count]+(self.totalReviews-[self.reviewsList count]?1:0);
 }
 
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"URTVCCell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    // Set up the cell...
-	NSMutableDictionary* review=[self.reviewsList objectAtIndex:indexPath.row];
-	NSString* s=[review objectForKey:@"beer_name"];
-	if (s==nil)
-		[cell.textLabel setText:@"???"];
-	else
-	{
-		[cell.textLabel setText:s];
-//		[cell.detailTextLabel setText:[review objectForKey:@"brewery_name"]];
 
-		NSArray* starsfmt=[NSArray arrayWithObjects:
-						   @"☆☆☆☆☆",
-						   @"★☆☆☆☆",
-						   @"★★☆☆☆",
-						   @"★★★☆☆",
-						   @"★★★★☆",
-						   @"★★★★★",
-						   nil];
+	static NSString *CellIdentifier = @"URTVCCell";
+	
+	UITableViewCell* cell=nil;
+	
+	if (indexPath.row<[self.reviewsList count])
+	{
+		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+		if (cell == nil) {
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+		}
 		
 		// Set up the cell...
-		[cell.detailTextLabel setText:[starsfmt objectAtIndex:[[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"rating"] integerValue]]];
+		NSMutableDictionary* review=[self.reviewsList objectAtIndex:indexPath.row];
+		NSString* s=[review objectForKey:@"beer_name"];
+		if (s==nil)
+			[cell.textLabel setText:@"???"];
+		else
+		{
+			[cell.textLabel setText:s];
+			//[cell.detailTextLabel setText:[review objectForKey:@"brewery_name"]];
+
+			NSArray* starsfmt=[NSArray arrayWithObjects:
+							   @"☆☆☆☆☆",
+							   @"★☆☆☆☆",
+							   @"★★☆☆☆",
+							   @"★★★☆☆",
+							   @"★★★★☆",
+							   @"★★★★★",
+							   nil];
+			
+			// Set up the cell...
+			[cell.detailTextLabel setText:[starsfmt objectAtIndex:[[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"rating"] integerValue]]];
+		}
+	}
+	else
+	{
+		// Add the "More reviews..." table cell
+		cell=[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+		[cell.textLabel setText:[NSString stringWithFormat:@"%d more reviews",self.totalReviews-[self.reviewsList count]]];
+		cell.textLabel.textAlignment=UITextAlignmentCenter;
 	}
 	
     return cell;
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	self.selectedRow=indexPath.row;
-	BeerObject* beerObj=[[BeerObject alloc] init];
-	beerObj.data=[[reviewsList objectAtIndex:selectedRow] copy];
-	FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithBeerObject:beerObj];
-	fbrtvc.delegate=self;
-	[self.navigationController pushViewController:fbrtvc animated:YES];
+	if (indexPath.row<[self.reviewsList count])
+	{
+		self.selectedRow=indexPath.row;
+		BeerObject* beerObj=[[BeerObject alloc] init];
+		beerObj.data=[[reviewsList objectAtIndex:selectedRow] copy];
+		FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithBeerObject:beerObj];
+		fbrtvc.delegate=self;
+		[self.navigationController pushViewController:fbrtvc animated:YES];
+	}
+	else if (self.totalReviews-[self.reviewsList count])
+	{
+		[tableView deselectRowAtIndexPath:indexPath animated:YES];
+		
+		NSUInteger origcnt=[self.reviewsList count];
+		// Query the server for the next set of reviews
+		// TODO: put spinner in accessoryview so the user knows network stuff is going on
+		[self retrieveReviews:self.seqNext];
+
+		// Insert more rows
+		[self.tableView beginUpdates];
+		
+		NSMutableArray* indexPaths=[NSMutableArray arrayWithCapacity:self.retrievedReviewsCount];
+		for (int i=0;i<self.retrievedReviewsCount;++i)
+		{
+			[indexPaths addObject:[NSIndexPath indexPathForRow:origcnt+i inSection:0]];
+		}
+		[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+		if ([self.reviewsList count]>=self.totalReviews) // We have no more reviews to load?
+			[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:origcnt inSection:0],nil] withRowAnimation:UITableViewRowAnimationNone];
+		
+		[self.tableView endUpdates];
+	}
 }
 
 /*
@@ -267,8 +313,20 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	// FYI, the test for count here is just for performance to avoid the array compare if possible
-	if ([elementName isEqualToString:@"review"])
+	if ([elementName isEqualToString:@"reviews"])
+	{
+		if ([self.xmlParserPath count]==0) // At the root / of the XML tree
+		{
+			self.totalReviews=[[attributeDict objectForKey:@"total"] integerValue];
+			self.seqNext=[[attributeDict objectForKey:@"seqnum"] integerValue]+1;
+			self.seqMax=[[attributeDict objectForKey:@"seqmax"] integerValue];
+			self.retrievedReviewsCount=[[attributeDict objectForKey:@"count"] integerValue];
+			DLog(@"totalReviews=%d",totalReviews);
+			DLog(@"seqNext=%d",seqNext);
+			DLog(@"seqMax=%d",seqMax);
+		}
+	}
+	else if ([elementName isEqualToString:@"review"])
 	{
 		if ([self.xmlParserPath count]==1 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",nil]])
 		{
