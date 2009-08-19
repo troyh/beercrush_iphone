@@ -67,8 +67,10 @@ const int kViewTagCommentsTextView=2;
 		[values addObject:[NSString stringWithFormat:@"body=%.0f",round(bodySlider.value)]];
 		[values addObject:[NSString stringWithFormat:@"aftertaste=%.0f",round(aftertasteSlider.value)]];
 		[values addObject:[NSString stringWithFormat:@"balance=%.0f",round(balanceSlider.value)]];
-		[values addObject:[NSString stringWithFormat:@"comments=%@",[(UITextView*)[self.view viewWithTag:kViewTagCommentsTextView] text]]];
-		[values addObject:[NSString stringWithFormat:@"flavors=%@",[flavors componentsJoinedByString:@" "]]];
+		if ([(UITextView*)[self.view viewWithTag:kViewTagCommentsTextView] text])
+			[values addObject:[NSString stringWithFormat:@"comments=%@",[(UITextView*)[self.view viewWithTag:kViewTagCommentsTextView] text]]];
+		if (flavors)
+			[values addObject:[NSString stringWithFormat:@"flavors=%@",[flavors componentsJoinedByString:@" "]]];
 
 		NSString* bodystr=[values componentsJoinedByString:@"&"];
 
@@ -438,10 +440,9 @@ const int kViewTagCommentsTextView=2;
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					
 					UITextView* tv=[[UITextView alloc] initWithFrame:CGRectMake(10, 10, tableView.frame.size.width-40, 100)];
-					if ([delegate hasUserReview])
-					{
+					if ([delegate hasUserReview] && [[delegate getUserReview] objectForKey:@"comments"])
 						tv.text=[[delegate getUserReview] objectForKey:@"comments"];
-					}
+					
 					tv.contentSize=CGSizeMake(100,100);
 					tv.tag=kViewTagCommentsTextView;
 

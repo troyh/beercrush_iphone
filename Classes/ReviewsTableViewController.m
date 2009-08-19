@@ -91,7 +91,7 @@
 			{
 				// TODO: handle this error
 			}
-		:		}
+		}
 	}
 
 }
@@ -182,11 +182,7 @@
 	
 	if ([[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"beer_id"]!=nil) // It's a beer review
 	{
-		BeerObject* beerObj=[[[BeerObject alloc] init] autorelease];
-		[beerObj.data setObject:[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"beer_id"] forKey:@"beer_id"];
-		[beerObj.data setObject:[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"name"] forKey:@"name"];
-	
-		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithBeerObject:beerObj] autorelease];
+		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithBeerObject:[beerTVC beerObj]] autorelease];
 		fbrtvc.delegate=self.beerTVC;
 		vc=fbrtvc;
 	}
