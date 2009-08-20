@@ -13,10 +13,8 @@
 @synthesize highestRating;
 @synthesize currentRating;
 @synthesize starImageViews;
-@synthesize starBox;
 
 #define kDefaultHighestRating 5
-#define kFramePadding 40
 
 - (id)initWithFrame:(CGRect)aRect
 {
@@ -28,16 +26,10 @@
 	self.currentRating=0; // Default is no rating
 	self.starImageViews=[[NSMutableArray alloc] initWithCapacity:self.highestRating];
 
-	// Shrink it a bit to make it look better
-	CGRect tmp=CGRectInset(aRect,kFramePadding,0);
-	tmp.origin.x-=10;
-	self.starBox=tmp;
-
-//	self.frame=self.superview.frame;
 	if ([self.starImageViews count]==0)
 	{
 		// Put star images in
-		int partition_width=self.starBox.size.width/self.highestRating;
+		int partition_width=self.frame.size.width/self.highestRating;
 		for (int i=0;i<self.highestRating;++i)
 		{
 			UIImage* emptyStarImage=[UIImage imageNamed:@"dot.png"];
@@ -47,7 +39,7 @@
 				if (starImage)
 				{
 					UIImageView* iv=[[UIImageView alloc] initWithImage:emptyStarImage highlightedImage:starImage];
-					iv.center=CGPointMake((self.starBox.origin.x-self.frame.origin.x)+(i*partition_width)+(0.5*partition_width),self.frame.size.height/2);
+					iv.center=CGPointMake((i*partition_width)+(0.5*partition_width),self.frame.size.height/2);
 					[self addSubview:iv];
 					
 					[self.starImageViews addObject:iv];
@@ -92,29 +84,22 @@
 	}
 }
 
-- (NSUInteger)setStarsForTouch:(UITouch*)touch
+- (NSUInteger)setStarsForPoint:(CGPoint)pt
 {
-	CGPoint pt=[touch locationInView:touch.view];
-	if (CGRectContainsPoint(self.starBox, pt))
-	{
-		pt.x-=(self.frame.size.width - self.starBox.size.width)/2;
-		int touchedRating=(pt.x / (self.starBox.size.width/self.highestRating))+1;
-
-		[self setStarsForRating:touchedRating];
-		return touchedRating;
-	}
-	return self.currentRating;
+	int touchedRating=(pt.x / (self.frame.size.width/self.highestRating))+1;
+	[self setStarsForRating:touchedRating];
+	return touchedRating;
 }
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-	[self setStarsForTouch:touch];
+	[self setStarsForPoint:[touch locationInView:touch.view]];
 	return [super beginTrackingWithTouch:touch withEvent:event];
 }
 
 - (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-	[self setStarsForTouch:touch];
+	[self setStarsForPoint:[touch locationInView:touch.view]];
 	return [super continueTrackingWithTouch:touch withEvent:event];
 }
 
@@ -123,10 +108,9 @@
 	if (touch.phase==UITouchPhaseEnded)
 	{
 		CGPoint pt=[touch locationInView:touch.view];
-		//		if ([self pointInside:pt withEvent:event])
-		if (CGRectContainsPoint(self.starBox, pt))
+		if ([self pointInside:pt withEvent:event])
 		{
-			self.currentRating=[self setStarsForTouch:touch];
+			self.currentRating=[self setStarsForPoint:pt];
 			// Notify the owner of a rating
 			[self sendActionsForControlEvents:UIControlEventValueChanged];
 		}
