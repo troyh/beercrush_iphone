@@ -14,6 +14,8 @@
 @protocol FullBeerReviewTVCDelegate
 
 -(void)fullBeerReview:(NSDictionary*)userReview withChanges:(BOOL)modified;
+-(NSString*)beerName;
+-(NSString*)breweryName;
 
 @end
 
@@ -30,7 +32,6 @@
 	id<FullBeerReviewTVCDelegate> delegate;
 }
 
-@property (nonatomic, retain) BeerObject* beerObj;
 @property (nonatomic, retain) NSMutableDictionary* userReview;
 @property (assign) id<FullBeerReviewTVCDelegate> delegate;
 @property (nonatomic, retain) RatingControl* ratingControl;

@@ -676,6 +676,16 @@
 	}
 }
 
+-(NSString*)beerName
+{
+	return [self.beerObj.data objectForKey:@"name"];
+}
+
+-(NSString*)breweryName
+{
+	return self.breweryID; // TODO: get the actual name of the brewery
+}
+
 // NSXMLParser delegate methods
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser

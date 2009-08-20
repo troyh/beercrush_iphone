@@ -259,8 +259,13 @@
 			switch (indexPath.row)
 			{
 				case 0:
-					[cell.textLabel setText:[userReview objectForKey:@"beer_name"]];
+				{
+					NSString* n=[userReview objectForKey:@"beer_name"];
+					if (n==nil)
+						n=[self.delegate beerName];
+					[cell.textLabel setText:n];
 					break;
+				}
 				default:
 					break;
 			}

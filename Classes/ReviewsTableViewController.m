@@ -252,6 +252,17 @@
 		}
 	}
 }
+
+-(NSString*)beerName
+{
+	return nil;
+}
+
+-(NSString*)breweryName
+{
+	return nil;
+}
+
 		
 // NSXMLParser delegate methods
 

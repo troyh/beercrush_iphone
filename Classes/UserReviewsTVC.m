@@ -128,10 +128,15 @@
 	}
 }
 
+-(NSString*)beerName
+{
+	return nil;
+}
 
-
-
-
+-(NSString*)breweryName
+{
+	return nil;
+}
 
 #pragma mark Table view methods
 
