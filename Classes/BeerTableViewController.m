@@ -368,7 +368,7 @@
 			{
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 
-				RatingControl* ratingctl=[[RatingControl alloc] initWithFrame:cell.contentView.frame];
+				RatingControl* ratingctl=[[RatingControl alloc] initWithFrame:CGRectMake(40, 7, 200, 30)];
 				
 				// Set current user's rating (if any)
 				NSString* user_rating=[self.userReviewData objectForKey:@"rating"];

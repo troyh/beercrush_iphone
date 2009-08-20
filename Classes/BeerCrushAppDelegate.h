@@ -68,8 +68,8 @@
 @end
 
 #ifdef DEBUG
-//#define BEERCRUSH_API_URL_HOST					"http://macdev"
-#define BEERCRUSH_API_URL_HOST					"http://beercrush.com"
+#define BEERCRUSH_API_URL_HOST					"http://macdev"
+//#define BEERCRUSH_API_URL_HOST					"http://beercrush.com"
 #else
 #define BEERCRUSH_API_URL_HOST					"http://beercrush.com"
 #endif
