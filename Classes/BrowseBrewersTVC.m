@@ -146,7 +146,19 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:[[[breweryList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"id"]];
+	bltvc.setRightBarButtonItem=NO;
 	[self.navigationController pushViewController:bltvc animated:YES];
+	[self.navigationController.navigationBar.topItem setRightBarButtonItem:
+		[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(newBeerCancelButtonClicked)] autorelease]
+	];
+}
+
+-(void)newBeerCancelButtonClicked
+{
+	[self.parentViewController dismissModalViewControllerAnimated:YES];
+	// Clear onBeerSelected selector so we're not called when the user selects a beer
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[delegate setOnBeerSelectedAction:nil target:nil];
 }
 
 

@@ -172,8 +172,8 @@
 		self.navigationController.navigationBar.topItem.leftBarButtonItem=nil;
 
 		NSArray* rows=[NSArray arrayWithObjects:
+					   [NSIndexPath indexPathForRow:0 inSection:1],
 					   [NSIndexPath indexPathForRow:1 inSection:1],
-					   [NSIndexPath indexPathForRow:2 inSection:1],
 					   nil];
 		[self.tableView beginUpdates];
 		[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
@@ -229,8 +229,8 @@
 		self.title=@"Beer";
 
 		NSArray* rows=[NSArray arrayWithObjects:
+					   [NSIndexPath indexPathForRow:0 inSection:1],
 					   [NSIndexPath indexPathForRow:1 inSection:1],
-					   [NSIndexPath indexPathForRow:2 inSection:1],
 					   nil];
 		[self.tableView beginUpdates];
 		[self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
@@ -274,11 +274,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSInteger adjusted_row=indexPath.row;
-	if (self.editing && indexPath.section==0)
+	if (self.editing && indexPath.section==1)
 	{
-		// When editing a beer, section 0 has 2 less rows
-		if (adjusted_row>0)
-			adjusted_row+=2;
+		// When editing a beer, the normal rows 0 and 1 in section 1 are gone, so adjust upward by 2
+		adjusted_row+=2;
 	}
 
 	switch (indexPath.section) 

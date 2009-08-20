@@ -21,14 +21,13 @@
 @synthesize xmlParserPath;
 @synthesize beerList;
 @synthesize btvc;
+@synthesize setRightBarButtonItem;
 
 -(id)initWithBreweryID:(NSString*)brewery_id
 {
 	[super initWithStyle:UITableViewStylePlain];
 	
-	self.placeID=nil;
-	self.breweryID=nil;
-	self.wishlistID=nil;
+	self.setRightBarButtonItem=YES;
 	
 	NSArray* parts=[brewery_id componentsSeparatedByString:@":"];
 	if ([[parts objectAtIndex:0] isEqualToString:@"place"])
@@ -87,10 +86,13 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
-	if (self.placeID)
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd	target:self action:@selector(browseBrewersPanel)] autorelease];
-	else if (self.breweryID)
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd	target:self action:@selector(newBeerPanel)] autorelease];
+	if (setRightBarButtonItem)
+	{
+		if (self.placeID)
+			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd	target:self action:@selector(browseBrewersPanel)] autorelease];
+		else if (self.breweryID)
+			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd	target:self action:@selector(newBeerPanel)] autorelease];
+	}
 }
 
 /*
@@ -150,7 +152,9 @@
 	UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(browseBrewersCancelButtonClicked)] autorelease];
 	
 	[self presentModalViewController:nc animated:YES];
-	[nc.navigationBar.topItem setLeftBarButtonItem:nil animated:NO];
+	// Take the (left) Back button off the navbar
+	[nc.navigationBar.topItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:[[UIView alloc] initWithFrame:CGRectZero]] autorelease] animated:NO];
+	// Put a cancel button on the right
 	[nc.navigationBar.topItem setRightBarButtonItem:cancelButton animated:NO];
 
 	// Set onBeerSelected selector so we're called when the user selects a beer
@@ -161,6 +165,10 @@
 -(void)browseBrewersCancelButtonClicked
 {
 	[self.parentViewController dismissModalViewControllerAnimated:YES];
+
+	// Clear onBeerSelected selector so we're not called when the user selects a beer
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[delegate setOnBeerSelectedAction:nil target:nil];
 }
 
 -(void)addBeerToMenu:(NSString*)beerID
