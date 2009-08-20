@@ -413,6 +413,32 @@
 	return flavorsDictionary;
 }
 
+-(NSHTTPURLResponse*)postBeerReview:(NSDictionary*)userReview returningData:(NSData**)answer
+{
+	// Post the review
+	NSMutableArray* values=[NSMutableArray arrayWithCapacity:10];
+	if (values)
+	{
+		[values addObject:[NSString stringWithFormat:@"beer_id=%@",	[userReview objectForKey:@"beer_id"]]];
+		[values addObject:[NSString stringWithFormat:@"rating=%d",	[userReview objectForKey:@"rating"]]];
+		[values addObject:[NSString stringWithFormat:@"body=%.0f",	[userReview objectForKey:@"body"]]];
+		[values addObject:[NSString stringWithFormat:@"aftertaste=%.0f",[userReview objectForKey:@"aftertaste"]]];
+		[values addObject:[NSString stringWithFormat:@"balance=%.0f",[userReview objectForKey:@"balance"]]];
+		if ([userReview objectForKey:@"comments"])
+			[values addObject:[NSString stringWithFormat:@"comments=%@",[userReview objectForKey:@"comments"]]];
+		
+		NSArray* flavors=[userReview objectForKey:@"flavors"];
+		if (flavors)
+			[values addObject:[NSString stringWithFormat:@"flavors=%@",[flavors componentsJoinedByString:@" "]]];
+		
+		NSString* bodystr=[values componentsJoinedByString:@"&"];
+		
+		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
+		return [self sendRequest:url usingMethod:@"POST" withData:bodystr returningData:answer];
+	}
+	return nil;
+}
+
 -(void)setOnBeerSelectedAction:(SEL)s target:(id)t
 {
 	self.onBeerSelectedAction=s;

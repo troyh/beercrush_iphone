@@ -15,7 +15,6 @@
 @synthesize reviewsList;
 @synthesize xmlParserPath;
 @synthesize currentElemValue;
-@synthesize selectedRow;
 @synthesize totalReviews;
 @synthesize seqNext;
 @synthesize seqMax;
@@ -116,19 +115,17 @@
 
 // FullBeerReviewTVCDelegate methods
 
--(BOOL)hasUserReview
+-(void)fullBeerReview:(NSDictionary*)review withChanges:(BOOL)edited
 {
-	return YES;
-}
-
--(NSMutableDictionary*)getUserReview
-{
-	return [reviewsList objectAtIndex:self.selectedRow];
-}
-
--(void)fullBeerReviewPosted
-{
-	[self.navigationController popViewControllerAnimated:YES];
+	if (edited)
+	{
+		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSData* answer;
+		if ([[del postBeerReview:review returningData:&answer] statusCode]==200)
+		{
+			[self.navigationController popViewControllerAnimated:YES];
+		}
+	}
 }
 
 
@@ -200,10 +197,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.row<[self.reviewsList count])
 	{
-		self.selectedRow=indexPath.row;
 		BeerObject* beerObj=[[BeerObject alloc] init];
-		beerObj.data=[[reviewsList objectAtIndex:selectedRow] copy];
-		FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithBeerObject:beerObj andReview:[self.reviewsList objectAtIndex:selectedRow]];
+		beerObj.data=[[reviewsList objectAtIndex:indexPath.row] copy];
+		FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithReviewObject:[self.reviewsList objectAtIndex:indexPath.row]];
 		fbrtvc.delegate=self;
 		[self.navigationController pushViewController:fbrtvc animated:YES];
 	}

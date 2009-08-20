@@ -498,7 +498,7 @@
 	
 	if ([response statusCode]==200) {
 		[self.userReviewData setObject:[NSString stringWithFormat:@"%d",rating] forKey:@"rating"];
-		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithBeerObject:self.beerObj andReview:self.userReviewData] autorelease];
+		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:self.userReviewData] autorelease];
 		fbrtvc.delegate=self;
 		[self.navigationController pushViewController:fbrtvc animated:YES];
 	} else {
@@ -526,7 +526,6 @@
 	else if (indexPath.section == 1 && indexPath.row == 1) // Ratings & Reviews
 	{
 		ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.beerID dataType:Beer];
-		rtvc.beerTVC=self;
 		[self.navigationController pushViewController: rtvc animated:YES];
 		[rtvc release];
 	}
@@ -664,19 +663,17 @@
 
 // FullBeerReviewTVCDelegate methods
 
--(BOOL)hasUserReview
+-(void)fullBeerReview:(NSDictionary*)userReview withChanges:(BOOL)modified
 {
-	return (userReviewData!=nil && [userReviewData count]);
-}
-
--(NSMutableDictionary*)getUserReview
-{
-	return userReviewData;
-}
-
--(void)fullBeerReviewPosted
-{
-	[self.navigationController popViewControllerAnimated:YES];
+	if (modified)
+	{
+		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSData* answer;
+		if ([[del postBeerReview:userReview returningData:&answer] statusCode]==200)
+		{
+			[self.navigationController popViewControllerAnimated:YES];
+		}
+	}
 }
 
 // NSXMLParser delegate methods

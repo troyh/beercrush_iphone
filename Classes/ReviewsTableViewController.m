@@ -7,7 +7,6 @@
 //
 
 #import "ReviewsTableViewController.h"
-#import "FullBeerReviewTVC.h"
 
 @implementation ReviewsTableViewController
 
@@ -16,7 +15,6 @@
 @synthesize currentElemValue;
 @synthesize reviewsList;
 @synthesize totalReviews;
-@synthesize beerTVC;
 
 -(id)initWithID:(NSString*)docid dataType:(ResultType)t
 {
@@ -175,15 +173,14 @@
     return cell;
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	// Find out what type of document this review is for...
 	UIViewController* vc=nil;
 	
 	if ([[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"beer_id"]!=nil) // It's a beer review
 	{
-		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithBeerObject:[beerTVC beerObj] andReview:[self.reviewsList objectAtIndex:indexPath.row]] autorelease];
-		fbrtvc.delegate=self.beerTVC;
+		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:[self.reviewsList objectAtIndex:indexPath.row]] autorelease];
+		fbrtvc.delegate=self;
 		vc=fbrtvc;
 	}
 	
@@ -237,11 +234,24 @@
 	currentElemValue=nil;
 	[reviewsList release];
 	[xmlParserPath release];
-	[beerTVC release];
 
     [super dealloc];
 }
 
+// FullBeerReviewTVCDelegate methods
+
+-(void)fullBeerReview:(NSDictionary*)review withChanges:(BOOL)edited
+{
+	if (edited)
+	{
+		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSData* answer;
+		if ([[del postBeerReview:review returningData:&answer] statusCode]==200)
+		{
+			[self.navigationController popViewControllerAnimated:YES];
+		}
+	}
+}
 		
 // NSXMLParser delegate methods
 

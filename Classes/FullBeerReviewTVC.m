@@ -13,7 +13,6 @@
 
 @implementation FullBeerReviewTVC
 
-@synthesize beerObj;
 @synthesize ratingControl;
 @synthesize userReview;
 @synthesize bodySlider;
@@ -30,10 +29,9 @@
 //const int kTagAftertasteSlider=5;
 //const int kTagRatingControl=6;
 
--(id)initWithBeerObject:(BeerObject*)beer andReview:(NSDictionary*)review
+-(id)initWithReviewObject:(NSDictionary*)review
 {
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
-		self.beerObj=beer;
 		self.userReview=[review copy];
 		self.title=@"Review";
 		
@@ -59,41 +57,7 @@
 
 -(void)doneButtonClicked
 {
-	// Post the review
-	
-	NSArray* flavors=nil;
-	if ([delegate hasUserReview])
-	{
-		flavors=[[delegate getUserReview] objectForKey:@"flavors"];
-	}
-	
-	NSMutableArray* values=[NSMutableArray arrayWithCapacity:10];
-	if (values)
-	{
-		[values addObject:[NSString stringWithFormat:@"beer_id=%@",[beerObj.data objectForKey:@"beer_id"]]];
-		[values addObject:[NSString stringWithFormat:@"rating=%d",ratingControl.currentRating]];
-		[values addObject:[NSString stringWithFormat:@"body=%.0f",round(bodySlider.value)]];
-		[values addObject:[NSString stringWithFormat:@"aftertaste=%.0f",round(aftertasteSlider.value)]];
-		[values addObject:[NSString stringWithFormat:@"balance=%.0f",round(balanceSlider.value)]];
-		if ([commentsTextView text])
-			[values addObject:[NSString stringWithFormat:@"comments=%@",[commentsTextView text]]];
-		if (flavors)
-			[values addObject:[NSString stringWithFormat:@"flavors=%@",[flavors componentsJoinedByString:@" "]]];
-
-		NSString* bodystr=[values componentsJoinedByString:@"&"];
-
-		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
-		NSHTTPURLResponse* response=[del sendRequest:url usingMethod:@"POST" withData:bodystr returningData:nil];
-		if ([response statusCode]==200)
-		{
-			[delegate fullBeerReviewPosted];
-		}
-		else
-		{
-			// TODO: handle this gracefully
-		}
-	}
+	[delegate fullBeerReview:self.userReview withChanges:YES];
 }
 
 /*
@@ -141,7 +105,7 @@
 
 -(NSArray*)getCurrentFlavors
 {
-	return [[delegate getUserReview] objectForKey:@"flavors"];
+	return [self.userReview objectForKey:@"flavors"];
 }
 
 -(void)didSelectFlavor:(NSString*)flavorID
@@ -186,17 +150,17 @@
 
 -(NSString*)getFlavorsCellText
 {
-	if ([delegate hasUserReview])
+	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSDictionary* flavorsdict=[[del getFlavorsDictionary] objectForKey:@"byid"];
+	
+	NSArray* flavors=[self.userReview objectForKey:@"flavors"];
+	if (flavors)
 	{
-		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		NSDictionary* flavorsdict=[[del getFlavorsDictionary] objectForKey:@"byid"];
-		
-		NSArray* flavors=[[delegate getUserReview] objectForKey:@"flavors"];
 		NSMutableArray* flavornames=[NSMutableArray arrayWithCapacity:10];
 		for (NSUInteger i=0; i<[flavors count]; ++i) {
 			[flavornames addObject:[flavorsdict objectForKey:[flavors objectAtIndex:i]]];
 		}
-		
+	
 		return [flavornames componentsJoinedByString:@", "];
 	}
 	return @"";
@@ -295,10 +259,7 @@
 			switch (indexPath.row)
 			{
 				case 0:
-					if ([beerObj.data objectForKey:@"beer_name"])
-						[cell.textLabel setText:[beerObj.data objectForKey:@"beer_name"]];
-					else
-						[cell.textLabel setText:[beerObj.data objectForKey:@"name"]];
+					[cell.textLabel setText:[userReview objectForKey:@"beer_name"]];
 					break;
 				default:
 					break;
@@ -526,7 +487,6 @@
 
 
 - (void)dealloc {
-	[beerObj release];
 	[userReview release];
 	[ratingControl release];
 	[bodySlider release];

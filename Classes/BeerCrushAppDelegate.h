@@ -64,6 +64,7 @@
 -(void)setOnBeerSelectedAction:(SEL)s target:(id)t;
 -(BOOL)onBeerSelected:(id)obj;
 -(NSDictionary*)getFlavorsDictionary;
+-(NSHTTPURLResponse*)postBeerReview:(NSDictionary*)userReview returningData:(NSData**)answer;
 
 @end
 

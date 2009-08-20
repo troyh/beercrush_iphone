@@ -12,16 +12,12 @@
 #import "FlavorsAromasTVC.h"
 
 @protocol FullBeerReviewTVCDelegate
-@optional
 
--(BOOL)hasUserReview;
--(NSMutableDictionary*)getUserReview;
--(void)fullBeerReviewPosted;
+-(void)fullBeerReview:(NSDictionary*)userReview withChanges:(BOOL)modified;
 
 @end
 
 @interface FullBeerReviewTVC : UITableViewController <FlavorsAromasTVCDelegate> {
-	BeerObject* beerObj;
 	NSMutableDictionary* userReview;
 	
 	RatingControl* ratingControl;
@@ -44,7 +40,7 @@
 @property (nonatomic, retain) UILabel* flavorsLabel;
 @property (nonatomic, retain) UITextView* commentsTextView;
 
--(id)initWithBeerObject:(BeerObject*)beer andReview:(NSDictionary*)review;
+-(id)initWithReviewObject:(NSDictionary*)review;
 -(NSString*)getFlavorsCellText;
 -(UIView*)view:(UIView*)view findSubviewOfClass:(Class)class;
 
