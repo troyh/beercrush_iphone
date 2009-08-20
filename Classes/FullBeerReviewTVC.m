@@ -14,19 +14,27 @@
 @implementation FullBeerReviewTVC
 
 @synthesize beerObj;
-@synthesize balanceSlider;
-@synthesize bodySlider;
-@synthesize aftertasteSlider;
 @synthesize ratingControl;
+@synthesize userReview;
+@synthesize bodySlider;
+@synthesize balanceSlider;
+@synthesize aftertasteSlider;
+@synthesize flavorsLabel;
+@synthesize commentsTextView;
 @synthesize delegate;
 
-const int kViewTagFlavorsLabel=1;
-const int kViewTagCommentsTextView=2;
+//const int kTagFlavorsLabel=1;
+//const int kTagCommentsTextView=2;
+//const int kTagBodySlider=3;
+//const int kTagBalanceSlider=4;
+//const int kTagAftertasteSlider=5;
+//const int kTagRatingControl=6;
 
--(id)initWithBeerObject:(BeerObject*)beer
+-(id)initWithBeerObject:(BeerObject*)beer andReview:(NSDictionary*)review
 {
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.beerObj=beer;
+		self.userReview=[review copy];
 		self.title=@"Review";
 		
 		// TODO: if the review is not the user's, all controls should be read-only
@@ -67,8 +75,8 @@ const int kViewTagCommentsTextView=2;
 		[values addObject:[NSString stringWithFormat:@"body=%.0f",round(bodySlider.value)]];
 		[values addObject:[NSString stringWithFormat:@"aftertaste=%.0f",round(aftertasteSlider.value)]];
 		[values addObject:[NSString stringWithFormat:@"balance=%.0f",round(balanceSlider.value)]];
-		if ([(UITextView*)[self.view viewWithTag:kViewTagCommentsTextView] text])
-			[values addObject:[NSString stringWithFormat:@"comments=%@",[(UITextView*)[self.view viewWithTag:kViewTagCommentsTextView] text]]];
+		if ([commentsTextView text])
+			[values addObject:[NSString stringWithFormat:@"comments=%@",[commentsTextView text]]];
 		if (flavors)
 			[values addObject:[NSString stringWithFormat:@"flavors=%@",[flavors componentsJoinedByString:@" "]]];
 
@@ -88,17 +96,11 @@ const int kViewTagCommentsTextView=2;
 	}
 }
 
+/*
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-	
-	// Populate the fields with values from the user's review (if there is one)
-	if ([delegate hasUserReview])
-	{
-		NSDictionary* review=[delegate getUserReview];
-		DLog(@"User's review=%@",review);
-	}
 }
-
+*/
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -146,19 +148,16 @@ const int kViewTagCommentsTextView=2;
 {
 	DLog(@"Flavor selected:%@",flavorID);
 	// It is the delegate's responsibility to provide a user review NSMutableDictionary. If the delegate doesn't have a review, we ignore this.
-	if ([delegate hasUserReview])
+	NSMutableArray* flavors=[self.userReview objectForKey:@"flavors"];
+	if (flavors==nil)
 	{
-		NSMutableArray* flavors=[[delegate getUserReview] objectForKey:@"flavors"];
-		if (flavors==nil)
-		{
-			flavors=[NSMutableArray arrayWithCapacity:10];
-			[[delegate getUserReview] setObject:flavors	forKey:@"flavors"];
-		}
-		
-		if ([flavors indexOfObjectIdenticalTo:flavorID]==NSNotFound)
-		{
-			[flavors addObject:flavorID];
-		}
+		flavors=[NSMutableArray arrayWithCapacity:10];
+		[self.userReview setObject:flavors	forKey:@"flavors"];
+	}
+	
+	if ([flavors indexOfObject:flavorID]==NSNotFound)
+	{
+		[flavors addObject:flavorID];
 	}
 }
 
@@ -166,16 +165,13 @@ const int kViewTagCommentsTextView=2;
 {
 	DLog(@"Flavor unselected:%@",flavorID);
 	// It is the delegate's responsibility to provide a user review NSMutableDictionary. If the delegate doesn't have a review, we ignore this.
-	if ([delegate hasUserReview])
+	NSMutableArray* flavors=[self.userReview objectForKey:@"flavors"];
+	if (flavors)
 	{
-		NSMutableArray* flavors=[[delegate getUserReview] objectForKey:@"flavors"];
-		if (flavors)
+		NSUInteger idx=[flavors indexOfObject:flavorID];
+		if (idx!=NSNotFound)
 		{
-			NSUInteger idx=[flavors indexOfObjectIdenticalTo:flavorID];
-			if (idx!=NSNotFound)
-			{
-				[flavors removeObjectAtIndex:idx];
-			}
+			[flavors removeObjectAtIndex:idx];
 		}
 	}
 }
@@ -183,7 +179,7 @@ const int kViewTagCommentsTextView=2;
 -(void)doneSelectingFlavors
 {
 	// Populate Flavors & Aromas text field with the text names for the flavor ids in the review's flavors array
-	[(UILabel*)[self.view viewWithTag:kViewTagFlavorsLabel] setText:[self getFlavorsCellText]];
+	[self.flavorsLabel setText:[self getFlavorsCellText]];
 	
 	[self.navigationController popViewControllerAnimated:YES];
 }
@@ -259,6 +255,19 @@ const int kViewTagCommentsTextView=2;
 	return tableView.rowHeight;
 }
 
+-(UIView*)view:(UIView*)view findSubviewOfClass:(Class)class
+{
+	for (NSUInteger i=0,j=[view.subviews count];i<j;++i)
+	{
+		UIView* v=[view.subviews objectAtIndex:i];
+		DLog(@"subview #%d=%@",i,v);
+		if ([v isKindOfClass:class])
+		{
+			return v;
+		}
+	}
+	return nil;
+}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -270,11 +279,17 @@ const int kViewTagCommentsTextView=2;
 	switch (indexPath.section) {
 		case 0:
 		{
-			static NSString *CellIdentifier = @"BeerNameCell";
+			static NSString *CellIdentifier = @"Section0Cell";
 			
 			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 			if (cell == nil) {
 				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+
+				UIView* transparentBackground=[[UIView alloc] initWithFrame:CGRectZero];
+				transparentBackground.backgroundColor=[UIColor clearColor];
+				cell.backgroundView=transparentBackground;
+				cell.backgroundColor=[UIColor clearColor];
+				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 			}
 			
 			switch (indexPath.row)
@@ -284,11 +299,6 @@ const int kViewTagCommentsTextView=2;
 						[cell.textLabel setText:[beerObj.data objectForKey:@"beer_name"]];
 					else
 						[cell.textLabel setText:[beerObj.data objectForKey:@"name"]];
-					UIView* transparentBackground=[[UIView alloc] initWithFrame:CGRectZero];
-					transparentBackground.backgroundColor=[UIColor clearColor];
-					cell.backgroundView=transparentBackground;
-					cell.backgroundColor=[UIColor clearColor];
-					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					break;
 				default:
 					break;
@@ -297,32 +307,35 @@ const int kViewTagCommentsTextView=2;
 		}
 		case 1:
 		{
-			static NSString *CellIdentifier = @"Value2Cell";
+			static NSString *CellIdentifier = @"Section1Cell";
 			
 			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 			if (cell == nil) {
 				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier] autorelease];
+				cell.detailTextLabel.backgroundColor=[UIColor clearColor];
+				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
+				if (self.ratingControl==nil)
+					self.ratingControl=[[[RatingControl alloc] initWithFrame:CGRectMake(120,(tableView.rowHeight-30)/2,170,30)] autorelease];
+				[cell.contentView addSubview:self.ratingControl];
 			}
 			
 			switch (indexPath.row)
 			{
 				case 0:
 					[cell.detailTextLabel setText:@"My Rating"];
-					cell.detailTextLabel.backgroundColor=[UIColor clearColor];
-					cell.selectionStyle=UITableViewCellSelectionStyleNone;
-					
-					ratingControl=[[[RatingControl alloc] initWithFrame:CGRectMake(80,(tableView.rowHeight-30)/2,260,30)] autorelease];
-					
+
 					// Set current user's rating (if any)
-					if ([delegate hasUserReview])
+					NSString* user_rating=[self.userReview objectForKey:@"rating"];
+					if (user_rating!=nil) // There is a user review
 					{
-						NSString* user_rating=[[delegate getUserReview] objectForKey:@"rating"];
-						if (user_rating!=nil) // No user review
-							ratingControl.currentRating=[user_rating integerValue];
-						DLog(@"Current rating:%d",ratingControl.currentRating);
+						if (self.ratingControl)
+						{
+							self.ratingControl.currentRating=[user_rating integerValue];
+							DLog(@"Current rating:%d",self.ratingControl.currentRating);
+						}
 					}
 					
-					[cell.contentView addSubview:ratingControl];
 					break;
 				default:
 					break;
@@ -331,42 +344,45 @@ const int kViewTagCommentsTextView=2;
 		}
 		case 2:
 		{
-			static NSString *CellIdentifier = @"Value2Cell";
+			static NSString *CellIdentifier = @"Section2Cell";
 			
 			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 			if (cell == nil) {
 				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier] autorelease];
+				cell.detailTextLabel.backgroundColor=[UIColor clearColor];
+				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 			}
+			
 			switch (indexPath.row)
 			{
 				case 0:
 				{
 					[cell.detailTextLabel setText:@"Body"];
-					cell.detailTextLabel.backgroundColor=[UIColor clearColor];
-					cell.selectionStyle=UITableViewCellSelectionStyleNone;
-					
-					bodySlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
-					bodySlider.minimumValue=1.0;
-					bodySlider.maximumValue=5.0;
-					
-					if ([delegate hasUserReview])
-						bodySlider.value=[[[delegate getUserReview] objectForKey:@"body"] integerValue];
-					
+
+					// Add slider control
+					if (self.bodySlider==nil)
+					{
+						self.bodySlider=[[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)] autorelease];
+						bodySlider.minimumValue=1.0;
+						bodySlider.maximumValue=5.0;
+						bodySlider.value=[[self.userReview objectForKey:@"body"] integerValue];
+					}
+
 					[cell.contentView addSubview:bodySlider];
 					break;
 				}
 				case 1:
 				{
 					[cell.detailTextLabel setText:@"Balance"];
-					cell.detailTextLabel.backgroundColor=[UIColor clearColor];
-					cell.selectionStyle=UITableViewCellSelectionStyleNone;
-					
-					balanceSlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
-					balanceSlider.minimumValue=1.0;
-					balanceSlider.maximumValue=5.0;
 
-					if ([delegate hasUserReview])
-						balanceSlider.value=[[[delegate getUserReview] objectForKey:@"balance"] integerValue];
+					// Add slider control
+					if (self.balanceSlider==nil)
+					{
+						self.balanceSlider=[[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)] autorelease];
+						balanceSlider.minimumValue=1.0;
+						balanceSlider.maximumValue=5.0;
+						balanceSlider.value=[[self.userReview objectForKey:@"balance"] integerValue];
+					}
 
 					[cell.contentView addSubview:balanceSlider];
 					break;
@@ -374,16 +390,16 @@ const int kViewTagCommentsTextView=2;
 				case 2:
 				{
 					[cell.detailTextLabel setText:@"Aftertaste"];
-					cell.detailTextLabel.backgroundColor=[UIColor clearColor];
-					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
+					// Add slider control
+					if (self.aftertasteSlider==nil)
+					{
+						self.aftertasteSlider=[[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)] autorelease];
+						aftertasteSlider.minimumValue=1.0;
+						aftertasteSlider.maximumValue=5.0;
+						aftertasteSlider.value=[[self.userReview objectForKey:@"aftertaste"] integerValue];
+					}
 					
-					aftertasteSlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
-					aftertasteSlider.minimumValue=1.0;
-					aftertasteSlider.maximumValue=5.0;
-
-					if ([delegate hasUserReview])
-						aftertasteSlider.value=[[[delegate getUserReview] objectForKey:@"aftertaste"] integerValue];
-
 					[cell.contentView addSubview:aftertasteSlider];
 					break;
 				}
@@ -394,7 +410,7 @@ const int kViewTagCommentsTextView=2;
 		}
 		case 3:
 		{
-			static NSString *CellIdentifier = @"DefaultCell";
+			static NSString *CellIdentifier = @"Section3Cell";
 			
 			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 			if (cell == nil) {
@@ -404,21 +420,19 @@ const int kViewTagCommentsTextView=2;
 			switch (indexPath.row)
 			{
 				case 0: // Flavors & Aromas
-				{
-					UILabel* label=[[UILabel alloc] initWithFrame:CGRectInset(cell.contentView.frame,25.0,5.0)];
-					label.tag=kViewTagFlavorsLabel;
-					label.text=[self getFlavorsCellText];
+					if (self.flavorsLabel==nil)
+					{
+						self.flavorsLabel=[[[UILabel alloc] initWithFrame:CGRectInset(cell.contentView.frame,25.0,5.0)] autorelease];
 					
-					label.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
-					label.textAlignment=UITextAlignmentLeft;
-					label.lineBreakMode=UILineBreakModeWordWrap;
-					label.numberOfLines=0;
+						self.flavorsLabel.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+						self.flavorsLabel.textAlignment=UITextAlignmentLeft;
+						self.flavorsLabel.lineBreakMode=UILineBreakModeWordWrap;
+						self.flavorsLabel.numberOfLines=0;
+					}
 					
-					[cell.contentView addSubview:label];
-					
-					[label release];
+					[cell.contentView addSubview:self.flavorsLabel];
+					self.flavorsLabel.text=[self getFlavorsCellText];
 					break;
-				}
 				default:
 					break;
 			}
@@ -426,31 +440,28 @@ const int kViewTagCommentsTextView=2;
 		}
 		case 4:
 		{
-			static NSString *CellIdentifier = @"CommentsCell";
+			static NSString *CellIdentifier = @"Section4Cell";
 			
 			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 			if (cell == nil) {
 				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 			}
 
 			switch (indexPath.row)
 			{
 				case 0:  // Comments
-				{
-					cell.selectionStyle=UITableViewCellSelectionStyleNone;
-					
-					UITextView* tv=[[UITextView alloc] initWithFrame:CGRectMake(10, 10, tableView.frame.size.width-40, 100)];
-					if ([delegate hasUserReview] && [[delegate getUserReview] objectForKey:@"comments"])
-						tv.text=[[delegate getUserReview] objectForKey:@"comments"];
-					
-					tv.contentSize=CGSizeMake(100,100);
-					tv.tag=kViewTagCommentsTextView;
 
-					[cell.contentView addSubview:tv];
+					if (self.commentsTextView==nil)
+					{
+						self.commentsTextView=[[[UITextView alloc] initWithFrame:CGRectMake(10, 10, tableView.frame.size.width-40, 100)] autorelease];
+						self.commentsTextView.text=[self.userReview objectForKey:@"comments"];
+					
+						self.commentsTextView.contentSize=CGSizeMake(100,100);
+					}
 
-					[tv release];
+					[cell.contentView addSubview:self.commentsTextView];
 					break;
-				}
 				default:
 					break;
 			}
@@ -516,9 +527,13 @@ const int kViewTagCommentsTextView=2;
 
 - (void)dealloc {
 	[beerObj release];
-	[balanceSlider release];
+	[userReview release];
+	[ratingControl release];
 	[bodySlider release];
+	[balanceSlider release];
 	[aftertasteSlider release];
+	[flavorsLabel release];
+	[commentsTextView release];
 	
     [super dealloc];
 }

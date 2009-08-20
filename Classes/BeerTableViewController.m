@@ -498,7 +498,7 @@
 	
 	if ([response statusCode]==200) {
 		[self.userReviewData setObject:[NSString stringWithFormat:@"%d",rating] forKey:@"rating"];
-		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithBeerObject:self.beerObj] autorelease];
+		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithBeerObject:self.beerObj andReview:self.userReviewData] autorelease];
 		fbrtvc.delegate=self;
 		[self.navigationController pushViewController:fbrtvc animated:YES];
 	} else {

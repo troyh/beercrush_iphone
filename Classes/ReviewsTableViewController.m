@@ -182,7 +182,7 @@
 	
 	if ([[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"beer_id"]!=nil) // It's a beer review
 	{
-		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithBeerObject:[beerTVC beerObj]] autorelease];
+		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithBeerObject:[beerTVC beerObj] andReview:[self.reviewsList objectAtIndex:indexPath.row]] autorelease];
 		fbrtvc.delegate=self.beerTVC;
 		vc=fbrtvc;
 	}

@@ -203,7 +203,7 @@
 		self.selectedRow=indexPath.row;
 		BeerObject* beerObj=[[BeerObject alloc] init];
 		beerObj.data=[[reviewsList objectAtIndex:selectedRow] copy];
-		FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithBeerObject:beerObj];
+		FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithBeerObject:beerObj andReview:[self.reviewsList objectAtIndex:selectedRow]];
 		fbrtvc.delegate=self;
 		[self.navigationController pushViewController:fbrtvc animated:YES];
 	}
