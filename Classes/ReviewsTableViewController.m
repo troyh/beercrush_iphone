@@ -15,6 +15,7 @@
 @synthesize currentElemValue;
 @synthesize reviewsList;
 @synthesize totalReviews;
+@synthesize fullBeerReviewDelegate;
 
 -(id)initWithID:(NSString*)docid dataType:(ResultType)t
 {
@@ -180,7 +181,7 @@
 	if ([[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"beer_id"]!=nil) // It's a beer review
 	{
 		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:[self.reviewsList objectAtIndex:indexPath.row]] autorelease];
-		fbrtvc.delegate=self;
+		fbrtvc.delegate=self.fullBeerReviewDelegate?self.fullBeerReviewDelegate:self;
 		vc=fbrtvc;
 	}
 	
