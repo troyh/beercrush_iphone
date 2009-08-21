@@ -21,6 +21,15 @@
 @synthesize currentElemValue;
 @synthesize xmlParserPath;
 @synthesize userReviewData;
+@synthesize userRatingControl;
+@synthesize overallRatingControl;
+@synthesize bodySlider;
+@synthesize balanceSlider;
+@synthesize aftertasteSlider;
+@synthesize buttons;
+
+const int kButtonWidth=80;
+const int kButtonHeight=40;
 
 -(id) initWithBeerID:(NSString*)beer_id
 {
@@ -46,6 +55,13 @@
 	[self.xmlParserPath release];
 	[self.userReviewData release];
 
+	[self.userRatingControl release];
+	[self.overallRatingControl release];
+	[self.bodySlider release];
+	[self.balanceSlider release];
+	[self.aftertasteSlider release];
+	[self.buttons release];
+	
     [super dealloc];
 }
 
@@ -241,7 +257,7 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 4;
+    return self.editing?5:4;
 }
 
 //-(void)editBeerCancelButtonClicked
@@ -254,17 +270,19 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return 1;
+			return self.editing?2:1;
 			break;
 		case 1:
-			return self.editing?1:3;
+			return self.editing?1:6;
 			break;
 		case 2:
-			return 2;
+			return self.editing?8:2;
 			break;
 		case 3:
-			return 1;
+			return 3;
 			break;
+		case 4: // This is only when in edit mode
+			return 1;
 		default:
 			break;
 	}
@@ -274,17 +292,16 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSInteger adjusted_row=indexPath.row;
-	if (self.editing && indexPath.section==1)
-	{
-		// When editing a beer, the normal rows 0 and 1 in section 1 are gone, so adjust upward by 2
-		adjusted_row+=2;
-	}
 
 	switch (indexPath.section) 
 	{
 		case 0:
 			break;
 		case 1:
+		{
+			if (self.editing)
+				adjusted_row+=2; // When editing a beer, the normal rows 0 and 1 in section 1 are gone, so adjust upward by 2
+
 			switch (adjusted_row)
 			{
 			case 0:
@@ -293,15 +310,15 @@
 				break;
 			case 2:
 			{
-				CGSize sz=[[beerObj.data objectForKey:@"description"] sizeWithFont:[UIFont systemFontOfSize: [UIFont smallSystemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
-				return sz.height+20.0f;
 				break;
 			}
 			default:
 				break;
 			}
 			break;
+		}
 		case 2:
+		{
 			switch (indexPath.row)
 			{
 			case 0:
@@ -311,6 +328,26 @@
 			default:
 				break;
 			}
+			break;
+		}
+		case 3:
+		{
+			switch (indexPath.row)
+			{
+				case 0:
+				{
+					CGSize sz=[[beerObj.data objectForKey:@"description"] sizeWithFont:[UIFont systemFontOfSize: [UIFont smallSystemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
+					return sz.height+20.0f;
+					break;
+				}
+				case 1:
+					break;
+				case 2:
+					break;
+			}
+		}
+		default:
+			break;
 	}
 
 	return tableView.rowHeight;
@@ -319,143 +356,283 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-    static NSString *CellIdentifier = @"Cell";
-    
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+
     UITableViewCell *cell = nil;
-    if (cell == nil) {
-		if (indexPath.section==0 && indexPath.row==0)
-			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"NameCell"] autorelease];
-		else
-			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
 
 	tableView.allowsSelectionDuringEditing=YES;
 
-	NSInteger adjusted_row=indexPath.row;
-	if (self.editing && indexPath.section==1)
-	{
-		// When editing a beer, section 0 has 2 less rows
-		if (adjusted_row>0)
-			adjusted_row-=2;
-	}
-	
     // Set up the cell...
 	switch (indexPath.section) 
 	{
 		case 0:
-			[cell.textLabel setText:[beerObj.data objectForKey:@"name"]];
-			[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
-			[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"brewery_id"]];
-			cell.selectionStyle=UITableViewCellSelectionStyleNone;
-			
-			UIView* transparentBackground=[[UIView alloc] initWithFrame:CGRectZero];
-			transparentBackground.backgroundColor=[UIColor clearColor];
-			cell.backgroundView=transparentBackground;
-			
-			cell.textLabel.backgroundColor=[UIColor clearColor];
-			cell.detailTextLabel.backgroundColor=[UIColor clearColor];
-			
-			CGRect f=cell.textLabel.frame;
-			f.size.width-=100;
-			f.origin.x+=100;
-			cell.textLabel.frame=f;
+		{
+			cell = [tableView dequeueReusableCellWithIdentifier:@"Section0Cell"];
+			if (cell == nil)
+			{
+				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Section0Cell"] autorelease];
+				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
+				UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 0, 200, 20)] autorelease];
+				breweryNameLabel.backgroundColor=[UIColor clearColor];
+				breweryNameLabel.font=[UIFont boldSystemFontOfSize:12];
+				breweryNameLabel.textColor=[UIColor grayColor];
+				[breweryNameLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"brewery_id"]];
+				[cell.contentView addSubview:breweryNameLabel];
+				
+				UILabel* beerNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 20, 200, 30)] autorelease];
+				beerNameLabel.font=[UIFont boldSystemFontOfSize:20];
+				beerNameLabel.backgroundColor=[UIColor clearColor];
+				[beerNameLabel setText:[beerObj.data objectForKey:@"name"]];
+				[cell.contentView addSubview:beerNameLabel];
+				
+				UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+				transparentBackground.backgroundColor=[UIColor clearColor];
+				cell.backgroundView=transparentBackground;
+			}
 			break;
-		case 1:
-			switch (adjusted_row)
-			{
-			case 0:
-			{
-				cell.selectionStyle=UITableViewCellSelectionStyleNone;
-
-				RatingControl* ratingctl=[[RatingControl alloc] initWithFrame:CGRectMake(40, 7, 200, 30)];
-				
-				// Set current user's rating (if any)
-				NSString* user_rating=[self.userReviewData objectForKey:@"rating"];
-				if (user_rating!=nil) // No user review
-					ratingctl.currentRating=[user_rating integerValue];
-				DLog(@"Current rating:%d",ratingctl.currentRating);
-				
-				// Set the callback for a review
-				[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
-				
-				[cell.contentView addSubview:ratingctl];
-				[ratingctl release];
-				
-				break;
-			}
-			case 1:
-				[cell.textLabel setText:@"Ratings & Reviews"];
-				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-				break;
-			case 2:
-			{
-//				cell.text=beerObj.description;
-				CGRect contentRect=CGRectMake(10, 10, 0, 0);
-				UILabel* textView=[[UILabel alloc] initWithFrame:contentRect];
-				textView.text=[beerObj.data objectForKey:@"description"];
-				
-				contentRect.size=[textView.text sizeWithFont:[UIFont systemFontOfSize: [UIFont systemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f)];
-				textView.frame=contentRect;
-				
-				textView.numberOfLines=0;
-				textView.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
-				textView.lineBreakMode=UILineBreakModeWordWrap;
-				[textView sizeToFit];
-
-				[cell.textLabel setFont:[UIFont systemFontOfSize:[UIFont smallSystemFontSize]]];
-				cell.selectionStyle=UITableViewCellSelectionStyleNone;
-				[cell.textLabel setLineBreakMode:UILineBreakModeWordWrap];
-				
-				[cell.contentView addSubview:textView];
-				[cell.contentView sizeToFit];
-				[textView release];
-				break;
-			}
-			default:
-				break;
 		}
+		case 1:
+			if (self.editing)
+			{
+				// When editing a beer, section 0 has 2 less rows
+//				NSUInteger adjusted_row=indexPath.row-2;
+			}
+			else
+			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Cell"];
+				if (cell == nil)
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section1Cell"] autorelease];
+
+				switch (indexPath.row)
+				{
+					case 0: // My Rating
+					{
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
+						if (self.userRatingControl==nil)
+							self.userRatingControl=[[RatingControl alloc] initWithFrame:CGRectMake(40, 7, 200, 30)];
+						
+						// Set current user's rating (if any)
+						NSString* user_rating=[self.userReviewData objectForKey:@"rating"];
+						if (user_rating!=nil) // No user review
+							self.userRatingControl.currentRating=[user_rating integerValue];
+						DLog(@"Current rating:%d",self.userRatingControl.currentRating);
+						
+						// Set the callback for a review
+						[self.userRatingControl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
+						
+						[cell.contentView addSubview:self.userRatingControl];
+						break;
+					}
+					case 1: // Overall rating
+						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+
+						if (self.overallRatingControl==nil)
+							self.overallRatingControl=[[RatingControl alloc] initWithFrame:CGRectMake(40, 7, 200, 30)];
+						
+						// Set overall rating (if any)
+						NSString* overall_rating=[self.beerObj.data objectForKey:@"avgrating"];
+						if (overall_rating!=nil) // No overall rating
+							self.overallRatingControl.currentRating=[overall_rating integerValue];
+						DLog(@"Overall rating:%d",self.overallRatingControl.currentRating);
+						
+						[cell.contentView addSubview:self.overallRatingControl];
+						break;
+					case 2: // Body meter
+					{
+						if (self.bodySlider==nil)
+							self.bodySlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
+						// TODO: put value in
+						[cell.contentView addSubview:self.bodySlider];
+						break;
+					}
+					case 3: // Balance meter
+					{
+						if (self.balanceSlider==nil)
+							self.balanceSlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
+						// TODO: put value in
+						[cell.contentView addSubview:self.balanceSlider];
+						break;
+					}
+					case 4: // Aftertaste meter
+					{
+						if (self.aftertasteSlider==nil)
+							self.aftertasteSlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
+						// TODO: put value in
+						[cell.contentView addSubview:self.aftertasteSlider];
+						break;
+					}
+					case 5: // Flavors summary
+					{
+						break;
+					}
+					default:
+						break;
+				}
+			}
 			break;
 		case 2:
-			switch (indexPath.row)
+			if (self.editing)
 			{
-				case 0:
-					[cell.textLabel setText:[beerObj.data objectForKey:@"style"]];
-					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-					cell.selectionStyle=UITableViewCellSelectionStyleNone;
-					break;
-				case 1:
+			}
+			else
+			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Cell"];
+				if (cell == nil)
 				{
-					NSString* ibu=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"ibu"];
-					NSString* abv=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"abv"];
-					if ([ibu length])
-						[cell.textLabel setText:[[[NSString alloc] initWithFormat:@"%u%% ABV %u IBUs", 
-								   abv.intValue, 
-								   ibu.intValue] autorelease]];
-					else
-						[cell.textLabel setText:[[[NSString alloc] initWithFormat:@"%u%% ABV", abv.intValue] autorelease]];
-					
-					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section2Cell"] autorelease];
+					UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+					transparentBackground.backgroundColor=[UIColor clearColor];
+					cell.backgroundView=transparentBackground;
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
-					break;
 				}
-				default:
-					break;
+
+				if ([self.buttons count]==0)
+				{
+					self.buttons=[[NSArray alloc] initWithObjects:
+													[UIButton buttonWithType:UIButtonTypeRoundedRect],
+													[UIButton buttonWithType:UIButtonTypeRoundedRect],
+													[UIButton buttonWithType:UIButtonTypeRoundedRect],
+													[UIButton buttonWithType:UIButtonTypeRoundedRect],
+													[UIButton buttonWithType:UIButtonTypeRoundedRect],
+													nil];
+
+					int centerButtonX=(cell.contentView.frame.size.width-kButtonWidth)/2;
+					DLog(@"centerButtonX=%d",centerButtonX);
+					
+					// Make Add a Photo button
+					UIButton* button=[self.buttons objectAtIndex:0];
+					button.frame=CGRectMake(centerButtonX-kButtonWidth-10, 0, kButtonWidth, kButtonHeight);
+					[button setTitle:@"Add Photo" forState:UIControlStateNormal];
+					button.titleLabel.lineBreakMode=UILineBreakModeWordWrap;
+					button.titleLabel.textAlignment=UITextAlignmentCenter;
+					//[button addTarget:self action:@selector(addToWishListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+					
+					// Make Add a Review button
+					button=[self.buttons objectAtIndex:1];
+					button.frame=CGRectMake(centerButtonX, 0, kButtonWidth, kButtonHeight);
+					[button setTitle:@"Add Review" forState:UIControlStateNormal];
+					button.titleLabel.lineBreakMode=UILineBreakModeWordWrap;
+					button.titleLabel.textAlignment=UITextAlignmentCenter;
+					//[button addTarget:self action:@selector(addToWishListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+
+					// Make Add to Wishlist button
+					button=[self.buttons objectAtIndex:2];
+					button.frame=CGRectMake(centerButtonX+kButtonWidth+10, 0, kButtonWidth, kButtonHeight);
+					[button setTitle:@"Add to Wish List" forState:UIControlStateNormal];
+					button.titleLabel.lineBreakMode=UILineBreakModeWordWrap;
+					button.titleLabel.textAlignment=UITextAlignmentCenter;
+					[button addTarget:self action:@selector(addToWishListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+
+					// Make Find Nearby button
+					button=[self.buttons objectAtIndex:3];
+					button.frame=CGRectMake(centerButtonX-kButtonWidth-10, 0, kButtonWidth, kButtonHeight);
+					[button setTitle:@"Find Nearby" forState:UIControlStateNormal];
+					button.titleLabel.lineBreakMode=UILineBreakModeWordWrap;
+					button.titleLabel.textAlignment=UITextAlignmentCenter;
+					//[button addTarget:self action:@selector(addToWishListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+
+					// Make Email Beer button
+					button=[self.buttons objectAtIndex:4];
+					button.frame=CGRectMake(centerButtonX, 0, kButtonWidth, kButtonHeight);
+					[button setTitle:@"Email Beer" forState:UIControlStateNormal];
+					button.titleLabel.lineBreakMode=UILineBreakModeWordWrap;
+					button.titleLabel.textAlignment=UITextAlignmentCenter;
+					//[button addTarget:self action:@selector(addToWishListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+				}
+
+				
+				switch (indexPath.row)
+				{
+					case 0: // First row of buttons
+					{
+						[cell addSubview:[self.buttons objectAtIndex:0]]; // Add a Photo button
+						[cell addSubview:[self.buttons objectAtIndex:1]]; // Add a Review button
+						[cell addSubview:[self.buttons objectAtIndex:2]]; // Add to Wishlist button
+						break;
+					}
+					case 1: // Second row of buttons
+					{
+						[cell addSubview:[self.buttons objectAtIndex:3]]; // Add Find Nearby button
+						[cell addSubview:[self.buttons objectAtIndex:4]]; // Add Email Beer button
+						break;
+					}
+					default:
+						break;
+				}
 			}
 			break;
 		case 3:
 		{
-			UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
-			transparentBackground.backgroundColor=[UIColor clearColor];
-			cell.backgroundView=transparentBackground;
-			
-			UIButton* button=[UIButton buttonWithType:UIButtonTypeRoundedRect];
-			button.frame=CGRectMake(20, 0, 200, 30);
-			[button setTitle:@"Add to Wish List" forState:UIControlStateNormal];
-			[button addTarget:self action:@selector(addToWishListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-			[cell addSubview:button];
+			if (self.editing)
+			{
+			}
+			else
+			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section3Cell"];
+				if (cell == nil)
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section3Cell"] autorelease];
+
+				switch (indexPath.row)
+				{
+					case 0: // Brewer's description
+					{
+						CGRect contentRect=CGRectMake(10, 10, 0, 0);
+						UILabel* textView=[[UILabel alloc] initWithFrame:contentRect];
+						textView.text=[beerObj.data objectForKey:@"description"];
+						
+						contentRect.size=[textView.text sizeWithFont:[UIFont systemFontOfSize: [UIFont systemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f)];
+						textView.frame=contentRect;
+						
+						textView.numberOfLines=0;
+						textView.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+						textView.lineBreakMode=UILineBreakModeWordWrap;
+						[textView sizeToFit];
+						
+						[cell.textLabel setFont:[UIFont systemFontOfSize:[UIFont smallSystemFontSize]]];
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+						[cell.textLabel setLineBreakMode:UILineBreakModeWordWrap];
+						
+						[cell.contentView addSubview:textView];
+						[cell.contentView sizeToFit];
+						[textView release];
+						break;
+					}
+					case 1: // Style
+						[cell.textLabel setText:[beerObj.data objectForKey:@"style"]];
+//						[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont  smallSystemFontSize]]];
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+						break;
+					case 2: // All other data
+					{
+						NSString* ibu=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"ibu"];
+						NSString* abv=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"abv"];
+						if ([ibu length])
+							[cell.textLabel setText:[[[NSString alloc] initWithFormat:@"%u%% ABV %u IBUs", 
+													  abv.intValue, 
+													  ibu.intValue] autorelease]];
+						else
+							[cell.textLabel setText:[[[NSString alloc] initWithFormat:@"%u%% ABV", abv.intValue] autorelease]];
+						
+						[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+						break;
+					}
+					default:
+						break;
+				}
+			}
 			break;
 		}
+		case 4:
+			if (self.editing)
+			{
+			}
+			else
+			{
+				// There is no 5th section when not in edit mode, this shouldn't happen
+			}
+			break;
 		default:
 			break;
 	}
@@ -880,7 +1057,7 @@
 		}
 		else if ([elementName isEqualToString:@"style"])
 		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
+			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",@"styles",nil]])
 			{
 				if ([[beerObj.data objectForKey:@"style"] length] == 0) // Only take the 1st style
 					[beerObj.data setObject:currentElemValue forKey:@"style"];
