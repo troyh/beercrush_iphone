@@ -124,7 +124,8 @@
 
 - (void)didMoveToWindow
 {
-	[self setStarsForRating:self.currentRating];
+	if (self.window!=nil)
+		[self setStarsForRating:self.currentRating];
 }
 
 @end
