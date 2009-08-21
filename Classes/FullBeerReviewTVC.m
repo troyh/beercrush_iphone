@@ -32,7 +32,7 @@
 -(id)initWithReviewObject:(NSDictionary*)review
 {
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
-		self.userReview=[review copy];
+		self.userReview=[[NSMutableDictionary alloc] initWithDictionary:review];
 		self.title=@"Review";
 		
 		// TODO: if the review is not the user's, all controls should be read-only
@@ -57,6 +57,13 @@
 
 -(void)doneButtonClicked
 {
+	[self.userReview setValue:[NSNumber numberWithUnsignedInt:ratingControl.currentRating] forKey:@"rating"];
+	[self.userReview setValue:[NSNumber numberWithFloat:bodySlider.value] forKey:@"body"];
+	[self.userReview setValue:[NSNumber numberWithFloat:balanceSlider.value] forKey:@"balance"];
+	[self.userReview setValue:[NSNumber numberWithFloat:aftertasteSlider.value] forKey:@"aftertaste"];
+	[self.userReview setValue:commentsTextView.text forKey:@"comments"];
+	// NOTE: flavors are already in self.userReview, they were put there as the user added/removed them 
+	
 	[delegate fullBeerReview:self.userReview withChanges:YES];
 }
 
@@ -111,7 +118,6 @@
 -(void)didSelectFlavor:(NSString*)flavorID
 {
 	DLog(@"Flavor selected:%@",flavorID);
-	// It is the delegate's responsibility to provide a user review NSMutableDictionary. If the delegate doesn't have a review, we ignore this.
 	NSMutableArray* flavors=[self.userReview objectForKey:@"flavors"];
 	if (flavors==nil)
 	{
@@ -128,7 +134,6 @@
 -(void)didUnselectFlavor:(NSString*)flavorID
 {
 	DLog(@"Flavor unselected:%@",flavorID);
-	// It is the delegate's responsibility to provide a user review NSMutableDictionary. If the delegate doesn't have a review, we ignore this.
 	NSMutableArray* flavors=[self.userReview objectForKey:@"flavors"];
 	if (flavors)
 	{

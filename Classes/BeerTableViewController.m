@@ -711,6 +711,14 @@
 			userReviewData=[[NSMutableDictionary alloc] initWithCapacity:10];
 		}
 	}
+	else if ([elementName isEqualToString:@"beer_id"])
+	{
+		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
+		{
+			[self.currentElemValue release];
+			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
+		}
+	}
 	else if ([elementName isEqualToString:@"rating"])
 	{
 		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
@@ -800,7 +808,14 @@
 
 	if (self.currentElemValue)
 	{
-		if ([elementName isEqualToString:@"rating"])
+		if ([elementName isEqualToString:@"beer_id"])
+		{
+			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
+			{
+				[userReviewData setObject:currentElemValue forKey:@"beer_id"];
+			}
+		}
+		else if ([elementName isEqualToString:@"rating"])
 		{
 			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
 			{

@@ -420,10 +420,10 @@
 	if (values)
 	{
 		[values addObject:[NSString stringWithFormat:@"beer_id=%@",	[userReview objectForKey:@"beer_id"]]];
-		[values addObject:[NSString stringWithFormat:@"rating=%d",	[userReview objectForKey:@"rating"]]];
-		[values addObject:[NSString stringWithFormat:@"body=%.0f",	[userReview objectForKey:@"body"]]];
-		[values addObject:[NSString stringWithFormat:@"aftertaste=%.0f",[userReview objectForKey:@"aftertaste"]]];
-		[values addObject:[NSString stringWithFormat:@"balance=%.0f",[userReview objectForKey:@"balance"]]];
+		[values addObject:[NSString stringWithFormat:@"rating=%@",	[userReview objectForKey:@"rating"]]];
+		[values addObject:[NSString stringWithFormat:@"body=%@",	[userReview objectForKey:@"body"]]];
+		[values addObject:[NSString stringWithFormat:@"aftertaste=%@",[userReview objectForKey:@"aftertaste"]]];
+		[values addObject:[NSString stringWithFormat:@"balance=%@",[userReview objectForKey:@"balance"]]];
 		if ([userReview objectForKey:@"comments"])
 			[values addObject:[NSString stringWithFormat:@"comments=%@",[userReview objectForKey:@"comments"]]];
 		
