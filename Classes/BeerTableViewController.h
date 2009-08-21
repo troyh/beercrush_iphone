@@ -29,6 +29,7 @@
 	UISlider* aftertasteSlider;
 	
 	NSMutableArray* buttons;
+	UIView* dataTableView;
 }
 
 @property (nonatomic,retain) NSString* beerID;
@@ -43,6 +44,7 @@
 @property (nonatomic,retain) UISlider* balanceSlider;
 @property (nonatomic,retain) UISlider* aftertasteSlider;
 @property (nonatomic,assign) NSMutableArray* buttons;
+@property (nonatomic,retain) UIView* dataTableView;
 
 -(id) initWithBeerID:(NSString*)beer_id;
 

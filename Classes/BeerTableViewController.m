@@ -12,6 +12,7 @@
 #import "PhoneNumberEditTableViewController.h"
 #import "RatingControl.h"
 #import "FullBeerReviewTVC.h"
+#import "StyleVC.h"
 
 @implementation BeerTableViewController
 
@@ -27,6 +28,7 @@
 @synthesize balanceSlider;
 @synthesize aftertasteSlider;
 @synthesize buttons;
+@synthesize dataTableView;
 
 const int kButtonWidth=80;
 const int kButtonHeight=40;
@@ -343,6 +345,7 @@ const int kButtonHeight=40;
 				case 1:
 					break;
 				case 2:
+					return 250;
 					break;
 			}
 		}
@@ -401,21 +404,27 @@ const int kButtonHeight=40;
 			{
 				cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Cell"];
 				if (cell == nil)
-					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section1Cell"] autorelease];
+				{
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section1Cell"] autorelease];
+					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+				}
 
 				switch (indexPath.row)
 				{
 					case 0: // My Rating
 					{
-						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-
+						[cell.textLabel setText:@"My Rating"];
+						
 						if (self.userRatingControl==nil)
-							self.userRatingControl=[[RatingControl alloc] initWithFrame:CGRectMake(40, 7, 200, 30)];
+							self.userRatingControl=[[RatingControl alloc] initWithFrame:CGRectMake(80, 7, 180, 30)];
 						
 						// Set current user's rating (if any)
 						NSString* user_rating=[self.userReviewData objectForKey:@"rating"];
-						if (user_rating!=nil) // No user review
+						if (user_rating!=nil) // Ther user has a review of this beer
+						{
 							self.userRatingControl.currentRating=[user_rating integerValue];
+							cell.accessoryType=UITableViewCellAccessoryDetailDisclosureButton;
+						}
 						DLog(@"Current rating:%d",self.userRatingControl.currentRating);
 						
 						// Set the callback for a review
@@ -426,9 +435,14 @@ const int kButtonHeight=40;
 					}
 					case 1: // Overall rating
 						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						cell.selectionStyle=UITableViewCellSelectionStyleBlue;
+						[cell.textLabel setText:[NSString stringWithFormat:@"%d Ratings",[self.beerObj.data objectForKey:@"ratingcount"]]];
 
 						if (self.overallRatingControl==nil)
-							self.overallRatingControl=[[RatingControl alloc] initWithFrame:CGRectMake(40, 7, 200, 30)];
+						{
+							self.overallRatingControl=[[RatingControl alloc] initWithFrame:CGRectMake(80, 7, 180, 30)];
+							self.overallRatingControl.userInteractionEnabled=NO; // This rating control should ignore touches
+						}
 						
 						// Set overall rating (if any)
 						NSString* overall_rating=[self.beerObj.data objectForKey:@"avgrating"];
@@ -441,25 +455,60 @@ const int kButtonHeight=40;
 					case 2: // Body meter
 					{
 						if (self.bodySlider==nil)
+						{
 							self.bodySlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
-						// TODO: put value in
+							self.bodySlider.userInteractionEnabled=NO; // This rating control should ignore touches
+
+							self.bodySlider.maximumValue=5.0;
+							[self.bodySlider setValue:[[[self.beerObj.data objectForKey:@"meta"] objectForKey:@"body"] integerValue] animated:YES];
+							
+							if (self.bodySlider.value==0)
+								self.bodySlider.value=3;
+
+							self.bodySlider.minimumValue=1.0;
+						}
 						[cell.contentView addSubview:self.bodySlider];
+						
+						[cell.textLabel setText:@"Body"];
+						cell.textLabel.backgroundColor=[UIColor clearColor];
 						break;
 					}
 					case 3: // Balance meter
 					{
 						if (self.balanceSlider==nil)
+						{
 							self.balanceSlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
-						// TODO: put value in
+							self.balanceSlider.userInteractionEnabled=NO; // This rating control should ignore touches
+
+							self.balanceSlider.maximumValue=5.0;
+							[self.balanceSlider setValue:[[[self.beerObj.data objectForKey:@"meta"] objectForKey:@"balance"] floatValue] animated:YES];
+							if (self.balanceSlider.value==0)
+								self.balanceSlider.value=3;
+							self.balanceSlider.minimumValue=1.0;
+						}
 						[cell.contentView addSubview:self.balanceSlider];
+
+						[cell.textLabel setText:@"Balance"];
+						cell.textLabel.backgroundColor=[UIColor clearColor];
 						break;
 					}
 					case 4: // Aftertaste meter
 					{
 						if (self.aftertasteSlider==nil)
+						{
 							self.aftertasteSlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
-						// TODO: put value in
+							self.aftertasteSlider.userInteractionEnabled=NO; // This rating control should ignore touches
+
+							self.aftertasteSlider.maximumValue=5.0;
+							[self.aftertasteSlider setValue:[[[self.beerObj.data objectForKey:@"meta"] objectForKey:@"aftertaste"] integerValue] animated:YES];
+							if (self.aftertasteSlider.value==0)
+								self.aftertasteSlider.value=3;
+							self.aftertasteSlider.minimumValue=1.0;
+						}
 						[cell.contentView addSubview:self.aftertasteSlider];
+
+						[cell.textLabel setText:@"Aftertaste"];
+						cell.textLabel.backgroundColor=[UIColor clearColor];
 						break;
 					}
 					case 5: // Flavors summary
@@ -571,7 +620,7 @@ const int kButtonHeight=40;
 			{
 				cell = [tableView dequeueReusableCellWithIdentifier:@"Section3Cell"];
 				if (cell == nil)
-					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section3Cell"] autorelease];
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section3Cell"] autorelease];
 
 				switch (indexPath.row)
 				{
@@ -589,9 +638,9 @@ const int kButtonHeight=40;
 						textView.lineBreakMode=UILineBreakModeWordWrap;
 						[textView sizeToFit];
 						
-						[cell.textLabel setFont:[UIFont systemFontOfSize:[UIFont smallSystemFontSize]]];
-						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell.textLabel setLineBreakMode:UILineBreakModeWordWrap];
+//						[cell.textLabel setFont:[UIFont systemFontOfSize:[UIFont smallSystemFontSize]]];
+//						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+//						[cell.textLabel setLineBreakMode:UILineBreakModeWordWrap];
 						
 						[cell.contentView addSubview:textView];
 						[cell.contentView sizeToFit];
@@ -599,22 +648,48 @@ const int kButtonHeight=40;
 						break;
 					}
 					case 1: // Style
-						[cell.textLabel setText:[beerObj.data objectForKey:@"style"]];
-//						[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont  smallSystemFontSize]]];
-						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+						[cell.textLabel setText:@"Style"];
+						[cell.detailTextLabel setText:[beerObj.data objectForKey:@"style"]];
+						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						break;
 					case 2: // All other data
 					{
-						NSString* ibu=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"ibu"];
-						NSString* abv=[[beerObj.data objectForKey:@"attribs" ] objectForKey:@"abv"];
-						if ([ibu length])
-							[cell.textLabel setText:[[[NSString alloc] initWithFormat:@"%u%% ABV %u IBUs", 
-													  abv.intValue, 
-													  ibu.intValue] autorelease]];
-						else
-							[cell.textLabel setText:[[[NSString alloc] initWithFormat:@"%u%% ABV", abv.intValue] autorelease]];
+						static struct { NSString* name; NSString* propname; } fields[]={
+							{@"Availability:",@"availability"},
+							{@"Color:",@"color"},
+							{@"ABV:",@"abv"},
+							{@"IBUs:",@"ibu"},
+							{@"OG:",@"og"},
+							{@"FG:",@"fg"},
+							{@"Grains:",@"grains"},
+							{@"Hops:",@"hops"},
+							{@"Yeast:",@"yeast"},
+							{@"Other ingredients:",@"otherings"},
+							{@"Sizes:",@"sizes"}
+						};
 						
-						[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+						if (self.dataTableView==nil)
+						{
+							dataTableView=[[UIView alloc] initWithFrame:CGRectMake(10, 10, cell.contentView.frame.size.width-20, 100)];
+							
+							for (int i=0;i<(sizeof(fields)/sizeof(fields[0]));++i)
+							{
+								UILabel* label=[[UILabel alloc] initWithFrame:CGRectMake(0, i*20, dataTableView.frame.size.width/2, 20)];
+								[label setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+								[label setText:fields[i].name];
+								label.textAlignment=UITextAlignmentRight;
+								[dataTableView addSubview:label];
+								
+								label=[[UILabel alloc] initWithFrame:CGRectMake(dataTableView.frame.size.width/2, i*20, dataTableView.frame.size.width/2, 20)];
+								[label setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+								[label setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]];
+								[dataTableView addSubview:label];
+							}
+							
+						}
+
+						[cell addSubview:dataTableView];
+						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
 					}
@@ -661,6 +736,16 @@ const int kButtonHeight=40;
 	}
 }
 
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+	if (indexPath.section==1 && indexPath.row==0)
+	{
+		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:self.userReviewData] autorelease];
+		fbrtvc.delegate=self;
+		[self.navigationController pushViewController:fbrtvc animated:YES];
+	}
+}
+
 -(void)ratingButtonTapped:(id)sender event:(id)event
 {
 	RatingControl* ctl=(RatingControl*)sender;
@@ -688,13 +773,13 @@ const int kButtonHeight=40;
 	{
 		if (self.tableView.editing==YES)
 		{
-			// Go to view to edit name
-			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=beerObj.data;
-			pnetvc.editableValueName=@"name";
-			pnetvc.editableValueType=kBeerCrushEditableValueTypeText;
-			[self.navigationController pushViewController:pnetvc animated:YES];
-			[pnetvc release];
+//			// Go to view to edit name
+//			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+//			pnetvc.data=beerObj.data;
+//			pnetvc.editableValueName=@"name";
+//			pnetvc.editableValueType=kBeerCrushEditableValueTypeText;
+//			[self.navigationController pushViewController:pnetvc animated:YES];
+//			[pnetvc release];
 		}
 		else
 		{
@@ -702,44 +787,37 @@ const int kButtonHeight=40;
 	}
 	else if (indexPath.section == 1 && indexPath.row == 1) // Ratings & Reviews
 	{
-		ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.beerID dataType:Beer];
-		[self.navigationController pushViewController: rtvc animated:YES];
-		[rtvc release];
+		if (self.tableView.editing==YES)
+		{
+		}
+		else
+		{
+			ReviewsTableViewController*	rtvc=[[[ReviewsTableViewController alloc] initWithID:self.beerID dataType:Beer] autorelease];
+			rtvc.fullBeerReviewDelegate=self; // I'll be the FullBeerReviewTVCDelegate when the user selects on of the reviews to look at
+			[self.navigationController pushViewController: rtvc animated:YES];
+		}
 	}
-	else if (indexPath.section == 1 && indexPath.row == 2) // Beer description
+	else if (indexPath.section == 3 && indexPath.row == 0) // Beer description
 	{
 		if (self.tableView.editing==YES)
 		{
-			// Go to view to edit description
-			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=beerObj.data;
-			pnetvc.editableValueName=@"description";
-			pnetvc.editableValueType=kBeerCrushEditableValueTypeMultiText;
-			[self.navigationController pushViewController:pnetvc animated:YES];
-			[pnetvc release];
 		}
 		else
 		{
 		}
 	}
-	else if (indexPath.section == 2 && indexPath.row == 0) // Beer style
+	else if (indexPath.section == 3 && indexPath.row == 1) // Beer style
 	{
 		if (self.tableView.editing==YES)
 		{
-			// Go to view to edit style
-			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=beerObj.data;
-			pnetvc.editableValueName=@"style";
-			pnetvc.editableChoices=[NSArray arrayWithObjects:@"Stout",@"IPA",nil];
-			pnetvc.editableValueType=kBeerCrushEditableValueTypeChoice;
-			[self.navigationController pushViewController:pnetvc animated:YES];
-			[pnetvc release];
 		}
 		else
 		{
+			StyleVC* svc=[[[StyleVC alloc] initWithStyleID:[self.beerObj.data objectForKey:@"style"]] autorelease];
+			[self.navigationController pushViewController:svc animated:YES];
 		}
 	}
-	else if (indexPath.section == 2 && indexPath.row == 1) // Beer ABV & IBUs
+	else if (indexPath.section == 3 && indexPath.row == 1) // Beer ABV & IBUs
 	{
 		if (self.tableView.editing==YES)
 		{
