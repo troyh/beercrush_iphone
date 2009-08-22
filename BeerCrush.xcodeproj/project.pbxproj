@@ -20,6 +20,8 @@
 		058FFCA410360A1E00DA6D81 /* FlavorsAromasTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 058FFCA310360A1E00DA6D81 /* FlavorsAromasTVC.m */; };
 		05944DBD0F72E2BB0043D34C /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05944DBC0F72E2BB0043D34C /* MainWindow.xib */; };
 		05944DC50F72E7C30043D34C /* BeerCrush.png in Resources */ = {isa = PBXBuildFile; fileRef = 05944DC40F72E7C30043D34C /* BeerCrush.png */; };
+		05B7DB5E103F42700021EEDA /* StylesListTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B7DB5D103F42700021EEDA /* StylesListTVC.m */; };
+		05B7DB7B103F45A70021EEDA /* StyleVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B7DB7A103F45A70021EEDA /* StyleVC.m */; };
 		05C6364D0F55C03C00B1C78A /* BreweryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */; };
 		05C636500F55C1CE00B1C78A /* BeerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */; };
 		05C637900F56018100B1C78A /* ReviewsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */; };
@@ -57,6 +59,10 @@
 		058FFCA310360A1E00DA6D81 /* FlavorsAromasTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlavorsAromasTVC.m; sourceTree = "<group>"; };
 		05944DBC0F72E2BB0043D34C /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		05944DC40F72E7C30043D34C /* BeerCrush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BeerCrush.png; sourceTree = "<group>"; };
+		05B7DB5C103F42700021EEDA /* StylesListTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StylesListTVC.h; sourceTree = "<group>"; };
+		05B7DB5D103F42700021EEDA /* StylesListTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StylesListTVC.m; sourceTree = "<group>"; };
+		05B7DB79103F45A70021EEDA /* StyleVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleVC.h; sourceTree = "<group>"; };
+		05B7DB7A103F45A70021EEDA /* StyleVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleVC.m; sourceTree = "<group>"; };
 		05C6364B0F55C03C00B1C78A /* BreweryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreweryTableViewController.h; sourceTree = "<group>"; };
 		05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BreweryTableViewController.m; sourceTree = "<group>"; };
 		05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeerTableViewController.h; sourceTree = "<group>"; };
@@ -103,6 +109,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				05B7DB5C103F42700021EEDA /* StylesListTVC.h */,
+				05B7DB5D103F42700021EEDA /* StylesListTVC.m */,
 				058FFCA210360A1E00DA6D81 /* FlavorsAromasTVC.h */,
 				058FFCA310360A1E00DA6D81 /* FlavorsAromasTVC.m */,
 				058FFBC81035DE4200DA6D81 /* FullBeerReviewTVC.h */,
@@ -135,6 +143,8 @@
 				0577ECB810068A1300A2468C /* RatingControl.m */,
 				0511029F100FDC8300610251 /* UserReviewsTVC.h */,
 				051102A0100FDC8300610251 /* UserReviewsTVC.m */,
+				05B7DB79103F45A70021EEDA /* StyleVC.h */,
+				05B7DB7A103F45A70021EEDA /* StyleVC.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -268,6 +278,8 @@
 				058FF79210332E2100DA6D81 /* LoginVC.m in Sources */,
 				058FFBCA1035DE4200DA6D81 /* FullBeerReviewTVC.m in Sources */,
 				058FFCA410360A1E00DA6D81 /* FlavorsAromasTVC.m in Sources */,
+				05B7DB5E103F42700021EEDA /* StylesListTVC.m in Sources */,
+				05B7DB7B103F45A70021EEDA /* StyleVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
