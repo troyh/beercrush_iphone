@@ -189,69 +189,106 @@ const int kButtonHeight=40;
 //		[self.navigationController.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:YES];
 		self.navigationController.navigationBar.topItem.leftBarButtonItem=nil;
 
-		NSArray* rows=[NSArray arrayWithObjects:
-					   [NSIndexPath indexPathForRow:0 inSection:1],
-					   [NSIndexPath indexPathForRow:1 inSection:1],
-					   nil];
+		NSArray* newrows=[NSArray arrayWithObjects:
+						  [NSIndexPath indexPathForRow:0 inSection:0],
+						[NSIndexPath indexPathForRow:1 inSection:0],
+						nil];
+
+//		NSArray* rows=[NSArray arrayWithObjects:
+//					   [NSIndexPath indexPathForRow:0 inSection:1],
+//					   [NSIndexPath indexPathForRow:1 inSection:1],
+//					   [NSIndexPath indexPathForRow:2 inSection:1],
+//					   [NSIndexPath indexPathForRow:3 inSection:1],
+//					   [NSIndexPath indexPathForRow:4 inSection:1],
+//					   [NSIndexPath indexPathForRow:5 inSection:1],
+//					   [NSIndexPath indexPathForRow:6 inSection:1],
+//					   [NSIndexPath indexPathForRow:0 inSection:2],
+//					   [NSIndexPath indexPathForRow:1 inSection:2],
+//					   [NSIndexPath indexPathForRow:0 inSection:3],
+//					   [NSIndexPath indexPathForRow:1 inSection:3],
+//					   [NSIndexPath indexPathForRow:2 inSection:3],
+//					   nil];
+		
+//		NSIndexSet* sections=[NSIndexSet indexSetWithIndex:1];
 		[self.tableView beginUpdates];
-		[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
+												[NSIndexPath indexPathForRow:0 inSection:0],
+												nil] 
+			withRowAnimation:UITableViewRowAnimationFade];
+
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+
+		[self.tableView insertRowsAtIndexPaths:newrows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView endUpdates];
 	}
 	else
 	{
 		// TODO: only do this if the user actually changed anything
 		
-		// Save data to server
-		NSString* bodystr;
-		
-		// TODO: only send data that has changed
-		if (self.beerID)
-		{
-			bodystr=[[NSString alloc] initWithFormat:
-						   @"beer_id=%@&"
-						   "description=%@&"
-						   "name=%@",
-						   self.beerID,
-						   [self.beerObj.data objectForKey:@"description"],
-						   [self.beerObj.data objectForKey:@"name"]];
-		}
-		else
-		{
-			bodystr=[[NSString alloc] initWithFormat:
-					 @"brewery_id=%@&"
-					 "description=%@&"
-					 "name=%@",
-					 self.breweryID,
-					 [self.beerObj.data objectForKey:@"description"],
-					 [self.beerObj.data objectForKey:@"name"]];
-		}
-		
-		DLog(@"POST data:%@",bodystr);
-		
-		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		NSData* answer;
-		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC];
-		NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
-		if ([response statusCode]==200)
-		{
-			// Parse the XML response, which is the new beer doc
-			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
-			[parser setDelegate:self];
-			[parser parse];
-		}
-		else
-		{
-			// TODO: alert the user that it failed and/or give a chance to retry
-		}
+//		// Save data to server
+//		NSString* bodystr;
+//		
+//		// TODO: only send data that has changed
+//		if (self.beerID)
+//		{
+//			bodystr=[[NSString alloc] initWithFormat:
+//						   @"beer_id=%@&"
+//						   "description=%@&"
+//						   "name=%@",
+//						   self.beerID,
+//						   [self.beerObj.data objectForKey:@"description"],
+//						   [self.beerObj.data objectForKey:@"name"]];
+//		}
+//		else
+//		{
+//			bodystr=[[NSString alloc] initWithFormat:
+//					 @"brewery_id=%@&"
+//					 "description=%@&"
+//					 "name=%@",
+//					 self.breweryID,
+//					 [self.beerObj.data objectForKey:@"description"],
+//					 [self.beerObj.data objectForKey:@"name"]];
+//		}
+//		
+//		DLog(@"POST data:%@",bodystr);
+//		
+//		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+//		NSData* answer;
+//		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC];
+//		NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
+//		if ([response statusCode]==200)
+//		{
+//			// Parse the XML response, which is the new beer doc
+//			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
+//			[parser setDelegate:self];
+//			[parser parse];
+//		}
+//		else
+//		{
+//			// TODO: alert the user that it failed and/or give a chance to retry
+//		}
 		
 		self.title=@"Beer";
 
 		NSArray* rows=[NSArray arrayWithObjects:
-					   [NSIndexPath indexPathForRow:0 inSection:1],
-					   [NSIndexPath indexPathForRow:1 inSection:1],
+					   [NSIndexPath indexPathForRow:1 inSection:0],
 					   nil];
 		[self.tableView beginUpdates];
-		[self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
+
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView endUpdates];
 	}
 }
@@ -281,7 +318,7 @@ const int kButtonHeight=40;
 			return self.editing?8:2;
 			break;
 		case 3:
-			return 3;
+			return self.editing?1:3;
 			break;
 		case 4: // This is only when in edit mode
 			return 1;
@@ -338,8 +375,14 @@ const int kButtonHeight=40;
 			{
 				case 0:
 				{
-					CGSize sz=[[beerObj.data objectForKey:@"description"] sizeWithFont:[UIFont systemFontOfSize: [UIFont smallSystemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
-					return sz.height+20.0f;
+					if (self.editing)
+					{
+					}
+					else
+					{
+						CGSize sz=[[beerObj.data objectForKey:@"description"] sizeWithFont:[UIFont systemFontOfSize: [UIFont smallSystemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
+						return sz.height+20.0f;
+					}
 					break;
 				}
 				case 1:
@@ -367,38 +410,83 @@ const int kButtonHeight=40;
     // Set up the cell...
 	switch (indexPath.section) 
 	{
-		case 0:
+		case 0: // Section 0
 		{
-			cell = [tableView dequeueReusableCellWithIdentifier:@"Section0Cell"];
-			if (cell == nil)
+			switch (indexPath.row)
 			{
-				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Section0Cell"] autorelease];
-				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+				case 0:
+					if (self.editing)
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section0CellEditing"];
+						if (cell == nil)
+						{
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Section0CellEditing"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.backgroundView.backgroundColor=[UIColor whiteColor];
+							
+							UITextView* beerNameTextView=[[[UITextView alloc] initWithFrame:CGRectMake(10, 10, cell.contentView.frame.size.width-20, 30)] autorelease];
+							beerNameTextView.font=[UIFont systemFontOfSize:20];
+							beerNameTextView.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"name"];
+							[cell addSubview:beerNameTextView];
+						}
+					}
+					else
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section0Cell"];
+						if (cell == nil)
+						{
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Section0Cell"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
 
-				UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 0, 200, 20)] autorelease];
-				breweryNameLabel.backgroundColor=[UIColor clearColor];
-				breweryNameLabel.font=[UIFont boldSystemFontOfSize:12];
-				breweryNameLabel.textColor=[UIColor grayColor];
-				[breweryNameLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"brewery_id"]];
-				[cell.contentView addSubview:breweryNameLabel];
-				
-				UILabel* beerNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 20, 200, 30)] autorelease];
-				beerNameLabel.font=[UIFont boldSystemFontOfSize:20];
-				beerNameLabel.backgroundColor=[UIColor clearColor];
-				[beerNameLabel setText:[beerObj.data objectForKey:@"name"]];
-				[cell.contentView addSubview:beerNameLabel];
-				
-				UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
-				transparentBackground.backgroundColor=[UIColor clearColor];
-				cell.backgroundView=transparentBackground;
+							UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 0, 200, 20)] autorelease];
+							breweryNameLabel.backgroundColor=[UIColor clearColor];
+							breweryNameLabel.font=[UIFont boldSystemFontOfSize:12];
+							breweryNameLabel.textColor=[UIColor grayColor];
+							[breweryNameLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"brewery_id"]];
+							[cell.contentView addSubview:breweryNameLabel];
+							
+							UILabel* beerNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 20, 200, 30)] autorelease];
+							beerNameLabel.font=[UIFont boldSystemFontOfSize:20];
+							beerNameLabel.backgroundColor=[UIColor clearColor];
+							[beerNameLabel setText:[beerObj.data objectForKey:@"name"]];
+							[cell.contentView addSubview:beerNameLabel];
+							
+							UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+							transparentBackground.backgroundColor=[UIColor clearColor];
+							cell.backgroundView=transparentBackground;
+						}
+					}
+					break;
+				case 1:
+					if (self.editing)
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section0Row1Editing"];
+						if (cell == nil)
+						{
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section0Row1Editing"] autorelease];
+							[cell.textLabel setText:@"Style"];
+							[cell.detailTextLabel setText:[beerObj.data objectForKey:@"style"]];
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						}
+					}
+					else
+					{
+						// When not editing, there is no 2nd row
+					}
+					break;
+				default:
+					break;
 			}
 			break;
 		}
-		case 1:
+		case 1:  // Section 1
 			if (self.editing)
 			{
-				// When editing a beer, section 0 has 2 less rows
-//				NSUInteger adjusted_row=indexPath.row-2;
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section1CellEditing"];
+				if (cell == nil)
+				{
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section1CellEditing"] autorelease];
+				}
 			}
 			else
 			{
@@ -520,9 +608,44 @@ const int kButtonHeight=40;
 				}
 			}
 			break;
-		case 2:
+		case 2: // Section 2
 			if (self.editing)
 			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section2CellEditing"];
+				if (cell == nil)
+				{
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2CellEditing"] autorelease];
+				}
+				
+				switch (indexPath.row)
+				{
+					case 0:
+						[cell.textLabel setText:@"Color"];
+						break;
+					case 1:
+						[cell.textLabel setText:@"Availability"];
+						break;
+					case 2:
+						[cell.textLabel setText:@"ABV"];
+						break;
+					case 3:
+						[cell.textLabel setText:@"IBUs"];
+						break;
+					case 4:
+						[cell.textLabel setText:@"OG"];
+						break;
+					case 5:
+						[cell.textLabel setText:@"FG"];
+						break;
+					case 6:
+						[cell.textLabel setText:@"Grains"];
+						break;
+					case 7:
+						[cell.textLabel setText:@"Hops"];
+						break;
+					default:
+						break;
+				}
 			}
 			else
 			{
@@ -611,10 +734,23 @@ const int kButtonHeight=40;
 				}
 			}
 			break;
-		case 3:
+		case 3: // Section 3
 		{
 			if (self.editing)
 			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section3CellEditing"];
+				if (cell == nil)
+				{
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section3CellEditing"] autorelease];
+				}
+				
+				switch (indexPath.row) {
+					case 0:
+						[cell.textLabel setText:@"Sizes"];
+						break;
+					default:
+						break;
+				}
 			}
 			else
 			{
@@ -699,9 +835,23 @@ const int kButtonHeight=40;
 			}
 			break;
 		}
-		case 4:
+		case 4:  // Section 4
 			if (self.editing)
 			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section4CellEditing"];
+				if (cell == nil)
+				{
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section4CellEditing"] autorelease];
+				}
+				
+				switch (indexPath.row) {
+					case 0:
+						[cell.textLabel setText:@"Retire This Beer"];
+						[cell.textLabel setTextAlignment:UITextAlignmentCenter];
+						break;
+					default:
+						break;
+				}
 			}
 			else
 			{
