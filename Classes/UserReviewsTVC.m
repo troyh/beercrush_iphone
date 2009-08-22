@@ -37,8 +37,27 @@
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-
-	[self retrieveReviews:0]; // Get the first batch
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	
+	if ([appDelegate restoringNavigationStateAutomatically])
+	{
+		NSObject* navData=[appDelegate nextNavigationStateToRestore];
+		if ([navData isKindOfClass:[NSDictionary class]])
+		{
+			NSDictionary* reviewData=(NSDictionary*)navData;
+			if (reviewData)
+			{
+				FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData];
+				fbrtvc.delegate=self;
+				[self.navigationController pushViewController:fbrtvc animated:YES];
+			}
+		}
+		
+	}
+	else
+	{
+		[self retrieveReviews:0]; // Get the first batch
+	}
 }
 
 -(void)retrieveReviews:(NSUInteger)seqnum
@@ -202,9 +221,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.row<[self.reviewsList count])
 	{
-		BeerObject* beerObj=[[BeerObject alloc] init];
-		beerObj.data=[[reviewsList objectAtIndex:indexPath.row] copy];
-		FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithReviewObject:[self.reviewsList objectAtIndex:indexPath.row]];
+		NSDictionary* reviewData=[self.reviewsList objectAtIndex:indexPath.row];
+		
+		// Create my navigation state and store it so I can restore it the next time the app launches
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[appDelegate saveNavigationState:reviewData]; // Saves the new nav state
+		
+		FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData];
 		fbrtvc.delegate=self;
 		[self.navigationController pushViewController:fbrtvc animated:YES];
 	}

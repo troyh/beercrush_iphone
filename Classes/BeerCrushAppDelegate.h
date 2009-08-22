@@ -41,6 +41,9 @@
 	NSMutableString* currentElemValue;
 	NSMutableString* currentElemID;
 	NSMutableDictionary* flavorsDictionary;
+	
+	NSMutableDictionary* restoringNavState;
+	NSMutableDictionary* appState;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -56,6 +59,8 @@
 @property (nonatomic, retain) NSMutableString* currentElemValue;
 @property (nonatomic, retain) NSMutableString* currentElemID;
 @property (nonatomic, retain) NSMutableDictionary* flavorsDictionary;
+@property (nonatomic, retain) NSMutableDictionary* restoringNavState;
+@property (nonatomic, retain) NSMutableDictionary* appState;
 
 -(void)startApp;
 -(void)askUserForCredentials;
@@ -65,6 +70,10 @@
 -(BOOL)onBeerSelected:(id)obj;
 -(NSDictionary*)getFlavorsDictionary;
 -(NSHTTPURLResponse*)postBeerReview:(NSDictionary*)userReview returningData:(NSData**)answer;
+-(BOOL)saveNavigationState:(NSObject*)data;
+-(BOOL)restoringNavigationStateAutomatically;
+-(NSObject*)nextNavigationStateToRestore;
+
 
 @end
 

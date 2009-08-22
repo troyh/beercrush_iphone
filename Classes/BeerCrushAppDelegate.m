@@ -23,12 +23,6 @@
 @implementation BeerObject
 
 @synthesize data;
-//@synthesize name;
-//@synthesize attribs;
-//@synthesize description;
-//@synthesize style;
-//@synthesize abv;
-//@synthesize ibu;
 
 -(id)init
 {
@@ -63,7 +57,8 @@
 @synthesize currentElemValue;
 @synthesize currentElemID;
 @synthesize flavorsDictionary;
-
+@synthesize restoringNavState;
+@synthesize appState;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
     
@@ -101,7 +96,8 @@
 		loginVC=nil; // releases it too
 	}
 
-	tabBarController.viewControllers=[[NSArray alloc] initWithObjects:[[UINavigationController alloc] initWithNibName:nil bundle:nil],
+	tabBarController.viewControllers=[[NSArray alloc] initWithObjects:
+									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
 									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
 									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
 									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
@@ -126,22 +122,12 @@
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:2];
 	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Nearby" image:[UIImage imageNamed:@"dot.png"] tag:kTabBarItemTagNearby] autorelease];
-	NearbyTableViewController* ntvc=[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain];
-	ntvc.app=app;
-	ntvc.appdel=self;
-	[ctl pushViewController:ntvc animated:NO ];
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:3];
 	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Reviews" image:[UIImage imageNamed:@"star_filled.png"] tag:kTabBarItemTagMyReviews] autorelease];
-	UserReviewsTVC* urtvc=[[UserReviewsTVC alloc] initWithStyle:UITableViewStylePlain];
-	[ctl pushViewController:urtvc animated:NO];
-	[urtvc release];
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:4];
 	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Wish List" image:[UIImage imageNamed:@"star_empty.png"] tag:kTabBarItemTagWishList] autorelease];
-	BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
-	[ctl pushViewController:bltvc animated:NO];
-	[bltvc release];
 	
 	// Add the tab bar controller's current view as a subview of the window
 	[window addSubview:tabBarController.view];
@@ -153,22 +139,120 @@
 	//	nav.navigationBarHidden=YES;
 	nav.delegate=self;
 	
-	[tabBarController retain];
-	
 	//
 	// Automatically navigate to where the user last closed the app
 	//
 	
-	//	// Hide search bar
-	//	[mySearchBar resignFirstResponder];
-	//	mySearchBar.hidden=YES;
-	//	self.nav.view.frame=app.keyWindow.frame;
-	//	self.nav.navigationBarHidden=NO;
+	// Hide search bar
+//	[mySearchBar resignFirstResponder];
+//	mySearchBar.hidden=YES;
+//	self.nav.view.frame=app.keyWindow.frame;
+//	self.nav.navigationBarHidden=NO;
 	
-	// Start the navigation
-	//	BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:@"Dogfish-Head-Craft-Brewery-Milton" app:self.app appDelegate:self];
-	//	[[tabBarController.viewControllers objectAtIndex:1] pushViewController: btvc animated:YES];
-	//	[btvc release];
+	/*
+		 Restore the previous state of navigation:
+	 
+		 For each tab in the TabBarController, do the following:
+			1. Move the previous nav stack out of the previous set and clear the previous stack
+			2. Persist the new (empty) stack in NSUserDefaults (via synchronize)
+			3. Start the navigation (each nav step will add to the stack as they normally do)
+			4. Persist the new nav stack in NSUserDefaults
+			5. Throw the old stack away
+	 
+		This way, if the app crashes while trying to restore the state of the navigation, the 
+		app won't get caught in an infinite loop of launching and crashing. Also, if for some reason, 
+	    (no network connection, the next step in the stack doesn't make sense anymore, the data needed 
+		to navigate isn't available, etc.) the app can't navigate to the previous position, the newest 
+		nav state makes sense -- view controller only goes as far as it can.
+	 
+		To do this, the app delegate provides methods that each controller can use to determine if it needs
+	    to automatically navigate to the next step. These methods are:
+
+				-(BOOL)saveNavigationState:(NSObject*)data;
+				-(BOOL)restoringNavigationStateAutomatically;
+				-(NSObject*)nextNavigationStateToRestore;
+
+	 In each view controller's viewDidLoad method should look something like this:
+	 
+	 [appdel saveNavigationState:mynavdata]; // Saves the new nav state
+	 if ([appdel restoringNavigationStateAutomatically]) // Go to the next step automatically?
+	 {
+		NSObject* navdata=[appdel nextNavigationStateToRestore];
+		if (navdata)
+		{
+			Use navdata to go to the next nav state...
+		}
+	 }
+	 */
+	
+	self.restoringNavState=[[NSUserDefaults standardUserDefaults] objectForKey:@"appstate"];
+	if (self.restoringNavState)
+	{
+		NSMutableArray* previousNavStacks=[self.restoringNavState objectForKey:@"navstacks"];
+
+		if ([previousNavStacks count] < [tabBarController.viewControllers count])
+		{ // The app state was saved with fewer stacks than we need (we are a newer version of the app?), so add more...
+			for (NSUInteger i=[previousNavStacks count];i < [tabBarController.viewControllers count];++i)
+			{
+				// Create a new stack for this tab bar item
+				[previousNavStacks addObject:[NSMutableArray arrayWithCapacity:5]];
+			}
+		}
+	}
+		
+	for (NSUInteger tabBarControllerIndex=0;tabBarControllerIndex < [tabBarController.viewControllers count];++tabBarControllerIndex)
+	{
+		switch (tabBarControllerIndex+1) {
+			case kTabBarItemTagBeers:
+				break;
+			case kTabBarItemTagMyReviews:
+			{
+				UserReviewsTVC* urtvc=[[UserReviewsTVC alloc] initWithStyle:UITableViewStylePlain];
+				[[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] pushViewController:urtvc animated:NO];
+				[urtvc release];
+				break;
+			}
+			case kTabBarItemTagNearby:
+			{
+				NearbyTableViewController* ntvc=[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain];
+				ntvc.app=app;
+				ntvc.appdel=self;
+				[[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] pushViewController:ntvc animated:NO ];
+				break;
+			}
+			case kTabBarItemTagSearch:
+				break;
+			case kTabBarItemTagWishList:
+			{
+				BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
+				[[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] pushViewController:bltvc animated:NO];
+				[bltvc release];
+				break;
+			}
+			default:
+				// Shouldn't happen
+				break;
+		}
+	}
+
+	// Create a new appstate dictionary to store the app's state as it runs
+	self.appState=[[NSMutableDictionary alloc] init];
+	NSMutableArray* stacks=[NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
+	for (int i=0;i<[self.tabBarController.viewControllers count];++i)
+	{
+		[stacks addObject:[NSMutableArray arrayWithCapacity:5]];
+	}
+	[self.appState setObject:stacks forKey:@"navstacks"];
+	
+//	tabBarController.selectedViewController=[tabBarController.viewControllers objectAtIndex:4];
+//	UINavigationController* nc=(UINavigationController*)tabBarController.selectedViewController;
+//	UITableViewController* tvc=(UITableViewController*)nc.topViewController;
+//	UITableViewDelegate* tvd=[tvc.tableView.delegate];
+//	[tvc.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionTop];
+//	[tvc.tableView.delegate tableView:tvc.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+//	BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:@"Dogfish-Head-Craft-Brewery-Milton" app:self.app appDelegate:self];
+//	[[tabBarController.viewControllers objectAtIndex:1] pushViewController: btvc animated:YES];
+//	[btvc release];
 }
 
 /*
@@ -183,6 +267,51 @@
 }
 */
 
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+	// Save the current app state
+	// TODO: if the app state is empty, just remove the key 'appstate' from NSUserDefaults
+	[[NSUserDefaults standardUserDefaults] setObject:self.appState forKey:@"appstate"];
+}
+
+
+-(BOOL)saveNavigationState:(NSObject*)data
+{
+	NSUInteger idx=[self.tabBarController.viewControllers indexOfObjectIdenticalTo:self.tabBarController.selectedViewController];
+	NSMutableArray* stack=[[self.appState objectForKey:@"navstacks"] objectAtIndex:idx];
+	[stack addObject:data];
+	return stack?YES:NO;
+}
+
+-(BOOL)restoringNavigationStateAutomatically
+{
+	if (self.restoringNavState==nil)
+		return NO;
+
+	NSMutableArray* stacks=[self.restoringNavState objectForKey:@"navstacks"];
+	if (stacks==nil)
+		return NO;
+
+	NSUInteger idx=[self.tabBarController.viewControllers indexOfObjectIdenticalTo:self.tabBarController.selectedViewController];
+	return [[stacks objectAtIndex:idx] count]?YES:NO;
+}
+
+-(NSObject*)nextNavigationStateToRestore
+{
+	NSMutableArray* stacks=[self.restoringNavState objectForKey:@"navstacks"];
+	NSUInteger idx=[self.tabBarController.viewControllers indexOfObjectIdenticalTo:self.tabBarController.selectedViewController];
+	if (idx < [stacks count])
+	{
+		NSMutableArray* stack=[stacks objectAtIndex:idx];
+		NSObject* obj=[[stack objectAtIndex:0] retain];
+		[stack removeObjectAtIndex:0];
+		[obj autorelease];
+		return obj;
+	}
+
+	return nil;
+}
+
 
 - (void)dealloc {
 	[nav release];
@@ -190,6 +319,14 @@
     [window release];
 	[flavorsDictionary release];
 
+	[loginVC release];
+	[mySearchBar release];
+	[xmlPostResponse release];
+	[xmlParserPath release];
+	[currentElemValue release];
+	[currentElemID release];
+	[restoringNavState release];
+	
     [super dealloc];
 }
 
@@ -204,7 +341,7 @@
 //	nav.view.frame=f;
 
 	MyTableViewController* tbl=nil;
-	if (nav.viewControllers.count)
+	if (self.nav.viewControllers.count)
 	{
 		if ([nav.topViewController isMemberOfClass:[MyTableViewController class]])
 		{
