@@ -234,6 +234,13 @@
 				break;
 		}
 	}
+	
+	if (self.restoringNavState)
+	{
+		// We don't need to test if 'selectedtab' is there, it'll just set it to the 0-th controller anyway
+		NSUInteger n=[(NSNumber*)[self.restoringNavState valueForKey:@"selectedtab"] integerValue];
+		tabBarController.selectedViewController=[tabBarController.viewControllers objectAtIndex:n];
+	}
 
 	// Create a new appstate dictionary to store the app's state as it runs
 	self.appState=[[NSMutableDictionary alloc] init];
@@ -270,6 +277,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
 	// Save the current app state
+	[self.appState setValue:[NSNumber numberWithUnsignedInt:[self.tabBarController.viewControllers indexOfObjectIdenticalTo:[self.tabBarController selectedViewController]]] forKey:@"selectedtab"];
 	// TODO: if the app state is empty, just remove the key 'appstate' from NSUserDefaults
 	[[NSUserDefaults standardUserDefaults] setObject:self.appState forKey:@"appstate"];
 }
