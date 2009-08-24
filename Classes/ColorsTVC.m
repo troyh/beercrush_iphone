@@ -1,30 +1,29 @@
 //
-//  StylesTVC.m
+//  ColorsTVC.m
 //  BeerCrush
 //
-//  Created by Troy Hakala on 8/21/09.
+//  Created by Troy Hakala on 8/24/09.
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "StylesListTVC.h"
+#import "ColorsTVC.h"
 #import "BeerCrushAppDelegate.h"
 
-@implementation StylesListTVC
+@implementation ColorsTVC
 
-@synthesize stylesList;
-@synthesize stylesNames;
-@synthesize currentStyleNum;
-@synthesize currentElemValue;
+@synthesize colorsList;
+@synthesize colorsNums;
 @synthesize xmlParserPath;
+@synthesize currentElemValue;
 @synthesize delegate;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:style]) {
-		// Get styles list from server
+		
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 		NSData* answer;
-		NSHTTPURLResponse* response=[appDelegate sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_GET_STYLESLIST] usingMethod:@"GET" withData:nil returningData:&answer];
+		NSHTTPURLResponse* response=[appDelegate sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_GET_COLORSLIST] usingMethod:@"GET" withData:nil returningData:&answer];
 		if ([response statusCode]==200)
 		{
 			NSXMLParser* parser=[[[NSXMLParser alloc] initWithData:answer] autorelease];
@@ -35,7 +34,6 @@
 		{
 			// TODO: alert the user
 		}
-
     }
     return self;
 }
@@ -94,33 +92,15 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [self.stylesList count];
+    return 1;
 }
 
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[self.stylesList objectAtIndex:section] count];
+    return [self.colorsNums count];
 }
 
-//- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
-//{
-//	NSMutableArray* a=[NSMutableArray arrayWithCapacity:32];
-//	for (int i=0; i < [self.stylesList count]; i+=5) {
-//		[a addObject:[[self.stylesNames objectForKey:[NSString stringWithFormat:@"%d",i+1]] substringToIndex:10]];
-//	}
-//	return a;
-//}
-//
-//- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
-//{
-//	return index*5;
-//}
-//
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-	return [self.stylesNames objectForKey:[NSString stringWithFormat:@"%d",section+1]];
-}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -133,7 +113,8 @@
     }
     
     // Set up the cell...
-	[cell.textLabel setText:[self.stylesNames objectForKey:[[self.stylesList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]]];
+	NSString* s=[self.colorsNums objectAtIndex:indexPath.row];
+	[cell.textLabel setText:[self.colorsList objectForKey:s]];
 	
     return cell;
 }
@@ -145,7 +126,7 @@
 	// [self.navigationController pushViewController:anotherViewController];
 	// [anotherViewController release];
 	
-	[delegate stylesTVC:self didSelectStyle:[[self.stylesList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+	[delegate colorsTVC:self didSelectColor:[[self.colorsNums objectAtIndex:indexPath.row] integerValue]];
 }
 
 
@@ -190,60 +171,31 @@
 
 
 - (void)dealloc {
-	[stylesList release];
-	[stylesNames release];
-	self.currentElemValue=nil;
-	self.xmlParserPath=nil;
+	[self.colorsList release];
+	[self.colorsNums release];
+	[self.xmlParserPath release];
+	[self.currentElemValue release];
     [super dealloc];
 }
 
 /*
+ Sample Colors doc:
  
- Sample styles doc:
- 
-<styles>
-	<style num="1">
-		<name>Light Lager</name>
-		<style num="1A">
-			<name>Light American Lager</name>
-		</style>
-		<style num="1B">
-			<name>Standard American Lager</name>
-		</style>
-		<style num="1C">
-			<name>Premium American Lager</name>
-		</style>
-		<style num="1D">
-			<name>Munich Helles</name>
-		</style>
-		<style num="1E">
-			<name>Dortmunder Export</name>
-		</style>
-	</style>
-	<style num="2">
-		<name>Pilsner</name>
-		<style num="2A">
-			<name>German Pilsner</name>
-		</style>
-		<style num="2B">
-			<name>Boehmian Pilsner</name>
-		</style>
-		<style num="2C">
-			<name>Classic American Pilsner</name>
-		</style>
-	</style>
-	<style num="3">
-		<name>European Amber Lager</name>
-		<style num="3A">
-			<name>Vienna Lager</name>
-		</style>
-		<style num="3B">
-			<name>Oktoberfest/Maerzen</name>
-		</style>
-	</style>
- </styles>
- 
- */
+<colors>
+<color srm="2" srmmin="0" srmmax="2.4"><name>Pale Straw</name></color>
+<color srm="3"  srmmin="2.5" srmmax="3.4"><name>Straw</name></color>
+<color srm="4"  srmmin="3.4" srmmax="4.9"><name>Pale Gold</name></color>
+<color srm="6"  srmmin="5" srmmax="7.4"><name>Deep Gold</name></color>
+<color srm="9"  srmmin="7.5" srmmax="10.4"><name>Pale Amber</name></color>
+<color srm="12" srmmin="10.5" srmmax="13.4"><name>Medium Amber</name></color>
+<color srm="15" srmmin="13.5" srmmax="16.4"><name>Deep Amber</name></color>
+<color srm="18" srmmin="16.5" srmmax="19.4"><name>Amber Brown</name></color>
+<color srm="21" srmmin="19.5" srmmax="22.9"><name>Brown</name></color>
+<color srm="24" srmmin="23" srmmax="26.9"><name>Ruby Brown</name></color>
+<color srm="30" srmmin="27" srmmax="34.9"><name>Deep Brown</name></color>
+<color srm="40" srmmin="35"><name>Black</name></color>
+</colors>
+*/
 
 // NSXMLParser delegate methods
 
@@ -254,8 +206,8 @@
 	
 	xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5];
 	
-	self.stylesList=[[NSMutableArray alloc] initWithCapacity:32];
-	self.stylesNames=[[NSMutableDictionary alloc] initWithCapacity:32];
+	self.colorsList=[[NSMutableDictionary alloc] initWithCapacity:12];
+	self.colorsNums=[[NSMutableArray alloc] initWithCapacity:12];
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser
@@ -266,24 +218,19 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if ([elementName isEqualToString:@"style"])
+	if ([elementName isEqualToString:@"color"])
 	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",nil]])
+		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"colors",nil]])
 		{
-			[self.stylesList addObject:[NSMutableArray arrayWithCapacity:5]];
-//			[self.stylesList addObject:[attributeDict objectForKey:@"num"]];
-		}
-		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",nil]])
-		{
-			[[self.stylesList lastObject] addObject:[attributeDict objectForKey:@"num"]];
+			[self.colorsNums addObject:[attributeDict objectForKey:@"srm"]];
 		}
 	}
 	else if ([elementName isEqualToString:@"name"])
 	{
-		if ([[xmlParserPath lastObject] isEqualToString:@"style"])
+		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"colors",@"color",nil]])
 		{
 			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
+			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:16];
 		}
 	}
 	
@@ -296,21 +243,17 @@
 	
 	if (self.currentElemValue)
 	{
-		if ([elementName isEqualToString:@"style"])
+		if ([elementName isEqualToString:@"color"])
 		{
 		}
 		else if ([elementName isEqualToString:@"name"])
 		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",nil]])
+			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"colors",@"color",nil]])
 			{
-				[self.stylesNames setObject:self.currentElemValue forKey:[NSString stringWithFormat:@"%d",[self.stylesList count]]];
-			}
-			else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",@"style",nil]])
-			{
-				[self.stylesNames setObject:self.currentElemValue forKey:[[self.stylesList lastObject] lastObject]];
+				[self.colorsList setObject:self.currentElemValue forKey:[self.colorsNums lastObject]];
 			}
 		}
-
+		
 		self.currentElemValue=nil;
 	}
 }
@@ -327,6 +270,8 @@
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
 {
 }
+
+
 
 @end
 

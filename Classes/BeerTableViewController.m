@@ -1100,6 +1100,8 @@ const int kButtonHeight=40;
 
 -(void)colorsTVC:(ColorsTVC*)tvc didSelectColor:(NSUInteger)srm
 {
+	[self.beerObj.data setObject:[NSNumber numberWithUnsignedInt:srm] forKey:@"srm"];
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 // StylesListTVCDelegate methods
