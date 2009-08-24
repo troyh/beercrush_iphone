@@ -179,21 +179,24 @@
 	}
 }
 
-//-(void)searchBarTextDidBeginEditing:(UISearchBar*)bar
-//{
-////	bar.showsCancelButton=NO;
-//}
-//
+-(void)searchBarTextDidBeginEditing:(UISearchBar*)bar
+{
+	bar.showsCancelButton=YES;
+}
+
 //-(BOOL)searchBarShouldEndEditing:(UISearchBar*)searchBar
 //{
 //	return YES;
 //}
-//
-//- (void)searchBarCancelButtonClicked:(UISearchBar *)bar
-//{
-//    [bar resignFirstResponder];
-//    bar.text = @"";
-//}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)bar
+{
+    [bar resignFirstResponder];
+    bar.text = @"";
+	self.autoCompleteResultsData=nil;
+	self.autoCompleteResultsCount=0;
+	[self.tableView reloadData];
+}
 
 
 #pragma mark Table view methods
