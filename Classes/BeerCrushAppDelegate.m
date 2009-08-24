@@ -305,27 +305,54 @@
 	return nil;
 }
 
--(BOOL)pushNavigationStateForNavigationController:(UINavigationController*)navigationController withData:(NSObject*)data
+-(BOOL)pushNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem withData:(NSObject*)data
 {
-	NSUInteger idx=[self.tabBarController.viewControllers indexOfObjectIdenticalTo:navigationController];
-	NSMutableArray* stack=[[self.appState objectForKey:@"navstacks"] objectAtIndex:idx];
-	[stack addObject:data];
-	return stack?YES:NO;
+	DLog(@"looking for tag=%d",tabBarItem.tag);
+	NSUInteger idx=0;
+	for (UIViewController* vc in self.tabBarController.viewControllers)
+	{
+		DLog(@"on tag=%d",vc.tabBarItem.tag);
+		if (vc.tabBarItem.tag==tabBarItem.tag)
+		{	// Found it
+			NSMutableArray* stack=[[self.appState objectForKey:@"navstacks"] objectAtIndex:idx];
+			[stack addObject:data];
+			return stack?YES:NO;
+		}
+		++idx;
+	}
+
+	return NO;
 }
 
--(void)popNavigationStateForNavigationController:(UINavigationController*)navigationController
+-(void)popNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem
 {
 	NSMutableArray* stacks=[self.appState objectForKey:@"navstacks"];
 	if (stacks)
 	{
-		NSUInteger idx=[self.tabBarController.viewControllers indexOfObjectIdenticalTo:navigationController];
-		if (idx < [stacks count])
+		NSUInteger idx=0;
+		for (UIViewController* vc in self.tabBarController.viewControllers)
 		{
-			if ([[stacks objectAtIndex:idx] count])
-			{
-				if ([[navigationController viewControllers] count] < [[stacks objectAtIndex:idx] count])
-				[[stacks objectAtIndex:idx] removeLastObject];
+			if (vc.tabBarItem.tag==tabBarItem.tag)
+			{	// Found it
+				if (idx < [stacks count])
+				{
+					if ([[stacks objectAtIndex:idx] count])
+					{
+						if ([vc.navigationController.viewControllers count] < [[stacks objectAtIndex:idx] count])
+						{
+							/* Make sure the stack has at least as many items as the navigation controller has. 
+							 We have to do this because the view controllers just do pops (call this method) in 
+							 viewWillAppear and it doesn't know if it's appearing because it was pushed onto the
+							 nav controller's stack or if another view controller was popped.
+							 */
+							[[stacks objectAtIndex:idx] removeLastObject];
+						}
+					}
+				}
+
+				return;
 			}
+			++idx;
 		}
 	}
 }

@@ -197,40 +197,61 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-
-	// Retrieve an XML doc from server
-	NSURL* url=nil;
-	if (breweryID)
-	{	// Get brewery doc, it includes the beer list
-		NSArray* idparts=[breweryID componentsSeparatedByString:@":"];
-		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC, [idparts objectAtIndex:1]]];
-		
-	}
-	else if (placeID)
-	{	// Get the place menu doc
-		NSArray* idparts=[placeID componentsSeparatedByString:@":"];
-		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_MENU_DOC, [idparts objectAtIndex:0], [idparts objectAtIndex:1]]];
-	}
-	else if (wishlistID)
-	{	 // Get the wishlist doc
-		NSArray* idparts=[wishlistID componentsSeparatedByString:@":"];
-		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_WISHLIST_DOC, [idparts objectAtIndex:1]]];
-	}
-
-	if (url)
+	
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	if ([appDelegate restoringNavigationStateAutomatically])
 	{
-		[beerList removeAllObjects];
-		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		NSData* answer;
-		NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-		if ([response statusCode]==200)
+		NSObject* navData=[appDelegate nextNavigationStateToRestore];
+		if ([navData isKindOfClass:[NSString class]])
 		{
-			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
-			[parser setDelegate:self];
-			[parser parse];
-			[parser release];
+			NSString* beerID=(NSString*)navData;
+			if (beerID)
+			{
+				[appDelegate pushNavigationStateForTabBarItem:self.tabBarController.tabBarItem withData:beerID]; // Saves the new nav state
+				
+				BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:beerID] autorelease];
+				[self.navigationController pushViewController:vc animated:NO];
+			}
 		}
-		[self.tableView reloadData];
+	}
+	else
+	{
+		[appDelegate popNavigationStateForTabBarItem:self.tabBarItem];
+		
+		// Retrieve an XML doc from server
+		NSURL* url=nil;
+		if (breweryID)
+		{	// Get brewery doc, it includes the beer list
+			NSArray* idparts=[breweryID componentsSeparatedByString:@":"];
+			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC, [idparts objectAtIndex:1]]];
+			
+		}
+		else if (placeID)
+		{	// Get the place menu doc
+			NSArray* idparts=[placeID componentsSeparatedByString:@":"];
+			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_MENU_DOC, [idparts objectAtIndex:0], [idparts objectAtIndex:1]]];
+		}
+		else if (wishlistID)
+		{	 // Get the wishlist doc
+			NSArray* idparts=[wishlistID componentsSeparatedByString:@":"];
+			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_WISHLIST_DOC, [idparts objectAtIndex:1]]];
+		}
+
+		if (url)
+		{
+			[beerList removeAllObjects];
+			BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			NSData* answer;
+			NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+			if ([response statusCode]==200)
+			{
+				NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
+				[parser setDelegate:self];
+				[parser parse];
+				[parser release];
+			}
+			[self.tableView reloadData];
+		}
 	}
 }
 /*
@@ -304,6 +325,9 @@
 	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	if ([delegate onBeerSelected:[beer.data valueForKey:@"id"]]==NO)
 	{
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[beer.data valueForKey:@"id"]]; // Saves the new nav state
+		
 		BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:[beer.data valueForKey:@"id"]] autorelease];
 		[self.navigationController pushViewController:vc animated:YES];
 	}

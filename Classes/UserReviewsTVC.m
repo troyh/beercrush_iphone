@@ -84,7 +84,7 @@
 			NSDictionary* reviewData=(NSDictionary*)navData;
 			if (reviewData)
 			{
-				[appDelegate pushNavigationStateForNavigationController:self.navigationController withData:reviewData]; // Saves the new nav state
+				[appDelegate pushNavigationStateForTabBarItem:self.tabBarItem withData:reviewData]; // Saves the new nav state
 				
 				FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData];
 				fbrtvc.delegate=self;
@@ -94,7 +94,7 @@
 	}
 	else
 	{ // Pop an item off the appstate navstack
-		[appDelegate popNavigationStateForNavigationController:self.navigationController];
+		[appDelegate popNavigationStateForTabBarItem:self.tabBarItem];
 	}
 }
 
@@ -227,7 +227,7 @@
 		
 		// Create my navigation state and store it so I can restore it the next time the app launches
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate pushNavigationStateForNavigationController:self.navigationController withData:reviewData]; // Saves the new nav state
+		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:reviewData]; // Saves the new nav state
 		
 		FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData];
 		fbrtvc.delegate=self;
