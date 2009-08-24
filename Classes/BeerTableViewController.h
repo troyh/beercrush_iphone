@@ -12,8 +12,9 @@
 #import "FullBeerReviewTVC.h"
 #import "StylesListTVC.h"
 #import "ColorsTVC.h"
+#import "AvailabilityTVC.h"
 
-@interface BeerTableViewController : UITableViewController <FullBeerReviewTVCDelegate,StylesListTVCDelegate,ColorsTVCDelegate> {
+@interface BeerTableViewController : UITableViewController <FullBeerReviewTVCDelegate,StylesListTVCDelegate,ColorsTVCDelegate,AvailabilityTVCDelegate> {
 	NSString* beerID;
 	NSString* breweryID;
 	BeerObject* beerObj;

@@ -15,6 +15,7 @@
 #import "StylesListTVC.h"
 #import "StyleVC.h"
 #import "ColorsTVC.h"
+#import "AvailabilityTVC.h"
 
 @implementation BeerTableViewController
 
@@ -977,6 +978,15 @@ const int kButtonHeight=40;
 			[self.navigationController pushViewController:ctvc animated:YES];
 		}
 	}
+	else if (indexPath.section == 2 && indexPath.row == 1)
+	{
+		if (self.editing) // Availability
+		{
+			AvailabilityTVC* atvc=[[[AvailabilityTVC alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
+			atvc.delegate=self;
+			[self.navigationController pushViewController:atvc animated:YES];
+		}
+	}
 	else if (indexPath.section == 3 && indexPath.row == 0) // Beer description
 	{
 		if (self.tableView.editing==YES)
@@ -1357,6 +1367,14 @@ const int kButtonHeight=40;
 
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
 {
+}
+
+// AvailabilityTVCDelegate methods
+
+-(void)availabilityTVC:(AvailabilityTVC*)tvc didSelectAvailability:(NSString*)s
+{
+	[self.beerObj.data setObject:s forKey:@"availability"];
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 @end
