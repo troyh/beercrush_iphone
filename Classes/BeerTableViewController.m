@@ -12,7 +12,9 @@
 #import "PhoneNumberEditTableViewController.h"
 #import "RatingControl.h"
 #import "FullBeerReviewTVC.h"
+#import "StylesListTVC.h"
 #import "StyleVC.h"
+#import "ColorsTVC.h"
 
 @implementation BeerTableViewController
 
@@ -189,10 +191,10 @@ const int kButtonHeight=40;
 //		[self.navigationController.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:YES];
 		self.navigationController.navigationBar.topItem.leftBarButtonItem=nil;
 
-		NSArray* newrows=[NSArray arrayWithObjects:
-						  [NSIndexPath indexPathForRow:0 inSection:0],
-						[NSIndexPath indexPathForRow:1 inSection:0],
-						nil];
+//		NSArray* newrows=[NSArray arrayWithObjects:
+//						  [NSIndexPath indexPathForRow:0 inSection:0],
+//						[NSIndexPath indexPathForRow:1 inSection:0],
+//						nil];
 
 //		NSArray* rows=[NSArray arrayWithObjects:
 //					   [NSIndexPath indexPathForRow:0 inSection:1],
@@ -211,16 +213,18 @@ const int kButtonHeight=40;
 		
 //		NSIndexSet* sections=[NSIndexSet indexSetWithIndex:1];
 		[self.tableView beginUpdates];
-		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
-												[NSIndexPath indexPathForRow:0 inSection:0],
-												nil] 
-			withRowAnimation:UITableViewRowAnimationFade];
+//		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
+//												[NSIndexPath indexPathForRow:0 inSection:0],
+//												nil] 
+//			withRowAnimation:UITableViewRowAnimationFade];
 
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 
-		[self.tableView insertRowsAtIndexPaths:newrows withRowAnimation:UITableViewRowAnimationFade];
+//		[self.tableView insertRowsAtIndexPaths:newrows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
@@ -281,11 +285,13 @@ const int kButtonHeight=40;
 					   nil];
 		[self.tableView beginUpdates];
 		[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
 
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
@@ -330,8 +336,6 @@ const int kButtonHeight=40;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	NSInteger adjusted_row=indexPath.row;
-
 	switch (indexPath.section) 
 	{
 		case 0:
@@ -339,20 +343,23 @@ const int kButtonHeight=40;
 		case 1:
 		{
 			if (self.editing)
-				adjusted_row+=2; // When editing a beer, the normal rows 0 and 1 in section 1 are gone, so adjust upward by 2
-
-			switch (adjusted_row)
 			{
-			case 0:
-				break;
-			case 1:
-				break;
-			case 2:
-			{
-				break;
+				CGSize sz=[[beerObj.data objectForKey:@"description"] sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
+				return sz.height+20.0f;
 			}
-			default:
-				break;
+			else
+			{
+				switch (indexPath.row)
+				{
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				default:
+					break;
+				}
 			}
 			break;
 		}
@@ -423,11 +430,10 @@ const int kButtonHeight=40;
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Section0CellEditing"] autorelease];
 							cell.selectionStyle=UITableViewCellSelectionStyleNone;
 							cell.backgroundView.backgroundColor=[UIColor whiteColor];
-							
 							UITextView* beerNameTextView=[[[UITextView alloc] initWithFrame:CGRectMake(10, 10, cell.contentView.frame.size.width-20, 30)] autorelease];
 							beerNameTextView.font=[UIFont systemFontOfSize:20];
-							beerNameTextView.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"name"];
 							[cell addSubview:beerNameTextView];
+							beerNameTextView.text=[self.beerObj.data objectForKey:@"name"];
 						}
 					}
 					else
@@ -486,6 +492,15 @@ const int kButtonHeight=40;
 				if (cell == nil)
 				{
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section1CellEditing"] autorelease];
+					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+					cell.backgroundView.backgroundColor=[UIColor whiteColor];
+					UITextView* textView=[[[UITextView alloc] initWithFrame:CGRectMake(10, 10, cell.contentView.frame.size.width-20, cell.contentView.frame.size.height)] autorelease];
+					textView.font=[UIFont systemFontOfSize:14];
+//					textView.textAlignment=UITextAlignmentCenter;
+//					textView.lineBreakMode=UILineBreakModeWordWrap;
+					[textView sizeToFit];
+					[cell addSubview:textView];
+					textView.text=[self.beerObj.data objectForKey:@"description"];
 				}
 			}
 			else
@@ -923,16 +938,22 @@ const int kButtonHeight=40;
 	{
 		if (self.tableView.editing==YES)
 		{
-//			// Go to view to edit name
-//			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-//			pnetvc.data=beerObj.data;
-//			pnetvc.editableValueName=@"name";
-//			pnetvc.editableValueType=kBeerCrushEditableValueTypeText;
-//			[self.navigationController pushViewController:pnetvc animated:YES];
-//			[pnetvc release];
 		}
 		else
 		{
+		}
+	}
+	else if (indexPath.section == 0 && indexPath.row == 1)
+	{
+		if (self.tableView.editing==YES)
+		{
+			StylesListTVC* tvc=[[[StylesListTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
+			tvc.delegate=self;
+			[self.navigationController pushViewController:tvc animated:YES];
+			
+//					BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+//					[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:nil];
+			
 		}
 	}
 	else if (indexPath.section == 1 && indexPath.row == 1) // Ratings & Reviews
@@ -945,6 +966,15 @@ const int kButtonHeight=40;
 			ReviewsTableViewController*	rtvc=[[[ReviewsTableViewController alloc] initWithID:self.beerID dataType:Beer] autorelease];
 			rtvc.fullBeerReviewDelegate=self; // I'll be the FullBeerReviewTVCDelegate when the user selects on of the reviews to look at
 			[self.navigationController pushViewController: rtvc animated:YES];
+		}
+	}
+	else if (indexPath.section == 2 && indexPath.row == 0)
+	{
+		if (self.editing) // Color
+		{
+			ColorsTVC* ctvc=[[[ColorsTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
+			ctvc.delegate=self;
+			[self.navigationController pushViewController:ctvc animated:YES];
 		}
 	}
 	else if (indexPath.section == 3 && indexPath.row == 0) // Beer description
@@ -1065,6 +1095,20 @@ const int kButtonHeight=40;
     return YES;
 }
 */
+
+// ColorsTVCDelegate methods
+
+-(void)colorsTVC:(ColorsTVC*)tvc didSelectColor:(NSUInteger)srm
+{
+}
+
+// StylesListTVCDelegate methods
+-(void)stylesTVC:(StylesListTVC*)tvc didSelectStyle:(NSString*)styleid
+{
+	NSDictionary* stylesDict=tvc.stylesNames;
+	[self.beerObj.data setObject:[stylesDict objectForKey:styleid] forKey:@"style"];
+	[self.navigationController popViewControllerAnimated:YES];
+}
 
 // FullBeerReviewTVCDelegate methods
 

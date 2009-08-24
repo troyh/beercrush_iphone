@@ -8,9 +8,30 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol StylesListTVCDelegate;
 
-@interface StylesTVC : UITableViewController {
-
+@interface StylesListTVC : UITableViewController {
+	NSMutableArray* stylesList;
+	NSMutableDictionary* stylesNames;
+	NSMutableString* currentStyleNum;
+	NSMutableString* currentElemValue;
+	NSMutableArray* xmlParserPath;
+	
+	id<StylesListTVCDelegate> delegate;
 }
 
+@property (nonatomic,retain) NSMutableArray* stylesList;
+@property (nonatomic,retain) NSMutableDictionary* stylesNames;
+@property (nonatomic,retain) NSMutableString* currentStyleNum;
+@property (nonatomic,retain) NSMutableString* currentElemValue;
+@property (nonatomic,retain) NSMutableArray* xmlParserPath;
+@property (assign) id<StylesListTVCDelegate> delegate;
+
 @end
+
+@protocol StylesListTVCDelegate
+
+-(void)stylesTVC:(StylesListTVC*)tvc didSelectStyle:(NSString*)styleid;
+
+@end
+

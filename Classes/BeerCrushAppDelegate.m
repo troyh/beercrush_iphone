@@ -307,11 +307,9 @@
 
 -(BOOL)pushNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem withData:(NSObject*)data
 {
-	DLog(@"looking for tag=%d",tabBarItem.tag);
 	NSUInteger idx=0;
 	for (UIViewController* vc in self.tabBarController.viewControllers)
 	{
-		DLog(@"on tag=%d",vc.tabBarItem.tag);
 		if (vc.tabBarItem.tag==tabBarItem.tag)
 		{	// Found it
 			NSMutableArray* stack=[[self.appState objectForKey:@"navstacks"] objectAtIndex:idx];
