@@ -45,19 +45,13 @@
 
 @synthesize breweryID;
 @synthesize breweryObject;
-@synthesize app;
-@synthesize appdel;
 @synthesize currentElemValue;
-@synthesize xmlPostResponse;
 @synthesize xmlParserPath;
 
--(id) initWithBreweryID:(NSString*)brewery_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
+-(id) initWithBreweryID:(NSString*)brewery_id
 {
 	self.breweryID=brewery_id;
-	self.app=a;
-	self.appdel=d;
 	self.xmlParserPath=[NSMutableArray arrayWithCapacity:10];
-	self.xmlPostResponse=nil;
 	self.currentElemValue=nil;
 	
 	self.title=@"Brewery";
@@ -87,7 +81,6 @@
 -(void)dealloc
 {
 	[self.breweryObject release];
-	[self.xmlPostResponse release];
 	[self.currentElemValue release];
 	[super dealloc];
 }
@@ -182,55 +175,17 @@
 			[bodystr appendFormat:@"&uri=%@",[self.breweryObject.data objectForKey:@"uri"]];
 		
 		
-		DLog(@"POST data:%@",bodystr);
-		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
-		
-		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BREWERY_DOC]
-																cachePolicy:NSURLRequestUseProtocolCachePolicy
-															timeoutInterval:30.0];
-		[theRequest setHTTPMethod:@"POST"];
-		[theRequest setHTTPBody:body];
-		[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
-
-		NSHTTPURLResponse* response=nil;
-		NSError* error;
-		int nTries=0;
-		BOOL bRetry=NO;
-		
-		do
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSData* answer;
+		NSHTTPURLResponse* response=[appDelegate sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BREWERY_DOC] usingMethod:@"POST" withData:bodystr returningData:&answer];
+		if ([response statusCode]==200)
 		{
-			++nTries;
-			
-			NSData* rspdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
-			
-			if (rspdata) {
-				DLog(@"Response code:%d",[response statusCode]);
-				DLog(@"Response data:%s",[rspdata bytes]);
-				
-				bRetry=NO;
-				int statuscode=[response statusCode];
-				if (statuscode==420)
-				{
-					if (nTries < 2) // Don't retry over and over, just do it once
-					{
-						if ([appdel login]==YES)
-						{
-							bRetry=YES;
-						}
-					}
-				}
-				else if (statuscode==200)
-				{
-					// Parse the XML response, which is the new brewery doc
-					NSXMLParser* parser=[[NSXMLParser alloc] initWithData:rspdata];
-					[parser setDelegate:self];
-					[parser parse];
-				}
-			} else {
-				// TODO: inform the user that the download could not be made
-			}	
+			// Parse the XML response, which is the new brewery doc
+			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
+			[parser setDelegate:self];
+			[parser parse];
+			[parser release];
 		}
-		while (bRetry);
 		
 		self.title=@"Brewery";
 
@@ -371,26 +326,15 @@
 	// Send the review to the site
 	
 	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&brewery_id=%@", rating+1, breweryID];
-	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
-	
-	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_POST_PLACE_REVIEW]
-															cachePolicy:NSURLRequestUseProtocolCachePolicy
-														timeoutInterval:60.0];
-	[theRequest setHTTPMethod:@"POST"];
-	[theRequest setHTTPBody:body];
-	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
-	
-	// create the connection with the request and start loading the data
-	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-	
-	if (theConnection) {
-		// Create the NSMutableData that will hold
-		// the received data
-		// receivedData is declared as a method instance elsewhere
-		xmlPostResponse=[[NSMutableData data] retain];
-	} else {
-		// TODO: inform the user that the download could not be made
-	}	
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSHTTPURLResponse* response=[appDelegate sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_POST_PLACE_REVIEW] usingMethod:@"POST" withData:bodystr returningData:nil];
+	if ([response statusCode]==200)
+	{
+	}
+	else
+	{
+		// TODO: alert the user
+	}
 }
 
 
@@ -651,67 +595,6 @@
 
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
 {
-}
-
-// NSURLConnection delegate methods
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    // this method is called when the server has determined that it
-    // has enough information to create the NSURLResponse
-	
-    // it can be called multiple times, for example in the case of a
-    // redirect, so each time we reset the data.
-    // receivedData is declared as a method instance elsewhere
-    [xmlPostResponse setLength:0];
-	
-	NSHTTPURLResponse* httprsp=(NSHTTPURLResponse*)response;
-	NSInteger n=httprsp.statusCode;
-	
-	if (n==401)
-	{
-		DLog(@"Need to login...");
-		[appdel login];
-	}
-	else
-		DLog(@"Status code:%u",n);
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    // append the new data to the receivedData
-    // receivedData is declared as a method instance elsewhere
-    [xmlPostResponse appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    // release the connection, and the data object
-    [connection release];
-	
-    // receivedData is declared as a method instance elsewhere
-    [xmlPostResponse release];
-	xmlPostResponse=nil;
-	
-    // inform the user
-    DLog(@"Connection failed! Error - %@ %@",
-          [error localizedDescription],
-          [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
-	
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-
-{
-    // do something with the data
-    // receivedData is declared as a method instance elsewhere
-    DLog(@"Succeeded! Received %d bytes of data",[xmlPostResponse length]);
-	DLog(@"Response doc:%s",(char*)[xmlPostResponse mutableBytes]);
-	
-    // release the connection, and the data object
-    [connection release];
-    [xmlPostResponse release];
-	xmlPostResponse=nil;
 }
 
 @end

@@ -47,9 +47,9 @@
 @synthesize window;
 @synthesize loginVC;
 @synthesize tabBarController;
-@synthesize nav;
-@synthesize mySearchBar;
-@synthesize app;
+//@synthesize nav;
+//@synthesize mySearchBar;
+//@synthesize app;
 @synthesize xmlPostResponse;
 @synthesize onBeerSelectedAction;
 @synthesize onBeerSelectedTarget;
@@ -62,7 +62,6 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
     
-	self.app=application;
 	loginVC=nil;
 	
 	// If we don't know the username/password for the user, give them the login screen
@@ -108,17 +107,7 @@
 	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Beers" image:[UIImage imageNamed:@"dot.png"] tag:kTabBarItemTagBeers] autorelease];
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:1];
-	nav=ctl;
 	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag:kTabBarItemTagSearch] autorelease];
-	tabBarController.selectedViewController=ctl;
-	
-	// Create the search bar
-	CGRect sbf=[UIApplication sharedApplication].keyWindow.frame;
-	sbf.size.height=nav.navigationBar.frame.size.height;
-	mySearchBar=[[UISearchBar alloc] initWithFrame:nav.navigationBar.frame];
-	mySearchBar.delegate=self;
-	//	[tabBarController.view addSubview: mySearchBar];
-	[ctl.view addSubview: mySearchBar];
 	
 	ctl=[tabBarController.viewControllers objectAtIndex:2];
 	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Nearby" image:[UIImage imageNamed:@"dot.png"] tag:kTabBarItemTagNearby] autorelease];
@@ -137,7 +126,7 @@
 	//	nav=[[UINavigationController alloc] initWithNibName:nil bundle:nil];
 	//	nav=[tabBarController.viewControllers objectAtIndex:0];
 	//	nav.navigationBarHidden=YES;
-	nav.delegate=self;
+//	nav.delegate=self;
 	
 	//
 	// Automatically navigate to where the user last closed the app
@@ -229,13 +218,15 @@
 			case kTabBarItemTagNearby:
 			{
 				NearbyTableViewController* ntvc=[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain];
-				ntvc.app=app;
-				ntvc.appdel=self;
 				[[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] pushViewController:ntvc animated:NO ];
 				break;
 			}
 			case kTabBarItemTagSearch:
+			{
+				MyTableViewController* tvc=[[[MyTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+				[[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] pushViewController:tvc animated:NO ];
 				break;
+			}
 			case kTabBarItemTagWishList:
 			{
 				BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
@@ -256,16 +247,6 @@
 		tabBarController.selectedViewController=[tabBarController.viewControllers objectAtIndex:n];
 	}
 
-	
-//	tabBarController.selectedViewController=[tabBarController.viewControllers objectAtIndex:4];
-//	UINavigationController* nc=(UINavigationController*)tabBarController.selectedViewController;
-//	UITableViewController* tvc=(UITableViewController*)nc.topViewController;
-//	UITableViewDelegate* tvd=[tvc.tableView.delegate];
-//	[tvc.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionTop];
-//	[tvc.tableView.delegate tableView:tvc.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-//	BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:@"Dogfish-Head-Craft-Brewery-Milton" app:self.app appDelegate:self];
-//	[[tabBarController.viewControllers objectAtIndex:1] pushViewController: btvc animated:YES];
-//	[btvc release];
 }
 
 /*
@@ -350,13 +331,12 @@
 }
 
 - (void)dealloc {
-	[nav release];
+//	[nav release];
     [tabBarController release];
     [window release];
 	[flavorsDictionary release];
 
 	[loginVC release];
-	[mySearchBar release];
 	[xmlPostResponse release];
 	[xmlParserPath release];
 	[currentElemValue release];
@@ -366,62 +346,6 @@
     [super dealloc];
 }
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-	[searchBar resignFirstResponder];
-
-	// Display them in a UITableView
-//	CGRect f=tabBarController.view.frame;
-//	f.size.height=411-searchBar.frame.size.height;
-//	f.origin.y=searchBar.frame.size.height;
-//	nav.view.frame=f;
-
-	MyTableViewController* tbl=nil;
-	if (self.nav.viewControllers.count)
-	{
-		if ([nav.topViewController isMemberOfClass:[MyTableViewController class]])
-		{
-			tbl=(MyTableViewController*)nav.topViewController;
-		}
-		else // This shouldn't happen...
-		{
-			// ...but just in case it does, pop all view controllers
-			while (nav.navigationController.viewControllers.count)
-				[nav.navigationController popViewControllerAnimated:YES];
-		}
-	}
-	
-	if (tbl==nil)
-	{
-		tbl=[[MyTableViewController alloc] initWithStyle:UITableViewStylePlain];
-		[nav pushViewController:tbl animated:NO];
-		tbl.app=app;
-		tbl.appdel=self;
-	}
-	
-	[tbl query: searchBar.text];
-	[tbl.tableView reloadData];
-	
-	//UIAlertView* av=[[UIAlertView alloc] initWithTitle: @"Blah"  message:searchBar.text delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	//[av show];
-	//[av release];
-}
-
--(void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar
-{
-	searchBar.showsCancelButton=YES;
-}
-
--(BOOL)searchBarShouldEndEditing:(UISearchBar*)searchBar
-{
-	return YES;
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
-    [searchBar resignFirstResponder];
-    searchBar.text = @"";
-}
 
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
@@ -431,7 +355,7 @@
 //		f.size.height=411-mySearchBar.frame.size.height;
 //		f.origin.y=mySearchBar.frame.size.height;
 //		nav.view.frame=f;
-		mySearchBar.hidden=NO;
+//		mySearchBar.hidden=NO;
 //		nav.navigationBarHidden=YES;
 	}
 }

@@ -18,19 +18,15 @@
 
 @synthesize placeID;
 @synthesize placeObject;
-@synthesize app;
-@synthesize appdel;
 @synthesize currentElemValue;
 @synthesize xmlPostResponse;
 @synthesize overlay;
 @synthesize spinner;
 @synthesize xmlParserPath;
 
--(id) initWithPlaceID:(NSString*)place_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d
+-(id) initWithPlaceID:(NSString*)place_id
 {
 	self.placeID=place_id;
-	self.app=a;
-	self.appdel=d;
 	self.overlay=nil;
 	self.spinner=nil;
 	self.xmlPostResponse=nil;
@@ -851,7 +847,8 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 	if (n==401)
 	{
 		DLog(@"Need to login...");
-		[appdel login];
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[appDelegate login];
 		// TODO: once logged in, re-try the HTTP request
 	}
 	else

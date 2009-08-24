@@ -11,8 +11,6 @@
 #import "NearbyTableViewController.h"
 
 @interface PlaceTableViewController : UITableViewController <UITableViewDataSource,UITableViewDelegate> {
-	UIApplication* app;
-	BeerCrushAppDelegate* appdel;
 	NSString* placeID;
 	//	NSMutableArray* breweryInfo;
 	PlaceObject* placeObject;
@@ -25,15 +23,13 @@
 
 @property (nonatomic,retain) NSString* placeID;
 @property (nonatomic,retain) PlaceObject* placeObject;
-@property (nonatomic,retain) UIApplication* app;
-@property (nonatomic,retain) BeerCrushAppDelegate* appdel;
 @property (nonatomic,retain) NSMutableString* currentElemValue;
 @property (nonatomic,retain) NSMutableData* xmlPostResponse;
 @property (nonatomic, retain) UIView* overlay;
 @property (nonatomic, retain) UIActivityIndicatorView* spinner;
 @property (nonatomic, retain) NSMutableArray* xmlParserPath;
 
--(id) initWithPlaceID:(NSString*)place_id app:(UIApplication*)a appDelegate:(BeerCrushAppDelegate*)d;
+-(id) initWithPlaceID:(NSString*)place_id;
 //- (void)editPlace:(id)sender;
 
 @end

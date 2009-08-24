@@ -9,23 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "BeerCrushAppDelegate.h"
 
-@interface MyTableViewController : UITableViewController {
-//	NSMutableArray* searchResultsList_title;
-//	NSMutableArray* searchResultsList_desc;
-//	NSMutableArray* searchResultsList_type;
-//	NSMutableArray* searchResultsList_id;
+@interface MyTableViewController : UITableViewController <UISearchBarDelegate> {
+	UISearchBar* searchBar;
 	NSInteger autoCompleteResultsCount;
 	NSData* autoCompleteResultsData;
-	UIApplication* app;
-	BeerCrushAppDelegate* appdel;
-	NSMutableString* currentElemValue;
-	BOOL bInResultElement;
 }
 
-@property (nonatomic, retain) UIApplication* app;
-@property (nonatomic, retain) BeerCrushAppDelegate* appdel;
-@property (nonatomic, retain) NSMutableString* currentElemValue;
-@property (nonatomic) BOOL bInResultElement;
+@property (nonatomic,retain) UISearchBar* searchBar;
 @property (nonatomic) NSInteger autoCompleteResultsCount;
 @property (nonatomic, retain) NSData* autoCompleteResultsData;
 

@@ -61,8 +61,6 @@
 
 @implementation NearbyTableViewController
 
-@synthesize app;
-@synthesize appdel;
 @synthesize myLocation;
 @synthesize currentElemValue;
 @synthesize placeObject;
@@ -197,7 +195,7 @@
 	if (t == Place)
 	{
 		PlaceObject* po=[places objectAtIndex:indexPath.row];
-		PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID:po.place_id  app:app appDelegate: appdel];
+		PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID:po.place_id];
 		UINavigationController* nav=(UINavigationController*)self.parentViewController;
 		[nav pushViewController: btvc animated:YES];
 		[btvc release];

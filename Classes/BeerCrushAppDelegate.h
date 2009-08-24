@@ -24,13 +24,13 @@
 // ALog always displays output regardless of the DEBUG setting  
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 
-@interface BeerCrushAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate> {
+@interface BeerCrushAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UINavigationControllerDelegate> {
     UIWindow *window;
 	LoginVC* loginVC;
     UITabBarController *tabBarController;
-	UINavigationController* nav;
-	UISearchBar* mySearchBar;
-	UIApplication* app;
+//	UINavigationController* nav;
+//	UISearchBar* mySearchBar;
+//	UIApplication* app;
 	SEL onBeerSelectedAction;
 	id onBeerSelectedTarget;
 	
@@ -49,9 +49,9 @@
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) LoginVC* loginVC;
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
-@property (nonatomic, retain) UINavigationController* nav;
-@property (nonatomic, retain) UISearchBar* mySearchBar;
-@property (nonatomic, retain) UIApplication* app;
+//@property (nonatomic, retain) UINavigationController* nav;
+//@property (nonatomic, retain) UISearchBar* mySearchBar;
+//@property (nonatomic, retain) UIApplication* app;
 @property (nonatomic, retain) NSMutableData* xmlPostResponse;
 @property(nonatomic) SEL onBeerSelectedAction;
 @property(nonatomic,assign) id onBeerSelectedTarget;

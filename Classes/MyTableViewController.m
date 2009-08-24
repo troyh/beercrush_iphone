@@ -59,33 +59,14 @@
 
 @implementation MyTableViewController
 
-@synthesize app;
-@synthesize appdel;
-@synthesize currentElemValue;
-@synthesize bInResultElement;
+@synthesize searchBar;
 @synthesize autoCompleteResultsData;
 @synthesize autoCompleteResultsCount;
 
 -(void)query:(NSString*)qs 
 {
-	self.title=@"Search";
-
-//	if (searchResultsList_title)
-//		[searchResultsList_title release];
-//	if (searchResultsList_desc)
-//		[searchResultsList_desc release];
-//	if (searchResultsList_type)
-//		[searchResultsList_type release];
-//	if (searchResultsList_id)
-//		[searchResultsList_id release];
-//	
-//	searchResultsList_title=[[NSMutableArray alloc] initWithCapacity:10];
-//	searchResultsList_desc=[[NSMutableArray alloc] initWithCapacity:10];
-//	searchResultsList_type=[[NSMutableArray alloc] initWithCapacity:10];
-//	searchResultsList_id=[[NSMutableArray alloc] initWithCapacity:10];
-	
 	self.autoCompleteResultsCount=0;
-	[self.autoCompleteResultsData release];
+	self.autoCompleteResultsData=nil;
 	
 	// Send the query off to the server
 	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY, qs ]];
@@ -111,46 +92,34 @@
 			}
 		}
 	}
-	
-//	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-//	[parser setDelegate:self];
-//	BOOL parse_ok=[parser parse];
-//	if (parse_ok==NO)
-//	{
-//		NSError* err=[parser parserError];
-//		UIAlertView* vw=[[UIAlertView alloc] initWithTitle:@"Oops" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//		[vw show];
-//		[vw release];
-//	}
-//	[parser release];
-	
-	// Get results back
-	
+	DLog(@"%d results",self.autoCompleteResultsCount);
 }
 
-/*
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:style]) {
+//		self.title=@"Search";
     }
     return self;
 }
-*/
 
-/*
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+	
+	self.searchBar=[[UISearchBar alloc] initWithFrame:CGRectZero];
+	self.searchBar.delegate=self;
+	[self.searchBar sizeToFit];
+	[self.navigationController.navigationBar addSubview:self.searchBar];
 }
-*/
 
-/*
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+	searchBar.hidden=NO; // Put searchbar back
+	[searchBar becomeFirstResponder];
 }
-*/
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -180,6 +149,52 @@
     // Release anything that's not essential, such as cached data
 	// TODO: free any search results
 }
+
+//
+// UISearchBarDelegate methods
+//
+
+- (void)searchBar:(UISearchBar *)bar textDidChange:(NSString *)searchText
+{
+	if (searchText.length)
+	{
+		[self query:searchText];
+	}
+	else
+	{
+		self.autoCompleteResultsData=nil;
+		self.autoCompleteResultsCount=0;
+	}
+	[self.tableView reloadData];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)bar
+{
+	if (bar.text.length)
+	{
+//		[bar resignFirstResponder];
+		
+		[self query:bar.text];
+		[self.tableView reloadData];
+	}
+}
+
+//-(void)searchBarTextDidBeginEditing:(UISearchBar*)bar
+//{
+////	bar.showsCancelButton=NO;
+//}
+//
+//-(BOOL)searchBarShouldEndEditing:(UISearchBar*)searchBar
+//{
+//	return YES;
+//}
+//
+//- (void)searchBarCancelButtonClicked:(UISearchBar *)bar
+//{
+//    [bar resignFirstResponder];
+//    bar.text = @"";
+//}
+
 
 #pragma mark Table view methods
 
@@ -251,9 +266,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Navigation logic may go here. Create and push another view controller.
 
-	appdel.mySearchBar.hidden=YES;
-	appdel.nav.navigationBarHidden=NO;
+//	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+//	appDelegate.mySearchBar.hidden=YES;
+//	appDelegate.nav.navigationBarHidden=NO;
 
+	self.searchBar.hidden=YES;
+	[searchBar resignFirstResponder];
 	
 	const char* p=(char*)[autoCompleteResultsData bytes];
 	NSUInteger n=0;
@@ -287,7 +305,7 @@
 		
 		if (t == Brewer)
 		{
-			BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:[NSString stringWithCString:idp] app:app appDelegate: appdel];
+			BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:[NSString stringWithCString:idp]];
 			[self.navigationController pushViewController: btvc animated:YES];
 			[btvc release];
 		}
@@ -299,7 +317,7 @@
 		}
 		else if (t == Place)
 		{
-			PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID: [NSString stringWithCString:idp] app:app appDelegate: appdel];
+			PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID: [NSString stringWithCString:idp]];
 			[self.navigationController pushViewController: btvc animated:YES];
 			[btvc release];
 		}
@@ -392,73 +410,9 @@
 
 
 - (void)dealloc {
-//	[searchResultsList_title release];
-//	[searchResultsList_desc release];
-//	[searchResultsList_type release];
-//	[searchResultsList_id release];
+	[searchBar release];
 	[autoCompleteResultsData release];
     [super dealloc];
-}
-
-// NSXMLParser delegate methods
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser
-{
-	// Clear any old data
-	self.currentElemValue=nil;
-	bInResultElement=NO;
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	if ([elementName isEqualToString:@"result"])
-	{
-		bInResultElement=YES;
-	}
-	else if (bInResultElement && ([elementName isEqualToString:@"text"] || [elementName isEqualToString:@"id"]))
-	{
-		self.currentElemValue=[NSMutableString string];
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-//	if (self.currentElemValue)
-//	{
-//		if ([elementName isEqualToString:@"result"])
-//		{
-//			bInResultElement=NO;
-//		}
-//		else if (bInResultElement)
-//		{
-//			if ([elementName isEqualToString:@"text"])
-//				[searchResultsList_title addObject:currentElemValue];
-//			else if ([elementName isEqualToString:@"id"])
-//				[searchResultsList_id addObject:currentElemValue];
-//		}
-//		
-//		self.currentElemValue=nil;
-//	}
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	if (self.currentElemValue)
-	{
-		[self.currentElemValue appendString:string];
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
 }
 
 
