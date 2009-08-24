@@ -199,7 +199,17 @@
 			}
 		}
 	}
-		
+
+	// Create a new appstate dictionary to store the app's state as it runs
+	self.appState=[[NSMutableDictionary alloc] init];
+	NSMutableArray* stacks=[NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
+	for (int i=0;i<[self.tabBarController.viewControllers count];++i)
+	{
+		[stacks addObject:[NSMutableArray arrayWithCapacity:5]];
+	}
+	[self.appState setObject:stacks forKey:@"navstacks"];
+	
+	
 	for (NSUInteger tabBarControllerIndex=0;tabBarControllerIndex < [tabBarController.viewControllers count];++tabBarControllerIndex)
 	{
 		switch (tabBarControllerIndex+1) {
@@ -210,6 +220,10 @@
 				UserReviewsTVC* urtvc=[[UserReviewsTVC alloc] initWithStyle:UITableViewStylePlain];
 				[[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] pushViewController:urtvc animated:NO];
 				[urtvc release];
+				
+//				[self nextNavigationStateToRestore]; // Pop this off, we don't care about it
+				tabBarController.selectedViewController=[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex];
+//				[self pushNavigationStateForNavigationController:[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] withData:[NSNumber numberWithUnsignedInt:42]]; // just a placeholder
 				break;
 			}
 			case kTabBarItemTagNearby:
@@ -242,14 +256,6 @@
 		tabBarController.selectedViewController=[tabBarController.viewControllers objectAtIndex:n];
 	}
 
-	// Create a new appstate dictionary to store the app's state as it runs
-	self.appState=[[NSMutableDictionary alloc] init];
-	NSMutableArray* stacks=[NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
-	for (int i=0;i<[self.tabBarController.viewControllers count];++i)
-	{
-		[stacks addObject:[NSMutableArray arrayWithCapacity:5]];
-	}
-	[self.appState setObject:stacks forKey:@"navstacks"];
 	
 //	tabBarController.selectedViewController=[tabBarController.viewControllers objectAtIndex:4];
 //	UINavigationController* nc=(UINavigationController*)tabBarController.selectedViewController;
@@ -283,14 +289,6 @@
 }
 
 
--(BOOL)saveNavigationState:(NSObject*)data
-{
-	NSUInteger idx=[self.tabBarController.viewControllers indexOfObjectIdenticalTo:self.tabBarController.selectedViewController];
-	NSMutableArray* stack=[[self.appState objectForKey:@"navstacks"] objectAtIndex:idx];
-	[stack addObject:data];
-	return stack?YES:NO;
-}
-
 -(BOOL)restoringNavigationStateAutomatically
 {
 	if (self.restoringNavState==nil)
@@ -307,19 +305,49 @@
 -(NSObject*)nextNavigationStateToRestore
 {
 	NSMutableArray* stacks=[self.restoringNavState objectForKey:@"navstacks"];
-	NSUInteger idx=[self.tabBarController.viewControllers indexOfObjectIdenticalTo:self.tabBarController.selectedViewController];
-	if (idx < [stacks count])
+	if (stacks)
 	{
-		NSMutableArray* stack=[stacks objectAtIndex:idx];
-		NSObject* obj=[[stack objectAtIndex:0] retain];
-		[stack removeObjectAtIndex:0];
-		[obj autorelease];
-		return obj;
+		NSUInteger idx=[self.tabBarController.viewControllers indexOfObjectIdenticalTo:self.tabBarController.selectedViewController];
+		if (idx < [stacks count])
+		{
+			NSMutableArray* stack=[stacks objectAtIndex:idx];
+			if ([stack count]==0)
+				return nil;
+			
+			NSObject* obj=[[stack objectAtIndex:0] retain];
+			[stack removeObjectAtIndex:0];
+			[obj autorelease];
+			return obj;
+		}
 	}
-
+	
 	return nil;
 }
 
+-(BOOL)pushNavigationStateForNavigationController:(UINavigationController*)navigationController withData:(NSObject*)data
+{
+	NSUInteger idx=[self.tabBarController.viewControllers indexOfObjectIdenticalTo:navigationController];
+	NSMutableArray* stack=[[self.appState objectForKey:@"navstacks"] objectAtIndex:idx];
+	[stack addObject:data];
+	return stack?YES:NO;
+}
+
+-(void)popNavigationStateForNavigationController:(UINavigationController*)navigationController
+{
+	NSMutableArray* stacks=[self.appState objectForKey:@"navstacks"];
+	if (stacks)
+	{
+		NSUInteger idx=[self.tabBarController.viewControllers indexOfObjectIdenticalTo:navigationController];
+		if (idx < [stacks count])
+		{
+			if ([[stacks objectAtIndex:idx] count])
+			{
+				if ([[navigationController viewControllers] count] < [[stacks objectAtIndex:idx] count])
+				[[stacks objectAtIndex:idx] removeLastObject];
+			}
+		}
+	}
+}
 
 - (void)dealloc {
 	[nav release];

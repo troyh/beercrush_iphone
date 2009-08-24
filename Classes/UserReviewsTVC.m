@@ -37,27 +37,7 @@
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	
-	if ([appDelegate restoringNavigationStateAutomatically])
-	{
-		NSObject* navData=[appDelegate nextNavigationStateToRestore];
-		if ([navData isKindOfClass:[NSDictionary class]])
-		{
-			NSDictionary* reviewData=(NSDictionary*)navData;
-			if (reviewData)
-			{
-				FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData];
-				fbrtvc.delegate=self;
-				[self.navigationController pushViewController:fbrtvc animated:YES];
-			}
-		}
-		
-	}
-	else
-	{
-		[self retrieveReviews:0]; // Get the first batch
-	}
+	[self retrieveReviews:0]; // Get the first batch
 }
 
 -(void)retrieveReviews:(NSUInteger)seqnum
@@ -91,11 +71,33 @@
 	}
 }
 
-/*
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
- }
-*/
+
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	if ([appDelegate restoringNavigationStateAutomatically])
+	{
+		NSObject* navData=[appDelegate nextNavigationStateToRestore];
+		if ([navData isKindOfClass:[NSDictionary class]])
+		{
+			NSDictionary* reviewData=(NSDictionary*)navData;
+			if (reviewData)
+			{
+				[appDelegate pushNavigationStateForNavigationController:self.navigationController withData:reviewData]; // Saves the new nav state
+				
+				FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData];
+				fbrtvc.delegate=self;
+				[self.navigationController pushViewController:fbrtvc animated:NO];
+			}
+		}
+	}
+	else
+	{ // Pop an item off the appstate navstack
+		[appDelegate popNavigationStateForNavigationController:self.navigationController];
+	}
+}
+
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -225,7 +227,7 @@
 		
 		// Create my navigation state and store it so I can restore it the next time the app launches
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate saveNavigationState:reviewData]; // Saves the new nav state
+		[appDelegate pushNavigationStateForNavigationController:self.navigationController withData:reviewData]; // Saves the new nav state
 		
 		FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData];
 		fbrtvc.delegate=self;

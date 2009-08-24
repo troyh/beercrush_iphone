@@ -70,10 +70,10 @@
 -(BOOL)onBeerSelected:(id)obj;
 -(NSDictionary*)getFlavorsDictionary;
 -(NSHTTPURLResponse*)postBeerReview:(NSDictionary*)userReview returningData:(NSData**)answer;
--(BOOL)saveNavigationState:(NSObject*)data;
 -(BOOL)restoringNavigationStateAutomatically;
 -(NSObject*)nextNavigationStateToRestore;
-
+-(BOOL)pushNavigationStateForNavigationController:(UINavigationController*)navigationController withData:(NSObject*)data;
+-(void)popNavigationStateForNavigationController:(UINavigationController*)navigationController;
 
 @end
 
