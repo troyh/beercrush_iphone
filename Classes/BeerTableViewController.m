@@ -30,6 +30,7 @@
 @synthesize bodySlider;
 @synthesize balanceSlider;
 @synthesize aftertasteSlider;
+@synthesize descriptionTextView;
 @synthesize buttons;
 @synthesize dataTableView;
 
@@ -65,6 +66,7 @@ const int kButtonHeight=40;
 	[self.bodySlider release];
 	[self.balanceSlider release];
 	[self.aftertasteSlider release];
+	[self.descriptionTextView release];
 	[self.buttons release];
 	
     [super dealloc];
@@ -346,7 +348,7 @@ const int kButtonHeight=40;
 			if (self.editing)
 			{
 				CGSize sz=[[beerObj.data objectForKey:@"description"] sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
-				return sz.height+20.0f;
+				return sz.height;
 			}
 			else
 			{
@@ -388,8 +390,9 @@ const int kButtonHeight=40;
 					}
 					else
 					{
-						CGSize sz=[[beerObj.data objectForKey:@"description"] sizeWithFont:[UIFont systemFontOfSize: [UIFont smallSystemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
-						return sz.height+20.0f;
+//						CGSize sz=[[beerObj.data objectForKey:@"description"] sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(280.f, 500.0f) lineBreakMode:UILineBreakModeWordWrap];
+//						return sz.height+20.0f;
+						return 100;
 					}
 					break;
 				}
@@ -643,15 +646,19 @@ const int kButtonHeight=40;
 						break;
 					case 2:
 						[cell.textLabel setText:@"ABV"];
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"abv"]];
 						break;
 					case 3:
 						[cell.textLabel setText:@"IBUs"];
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"]];
 						break;
 					case 4:
 						[cell.textLabel setText:@"OG"];
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"og"]];
 						break;
 					case 5:
 						[cell.textLabel setText:@"FG"];
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"fg"]];
 						break;
 					case 6:
 						[cell.textLabel setText:@"Grains"];
@@ -778,25 +785,16 @@ const int kButtonHeight=40;
 				{
 					case 0: // Brewer's description
 					{
-						CGRect contentRect=CGRectMake(10, 10, 0, 0);
-						UILabel* textView=[[UILabel alloc] initWithFrame:contentRect];
-						textView.text=[beerObj.data objectForKey:@"description"];
+						self.descriptionTextView=[[UITextView alloc] initWithFrame:CGRectInset(cell.contentView.frame, 8, 8)];
+						self.descriptionTextView.text=[beerObj.data objectForKey:@"description"];
 						
-						contentRect.size=[textView.text sizeWithFont:[UIFont systemFontOfSize: [UIFont systemFontSize]] constrainedToSize:CGSizeMake(280.f, 500.0f)];
-						textView.frame=contentRect;
+						self.descriptionTextView.delegate=self;
+						self.descriptionTextView.font=[UIFont systemFontOfSize:14.0];
+						self.descriptionTextView.autoresizingMask|=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleRightMargin;
+						[self.descriptionTextView sizeToFit];
 						
-						textView.numberOfLines=0;
-						textView.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
-						textView.lineBreakMode=UILineBreakModeWordWrap;
-						[textView sizeToFit];
-						
-//						[cell.textLabel setFont:[UIFont systemFontOfSize:[UIFont smallSystemFontSize]]];
-//						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-//						[cell.textLabel setLineBreakMode:UILineBreakModeWordWrap];
-						
-						[cell.contentView addSubview:textView];
-						[cell.contentView sizeToFit];
-						[textView release];
+						[cell.contentView addSubview:self.descriptionTextView];
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
 					}
 					case 1: // Style
@@ -881,6 +879,14 @@ const int kButtonHeight=40;
 	
     return cell;
 }
+
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+	if (textView==self.descriptionTextView && self.editing==NO)
+		return NO;
+	return YES;
+}
+
 
 -(void)addToWishListButtonClicked
 {

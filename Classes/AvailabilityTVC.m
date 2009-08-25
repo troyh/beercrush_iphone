@@ -17,7 +17,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:style]) {
-		self.options=[NSArray arrayWithObjects:@"Year-round",@"Seasonal",nil];
+		self.options=[NSArray arrayWithObjects:@"Year-round",@"Seasonal",@"Limited",nil];
     }
     return self;
 }

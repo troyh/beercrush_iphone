@@ -14,13 +14,11 @@
 #import "ColorsTVC.h"
 #import "AvailabilityTVC.h"
 
-@interface BeerTableViewController : UITableViewController <FullBeerReviewTVCDelegate,StylesListTVCDelegate,ColorsTVCDelegate,AvailabilityTVCDelegate> {
+@interface BeerTableViewController : UITableViewController <FullBeerReviewTVCDelegate,StylesListTVCDelegate,ColorsTVCDelegate,AvailabilityTVCDelegate,UITextViewDelegate> {
 	NSString* beerID;
 	NSString* breweryID;
 	BeerObject* beerObj;
 	NSMutableString* currentElemValue;
-//	int xmlParseDepth;
-//	BOOL bParsingBeerReview;
 	NSMutableArray* xmlParserPath;
 	NSMutableDictionary* userReviewData;
 	
@@ -30,6 +28,7 @@
 	UISlider* bodySlider;
 	UISlider* balanceSlider;
 	UISlider* aftertasteSlider;
+	UITextView* descriptionTextView;
 	
 	NSMutableArray* buttons;
 	UIView* dataTableView;
@@ -46,6 +45,7 @@
 @property (nonatomic,retain) UISlider* bodySlider;
 @property (nonatomic,retain) UISlider* balanceSlider;
 @property (nonatomic,retain) UISlider* aftertasteSlider;
+@property (nonatomic,retain) UITextView* descriptionTextView;
 @property (nonatomic,assign) NSMutableArray* buttons;
 @property (nonatomic,retain) UIView* dataTableView;
 
