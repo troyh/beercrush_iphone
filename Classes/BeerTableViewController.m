@@ -179,6 +179,9 @@ const int kButtonHeight=40;
 	}
 	else
 	{
+		[self.descriptionTextView removeFromSuperview];
+		self.descriptionTextView=nil;
+
 		[self setEditing:self.editing?NO:YES animated:YES];
 	}
 	
@@ -205,7 +208,7 @@ const int kButtonHeight=40;
 //		[self.view sizeToFit];
 		self.title=@"New Beer";
 	}
-	else
+	else if ([self.beerObj.data count]<2)
 	{
 		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 
@@ -711,11 +714,21 @@ const int kButtonHeight=40;
 				switch (indexPath.row)
 				{
 					case 0:
+					{
+						BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+						NSDictionary* colorsDict=[appDelegate getColorsDictionary];
 						[cell.textLabel setText:@"Color"];
+						DLog(@"srm=%@",[self.beerObj.data objectForKey:@"srm"]);
+						DLog(@"list=%@",[colorsDict objectForKey:@"list"]);
+						DLog(@"key=%@",[NSString stringWithFormat:@"%@",[self.beerObj.data objectForKey:@"srm"]]);
+						DLog(@"color=%@",[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%d",[self.beerObj.data objectForKey:@"srm"]]]);
+						[cell.detailTextLabel setText:[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[self.beerObj.data objectForKey:@"srm"]]]];
 						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						break;
+					}
 					case 1:
 						[cell.textLabel setText:@"Availability"];
+						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"availability"]];
 						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						break;
 					case 2:

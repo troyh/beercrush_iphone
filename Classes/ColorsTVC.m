@@ -11,29 +11,14 @@
 
 @implementation ColorsTVC
 
-@synthesize colorsList;
-@synthesize colorsNums;
-@synthesize xmlParserPath;
-@synthesize currentElemValue;
+@synthesize colorsDict;
 @synthesize delegate;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:style]) {
-		
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		NSData* answer;
-		NSHTTPURLResponse* response=[appDelegate sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_GET_COLORSLIST] usingMethod:@"GET" withData:nil returningData:&answer];
-		if ([response statusCode]==200)
-		{
-			NSXMLParser* parser=[[[NSXMLParser alloc] initWithData:answer] autorelease];
-			parser.delegate=self;
-			[parser parse];
-		}
-		else
-		{
-			// TODO: alert the user
-		}
+		self.colorsDict=[appDelegate getColorsDictionary];
     }
     return self;
 }
@@ -98,7 +83,7 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.colorsNums count];
+    return [[self.colorsDict objectForKey:@"nums"] count];
 }
 
 
@@ -113,8 +98,8 @@
     }
     
     // Set up the cell...
-	NSString* s=[self.colorsNums objectAtIndex:indexPath.row];
-	[cell.textLabel setText:[self.colorsList objectForKey:s]];
+	NSString* s=[[self.colorsDict objectForKey:@"nums"] objectAtIndex:indexPath.row];
+	[cell.textLabel setText:[[self.colorsDict objectForKey:@"list"] objectForKey:s]];
 	
     return cell;
 }
@@ -126,7 +111,7 @@
 	// [self.navigationController pushViewController:anotherViewController];
 	// [anotherViewController release];
 	
-	[delegate colorsTVC:self didSelectColor:[[self.colorsNums objectAtIndex:indexPath.row] integerValue]];
+	[delegate colorsTVC:self didSelectColor:[[[self.colorsDict objectForKey:@"nums"] objectAtIndex:indexPath.row] integerValue]];
 }
 
 
@@ -171,10 +156,7 @@
 
 
 - (void)dealloc {
-	[self.colorsList release];
-	[self.colorsNums release];
-	[self.xmlParserPath release];
-	[self.currentElemValue release];
+	[self.colorsDict release];
     [super dealloc];
 }
 
@@ -196,80 +178,6 @@
 <color srm="40" srmmin="35"><name>Black</name></color>
 </colors>
 */
-
-// NSXMLParser delegate methods
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser
-{
-	// Clear any old data
-	self.currentElemValue=nil;
-	
-	xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5];
-	
-	self.colorsList=[[NSMutableDictionary alloc] initWithCapacity:12];
-	self.colorsNums=[[NSMutableArray alloc] initWithCapacity:12];
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-	xmlParserPath=nil;
-	currentElemValue=nil;
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	if ([elementName isEqualToString:@"color"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"colors",nil]])
-		{
-			[self.colorsNums addObject:[attributeDict objectForKey:@"srm"]];
-		}
-	}
-	else if ([elementName isEqualToString:@"name"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"colors",@"color",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:16];
-		}
-	}
-	
-	[xmlParserPath addObject:elementName];
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	[xmlParserPath removeLastObject];
-	
-	if (self.currentElemValue)
-	{
-		if ([elementName isEqualToString:@"color"])
-		{
-		}
-		else if ([elementName isEqualToString:@"name"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"colors",@"color",nil]])
-			{
-				[self.colorsList setObject:self.currentElemValue forKey:[self.colorsNums lastObject]];
-			}
-		}
-		
-		self.currentElemValue=nil;
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	[self.currentElemValue appendString:string];
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
-}
 
 
 

@@ -58,6 +58,7 @@
 @synthesize currentElemID;
 @synthesize flavorsDictionary;
 @synthesize stylesDictionary;
+@synthesize colorsDictionary;
 @synthesize restoringNavState;
 @synthesize appState;
 
@@ -561,6 +562,31 @@
 	return stylesDictionary;
 }
 
+-(NSDictionary*)getColorsDictionary
+{
+	if (self.colorsDictionary==nil)
+	{
+		self.colorsDictionary=[[NSMutableDictionary alloc] initWithCapacity:2];
+		[self.colorsDictionary setObject:[[NSMutableDictionary alloc] initWithCapacity:12] forKey:@"list"];
+		[self.colorsDictionary setObject:[[NSMutableArray alloc] initWithCapacity:12] forKey:@"nums"];
+	
+		NSData* answer;
+		NSHTTPURLResponse* response=[self sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_GET_COLORSLIST] usingMethod:@"GET" withData:nil returningData:&answer];
+		if ([response statusCode]==200)
+		{
+			NSXMLParser* parser=[[[NSXMLParser alloc] initWithData:answer] autorelease];
+			parser.delegate=self;
+			[parser parse];
+		}
+		else
+		{
+			// TODO: alert the user
+		}
+	}
+
+	return self.colorsDictionary;
+}
+
 -(NSHTTPURLResponse*)postBeerReview:(NSDictionary*)userReview returningData:(NSData**)answer
 {
 	// Post the review
@@ -789,6 +815,18 @@
 			[self.currentElemValue release];
 			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
 		}
+		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"colors",@"color",nil]])
+		{
+			[self.currentElemValue release];
+			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:16];
+		}
+	}
+	else if ([elementName isEqualToString:@"color"])
+	{
+		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"colors",nil]])
+		{
+			[[self.colorsDictionary objectForKey:@"nums"] addObject:[attributeDict objectForKey:@"srm"]];
+		}
 	}
 	
 	[xmlParserPath addObject:elementName];
@@ -837,6 +875,10 @@
 			else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",@"style",nil]])
 			{
 				[[self.stylesDictionary objectForKey:@"names"] setObject:self.currentElemValue forKey:[[[self.stylesDictionary objectForKey:@"list"] lastObject] lastObject]];
+			}
+			else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"colors",@"color",nil]])
+			{
+				[[self.colorsDictionary objectForKey:@"list"] setObject:self.currentElemValue forKey:[[self.colorsDictionary objectForKey:@"nums"] lastObject]];
 			}
 		}
 		

@@ -11,22 +11,11 @@
 @protocol ColorsTVCDelegate;
 
 @interface ColorsTVC : UITableViewController {
-
-	NSMutableDictionary* colorsList;
-	NSMutableArray* colorsNums;
-	
-	NSMutableString* currentElemValue;
-	NSMutableArray* xmlParserPath;
-	
+	NSDictionary* colorsDict;
 	id<ColorsTVCDelegate> delegate;
-	
 }
 
-@property (nonatomic,retain) NSMutableDictionary* colorsList;
-@property (nonatomic,retain) NSMutableArray* colorsNums;
-@property (nonatomic,retain) NSMutableString* currentElemValue;
-@property (nonatomic,retain) NSMutableArray* xmlParserPath;
-
+@property (nonatomic,retain) NSDictionary* colorsDict;
 @property (assign) id<ColorsTVCDelegate> delegate;
 
 @end
