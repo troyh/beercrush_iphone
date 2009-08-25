@@ -721,7 +721,7 @@ const int kButtonHeight=40;
 						DLog(@"srm=%@",[self.beerObj.data objectForKey:@"srm"]);
 						DLog(@"list=%@",[colorsDict objectForKey:@"list"]);
 						DLog(@"key=%@",[NSString stringWithFormat:@"%@",[self.beerObj.data objectForKey:@"srm"]]);
-						DLog(@"color=%@",[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%d",[self.beerObj.data objectForKey:@"srm"]]]);
+						DLog(@"color=%@",[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[self.beerObj.data objectForKey:@"srm"]]]);
 						[cell.detailTextLabel setText:[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[self.beerObj.data objectForKey:@"srm"]]]];
 						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						break;
@@ -734,6 +734,7 @@ const int kButtonHeight=40;
 					case 2:
 					{
 						[cell.textLabel setText:@"ABV"];
+						[cell.detailTextLabel setText:nil];
 						
 						if (abvTextField==nil)
 						{
@@ -751,6 +752,7 @@ const int kButtonHeight=40;
 					case 3:
 					{
 						[cell.textLabel setText:@"IBUs"];
+						[cell.detailTextLabel setText:nil];
 
 						if (ibuTextField==nil)
 						{
@@ -768,6 +770,7 @@ const int kButtonHeight=40;
 					case 4:
 					{
 						[cell.textLabel setText:@"OG"];
+						[cell.detailTextLabel setText:nil];
 
 						if (ogTextField==nil)
 						{
@@ -785,6 +788,7 @@ const int kButtonHeight=40;
 					case 5:
 					{
 						[cell.textLabel setText:@"FG"];
+						[cell.detailTextLabel setText:nil];
 
 						if (fgTextField==nil)
 						{
@@ -802,6 +806,7 @@ const int kButtonHeight=40;
 					case 6:
 					{
 						[cell.textLabel setText:@"Grains"];
+						[cell.detailTextLabel setText:nil];
 
 						if (grainsTextField==nil)
 						{
@@ -818,6 +823,7 @@ const int kButtonHeight=40;
 					}
 					case 7:
 						[cell.textLabel setText:@"Hops"];
+						[cell.detailTextLabel setText:nil];
 
 						if (hopsTextField==nil)
 						{
@@ -980,7 +986,7 @@ const int kButtonHeight=40;
 					{
 						static struct { NSString* name; NSString* propname; BOOL inattribs; } fields[]={
 							{@"Availability:",@"availability",NO},
-							{@"Color:",@"color",NO},
+							{@"Color:",@"srm",YES},
 							{@"ABV:",@"abv",YES},
 							{@"IBUs:",@"ibu",YES},
 							{@"OG:",@"og",YES},
@@ -1007,7 +1013,16 @@ const int kButtonHeight=40;
 								label=[[[UILabel alloc] initWithFrame:CGRectMake(dataTableView.frame.size.width/2, i*20, dataTableView.frame.size.width/2, 20)] autorelease];
 								[label setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
 								if (fields[i].inattribs)
-									[label setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]];
+								{
+									if ([fields[i].propname isEqualToString:@"srm"]) 
+									{ // Treat SRM (Color) specially
+										BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+										NSDictionary* colorsDict=[appDelegate getColorsDictionary];
+										[label setText:[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]]]];
+									}
+									else
+										[label setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]];
+								}
 								else
 									[label setText:[self.beerObj.data objectForKey:fields[i].propname]];
 								[dataTableView addSubview:label];
