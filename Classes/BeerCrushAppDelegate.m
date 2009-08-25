@@ -57,6 +57,7 @@
 @synthesize currentElemValue;
 @synthesize currentElemID;
 @synthesize flavorsDictionary;
+@synthesize stylesDictionary;
 @synthesize restoringNavState;
 @synthesize appState;
 
@@ -531,6 +532,35 @@
 	return flavorsDictionary;
 }
 
+-(NSDictionary*)getStylesDictionary
+{
+	// TODO: If the file is older than 7 days and we have good network connectivity (WiFi), ask the server for a newer version using If-Modified-Since
+
+	if (stylesDictionary==nil)
+	{
+		stylesDictionary=[[NSMutableDictionary alloc] initWithCapacity:2];
+
+		[self.stylesDictionary setObject:[[NSMutableArray alloc] initWithCapacity:32] forKey:@"list"];
+		[self.stylesDictionary setObject:[[NSMutableDictionary alloc] initWithCapacity:32] forKey:@"names"];
+
+		// Get styles list from server
+		NSData* answer;
+		NSHTTPURLResponse* response=[self sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_GET_STYLESLIST] usingMethod:@"GET" withData:nil returningData:&answer];
+		if ([response statusCode]==200)
+		{
+			NSXMLParser* parser=[[[NSXMLParser alloc] initWithData:answer] autorelease];
+			parser.delegate=self;
+			[parser parse];
+		}
+		else
+		{
+			// TODO: handle this gracefully
+		}
+	}
+	
+	return stylesDictionary;
+}
+
 -(NSHTTPURLResponse*)postBeerReview:(NSDictionary*)userReview returningData:(NSData**)answer
 {
 	// Post the review
@@ -656,6 +686,54 @@
 //    [reviewPostResponse release];
 }
 
+/*
+ 
+ Sample styles doc:
+ 
+ <styles>
+ <style num="1">
+ <name>Light Lager</name>
+ <style num="1A">
+ <name>Light American Lager</name>
+ </style>
+ <style num="1B">
+ <name>Standard American Lager</name>
+ </style>
+ <style num="1C">
+ <name>Premium American Lager</name>
+ </style>
+ <style num="1D">
+ <name>Munich Helles</name>
+ </style>
+ <style num="1E">
+ <name>Dortmunder Export</name>
+ </style>
+ </style>
+ <style num="2">
+ <name>Pilsner</name>
+ <style num="2A">
+ <name>German Pilsner</name>
+ </style>
+ <style num="2B">
+ <name>Boehmian Pilsner</name>
+ </style>
+ <style num="2C">
+ <name>Classic American Pilsner</name>
+ </style>
+ </style>
+ <style num="3">
+ <name>European Amber Lager</name>
+ <style num="3A">
+ <name>Vienna Lager</name>
+ </style>
+ <style num="3B">
+ <name>Oktoberfest/Maerzen</name>
+ </style>
+ </style>
+ </styles>
+ 
+ */
+
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
@@ -692,6 +770,26 @@
 			self.currentElemID=[[attributeDict objectForKey:@"id"] copy];
 		}
 	}
+	else if ([elementName isEqualToString:@"style"])
+	{
+		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",nil]])
+		{
+			[[self.stylesDictionary objectForKey:@"list"] addObject:[NSMutableArray arrayWithCapacity:5]];
+			//			[self.stylesList addObject:[attributeDict objectForKey:@"num"]];
+		}
+		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",nil]])
+		{
+			[[[self.stylesDictionary objectForKey:@"list"] lastObject] addObject:[attributeDict objectForKey:@"num"]];
+		}
+	}
+	else if ([elementName isEqualToString:@"name"])
+	{
+		if ([[xmlParserPath lastObject] isEqualToString:@"style"])
+		{
+			[self.currentElemValue release];
+			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
+		}
+	}
 	
 	[xmlParserPath addObject:elementName];
 }
@@ -725,6 +823,20 @@
 				[[flavorsDictionary objectForKey:@"byid"] setObject:currentElemValue forKey:currentElemID];
 
 				[[[flavorsDictionary objectForKey:@"groups"] lastObject] addObject:currentElemID];
+			}
+		}
+		else if ([elementName isEqualToString:@"style"])
+		{
+		}
+		else if ([elementName isEqualToString:@"name"])
+		{
+			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",nil]])
+			{
+				[[self.stylesDictionary objectForKey:@"names"] setObject:self.currentElemValue forKey:[NSString stringWithFormat:@"%d",[[self.stylesDictionary objectForKey:@"list"] count]]];
+			}
+			else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",@"style",nil]])
+			{
+				[[self.stylesDictionary objectForKey:@"names"] setObject:self.currentElemValue forKey:[[[self.stylesDictionary objectForKey:@"list"] lastObject] lastObject]];
 			}
 		}
 		

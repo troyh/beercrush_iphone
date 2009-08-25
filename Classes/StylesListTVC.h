@@ -11,8 +11,7 @@
 @protocol StylesListTVCDelegate;
 
 @interface StylesListTVC : UITableViewController {
-	NSMutableArray* stylesList;
-	NSMutableDictionary* stylesNames;
+	NSDictionary* stylesDictionary;
 	NSMutableString* currentStyleNum;
 	NSMutableString* currentElemValue;
 	NSMutableArray* xmlParserPath;
@@ -20,8 +19,7 @@
 	id<StylesListTVCDelegate> delegate;
 }
 
-@property (nonatomic,retain) NSMutableArray* stylesList;
-@property (nonatomic,retain) NSMutableDictionary* stylesNames;
+@property (nonatomic,retain) NSDictionary* stylesDictionary;
 @property (nonatomic,retain) NSMutableString* currentStyleNum;
 @property (nonatomic,retain) NSMutableString* currentElemValue;
 @property (nonatomic,retain) NSMutableArray* xmlParserPath;

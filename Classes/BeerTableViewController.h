@@ -28,7 +28,14 @@
 	UISlider* bodySlider;
 	UISlider* balanceSlider;
 	UISlider* aftertasteSlider;
+	UITextField* beerNameTextField;
 	UITextView* descriptionTextView;
+	UITextField* abvTextField;
+	UITextField* ibuTextField;
+	UITextField* ogTextField;
+	UITextField* fgTextField;
+	UITextField* grainsTextField;
+	UITextField* hopsTextField;
 	
 	NSMutableArray* buttons;
 	UIView* dataTableView;
@@ -45,7 +52,14 @@
 @property (nonatomic,retain) UISlider* bodySlider;
 @property (nonatomic,retain) UISlider* balanceSlider;
 @property (nonatomic,retain) UISlider* aftertasteSlider;
+@property (nonatomic,retain) UITextField* beerNameTextField;
 @property (nonatomic,retain) UITextView* descriptionTextView;
+@property (nonatomic,retain) UITextField* abvTextField;
+@property (nonatomic,retain) UITextField* ibuTextField;
+@property (nonatomic,retain) UITextField* ogTextField;
+@property (nonatomic,retain) UITextField* fgTextField;
+@property (nonatomic,retain) UITextField* grainsTextField;
+@property (nonatomic,retain) UITextField* hopsTextField;
 @property (nonatomic,assign) NSMutableArray* buttons;
 @property (nonatomic,retain) UIView* dataTableView;
 

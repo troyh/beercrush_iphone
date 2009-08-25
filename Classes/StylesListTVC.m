@@ -11,8 +11,7 @@
 
 @implementation StylesListTVC
 
-@synthesize stylesList;
-@synthesize stylesNames;
+@synthesize stylesDictionary;
 @synthesize currentStyleNum;
 @synthesize currentElemValue;
 @synthesize xmlParserPath;
@@ -21,21 +20,8 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:style]) {
-		// Get styles list from server
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		NSData* answer;
-		NSHTTPURLResponse* response=[appDelegate sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_GET_STYLESLIST] usingMethod:@"GET" withData:nil returningData:&answer];
-		if ([response statusCode]==200)
-		{
-			NSXMLParser* parser=[[[NSXMLParser alloc] initWithData:answer] autorelease];
-			parser.delegate=self;
-			[parser parse];
-		}
-		else
-		{
-			// TODO: alert the user
-		}
-
+		self.stylesDictionary=[appDelegate getStylesDictionary];
     }
     return self;
 }
@@ -94,13 +80,13 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [self.stylesList count];
+    return [[self.stylesDictionary objectForKey:@"list"] count];
 }
 
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[self.stylesList objectAtIndex:section] count];
+    return [[[self.stylesDictionary objectForKey:@"list"] objectAtIndex:section] count];
 }
 
 //- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
@@ -119,7 +105,7 @@
 //
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-	return [self.stylesNames objectForKey:[NSString stringWithFormat:@"%d",section+1]];
+	return [[self.stylesDictionary objectForKey:@"names"] objectForKey:[NSString stringWithFormat:@"%d",section+1]];
 }
 
 // Customize the appearance of table view cells.
@@ -133,7 +119,7 @@
     }
     
     // Set up the cell...
-	[cell.textLabel setText:[self.stylesNames objectForKey:[[self.stylesList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]]];
+	[cell.textLabel setText:[[self.stylesDictionary objectForKey:@"names"] objectForKey:[[[self.stylesDictionary objectForKey:@"list"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]]];
 	
     return cell;
 }
@@ -145,7 +131,7 @@
 	// [self.navigationController pushViewController:anotherViewController];
 	// [anotherViewController release];
 	
-	[delegate stylesTVC:self didSelectStyle:[[self.stylesList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+	[delegate stylesTVC:self didSelectStyle:[[[self.stylesDictionary objectForKey:@"list"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
 }
 
 
@@ -190,143 +176,12 @@
 
 
 - (void)dealloc {
-	[stylesList release];
-	[stylesNames release];
+	[stylesDictionary release];
 	self.currentElemValue=nil;
 	self.xmlParserPath=nil;
     [super dealloc];
 }
 
-/*
- 
- Sample styles doc:
- 
-<styles>
-	<style num="1">
-		<name>Light Lager</name>
-		<style num="1A">
-			<name>Light American Lager</name>
-		</style>
-		<style num="1B">
-			<name>Standard American Lager</name>
-		</style>
-		<style num="1C">
-			<name>Premium American Lager</name>
-		</style>
-		<style num="1D">
-			<name>Munich Helles</name>
-		</style>
-		<style num="1E">
-			<name>Dortmunder Export</name>
-		</style>
-	</style>
-	<style num="2">
-		<name>Pilsner</name>
-		<style num="2A">
-			<name>German Pilsner</name>
-		</style>
-		<style num="2B">
-			<name>Boehmian Pilsner</name>
-		</style>
-		<style num="2C">
-			<name>Classic American Pilsner</name>
-		</style>
-	</style>
-	<style num="3">
-		<name>European Amber Lager</name>
-		<style num="3A">
-			<name>Vienna Lager</name>
-		</style>
-		<style num="3B">
-			<name>Oktoberfest/Maerzen</name>
-		</style>
-	</style>
- </styles>
- 
- */
-
-// NSXMLParser delegate methods
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser
-{
-	// Clear any old data
-	self.currentElemValue=nil;
-	
-	xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5];
-	
-	self.stylesList=[[NSMutableArray alloc] initWithCapacity:32];
-	self.stylesNames=[[NSMutableDictionary alloc] initWithCapacity:32];
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-	xmlParserPath=nil;
-	currentElemValue=nil;
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	if ([elementName isEqualToString:@"style"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",nil]])
-		{
-			[self.stylesList addObject:[NSMutableArray arrayWithCapacity:5]];
-//			[self.stylesList addObject:[attributeDict objectForKey:@"num"]];
-		}
-		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",nil]])
-		{
-			[[self.stylesList lastObject] addObject:[attributeDict objectForKey:@"num"]];
-		}
-	}
-	else if ([elementName isEqualToString:@"name"])
-	{
-		if ([[xmlParserPath lastObject] isEqualToString:@"style"])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-		}
-	}
-	
-	[xmlParserPath addObject:elementName];
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	[xmlParserPath removeLastObject];
-	
-	if (self.currentElemValue)
-	{
-		if ([elementName isEqualToString:@"style"])
-		{
-		}
-		else if ([elementName isEqualToString:@"name"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",nil]])
-			{
-				[self.stylesNames setObject:self.currentElemValue forKey:[NSString stringWithFormat:@"%d",[self.stylesList count]]];
-			}
-			else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",@"style",nil]])
-			{
-				[self.stylesNames setObject:self.currentElemValue forKey:[[self.stylesList lastObject] lastObject]];
-			}
-		}
-
-		self.currentElemValue=nil;
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	[self.currentElemValue appendString:string];
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
-}
 
 @end
 

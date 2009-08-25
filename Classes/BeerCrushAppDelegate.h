@@ -37,6 +37,7 @@
 	NSMutableString* currentElemValue;
 	NSMutableString* currentElemID;
 	NSMutableDictionary* flavorsDictionary;
+	NSMutableDictionary* stylesDictionary;
 	
 	NSMutableDictionary* restoringNavState;
 	NSMutableDictionary* appState;
@@ -52,6 +53,7 @@
 @property (nonatomic, retain) NSMutableString* currentElemValue;
 @property (nonatomic, retain) NSMutableString* currentElemID;
 @property (nonatomic, retain) NSMutableDictionary* flavorsDictionary;
+@property (nonatomic, retain) NSMutableDictionary* stylesDictionary;
 @property (nonatomic, retain) NSMutableDictionary* restoringNavState;
 @property (nonatomic, retain) NSMutableDictionary* appState;
 
@@ -62,6 +64,7 @@
 -(void)setOnBeerSelectedAction:(SEL)s target:(id)t;
 -(BOOL)onBeerSelected:(id)obj;
 -(NSDictionary*)getFlavorsDictionary;
+-(NSDictionary*)getStylesDictionary;
 -(NSHTTPURLResponse*)postBeerReview:(NSDictionary*)userReview returningData:(NSData**)answer;
 -(BOOL)restoringNavigationStateAutomatically;
 -(NSObject*)nextNavigationStateToRestore;
