@@ -209,10 +209,6 @@
 				UserReviewsTVC* urtvc=[[UserReviewsTVC alloc] initWithStyle:UITableViewStylePlain];
 				[[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] pushViewController:urtvc animated:NO];
 				[urtvc release];
-				
-//				[self nextNavigationStateToRestore]; // Pop this off, we don't care about it
-				tabBarController.selectedViewController=[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex];
-//				[self pushNavigationStateForNavigationController:[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] withData:[NSNumber numberWithUnsignedInt:42]]; // just a placeholder
 				break;
 			}
 			case kTabBarItemTagNearby:

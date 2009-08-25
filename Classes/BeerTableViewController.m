@@ -497,6 +497,7 @@ const int kButtonHeight=40;
 				{
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section1CellEditing"] autorelease];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+					cell.accessoryType=UITableViewCellAccessoryNone;
 					cell.backgroundView.backgroundColor=[UIColor whiteColor];
 					UITextView* textView=[[[UITextView alloc] initWithFrame:CGRectMake(10, 10, cell.contentView.frame.size.width-20, cell.contentView.frame.size.height)] autorelease];
 					textView.font=[UIFont systemFontOfSize:14];
@@ -620,6 +621,8 @@ const int kButtonHeight=40;
 					}
 					case 5: // Flavors summary
 					{
+						[cell.textLabel setText:@"Flavors"];
+						cell.accessoryType=UITableViewCellAccessoryNone;
 						break;
 					}
 					default:
@@ -793,6 +796,8 @@ const int kButtonHeight=40;
 						self.descriptionTextView.autoresizingMask|=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleRightMargin;
 						[self.descriptionTextView sizeToFit];
 						
+						[cell.textLabel setText:@""];
+						[cell.detailTextLabel setText:@""];
 						[cell.contentView addSubview:self.descriptionTextView];
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
