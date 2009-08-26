@@ -4160,7 +4160,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 47";
 		rLen = 13;
-		rLoc = 2299;
+		rLoc = 2319;
 		rType = 0;
 		vrLen = 1555;
 		vrLoc = 0;
@@ -4190,7 +4190,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 47";
 		rLen = 13;
-		rLoc = 2299;
+		rLoc = 2319;
 		rType = 0;
 		vrLen = 1555;
 		vrLoc = 0;
@@ -4230,7 +4230,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 193";
 		rLen = 0;
-		rLoc = 10553;
+		rLoc = 10373;
 		rType = 0;
 		vrLen = 2404;
 		vrLoc = 50;
@@ -4390,7 +4390,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 193";
 		rLen = 0;
-		rLoc = 10553;
+		rLoc = 10373;
 		rType = 0;
 		vrLen = 3792;
 		vrLoc = 5030;
@@ -4540,7 +4540,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 193";
 		rLen = 0;
-		rLoc = 10553;
+		rLoc = 10373;
 		rType = 0;
 		vrLen = 2404;
 		vrLoc = 50;
@@ -4951,7 +4951,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 185";
 		rLen = 0;
-		rLoc = 10154;
+		rLoc = 9974;
 		rType = 0;
 		vrLen = 3832;
 		vrLoc = 5626;
@@ -4978,7 +4978,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 185";
 		rLen = 0;
-		rLoc = 10154;
+		rLoc = 9974;
 		rType = 0;
 		vrLen = 3832;
 		vrLoc = 5626;
@@ -5008,7 +5008,7 @@
 		comments = "warning: unused variable 'newrows'";
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		rLen = 1;
-		rLoc = 294;
+		rLoc = 288;
 		rType = 1;
 	};
 	054512701043195E00F9400B /* PBXTextBookmark */ = {
@@ -5026,7 +5026,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 192";
 		rLen = 170;
-		rLoc = 10553;
+		rLoc = 10373;
 		rType = 0;
 		vrLen = 3688;
 		vrLoc = 4769;
@@ -5036,7 +5036,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 443";
 		rLen = 0;
-		rLoc = 17035;
+		rLoc = 17025;
 		rType = 0;
 		vrLen = 3281;
 		vrLoc = 12962;
@@ -5046,7 +5046,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 443";
 		rLen = 0;
-		rLoc = 17035;
+		rLoc = 17025;
 		rType = 0;
 		vrLen = 3281;
 		vrLoc = 12962;
@@ -5056,7 +5056,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 435";
 		rLen = 0;
-		rLoc = 16769;
+		rLoc = 16759;
 		rType = 0;
 		vrLen = 3279;
 		vrLoc = 12962;
@@ -5066,7 +5066,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 435";
 		rLen = 0;
-		rLoc = 16769;
+		rLoc = 16759;
 		rType = 0;
 		vrLen = 3279;
 		vrLoc = 12962;
@@ -5076,7 +5076,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 433";
 		rLen = 0;
-		rLoc = 16684;
+		rLoc = 16674;
 		rType = 0;
 		vrLen = 3279;
 		vrLoc = 12962;
@@ -5086,7 +5086,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 496";
 		rLen = 0;
-		rLoc = 27095;
+		rLoc = 27375;
 		rType = 0;
 		vrLen = 3254;
 		vrLoc = 14869;
@@ -5096,7 +5096,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 499";
 		rLen = 0;
-		rLoc = 27095;
+		rLoc = 27375;
 		rType = 0;
 		vrLen = 3422;
 		vrLoc = 15042;
@@ -5106,7 +5106,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 358";
 		rLen = 0;
-		rLoc = 15095;
+		rLoc = 14915;
 		rType = 0;
 		vrLen = 3520;
 		vrLoc = 14191;
@@ -5116,7 +5116,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 358";
 		rLen = 0;
-		rLoc = 15095;
+		rLoc = 14915;
 		rType = 0;
 		vrLen = 3444;
 		vrLoc = 15556;
@@ -5126,7 +5126,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 495";
 		rLen = 0;
-		rLoc = 27095;
+		rLoc = 27375;
 		rType = 0;
 		vrLen = 3454;
 		vrLoc = 14958;
@@ -5136,7 +5136,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 949";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2774;
 		vrLoc = 31483;
@@ -5156,7 +5156,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1116";
 		rLen = 8826;
-		rLoc = 49000;
+		rLoc = 50196;
 		rType = 0;
 		vrLen = 2395;
 		vrLoc = 41690;
@@ -5204,7 +5204,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 945";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2642;
 		vrLoc = 31483;
@@ -5234,7 +5234,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 946";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2806;
 		vrLoc = 31492;
@@ -5294,7 +5294,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 945";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2797;
 		vrLoc = 31532;
@@ -5334,7 +5334,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1116";
 		rLen = 8826;
-		rLoc = 49000;
+		rLoc = 50196;
 		rType = 0;
 		vrLen = 2395;
 		vrLoc = 41690;
@@ -5554,7 +5554,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 940";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2976;
 		vrLoc = 32049;
@@ -5564,7 +5564,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 940";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2976;
 		vrLoc = 32049;
@@ -5574,7 +5574,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 940";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2976;
 		vrLoc = 32049;
@@ -5844,7 +5844,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1092";
 		rLen = 0;
-		rLoc = 48420;
+		rLoc = 49616;
 		rType = 0;
 		vrLen = 2434;
 		vrLoc = 35948;
@@ -5884,7 +5884,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1092";
 		rLen = 0;
-		rLoc = 48420;
+		rLoc = 49616;
 		rType = 0;
 		vrLen = 2434;
 		vrLoc = 35948;
@@ -5893,7 +5893,7 @@
 		isa = PBXTextBookmark;
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 14";
-		rLen = 172;
+		rLen = 192;
 		rLoc = 317;
 		rType = 0;
 		vrLen = 1577;
@@ -5904,7 +5904,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1092";
 		rLen = 0;
-		rLoc = 48420;
+		rLoc = 49616;
 		rType = 0;
 		vrLen = 2434;
 		vrLoc = 35948;
@@ -5924,7 +5924,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1092";
 		rLen = 0;
-		rLoc = 48420;
+		rLoc = 49616;
 		rType = 0;
 		vrLen = 2434;
 		vrLoc = 35948;
@@ -5964,7 +5964,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1090";
 		rLen = 0;
-		rLoc = 48302;
+		rLoc = 49498;
 		rType = 0;
 		vrLen = 2453;
 		vrLoc = 35948;
@@ -5974,7 +5974,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1090";
 		rLen = 0;
-		rLoc = 48302;
+		rLoc = 49498;
 		rType = 0;
 		vrLen = 2453;
 		vrLoc = 35948;
@@ -5994,7 +5994,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1090";
 		rLen = 0;
-		rLoc = 48302;
+		rLoc = 49498;
 		rType = 0;
 		vrLen = 2453;
 		vrLoc = 35948;
@@ -6024,7 +6024,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1090";
 		rLen = 0;
-		rLoc = 48302;
+		rLoc = 49498;
 		rType = 0;
 		vrLen = 2453;
 		vrLoc = 35948;
@@ -6064,7 +6064,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1090";
 		rLen = 71;
-		rLoc = 48232;
+		rLoc = 49428;
 		rType = 0;
 		vrLen = 2518;
 		vrLoc = 35657;
@@ -6074,7 +6074,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1090";
 		rLen = 0;
-		rLoc = 48302;
+		rLoc = 49498;
 		rType = 0;
 		vrLen = 2453;
 		vrLoc = 35948;
@@ -6094,7 +6094,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1092";
 		rLen = 0;
-		rLoc = 48305;
+		rLoc = 49501;
 		rType = 0;
 		vrLen = 2364;
 		vrLoc = 35821;
@@ -6114,7 +6114,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1090";
 		rLen = 71;
-		rLoc = 48232;
+		rLoc = 49428;
 		rType = 0;
 		vrLen = 2518;
 		vrLoc = 35657;
@@ -6304,7 +6304,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1092";
 		rLen = 0;
-		rLoc = 48305;
+		rLoc = 49501;
 		rType = 0;
 		vrLen = 2518;
 		vrLoc = 35657;
@@ -6328,7 +6328,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 16";
 		rLen = 0;
-		rLoc = 485;
+		rLoc = 505;
 		rType = 0;
 		vrLen = 1643;
 		vrLoc = 0;
@@ -6338,7 +6338,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1101";
 		rLen = 0;
-		rLoc = 47987;
+		rLoc = 49183;
 		rType = 0;
 		vrLen = 2343;
 		vrLoc = 36236;
@@ -6398,7 +6398,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 975";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2510;
 		vrLoc = 32873;
@@ -6428,7 +6428,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 976";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2532;
 		vrLoc = 32818;
@@ -6448,7 +6448,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 976";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2532;
 		vrLoc = 32818;
@@ -6458,7 +6458,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 16";
 		rLen = 0;
-		rLoc = 485;
+		rLoc = 505;
 		rType = 0;
 		vrLen = 1643;
 		vrLoc = 0;
@@ -6468,7 +6468,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1101";
 		rLen = 0;
-		rLoc = 47987;
+		rLoc = 49183;
 		rType = 0;
 		vrLen = 2343;
 		vrLoc = 36236;
@@ -7496,7 +7496,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1101";
 		rLen = 0;
-		rLoc = 47987;
+		rLoc = 49183;
 		rType = 0;
 		vrLen = 2343;
 		vrLoc = 36236;
@@ -7516,7 +7516,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1104";
 		rLen = 0;
-		rLoc = 48136;
+		rLoc = 49332;
 		rType = 0;
 		vrLen = 2363;
 		vrLoc = 36741;
@@ -7526,7 +7526,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1104";
 		rLen = 0;
-		rLoc = 48136;
+		rLoc = 49332;
 		rType = 0;
 		vrLen = 2363;
 		vrLoc = 36741;
@@ -7553,7 +7553,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1104";
 		rLen = 0;
-		rLoc = 48136;
+		rLoc = 49332;
 		rType = 0;
 		vrLen = 2363;
 		vrLoc = 36741;
@@ -7644,7 +7644,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 17";
 		rLen = 0;
-		rLoc = 485;
+		rLoc = 505;
 		rType = 0;
 		vrLen = 1695;
 		vrLoc = 0;
@@ -7664,7 +7664,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1374";
 		rLen = 0;
-		rLoc = 58071;
+		rLoc = 59267;
 		rType = 0;
 		vrLen = 2398;
 		vrLoc = 42865;
@@ -7674,7 +7674,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 983";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2590;
 		vrLoc = 32818;
@@ -7784,7 +7784,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 986";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2542;
 		vrLoc = 33141;
@@ -7794,7 +7794,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 17";
 		rLen = 0;
-		rLoc = 485;
+		rLoc = 505;
 		rType = 0;
 		vrLen = 1695;
 		vrLoc = 0;
@@ -7804,7 +7804,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1374";
 		rLen = 0;
-		rLoc = 58071;
+		rLoc = 59267;
 		rType = 0;
 		vrLen = 2241;
 		vrLoc = 43023;
@@ -7814,7 +7814,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 17";
 		rLen = 0;
-		rLoc = 485;
+		rLoc = 505;
 		rType = 0;
 		vrLen = 1695;
 		vrLoc = 0;
@@ -7824,7 +7824,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1374";
 		rLen = 0;
-		rLoc = 58071;
+		rLoc = 59267;
 		rType = 0;
 		vrLen = 2314;
 		vrLoc = 42949;
@@ -7844,7 +7844,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1376";
 		rLen = 0;
-		rLoc = 57976;
+		rLoc = 59172;
 		rType = 0;
 		vrLen = 2472;
 		vrLoc = 43023;
@@ -7854,7 +7854,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1376";
 		rLen = 0;
-		rLoc = 57976;
+		rLoc = 59172;
 		rType = 0;
 		vrLen = 2472;
 		vrLoc = 43023;
@@ -7871,7 +7871,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1376";
 		rLen = 0;
-		rLoc = 57976;
+		rLoc = 59172;
 		rType = 0;
 		vrLen = 2472;
 		vrLoc = 43023;
@@ -7911,7 +7911,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 985";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2725;
 		vrLoc = 33246;
@@ -7921,7 +7921,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 985";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2725;
 		vrLoc = 33246;
@@ -7931,7 +7931,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 985";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2725;
 		vrLoc = 33246;
@@ -7951,7 +7951,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 985";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 3119;
 		vrLoc = 27217;
@@ -7961,7 +7961,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 654";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 2917;
 		vrLoc = 21435;
@@ -7971,7 +7971,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 349";
 		rLen = 0;
-		rLoc = 15077;
+		rLoc = 14897;
 		rType = 0;
 		vrLen = 1467;
 		vrLoc = 11735;
@@ -7981,7 +7981,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 789";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 2850;
 		vrLoc = 26890;
@@ -7991,7 +7991,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 793";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 2827;
 		vrLoc = 26890;
@@ -8001,7 +8001,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 792";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 2832;
 		vrLoc = 26890;
@@ -8011,7 +8011,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 794";
 		rLen = 0;
-		rLoc = 38410;
+		rLoc = 38847;
 		rType = 0;
 		vrLen = 2937;
 		vrLoc = 26890;
@@ -8021,7 +8021,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 786";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 2968;
 		vrLoc = 26890;
@@ -8031,7 +8031,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 794";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 2970;
 		vrLoc = 26890;
@@ -8041,7 +8041,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 795";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3019;
 		vrLoc = 26890;
@@ -8051,7 +8051,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 786";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3078;
 		vrLoc = 26890;
@@ -8061,7 +8061,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 803";
 		rLen = 0;
-		rLoc = 38547;
+		rLoc = 38984;
 		rType = 0;
 		vrLen = 3080;
 		vrLoc = 26890;
@@ -8071,7 +8071,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 804";
 		rLen = 0;
-		rLoc = 38609;
+		rLoc = 39046;
 		rType = 0;
 		vrLen = 3082;
 		vrLoc = 26890;
@@ -8081,7 +8081,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 797";
 		rLen = 0;
-		rLoc = 38410;
+		rLoc = 38847;
 		rType = 0;
 		vrLen = 3080;
 		vrLoc = 26890;
@@ -8091,7 +8091,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 795";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3118;
 		vrLoc = 26890;
@@ -8101,7 +8101,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 786";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3121;
 		vrLoc = 26890;
@@ -8111,7 +8111,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 787";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3082;
 		vrLoc = 26890;
@@ -8121,7 +8121,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 787";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3094;
 		vrLoc = 26890;
@@ -8131,7 +8131,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 798";
 		rLen = 0;
-		rLoc = 38410;
+		rLoc = 38847;
 		rType = 0;
 		vrLen = 3098;
 		vrLoc = 26890;
@@ -8141,7 +8141,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 798";
 		rLen = 0;
-		rLoc = 38410;
+		rLoc = 38847;
 		rType = 0;
 		vrLen = 3096;
 		vrLoc = 26890;
@@ -8151,7 +8151,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 798";
 		rLen = 0;
-		rLoc = 38410;
+		rLoc = 38847;
 		rType = 0;
 		vrLen = 3096;
 		vrLoc = 26890;
@@ -8161,7 +8161,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 802";
 		rLen = 0;
-		rLoc = 38547;
+		rLoc = 38984;
 		rType = 0;
 		vrLen = 3094;
 		vrLoc = 26890;
@@ -8171,7 +8171,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 796";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3092;
 		vrLoc = 26890;
@@ -8181,7 +8181,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 805";
 		rLen = 0;
-		rLoc = 38609;
+		rLoc = 39046;
 		rType = 0;
 		vrLen = 3094;
 		vrLoc = 26890;
@@ -8191,7 +8191,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 786";
 		rLen = 0;
-		rLoc = 37940;
+		rLoc = 38378;
 		rType = 0;
 		vrLen = 3171;
 		vrLoc = 26890;
@@ -8201,7 +8201,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 787";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3192;
 		vrLoc = 26890;
@@ -8211,7 +8211,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 795";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3194;
 		vrLoc = 26890;
@@ -8221,7 +8221,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 787";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3192;
 		vrLoc = 26890;
@@ -8231,7 +8231,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 393";
 		rLen = 0;
-		rLoc = 15203;
+		rLoc = 15023;
 		rType = 0;
 		vrLen = 1945;
 		vrLoc = 12125;
@@ -8241,7 +8241,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 17";
 		rLen = 0;
-		rLoc = 485;
+		rLoc = 505;
 		rType = 0;
 		vrLen = 1714;
 		vrLoc = 0;
@@ -8251,7 +8251,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 789";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 2859;
 		vrLoc = 26905;
@@ -8261,7 +8261,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 789";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 2859;
 		vrLoc = 26905;
@@ -8271,7 +8271,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 17";
 		rLen = 0;
-		rLoc = 485;
+		rLoc = 505;
 		rType = 0;
 		vrLen = 1714;
 		vrLoc = 0;
@@ -8281,7 +8281,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 789";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3004;
 		vrLoc = 26905;
@@ -8291,7 +8291,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 48";
 		rLen = 0;
-		rLoc = 1868;
+		rLoc = 1888;
 		rType = 0;
 		vrLen = 1760;
 		vrLoc = 0;
@@ -8301,7 +8301,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 787";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 2995;
 		vrLoc = 26764;
@@ -8311,7 +8311,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 786";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3004;
 		vrLoc = 26905;
@@ -8321,7 +8321,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 48";
 		rLen = 0;
-		rLoc = 1868;
+		rLoc = 1888;
 		rType = 0;
 		vrLen = 1760;
 		vrLoc = 0;
@@ -8331,7 +8331,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 787";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 2995;
 		vrLoc = 26764;
@@ -8341,7 +8341,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 48";
 		rLen = 0;
-		rLoc = 1868;
+		rLoc = 1888;
 		rType = 0;
 		vrLen = 1760;
 		vrLoc = 0;
@@ -8351,7 +8351,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 69";
 		rLen = 0;
-		rLoc = 2045;
+		rLoc = 1498;
 		rType = 0;
 		vrLen = 2356;
 		vrLoc = 224;
@@ -8371,7 +8371,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 48";
 		rLen = 0;
-		rLoc = 1868;
+		rLoc = 1888;
 		rType = 0;
 		vrLen = 1760;
 		vrLoc = 0;
@@ -8381,7 +8381,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1388";
 		rLen = 0;
-		rLoc = 58071;
+		rLoc = 59267;
 		rType = 0;
 		vrLen = 2887;
 		vrLoc = 31128;
@@ -8391,7 +8391,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1388";
 		rLen = 0;
-		rLoc = 58071;
+		rLoc = 59267;
 		rType = 0;
 		vrLen = 2887;
 		vrLoc = 31128;
@@ -8411,7 +8411,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 48";
 		rLen = 0;
-		rLoc = 1868;
+		rLoc = 1888;
 		rType = 0;
 		vrLen = 1760;
 		vrLoc = 0;
@@ -8421,7 +8421,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 624";
 		rLen = 0;
-		rLoc = 32157;
+		rLoc = 32437;
 		rType = 0;
 		vrLen = 3012;
 		vrLoc = 19391;
@@ -8431,7 +8431,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 799";
 		rLen = 0;
-		rLoc = 38505;
+		rLoc = 38942;
 		rType = 0;
 		vrLen = 3146;
 		vrLoc = 27517;
@@ -8441,7 +8441,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 799";
 		rLen = 0;
-		rLoc = 38505;
+		rLoc = 38942;
 		rType = 0;
 		vrLen = 3146;
 		vrLoc = 27517;
@@ -8451,7 +8451,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 799";
 		rLen = 0;
-		rLoc = 38505;
+		rLoc = 38942;
 		rType = 0;
 		vrLen = 3146;
 		vrLoc = 27517;
@@ -8481,7 +8481,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 799";
 		rLen = 0;
-		rLoc = 38505;
+		rLoc = 38942;
 		rType = 0;
 		vrLen = 3146;
 		vrLoc = 27517;
@@ -8501,7 +8501,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 500";
 		rLen = 0;
-		rLoc = 27095;
+		rLoc = 27375;
 		rType = 0;
 		vrLen = 3564;
 		vrLoc = 15818;
@@ -8511,7 +8511,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 440";
 		rLen = 0;
-		rLoc = 16684;
+		rLoc = 16674;
 		rType = 0;
 		vrLen = 3178;
 		vrLoc = 13163;
@@ -8521,7 +8521,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 48";
 		rLen = 0;
-		rLoc = 1868;
+		rLoc = 1888;
 		rType = 0;
 		vrLen = 1760;
 		vrLoc = 0;
@@ -8531,7 +8531,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 440";
 		rLen = 0;
-		rLoc = 16480;
+		rLoc = 16236;
 		rType = 0;
 		vrLen = 3303;
 		vrLoc = 13163;
@@ -8541,7 +8541,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 440";
 		rLen = 0;
-		rLoc = 16480;
+		rLoc = 16236;
 		rType = 0;
 		vrLen = 3303;
 		vrLoc = 13163;
@@ -8551,7 +8551,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 48";
 		rLen = 0;
-		rLoc = 1868;
+		rLoc = 1888;
 		rType = 0;
 		vrLen = 1760;
 		vrLoc = 0;
@@ -8561,7 +8561,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 657";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3302;
 		vrLoc = 22102;
@@ -8571,7 +8571,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 660";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3249;
 		vrLoc = 22102;
@@ -8581,7 +8581,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 657";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3241;
 		vrLoc = 22102;
@@ -8591,7 +8591,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 674";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3004;
 		vrLoc = 22102;
@@ -8601,7 +8601,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 672";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3004;
 		vrLoc = 22102;
@@ -8611,7 +8611,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 660";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3012;
 		vrLoc = 22102;
@@ -8621,7 +8621,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 653";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3004;
 		vrLoc = 21866;
@@ -8631,7 +8631,7 @@
 		comments = "error: expected ';' before 'textField'";
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		rLen = 0;
-		rLoc = 869;
+		rLoc = 875;
 		rType = 1;
 	};
 	054515301044636500F9400B /* PBXTextBookmark */ = {
@@ -8639,7 +8639,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 717";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3335;
 		vrLoc = 23540;
@@ -8649,7 +8649,7 @@
 		comments = "warning: 'setTextColor:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.0.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:199)";
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		rLen = 0;
-		rLoc = 1075;
+		rLoc = 1086;
 		rType = 1;
 	};
 	05451536104467CA00F9400B /* PBXTextBookmark */ = {
@@ -8657,7 +8657,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 937";
 		rLen = 0;
-		rLoc = 41459;
+		rLoc = 41896;
 		rType = 0;
 		vrLen = 3526;
 		vrLoc = 16257;
@@ -8667,7 +8667,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 511";
 		rLen = 0;
-		rLoc = 27095;
+		rLoc = 27375;
 		rType = 0;
 		vrLen = 3548;
 		vrLoc = 16257;
@@ -8677,7 +8677,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 437";
 		rLen = 0;
-		rLoc = 16192;
+		rLoc = 15986;
 		rType = 0;
 		vrLen = 3307;
 		vrLoc = 13163;
@@ -8687,7 +8687,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 55";
 		rLen = 17;
-		rLoc = 1789;
+		rLoc = 1809;
 		rType = 0;
 		vrLen = 2362;
 		vrLoc = 0;
@@ -8697,7 +8697,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 450";
 		rLen = 0;
-		rLoc = 16334;
+		rLoc = 16082;
 		rType = 0;
 		vrLen = 3331;
 		vrLoc = 13404;
@@ -8717,7 +8717,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 60";
 		rLen = 0;
-		rLoc = 2151;
+		rLoc = 2171;
 		rType = 0;
 		vrLen = 2268;
 		vrLoc = 0;
@@ -8737,7 +8737,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 32";
 		rLen = 170;
-		rLoc = 894;
+		rLoc = 914;
 		rType = 0;
 		vrLen = 2268;
 		vrLoc = 0;
@@ -8747,7 +8747,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 450";
 		rLen = 0;
-		rLoc = 16334;
+		rLoc = 16082;
 		rType = 0;
 		vrLen = 3331;
 		vrLoc = 13404;
@@ -8757,7 +8757,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 55";
 		rLen = 17;
-		rLoc = 1789;
+		rLoc = 1809;
 		rType = 0;
 		vrLen = 2362;
 		vrLoc = 0;
@@ -8767,7 +8767,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 282";
 		rLen = 0;
-		rLoc = 12513;
+		rLoc = 12333;
 		rType = 0;
 		vrLen = 4514;
 		vrLoc = 9009;
@@ -8777,7 +8777,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 264";
 		rLen = 0;
-		rLoc = 12513;
+		rLoc = 12333;
 		rType = 0;
 		vrLen = 4903;
 		vrLoc = 7032;
@@ -8787,7 +8787,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1238";
 		rLen = 0;
-		rLoc = 48305;
+		rLoc = 49501;
 		rType = 0;
 		vrLen = 2472;
 		vrLoc = 42510;
@@ -8825,7 +8825,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1238";
 		rLen = 0;
-		rLoc = 48305;
+		rLoc = 49501;
 		rType = 0;
 		vrLen = 2472;
 		vrLoc = 42510;
@@ -9223,7 +9223,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1238";
 		rLen = 0;
-		rLoc = 48305;
+		rLoc = 49501;
 		rType = 0;
 		vrLen = 2472;
 		vrLoc = 42510;
@@ -9243,7 +9243,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 274";
 		rLen = 0;
-		rLoc = 12513;
+		rLoc = 12333;
 		rType = 0;
 		vrLen = 5123;
 		vrLoc = 7785;
@@ -9253,7 +9253,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 280";
 		rLen = 0;
-		rLoc = 12513;
+		rLoc = 12333;
 		rType = 0;
 		vrLen = 5130;
 		vrLoc = 7785;
@@ -9263,7 +9263,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 908";
 		rLen = 0;
-		rLoc = 39060;
+		rLoc = 39497;
 		rType = 0;
 		vrLen = 3261;
 		vrLoc = 32540;
@@ -9273,7 +9273,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 908";
 		rLen = 0;
-		rLoc = 39060;
+		rLoc = 39497;
 		rType = 0;
 		vrLen = 2618;
 		vrLoc = 43043;
@@ -9283,7 +9283,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 888";
 		rLen = 0;
-		rLoc = 37946;
+		rLoc = 38384;
 		rType = 0;
 		vrLen = 3085;
 		vrLoc = 32232;
@@ -9293,7 +9293,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 33";
 		rLen = 0;
-		rLoc = 894;
+		rLoc = 914;
 		rType = 0;
 		vrLen = 2362;
 		vrLoc = 0;
@@ -9303,7 +9303,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 549";
 		rLen = 0;
-		rLoc = 27095;
+		rLoc = 27375;
 		rType = 0;
 		vrLen = 3294;
 		vrLoc = 18175;
@@ -9313,7 +9313,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 542";
 		rLen = 0;
-		rLoc = 27095;
+		rLoc = 27375;
 		rType = 0;
 		vrLen = 3434;
 		vrLoc = 18182;
@@ -9323,7 +9323,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 33";
 		rLen = 0;
-		rLoc = 894;
+		rLoc = 914;
 		rType = 0;
 		vrLen = 2362;
 		vrLoc = 0;
@@ -9333,7 +9333,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 549";
 		rLen = 0;
-		rLoc = 27095;
+		rLoc = 27375;
 		rType = 0;
 		vrLen = 3294;
 		vrLoc = 18175;
@@ -9343,7 +9343,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 33";
 		rLen = 0;
-		rLoc = 894;
+		rLoc = 914;
 		rType = 0;
 		vrLen = 2362;
 		vrLoc = 0;
@@ -9353,7 +9353,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 282";
 		rLen = 0;
-		rLoc = 12513;
+		rLoc = 12333;
 		rType = 0;
 		vrLen = 4536;
 		vrLoc = 9573;
@@ -9363,7 +9363,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 282";
 		rLen = 0;
-		rLoc = 12513;
+		rLoc = 12333;
 		rType = 0;
 		vrLen = 2618;
 		vrLoc = 43193;
@@ -9373,7 +9373,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 697";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 4084;
 		vrLoc = 27968;
@@ -9383,7 +9383,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 697";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 4084;
 		vrLoc = 27968;
@@ -9393,7 +9393,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 697";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 4891;
 		vrLoc = 8237;
@@ -9403,7 +9403,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 924";
 		rLen = 0;
-		rLoc = 38454;
+		rLoc = 38847;
 		rType = 0;
 		vrLen = 2977;
 		vrLoc = 32864;
@@ -9413,7 +9413,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 515";
 		rLen = 0;
-		rLoc = 18141;
+		rLoc = 18131;
 		rType = 0;
 		vrLen = 3573;
 		vrLoc = 15727;
@@ -9423,7 +9423,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 281";
 		rLen = 0;
-		rLoc = 12513;
+		rLoc = 12333;
 		rType = 0;
 		vrLen = 4742;
 		vrLoc = 8932;
@@ -9433,7 +9433,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 164";
 		rLen = 0;
-		rLoc = 6449;
+		rLoc = 6352;
 		rType = 0;
 		vrLen = 2398;
 		vrLoc = 889;
@@ -9493,7 +9493,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1462";
 		rLen = 0;
-		rLoc = 53255;
+		rLoc = 54451;
 		rType = 0;
 		vrLen = 2743;
 		vrLoc = 49370;
@@ -9503,7 +9503,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1462";
 		rLen = 0;
-		rLoc = 53255;
+		rLoc = 54451;
 		rType = 0;
 		vrLen = 3436;
 		vrLoc = 34730;
@@ -9513,7 +9513,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1565";
 		rLen = 0;
-		rLoc = 56500;
+		rLoc = 57696;
 		rType = 0;
 		vrLen = 2565;
 		vrLoc = 52643;
@@ -9523,7 +9523,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 160";
 		rLen = 0;
-		rLoc = 6291;
+		rLoc = 6195;
 		rType = 0;
 		vrLen = 4201;
 		vrLoc = 2900;
@@ -9533,7 +9533,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 160";
 		rLen = 0;
-		rLoc = 6291;
+		rLoc = 6195;
 		rType = 0;
 		vrLen = 2643;
 		vrLoc = 48786;
@@ -9563,7 +9563,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1629";
 		rLen = 0;
-		rLoc = 58071;
+		rLoc = 59267;
 		rType = 0;
 		vrLen = 3386;
 		vrLoc = 34335;
@@ -9603,7 +9603,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 162";
 		rLen = 0;
-		rLoc = 6350;
+		rLoc = 6253;
 		rType = 0;
 		vrLen = 4446;
 		vrLoc = 3005;
@@ -9613,7 +9613,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 162";
 		rLen = 0;
-		rLoc = 6350;
+		rLoc = 6253;
 		rType = 0;
 		vrLen = 3455;
 		vrLoc = 34712;
@@ -9623,7 +9623,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 164";
 		rLen = 0;
-		rLoc = 6291;
+		rLoc = 6195;
 		rType = 0;
 		vrLen = 4434;
 		vrLoc = 2903;
@@ -9633,7 +9633,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 164";
 		rLen = 0;
-		rLoc = 6291;
+		rLoc = 6195;
 		rType = 0;
 		vrLen = 3526;
 		vrLoc = 35118;
@@ -9643,7 +9643,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 970";
 		rLen = 0;
-		rLoc = 39351;
+		rLoc = 39788;
 		rType = 0;
 		vrLen = 3455;
 		vrLoc = 34816;
@@ -9653,7 +9653,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 185";
 		rLen = 0;
-		rLoc = 6667;
+		rLoc = 6487;
 		rType = 0;
 		vrLen = 3529;
 		vrLoc = 4386;
@@ -9663,7 +9663,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 718";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3041;
 		vrLoc = 24937;
@@ -9673,7 +9673,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1639";
 		rLen = 0;
-		rLoc = 58071;
+		rLoc = 59267;
 		rType = 0;
 		vrLen = 2310;
 		vrLoc = 53799;
@@ -9683,7 +9683,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 211";
 		rLen = 0;
-		rLoc = 7676;
+		rLoc = 7496;
 		rType = 0;
 		vrLen = 3105;
 		vrLoc = 6726;
@@ -9693,7 +9693,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 211";
 		rLen = 0;
-		rLoc = 7676;
+		rLoc = 7496;
 		rType = 0;
 		vrLen = 3058;
 		vrLoc = 24924;
@@ -9703,7 +9703,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1294";
 		rLen = 14;
-		rLoc = 48020;
+		rLoc = 49216;
 		rType = 0;
 		vrLen = 2395;
 		vrLoc = 44603;
@@ -9713,7 +9713,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 719";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3200;
 		vrLoc = 24917;
@@ -9761,7 +9761,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 719";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3133;
 		vrLoc = 24917;
@@ -9791,7 +9791,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 719";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3200;
 		vrLoc = 24917;
@@ -9861,7 +9861,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 719";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3200;
 		vrLoc = 24917;
@@ -9881,7 +9881,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 719";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3200;
 		vrLoc = 24917;
@@ -10050,7 +10050,7 @@
 		isa = PBXTextBookmark;
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		rLen = 0;
-		rLoc = 869;
+		rLoc = 875;
 		rType = 1;
 	};
 	054516561044A06E00F9400B /* PBXTextBookmark */ = {
@@ -10068,7 +10068,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 727";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3200;
 		vrLoc = 24917;
@@ -10078,7 +10078,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 719";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3203;
 		vrLoc = 24970;
@@ -10088,7 +10088,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 719";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3203;
 		vrLoc = 24970;
@@ -10098,7 +10098,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 722";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3304;
 		vrLoc = 24970;
@@ -10108,7 +10108,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 721";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3304;
 		vrLoc = 24970;
@@ -10118,7 +10118,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 722";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3305;
 		vrLoc = 25083;
@@ -10128,7 +10128,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 722";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3305;
 		vrLoc = 25083;
@@ -10138,7 +10138,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 724";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3473;
 		vrLoc = 24970;
@@ -10148,7 +10148,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 724";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3473;
 		vrLoc = 24970;
@@ -10158,7 +10158,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 723";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3375;
 		vrLoc = 25185;
@@ -10168,7 +10168,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 723";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3375;
 		vrLoc = 25185;
@@ -10178,7 +10178,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 725";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3341;
 		vrLoc = 25232;
@@ -10188,7 +10188,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 725";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3341;
 		vrLoc = 25232;
@@ -10198,7 +10198,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 724";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3341;
 		vrLoc = 25232;
@@ -10208,7 +10208,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 827";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 3088;
 		vrLoc = 29131;
@@ -10218,7 +10218,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 827";
 		rLen = 0;
-		rLoc = 32655;
+		rLoc = 32935;
 		rType = 0;
 		vrLen = 2513;
 		vrLoc = 45557;
@@ -10228,7 +10228,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 989";
 		rLen = 0;
-		rLoc = 39344;
+		rLoc = 39781;
 		rType = 0;
 		vrLen = 3490;
 		vrLoc = 35950;
@@ -10238,7 +10238,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 989";
 		rLen = 0;
-		rLoc = 39349;
+		rLoc = 39786;
 		rType = 0;
 		vrLen = 3516;
 		vrLoc = 36035;
@@ -10248,7 +10248,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1017";
 		rLen = 0;
-		rLoc = 40523;
+		rLoc = 40960;
 		rType = 0;
 		vrLen = 3522;
 		vrLoc = 36289;
@@ -10258,7 +10258,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1021";
 		rLen = 0;
-		rLoc = 40993;
+		rLoc = 41430;
 		rType = 0;
 		vrLen = 3556;
 		vrLoc = 36289;
@@ -10268,7 +10268,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1021";
 		rLen = 0;
-		rLoc = 40993;
+		rLoc = 41430;
 		rType = 0;
 		vrLen = 3556;
 		vrLoc = 36289;
@@ -10278,7 +10278,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1021";
 		rLen = 0;
-		rLoc = 40834;
+		rLoc = 41271;
 		rType = 0;
 		vrLen = 3579;
 		vrLoc = 36289;
@@ -10288,7 +10288,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1026";
 		rLen = 0;
-		rLoc = 40995;
+		rLoc = 41432;
 		rType = 0;
 		vrLen = 3887;
 		vrLoc = 36815;
@@ -10298,7 +10298,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1026";
 		rLen = 0;
-		rLoc = 40995;
+		rLoc = 41432;
 		rType = 0;
 		vrLen = 3837;
 		vrLoc = 36815;
@@ -10308,7 +10308,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1021";
 		rLen = 0;
-		rLoc = 40807;
+		rLoc = 41244;
 		rType = 0;
 		vrLen = 3557;
 		vrLoc = 36815;
@@ -10318,7 +10318,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 378";
 		rLen = 0;
-		rLoc = 14630;
+		rLoc = 14450;
 		rType = 0;
 		vrLen = 3672;
 		vrLoc = 11741;
@@ -10328,7 +10328,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 328";
 		rLen = 226;
-		rLoc = 12244;
+		rLoc = 12064;
 		rType = 0;
 		vrLen = 4456;
 		vrLoc = 10024;
@@ -10338,7 +10338,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 324";
 		rLen = 0;
-		rLoc = 12017;
+		rLoc = 11837;
 		rType = 0;
 		vrLen = 4456;
 		vrLoc = 10024;
@@ -10348,7 +10348,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 378";
 		rLen = 0;
-		rLoc = 14630;
+		rLoc = 14450;
 		rType = 0;
 		vrLen = 2637;
 		vrLoc = 12915;
@@ -10358,7 +10358,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 386";
 		rLen = 0;
-		rLoc = 14740;
+		rLoc = 14560;
 		rType = 0;
 		vrLen = 3641;
 		vrLoc = 11689;
@@ -10368,7 +10368,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 386";
 		rLen = 0;
-		rLoc = 14740;
+		rLoc = 14560;
 		rType = 0;
 		vrLen = 3566;
 		vrLoc = 36750;
@@ -10378,7 +10378,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 386";
 		rLen = 0;
-		rLoc = 14740;
+		rLoc = 14560;
 		rType = 0;
 		vrLen = 3213;
 		vrLoc = 12198;
@@ -10388,7 +10388,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 378";
 		rLen = 0;
-		rLoc = 14630;
+		rLoc = 14450;
 		rType = 0;
 		vrLen = 3700;
 		vrLoc = 11374;
@@ -10398,7 +10398,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 378";
 		rLen = 0;
-		rLoc = 14630;
+		rLoc = 14450;
 		rType = 0;
 		vrLen = 2720;
 		vrLoc = 15541;
@@ -10408,7 +10408,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 385";
 		rLen = 0;
-		rLoc = 14739;
+		rLoc = 14559;
 		rType = 0;
 		vrLen = 2582;
 		vrLoc = 12903;
@@ -10418,7 +10418,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 378";
 		rLen = 0;
-		rLoc = 14630;
+		rLoc = 14450;
 		rType = 0;
 		vrLen = 3518;
 		vrLoc = 11857;
@@ -10428,7 +10428,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 332";
 		rLen = 0;
-		rLoc = 12470;
+		rLoc = 12290;
 		rType = 0;
 		vrLen = 4546;
 		vrLoc = 10135;
@@ -10438,7 +10438,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 332";
 		rLen = 0;
-		rLoc = 12470;
+		rLoc = 12290;
 		rType = 0;
 		vrLen = 4548;
 		vrLoc = 10135;
@@ -10448,7 +10448,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 331";
 		rLen = 0;
-		rLoc = 12470;
+		rLoc = 12290;
 		rType = 0;
 		vrLen = 3980;
 		vrLoc = 10934;
@@ -10458,7 +10458,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 329";
 		rLen = 0;
-		rLoc = 12244;
+		rLoc = 12064;
 		rType = 0;
 		vrLen = 3976;
 		vrLoc = 10934;
@@ -10468,7 +10468,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 330";
 		rLen = 0;
-		rLoc = 12357;
+		rLoc = 12177;
 		rType = 0;
 		vrLen = 3976;
 		vrLoc = 10934;
@@ -10478,7 +10478,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 384";
 		rLen = 0;
-		rLoc = 14726;
+		rLoc = 14546;
 		rType = 0;
 		vrLen = 3650;
 		vrLoc = 11445;
@@ -10488,7 +10488,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 961";
 		rLen = 0;
-		rLoc = 37574;
+		rLoc = 37854;
 		rType = 0;
 		vrLen = 3099;
 		vrLoc = 35071;
@@ -10498,7 +10498,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 960";
 		rLen = 0;
-		rLoc = 37574;
+		rLoc = 37854;
 		rType = 0;
 		vrLen = 2809;
 		vrLoc = 15542;
@@ -10508,7 +10508,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 960";
 		rLen = 0;
-		rLoc = 37574;
+		rLoc = 37854;
 		rType = 0;
 		vrLen = 2809;
 		vrLoc = 15542;
@@ -10517,8 +10517,8 @@
 		isa = PBXTextBookmark;
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 590";
-		rLen = 5505;
-		rLoc = 21590;
+		rLen = 5437;
+		rLoc = 21938;
 		rType = 0;
 		vrLen = 3334;
 		vrLoc = 17944;
@@ -10527,8 +10527,8 @@
 		isa = PBXTextBookmark;
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 590";
-		rLen = 5505;
-		rLoc = 21590;
+		rLen = 5437;
+		rLoc = 21938;
 		rType = 0;
 		vrLen = 1900;
 		vrLoc = 15325;
@@ -10538,7 +10538,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 384";
 		rLen = 0;
-		rLoc = 14726;
+		rLoc = 14546;
 		rType = 0;
 		vrLen = 3606;
 		vrLoc = 11540;
@@ -10548,7 +10548,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 339";
 		rLen = 0;
-		rLoc = 12538;
+		rLoc = 12358;
 		rType = 0;
 		vrLen = 1476;
 		vrLoc = 14078;
@@ -10558,7 +10558,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 719";
 		rLen = 0;
-		rLoc = 27340;
+		rLoc = 27620;
 		rType = 0;
 		vrLen = 3480;
 		vrLoc = 25723;
@@ -10568,7 +10568,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 319";
 		rLen = 0;
-		rLoc = 11707;
+		rLoc = 11527;
 		rType = 0;
 		vrLen = 4483;
 		vrLoc = 10084;
@@ -10578,7 +10578,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 319";
 		rLen = 0;
-		rLoc = 11707;
+		rLoc = 11527;
 		rType = 0;
 		vrLen = 4423;
 		vrLoc = 3002;
@@ -10588,7 +10588,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 335";
 		rLen = 116;
-		rLoc = 12539;
+		rLoc = 12359;
 		rType = 0;
 		vrLen = 3907;
 		vrLoc = 10553;
@@ -10598,7 +10598,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 335";
 		rLen = 116;
-		rLoc = 12539;
+		rLoc = 12359;
 		rType = 0;
 		vrLen = 4423;
 		vrLoc = 3002;
@@ -10608,7 +10608,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 886";
 		rLen = 0;
-		rLoc = 34057;
+		rLoc = 34337;
 		rType = 0;
 		vrLen = 3961;
 		vrLoc = 31788;
@@ -10638,7 +10638,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 886";
 		rLen = 0;
-		rLoc = 34057;
+		rLoc = 34337;
 		rType = 0;
 		vrLen = 3961;
 		vrLoc = 31788;
@@ -10708,7 +10708,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 886";
 		rLen = 0;
-		rLoc = 34057;
+		rLoc = 34337;
 		rType = 0;
 		vrLen = 3960;
 		vrLoc = 31788;
@@ -10728,12 +10728,12 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 886";
 		rLen = 0;
-		rLoc = 34057;
+		rLoc = 34337;
 		rType = 0;
 		vrLen = 3911;
 		vrLoc = 15377;
 	};
-	0545171D1045BBEA00F9400B /* BeerTableViewController.m:467 */ = {
+	0545171D1045BBEA00F9400B /* BeerTableViewController.m:461 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -10745,9 +10745,9 @@
 		functionName = "-tableView:cellForRowAtIndexPath:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 467;
+		lineNumber = 461;
 		location = BeerCrush;
-		modificationTime = 273008684.578855;
+		modificationTime = 273016378.355623;
 		state = 2;
 	};
 	0545171E1045BBED00F9400B /* PBXTextBookmark */ = {
@@ -10755,12 +10755,12 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 459";
 		rLen = 0;
-		rLoc = 15766;
+		rLoc = 15586;
 		rType = 0;
 		vrLen = 3911;
 		vrLoc = 15377;
 	};
-	054517201045BC0000F9400B /* BeerTableViewController.m:465 */ = {
+	054517201045BC0000F9400B /* BeerTableViewController.m:459 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -10772,9 +10772,9 @@
 		functionName = "-tableView:cellForRowAtIndexPath:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 465;
+		lineNumber = 459;
 		location = BeerCrush;
-		modificationTime = 273008684.579791;
+		modificationTime = 273016378.357112;
 		state = 2;
 	};
 	054517211045BC0200F9400B /* PBXTextBookmark */ = {
@@ -10782,12 +10782,12 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 459";
 		rLen = 0;
-		rLoc = 15766;
+		rLoc = 15586;
 		rType = 0;
 		vrLen = 3834;
 		vrLoc = 15186;
 	};
-	054517231045BC1800F9400B /* BeerTableViewController.m:450 */ = {
+	054517231045BC1800F9400B /* BeerTableViewController.m:444 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -10799,9 +10799,9 @@
 		functionName = "-tableView:cellForRowAtIndexPath:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 450;
+		lineNumber = 444;
 		location = BeerCrush;
-		modificationTime = 273008684.580581;
+		modificationTime = 273016378.357734;
 		state = 2;
 	};
 	054517241045BC1C00F9400B /* PBXTextBookmark */ = {
@@ -10809,7 +10809,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 459";
 		rLen = 0;
-		rLoc = 15766;
+		rLoc = 15586;
 		rType = 0;
 		vrLen = 3319;
 		vrLoc = 15102;
@@ -10819,7 +10819,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 353";
 		rLen = 0;
-		rLoc = 13603;
+		rLoc = 13423;
 		rType = 0;
 		vrLen = 4357;
 		vrLoc = 9869;
@@ -10829,7 +10829,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 353";
 		rLen = 0;
-		rLoc = 13603;
+		rLoc = 13423;
 		rType = 0;
 		vrLen = 2999;
 		vrLoc = 15132;
@@ -10839,7 +10839,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 353";
 		rLen = 0;
-		rLoc = 13603;
+		rLoc = 13423;
 		rType = 0;
 		vrLen = 3593;
 		vrLoc = 15376;
@@ -10849,7 +10849,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 774";
 		rLen = 0;
-		rLoc = 29730;
+		rLoc = 30010;
 		rType = 0;
 		vrLen = 3654;
 		vrLoc = 27487;
@@ -10859,7 +10859,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 774";
 		rLen = 0;
-		rLoc = 29730;
+		rLoc = 30010;
 		rType = 0;
 		vrLen = 3678;
 		vrLoc = 27487;
@@ -10869,7 +10869,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 774";
 		rLen = 0;
-		rLoc = 29730;
+		rLoc = 30010;
 		rType = 0;
 		vrLen = 3682;
 		vrLoc = 27487;
@@ -10879,7 +10879,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 783";
 		rLen = 0;
-		rLoc = 30039;
+		rLoc = 30319;
 		rType = 0;
 		vrLen = 3682;
 		vrLoc = 27487;
@@ -10889,7 +10889,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 783";
 		rLen = 0;
-		rLoc = 30039;
+		rLoc = 30319;
 		rType = 0;
 		vrLen = 3720;
 		vrLoc = 27487;
@@ -10899,7 +10899,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 824";
 		rLen = 0;
-		rLoc = 31772;
+		rLoc = 32052;
 		rType = 0;
 		vrLen = 3312;
 		vrLoc = 29273;
@@ -10909,7 +10909,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 782";
 		rLen = 0;
-		rLoc = 30039;
+		rLoc = 30319;
 		rType = 0;
 		vrLen = 3215;
 		vrLoc = 29273;
@@ -10919,7 +10919,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 779";
 		rLen = 0;
-		rLoc = 29955;
+		rLoc = 30235;
 		rType = 0;
 		vrLen = 3746;
 		vrLoc = 28400;
@@ -10929,7 +10929,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 782";
 		rLen = 0;
-		rLoc = 30039;
+		rLoc = 30319;
 		rType = 0;
 		vrLen = 3748;
 		vrLoc = 28400;
@@ -10939,7 +10939,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 868";
 		rLen = 0;
-		rLoc = 32901;
+		rLoc = 33181;
 		rType = 0;
 		vrLen = 4104;
 		vrLoc = 32511;
@@ -10949,7 +10949,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 871";
 		rLen = 0;
-		rLoc = 33058;
+		rLoc = 33338;
 		rType = 0;
 		vrLen = 3667;
 		vrLoc = 31912;
@@ -10959,7 +10959,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 761";
 		rLen = 0;
-		rLoc = 28928;
+		rLoc = 29208;
 		rType = 0;
 		vrLen = 3382;
 		vrLoc = 27092;
@@ -10969,7 +10969,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1217";
 		rLen = 0;
-		rLoc = 45159;
+		rLoc = 46355;
 		rType = 0;
 		vrLen = 1830;
 		vrLoc = 44328;
@@ -10978,8 +10978,8 @@
 		isa = PBXTextBookmark;
 		comments = "error: expected expression before 'StylesListTVC'";
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
-		rLen = 1;
-		rLoc = 1158;
+		rLen = 0;
+		rLoc = 1176;
 		rType = 1;
 	};
 	0545174F1045C60700F9400B /* PBXTextBookmark */ = {
@@ -10987,12 +10987,12 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1158";
 		rLen = 0;
-		rLoc = 44023;
+		rLoc = 44539;
 		rType = 0;
 		vrLen = 2564;
 		vrLoc = 42348;
 	};
-	054517561045C84100F9400B /* BeerTableViewController.m:521 */ = {
+	054517561045C84100F9400B /* BeerTableViewController.m:520 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -11002,12 +11002,861 @@
 		delayBeforeContinue = 0;
 		fileReference = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		functionName = "-tableView:cellForRowAtIndexPath:";
-		hitCount = 2;
+		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 521;
+		lineNumber = 520;
 		location = BeerCrush;
-		modificationTime = 273008723.495566;
+		modificationTime = 273016378.358327;
+		state = 2;
+	};
+	054517581045D14F00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 543";
+		rLen = 0;
+		rLoc = 19850;
+		rType = 0;
+		vrLen = 4188;
+		vrLoc = 17543;
+	};
+	0545175D1045D21F00F9400B /* BeerTableViewController.m:162 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		functionName = "-editButtonClicked";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 162;
+		location = BeerCrush;
+		modificationTime = 273016378.359011;
+		state = 2;
+	};
+	0545175F1045D22D00F9400B /* BeerTableViewController.m:179 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		functionName = "-editButtonClicked";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 179;
+		location = BeerCrush;
+		modificationTime = 273016378.35966;
+		state = 2;
+	};
+	054517601045D23200F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 521";
+		rLen = 0;
+		rLoc = 18357;
+		rType = 0;
+		vrLen = 3868;
+		vrLoc = 16635;
+	};
+	054517631045D28D00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 542";
+		rLen = 0;
+		rLoc = 19736;
+		rType = 0;
+		vrLen = 3862;
+		vrLoc = 16635;
+	};
+	054517651045D2A800F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 542";
+		rLen = 0;
+		rLoc = 19736;
+		rType = 0;
+		vrLen = 3862;
+		vrLoc = 16635;
+	};
+	054517661045D33F00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 994";
+		rLen = 19;
+		rLoc = 38186;
+		rType = 0;
+		vrLen = 3862;
+		vrLoc = 16635;
+	};
+	054517681045D34F00F9400B /* BeerTableViewController.m:1168 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		functionName = "-tableView:didSelectRowAtIndexPath:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 1168;
+		location = BeerCrush;
+		modificationTime = 273016378.360239;
+		state = 2;
+	};
+	054517691045D35200F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 1149";
+		rLen = 91;
+		rLoc = 44308;
+		rType = 0;
+		vrLen = 1959;
+		vrLoc = 43269;
+	};
+	0545176D1045D61A00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
+		name = "BeerTableViewController.h: 33";
+		rLen = 0;
+		rLoc = 914;
+		rType = 0;
+		vrLen = 2362;
+		vrLoc = 0;
+	};
+	0545176E1045D61A00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 333";
+		rLen = 0;
+		rLoc = 12321;
+		rType = 0;
+		vrLen = 4331;
+		vrLoc = 9869;
+	};
+	0545176F1045D61A00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 333";
+		rLen = 0;
+		rLoc = 12321;
+		rType = 0;
+		vrLen = 4331;
+		vrLoc = 9869;
+	};
+	054517701045D61A00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
+		name = "BeerTableViewController.h: 33";
+		rLen = 0;
+		rLoc = 914;
+		rType = 0;
+		vrLen = 2362;
+		vrLoc = 0;
+	};
+	054517711045D61A00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 333";
+		rLen = 0;
+		rLoc = 12321;
+		rType = 0;
+		vrLen = 4405;
+		vrLoc = 9835;
+	};
+	054517751045D71D00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 1157";
+		rLen = 0;
+		rLoc = 44426;
+		rType = 0;
+		vrLen = 2411;
+		vrLoc = 42831;
+	};
+	054517771045D73200F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 1157";
+		rLen = 0;
+		rLoc = 44426;
+		rType = 0;
+		vrLen = 2411;
+		vrLoc = 42831;
+	};
+	054517791045D7FB00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 887";
+		rLen = 0;
+		rLoc = 33593;
+		rType = 0;
+		vrLen = 3573;
+		vrLoc = 31791;
+	};
+	0545177D1045D89B00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 471";
+		rLen = 0;
+		rLoc = 15920;
+		rType = 0;
+		vrLen = 3816;
+		vrLoc = 15655;
+	};
+	054517801045D90D00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 474";
+		rLen = 0;
+		rLoc = 16010;
+		rType = 0;
+		vrLen = 3828;
+		vrLoc = 15655;
+	};
+	054517821045D98E00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 474";
+		rLen = 0;
+		rLoc = 16065;
+		rType = 0;
+		vrLen = 3887;
+		vrLoc = 15655;
+	};
+	054517841045D9B000F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 473";
+		rLen = 0;
+		rLoc = 15986;
+		rType = 0;
+		vrLen = 3886;
+		vrLoc = 15655;
+	};
+	054517871045D9F200F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 479";
+		rLen = 0;
+		rLoc = 16612;
+		rType = 0;
+		vrLen = 3955;
+		vrLoc = 15655;
+	};
+	054517891045DA2800F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 475";
+		rLen = 0;
+		rLoc = 16082;
+		rType = 0;
+		vrLen = 4016;
+		vrLoc = 15655;
+	};
+	0545178B1045DAB200F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 475";
+		rLen = 0;
+		rLoc = 16082;
+		rType = 0;
+		vrLen = 4017;
+		vrLoc = 15655;
+	};
+	0545178E1045DADF00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 481";
+		rLen = 0;
+		rLoc = 16353;
+		rType = 0;
+		vrLen = 3912;
+		vrLoc = 15655;
+	};
+	054517901045DB0500F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 475";
+		rLen = 0;
+		rLoc = 16082;
+		rType = 0;
+		vrLen = 3911;
+		vrLoc = 15655;
+	};
+	054517921045DB2B00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 473";
+		rLen = 0;
+		rLoc = 16081;
+		rType = 0;
+		vrLen = 3961;
+		vrLoc = 15655;
+	};
+	054517941045DB5600F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 473";
+		rLen = 0;
+		rLoc = 16074;
+		rType = 0;
+		vrLen = 3856;
+		vrLoc = 15655;
+	};
+	054517961045DB7800F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 477";
+		rLen = 0;
+		rLoc = 16324;
+		rType = 0;
+		vrLen = 3768;
+		vrLoc = 15655;
+	};
+	054517981045DCCC00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 475";
+		rLen = 0;
+		rLoc = 16158;
+		rType = 0;
+		vrLen = 3702;
+		vrLoc = 15655;
+	};
+	0545179B1045DD6900F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 1097";
+		rLen = 0;
+		rLoc = 42161;
+		rType = 0;
+		vrLen = 2339;
+		vrLoc = 40873;
+	};
+	0545179D1045DD7600F9400B /* BeerTableViewController.m:1099 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		functionName = "-textFieldShouldReturn:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 1099;
+		location = BeerCrush;
+		modificationTime = 273016378.360943;
+		state = 2;
+	};
+	0545179E1045DD7800F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 1097";
+		rLen = 0;
+		rLoc = 42161;
+		rType = 0;
+		vrLen = 2339;
+		vrLoc = 40873;
+	};
+	054517A31045DDC000F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
+		name = "BeerTableViewController.h: 17";
+		rLen = 0;
+		rLoc = 317;
+		rType = 0;
+		vrLen = 2382;
+		vrLoc = 0;
+	};
+	054517A41045DDC000F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 481";
+		rLen = 0;
+		rLoc = 16611;
+		rType = 0;
+		vrLen = 3100;
+		vrLoc = 15347;
+	};
+	054517A51045DDC000F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 481";
+		rLen = 0;
+		rLoc = 16611;
+		rType = 0;
+		vrLen = 3100;
+		vrLoc = 15347;
+	};
+	054517A61045DDC000F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
+		name = "BeerTableViewController.h: 17";
+		rLen = 0;
+		rLoc = 317;
+		rType = 0;
+		vrLen = 2382;
+		vrLoc = 0;
+	};
+	054517A71045DDC000F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 481";
+		rLen = 0;
+		rLoc = 16611;
+		rType = 0;
+		vrLen = 3190;
+		vrLoc = 15347;
+	};
+	054517A91045DDDF00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 481";
+		rLen = 0;
+		rLoc = 16611;
+		rType = 0;
+		vrLen = 3120;
+		vrLoc = 15334;
+	};
+	054517AA1045DEBC00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 481";
+		rLen = 0;
+		rLoc = 16611;
+		rType = 0;
+		vrLen = 2479;
+		vrLoc = 40661;
+	};
+	054517AF1045DFC000F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 537";
+		rLen = 19;
+		rLoc = 19525;
+		rType = 0;
+		vrLen = 4244;
+		vrLoc = 17083;
+	};
+	054517B21045E07D00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 547";
+		rLen = 0;
+		rLoc = 19850;
+		rType = 0;
+		vrLen = 3954;
+		vrLoc = 17082;
+	};
+	054517B41045E0B300F9400B /* BeerTableViewController.m:534 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		functionName = "-tableView:cellForRowAtIndexPath:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 534;
+		location = BeerCrush;
+		modificationTime = 273016378.361584;
+		state = 2;
+	};
+	054517B51045E0B500F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 547";
+		rLen = 0;
+		rLoc = 19850;
+		rType = 0;
+		vrLen = 3954;
+		vrLoc = 17082;
+	};
+	054517B81045E0E900F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 547";
+		rLen = 0;
+		rLoc = 19850;
+		rType = 0;
+		vrLen = 3902;
+		vrLoc = 17082;
+	};
+	054517BA1045E0F600F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 547";
+		rLen = 0;
+		rLoc = 19850;
+		rType = 0;
+		vrLen = 3902;
+		vrLoc = 17082;
+	};
+	054517BC1045E10D00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 548";
+		rLen = 0;
+		rLoc = 19850;
+		rType = 0;
+		vrLen = 3925;
+		vrLoc = 17082;
+	};
+	054517BE1045E11900F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 548";
+		rLen = 0;
+		rLoc = 19850;
+		rType = 0;
+		vrLen = 3925;
+		vrLoc = 17082;
+	};
+	054517C11045E1AE00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 546";
+		rLen = 0;
+		rLoc = 19744;
+		rType = 0;
+		vrLen = 3945;
+		vrLoc = 17082;
+	};
+	054517C31045E1BA00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 546";
+		rLen = 0;
+		rLoc = 19744;
+		rType = 0;
+		vrLen = 3945;
+		vrLoc = 17082;
+	};
+	054517C61045E27300F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 1009";
+		rLen = 0;
+		rLoc = 38899;
+		rType = 0;
+		vrLen = 3183;
+		vrLoc = 36639;
+	};
+	054517C91045E2B500F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 543";
+		rLen = 0;
+		rLoc = 19582;
+		rType = 0;
+		vrLen = 4315;
+		vrLoc = 17252;
+	};
+	054517CD1045E31000F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 538";
+		rLen = 0;
+		rLoc = 19240;
+		rType = 0;
+		vrLen = 4033;
+		vrLoc = 17252;
+	};
+	054517D21045E37D00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 1005";
+		rLen = 0;
+		rLoc = 38359;
+		rType = 0;
+		vrLen = 3191;
+		vrLoc = 36735;
+	};
+	054517D51045E3B900F9400B /* BeerTableViewController.m:61 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		functionName = "-dealloc";
+		hitCount = 1;
+		ignoreCount = 0;
+		lineNumber = 61;
+		location = BeerCrush;
+		modificationTime = 273016386.050764;
 		state = 1;
+	};
+	054517D71045E41500F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
+		name = "BeerTableViewController.h: 17";
+		rLen = 0;
+		rLoc = 317;
+		rType = 0;
+		vrLen = 2382;
+		vrLoc = 0;
+	};
+	054517D81045E41500F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 64";
+		rLen = 0;
+		rLoc = 1498;
+		rType = 0;
+		vrLen = 2384;
+		vrLoc = 148;
+	};
+	054517D91045E41500F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 64";
+		rLen = 0;
+		rLoc = 1498;
+		rType = 0;
+		vrLen = 2384;
+		vrLoc = 148;
+	};
+	054517DA1045E41500F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
+		name = "BeerTableViewController.h: 17";
+		rLen = 0;
+		rLoc = 317;
+		rType = 0;
+		vrLen = 2382;
+		vrLoc = 0;
+	};
+	054517DB1045E41500F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 64";
+		rLen = 0;
+		rLoc = 1498;
+		rType = 0;
+		vrLen = 2384;
+		vrLoc = 148;
+	};
+	054517DC1045E41500F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
+		name = "BeerTableViewController.h: 17";
+		rLen = 0;
+		rLoc = 317;
+		rType = 0;
+		vrLen = 2382;
+		vrLoc = 0;
+	};
+	054517DD1045E41500F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 50";
+		rLen = 6;
+		rLoc = 1244;
+		rType = 0;
+		vrLen = 2278;
+		vrLoc = 0;
+	};
+	054517E51045E4B100F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C637F30F56087F00B1C78A /* BeerListTableViewController.m */;
+		name = "BeerListTableViewController.m: 62";
+		rLen = 11;
+		rLoc = 1540;
+		rType = 0;
+		vrLen = 2237;
+		vrLoc = 0;
+	};
+	054517E61045E4B100F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		rLen = 0;
+		rLoc = 62;
+		rType = 1;
+	};
+	054517E71045E4B100F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 50";
+		rLen = 6;
+		rLoc = 1244;
+		rType = 0;
+		vrLen = 3174;
+		vrLoc = 1070;
+	};
+	054517E81045E4B100F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C637F30F56087F00B1C78A /* BeerListTableViewController.m */;
+		name = "BeerListTableViewController.m: 62";
+		rLen = 11;
+		rLoc = 1540;
+		rType = 0;
+		vrLen = 2237;
+		vrLoc = 0;
+	};
+	054517E91045E4B100F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 63";
+		rLen = 755;
+		rLoc = 1498;
+		rType = 0;
+		vrLen = 3218;
+		vrLoc = 1070;
+	};
+	054517EC1045E4D200F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 65";
+		rLen = 0;
+		rLoc = 1663;
+		rType = 0;
+		vrLen = 3214;
+		vrLoc = 1070;
+	};
+	054517EF1045E4F100F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 65";
+		rLen = 144;
+		rLoc = 1663;
+		rType = 0;
+		vrLen = 3204;
+		vrLoc = 1070;
+	};
+	054517F21045E51300F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 71";
+		rLen = 238;
+		rLoc = 1808;
+		rType = 0;
+		vrLen = 3189;
+		vrLoc = 1069;
+	};
+	054517F51045E53300F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 78";
+		rLen = 118;
+		rLoc = 2046;
+		rType = 0;
+		vrLen = 3181;
+		vrLoc = 1069;
+	};
+	054517F91045E54B00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 80";
+		rLen = 58;
+		rLoc = 2106;
+		rType = 0;
+		vrLen = 3185;
+		vrLoc = 1069;
+	};
+	054517FD1045E56100F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 79";
+		rLen = 0;
+		rLoc = 2076;
+		rType = 0;
+		vrLen = 3187;
+		vrLoc = 1069;
+	};
+	054518011045E57600F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 78";
+		rLen = 0;
+		rLoc = 2046;
+		rType = 0;
+		vrLen = 3189;
+		vrLoc = 1069;
+	};
+	054518041045E59200F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 82";
+		rLen = 89;
+		rLoc = 2164;
+		rType = 0;
+		vrLen = 3183;
+		vrLoc = 1069;
+	};
+	054518071045E5AC00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 82";
+		rLen = 0;
+		rLoc = 2164;
+		rType = 0;
+		vrLen = 3179;
+		vrLoc = 1069;
+	};
+	0545180A1045E5C200F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 79";
+		rLen = 0;
+		rLoc = 2076;
+		rType = 0;
+		vrLen = 3177;
+		vrLoc = 1069;
+	};
+	0545180D1045E5DA00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 78";
+		rLen = 0;
+		rLoc = 2046;
+		rType = 0;
+		vrLen = 3175;
+		vrLoc = 1069;
+	};
+	054518111045E5F600F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 78";
+		rLen = 0;
+		rLoc = 2046;
+		rType = 0;
+		vrLen = 3177;
+		vrLoc = 1069;
+	};
+	054518141045E63800F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 78";
+		rLen = 12;
+		rLoc = 2053;
+		rType = 0;
+		vrLen = 2278;
+		vrLoc = 0;
+	};
+	054518161045E64C00F9400B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
+		name = "BeerTableViewController.m: 78";
+		rLen = 12;
+		rLoc = 2053;
+		rType = 0;
+		vrLen = 3522;
+		vrLoc = 1166;
 	};
 	056D28630F53192400A1F223 /* BeerCrush */ = {
 		isa = PBXExecutable;
@@ -11593,7 +12442,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 675";
 		rLen = 0;
-		rLoc = 48537;
+		rLoc = 49733;
 		rType = 0;
 		vrLen = 2430;
 		vrLoc = 19064;
@@ -11643,7 +12492,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 672";
 		rLen = 0;
-		rLoc = 48537;
+		rLoc = 49733;
 		rType = 0;
 		vrLen = 2396;
 		vrLoc = 19105;
@@ -11673,7 +12522,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 672";
 		rLen = 0;
-		rLoc = 48537;
+		rLoc = 49733;
 		rType = 0;
 		vrLen = 2134;
 		vrLoc = 17522;
@@ -11703,7 +12552,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 818";
 		rLen = 0;
-		rLoc = 54801;
+		rLoc = 55997;
 		rType = 0;
 		vrLen = 2626;
 		vrLoc = 23739;
@@ -12203,7 +13052,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 818";
 		rLen = 0;
-		rLoc = 54801;
+		rLoc = 55997;
 		rType = 0;
 		vrLen = 2385;
 		vrLoc = 24219;
@@ -12233,7 +13082,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 818";
 		rLen = 0;
-		rLoc = 54801;
+		rLoc = 55997;
 		rType = 0;
 		vrLen = 2385;
 		vrLoc = 24219;
@@ -12875,7 +13724,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 106";
 		rLen = 1223;
-		rLoc = 7948;
+		rLoc = 7768;
 		rType = 0;
 		vrLen = 2891;
 		vrLoc = 1504;
@@ -13235,7 +14084,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 27";
 		rLen = 0;
-		rLoc = 1216;
+		rLoc = 1236;
 		rType = 0;
 		vrLen = 937;
 		vrLoc = 0;
@@ -13245,7 +14094,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 830";
 		rLen = 0;
-		rLoc = 58065;
+		rLoc = 59261;
 		rType = 0;
 		vrLen = 2465;
 		vrLoc = 23078;
@@ -13265,7 +14114,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 35";
 		rLen = 0;
-		rLoc = 2354;
+		rLoc = 2374;
 		rType = 0;
 		vrLen = 937;
 		vrLoc = 0;
@@ -13405,7 +14254,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 530";
 		rLen = 9;
-		rLoc = 43725;
+		rLoc = 44351;
 		rType = 0;
 		vrLen = 3257;
 		vrLoc = 14944;
@@ -13455,7 +14304,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 35";
 		rLen = 0;
-		rLoc = 2354;
+		rLoc = 2374;
 		rType = 0;
 		vrLen = 937;
 		vrLoc = 0;
@@ -14909,7 +15758,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 201";
 		rLen = 0;
-		rLoc = 12513;
+		rLoc = 12333;
 		rType = 0;
 		vrLen = 2970;
 		vrLoc = 4925;
@@ -14929,7 +15778,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 223";
 		rLen = 0;
-		rLoc = 12516;
+		rLoc = 12336;
 		rType = 0;
 		vrLen = 2528;
 		vrLoc = 6553;
@@ -14949,7 +15798,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 35";
 		rLen = 0;
-		rLoc = 2354;
+		rLoc = 2374;
 		rType = 0;
 		vrLen = 937;
 		vrLoc = 0;
@@ -14959,7 +15808,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 213";
 		rLen = 0;
-		rLoc = 12516;
+		rLoc = 12336;
 		rType = 0;
 		vrLen = 2604;
 		vrLoc = 5619;
@@ -16823,7 +17672,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 474";
 		rLen = 0;
-		rLoc = 41445;
+		rLoc = 41882;
 		rType = 0;
 		vrLen = 2988;
 		vrLoc = 11337;
@@ -16843,7 +17692,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 474";
 		rLen = 0;
-		rLoc = 41445;
+		rLoc = 41882;
 		rType = 0;
 		vrLen = 2609;
 		vrLoc = 12769;
@@ -16873,7 +17722,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 481";
 		rLen = 0;
-		rLoc = 41445;
+		rLoc = 41882;
 		rType = 0;
 		vrLen = 2781;
 		vrLoc = 12053;
@@ -16893,7 +17742,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 481";
 		rLen = 0;
-		rLoc = 41445;
+		rLoc = 41882;
 		rType = 0;
 		vrLen = 2877;
 		vrLoc = 12053;
@@ -16913,7 +17762,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 496";
 		rLen = 0;
-		rLoc = 41807;
+		rLoc = 42433;
 		rType = 0;
 		vrLen = 2926;
 		vrLoc = 13446;
@@ -16933,7 +17782,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 497";
 		rLen = 0;
-		rLoc = 41899;
+		rLoc = 42525;
 		rType = 0;
 		vrLen = 2851;
 		vrLoc = 13446;
@@ -16973,7 +17822,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 496";
 		rLen = 0;
-		rLoc = 41769;
+		rLoc = 42395;
 		rType = 0;
 		vrLen = 2851;
 		vrLoc = 13446;
@@ -16993,7 +17842,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 496";
 		rLen = 0;
-		rLoc = 41769;
+		rLoc = 42395;
 		rType = 0;
 		vrLen = 2851;
 		vrLoc = 13446;
@@ -17093,7 +17942,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 403";
 		rLen = 0;
-		rLoc = 27464;
+		rLoc = 27744;
 		rType = 0;
 		vrLen = 3011;
 		vrLoc = 10185;
@@ -17173,7 +18022,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 599";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2575;
 		vrLoc = 16988;
@@ -17273,7 +18122,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 78";
 		rLen = 0;
-		rLoc = 6805;
+		rLoc = 6625;
 		rType = 0;
 		vrLen = 2899;
 		vrLoc = 1651;
@@ -17293,7 +18142,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 78";
 		rLen = 0;
-		rLoc = 6805;
+		rLoc = 6625;
 		rType = 0;
 		vrLen = 2911;
 		vrLoc = 1651;
@@ -17313,7 +18162,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 137";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9179;
 		rType = 0;
 		vrLen = 3041;
 		vrLoc = 2103;
@@ -17353,7 +18202,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 135";
 		rLen = 0;
-		rLoc = 9323;
+		rLoc = 9143;
 		rType = 0;
 		vrLen = 2827;
 		vrLoc = 2881;
@@ -17393,7 +18242,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 134";
 		rLen = 0;
-		rLoc = 9323;
+		rLoc = 9143;
 		rType = 0;
 		vrLen = 2832;
 		vrLoc = 2881;
@@ -17453,7 +18302,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 134";
 		rLen = 0;
-		rLoc = 9323;
+		rLoc = 9143;
 		rType = 0;
 		vrLen = 2832;
 		vrLoc = 2881;
@@ -17563,7 +18412,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 145";
 		rLen = 0;
-		rLoc = 9509;
+		rLoc = 9329;
 		rType = 0;
 		vrLen = 2834;
 		vrLoc = 2881;
@@ -17613,7 +18462,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 161";
 		rLen = 0;
-		rLoc = 9869;
+		rLoc = 9689;
 		rType = 0;
 		vrLen = 2817;
 		vrLoc = 16458;
@@ -17753,7 +18602,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 138";
 		rLen = 0;
-		rLoc = 9363;
+		rLoc = 9183;
 		rType = 0;
 		vrLen = 2786;
 		vrLoc = 2780;
@@ -17863,7 +18712,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 35";
 		rLen = 0;
-		rLoc = 2354;
+		rLoc = 2374;
 		rType = 0;
 		vrLen = 937;
 		vrLoc = 0;
@@ -18023,7 +18872,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 124";
 		rLen = 0;
-		rLoc = 9167;
+		rLoc = 8987;
 		rType = 0;
 		vrLen = 2837;
 		vrLoc = 2083;
@@ -18137,7 +18986,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 20";
 		rLen = 0;
-		rLoc = 1116;
+		rLoc = 1136;
 		rType = 0;
 		vrLen = 937;
 		vrLoc = 0;
@@ -18157,7 +19006,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 30";
 		rLen = 0;
-		rLoc = 1389;
+		rLoc = 1409;
 		rType = 0;
 		vrLen = 931;
 		vrLoc = 0;
@@ -18167,7 +19016,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 524";
 		rLen = 8;
-		rLoc = 43398;
+		rLoc = 44024;
 		rType = 0;
 		vrLen = 3387;
 		vrLoc = 14701;
@@ -18217,7 +19066,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 528";
 		rLen = 0;
-		rLoc = 43678;
+		rLoc = 44304;
 		rType = 0;
 		vrLen = 1972;
 		vrLoc = 6629;
@@ -18227,7 +19076,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 30";
 		rLen = 0;
-		rLoc = 1389;
+		rLoc = 1409;
 		rType = 0;
 		vrLen = 931;
 		vrLoc = 0;
@@ -18347,7 +19196,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 508";
 		rLen = 0;
-		rLoc = 42772;
+		rLoc = 43398;
 		rType = 0;
 		vrLen = 3119;
 		vrLoc = 14072;
@@ -18357,7 +19206,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 28";
 		rLen = 0;
-		rLoc = 1389;
+		rLoc = 1409;
 		rType = 0;
 		vrLen = 767;
 		vrLoc = 0;
@@ -18367,7 +19216,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 488";
 		rLen = 0;
-		rLoc = 42889;
+		rLoc = 43515;
 		rType = 0;
 		vrLen = 3081;
 		vrLoc = 13167;
@@ -18407,7 +19256,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 494";
 		rLen = 0;
-		rLoc = 43492;
+		rLoc = 44118;
 		rType = 0;
 		vrLen = 3086;
 		vrLoc = 13167;
@@ -18427,7 +19276,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 378";
 		rLen = 0;
-		rLoc = 27464;
+		rLoc = 27744;
 		rType = 0;
 		vrLen = 3096;
 		vrLoc = 9064;
@@ -18551,7 +19400,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 784";
 		rLen = 0;
-		rLoc = 58071;
+		rLoc = 59267;
 		rType = 0;
 		vrLen = 2137;
 		vrLoc = 19512;
@@ -19001,7 +19850,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 495";
 		rLen = 0;
-		rLoc = 43376;
+		rLoc = 44002;
 		rType = 0;
 		vrLen = 3040;
 		vrLoc = 13776;
@@ -19691,7 +20540,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 495";
 		rLen = 0;
-		rLoc = 43376;
+		rLoc = 44002;
 		rType = 0;
 		vrLen = 3002;
 		vrLoc = 817;
@@ -19731,7 +20580,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 71";
 		rLen = 0;
-		rLoc = 6767;
+		rLoc = 6587;
 		rType = 0;
 		vrLen = 3002;
 		vrLoc = 817;
@@ -19791,7 +20640,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 742";
 		rLen = 0;
-		rLoc = 54097;
+		rLoc = 55293;
 		rType = 0;
 		vrLen = 2036;
 		vrLoc = 21168;
@@ -19801,7 +20650,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 27";
 		rLen = 0;
-		rLoc = 1389;
+		rLoc = 1409;
 		rType = 0;
 		vrLen = 775;
 		vrLoc = 0;
@@ -19811,7 +20660,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 775";
 		rLen = 14;
-		rLoc = 54456;
+		rLoc = 55652;
 		rType = 0;
 		vrLen = 2521;
 		vrLoc = 22339;
@@ -19821,7 +20670,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 30";
 		rLen = 0;
-		rLoc = 2314;
+		rLoc = 2334;
 		rType = 0;
 		vrLen = 879;
 		vrLoc = 0;
@@ -19831,7 +20680,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 0;
-		rLoc = 43532;
+		rLoc = 44158;
 		rType = 0;
 		vrLen = 3037;
 		vrLoc = 14097;
@@ -19861,7 +20710,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 0;
-		rLoc = 43508;
+		rLoc = 44134;
 		rType = 0;
 		vrLen = 3029;
 		vrLoc = 14097;
@@ -19901,7 +20750,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 30";
 		rLen = 0;
-		rLoc = 2314;
+		rLoc = 2334;
 		rType = 0;
 		vrLen = 879;
 		vrLoc = 0;
@@ -19941,7 +20790,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 24;
-		rLoc = 43508;
+		rLoc = 44134;
 		rType = 0;
 		vrLen = 3229;
 		vrLoc = 14213;
@@ -19971,7 +20820,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 24;
-		rLoc = 43508;
+		rLoc = 44134;
 		rType = 0;
 		vrLen = 3127;
 		vrLoc = 14185;
@@ -19981,7 +20830,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 30";
 		rLen = 0;
-		rLoc = 2314;
+		rLoc = 2334;
 		rType = 0;
 		vrLen = 879;
 		vrLoc = 0;
@@ -19991,7 +20840,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 664";
 		rLen = 0;
-		rLoc = 48999;
+		rLoc = 50195;
 		rType = 0;
 		vrLen = 2473;
 		vrLoc = 19671;
@@ -20011,7 +20860,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 665";
 		rLen = 0;
-		rLoc = 48999;
+		rLoc = 50195;
 		rType = 0;
 		vrLen = 2533;
 		vrLoc = 19671;
@@ -20041,7 +20890,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 30";
 		rLen = 0;
-		rLoc = 2314;
+		rLoc = 2334;
 		rType = 0;
 		vrLen = 879;
 		vrLoc = 0;
@@ -20061,7 +20910,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 24;
-		rLoc = 43508;
+		rLoc = 44134;
 		rType = 0;
 		vrLen = 2968;
 		vrLoc = 14087;
@@ -20091,7 +20940,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 30";
 		rLen = 0;
-		rLoc = 2314;
+		rLoc = 2334;
 		rType = 0;
 		vrLen = 879;
 		vrLoc = 0;
@@ -20101,7 +20950,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 24;
-		rLoc = 43508;
+		rLoc = 44134;
 		rType = 0;
 		vrLen = 3039;
 		vrLoc = 14112;
@@ -20111,7 +20960,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 13";
 		rLen = 0;
-		rLoc = 486;
+		rLoc = 506;
 		rType = 0;
 		vrLen = 907;
 		vrLoc = 0;
@@ -20121,7 +20970,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 24;
-		rLoc = 43508;
+		rLoc = 44134;
 		rType = 0;
 		vrLen = 3039;
 		vrLoc = 14112;
@@ -20141,7 +20990,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 24;
-		rLoc = 43508;
+		rLoc = 44134;
 		rType = 0;
 		vrLen = 3057;
 		vrLoc = 14101;
@@ -20161,7 +21010,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 858";
 		rLen = 0;
-		rLoc = 58071;
+		rLoc = 59267;
 		rType = 0;
 		vrLen = 3163;
 		vrLoc = 1889;
@@ -20201,7 +21050,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 375";
 		rLen = 0;
-		rLoc = 27464;
+		rLoc = 27744;
 		rType = 0;
 		vrLen = 2867;
 		vrLoc = 9746;
@@ -20221,7 +21070,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 697";
 		rLen = 0;
-		rLoc = 49512;
+		rLoc = 50708;
 		rType = 0;
 		vrLen = 3120;
 		vrLoc = 1866;
@@ -20241,7 +21090,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 109";
 		rLen = 0;
-		rLoc = 8461;
+		rLoc = 8281;
 		rType = 0;
 		vrLen = 3120;
 		vrLoc = 1866;
@@ -20271,7 +21120,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 109";
 		rLen = 0;
-		rLoc = 8461;
+		rLoc = 8281;
 		rType = 0;
 		vrLen = 3120;
 		vrLoc = 1866;
@@ -20321,7 +21170,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 109";
 		rLen = 0;
-		rLoc = 8461;
+		rLoc = 8281;
 		rType = 0;
 		vrLen = 3120;
 		vrLoc = 1866;
@@ -20361,7 +21210,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 675";
 		rLen = 0;
-		rLoc = 48537;
+		rLoc = 49733;
 		rType = 0;
 		vrLen = 2360;
 		vrLoc = 18943;
@@ -20889,7 +21738,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 0;
-		rLoc = 43303;
+		rLoc = 43929;
 		rType = 0;
 		vrLen = 3153;
 		vrLoc = 15396;
@@ -20927,7 +21776,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 0;
-		rLoc = 43303;
+		rLoc = 43929;
 		rType = 0;
 		vrLen = 3104;
 		vrLoc = 15282;
@@ -20977,7 +21826,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 0;
-		rLoc = 43303;
+		rLoc = 43929;
 		rType = 0;
 		vrLen = 3153;
 		vrLoc = 15396;
@@ -21775,7 +22624,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 669";
 		rLen = 0;
-		rLoc = 48537;
+		rLoc = 49733;
 		rType = 0;
 		vrLen = 2445;
 		vrLoc = 18941;
@@ -21875,7 +22724,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 669";
 		rLen = 0;
-		rLoc = 48537;
+		rLoc = 49733;
 		rType = 0;
 		vrLen = 2445;
 		vrLoc = 18941;
@@ -21935,7 +22784,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 669";
 		rLen = 0;
-		rLoc = 48537;
+		rLoc = 49733;
 		rType = 0;
 		vrLen = 2445;
 		vrLoc = 18941;
@@ -22115,7 +22964,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 530";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 3302;
 		vrLoc = 14416;
@@ -22135,7 +22984,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 530";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 3302;
 		vrLoc = 14416;
@@ -22152,7 +23001,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 530";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 3302;
 		vrLoc = 14416;
@@ -23298,7 +24147,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 471";
 		rLen = 0;
-		rLoc = 41769;
+		rLoc = 42395;
 		rType = 0;
 		vrLen = 3095;
 		vrLoc = 12906;
@@ -23318,7 +24167,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 176";
 		rLen = 0;
-		rLoc = 10724;
+		rLoc = 10544;
 		rType = 0;
 		vrLen = 2284;
 		vrLoc = 5904;
@@ -23348,7 +24197,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 176";
 		rLen = 0;
-		rLoc = 10724;
+		rLoc = 10544;
 		rType = 0;
 		vrLen = 2284;
 		vrLoc = 5904;
@@ -23358,7 +24207,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 176";
 		rLen = 0;
-		rLoc = 10724;
+		rLoc = 10544;
 		rType = 0;
 		vrLen = 2284;
 		vrLoc = 5904;
@@ -23378,7 +24227,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 233";
 		rLen = 0;
-		rLoc = 12539;
+		rLoc = 12359;
 		rType = 0;
 		vrLen = 2830;
 		vrLoc = 4863;
@@ -23398,7 +24247,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 280";
 		rLen = 0;
-		rLoc = 14875;
+		rLoc = 14695;
 		rType = 0;
 		vrLen = 2423;
 		vrLoc = 8312;
@@ -23418,7 +24267,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 280";
 		rLen = 0;
-		rLoc = 14875;
+		rLoc = 14695;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 8144;
@@ -23438,7 +24287,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 279";
 		rLen = 0;
-		rLoc = 14875;
+		rLoc = 14695;
 		rType = 0;
 		vrLen = 2224;
 		vrLoc = 8144;
@@ -23458,7 +24307,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 279";
 		rLen = 0;
-		rLoc = 14875;
+		rLoc = 14695;
 		rType = 0;
 		vrLen = 2363;
 		vrLoc = 8144;
@@ -23478,7 +24327,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 279";
 		rLen = 0;
-		rLoc = 14875;
+		rLoc = 14695;
 		rType = 0;
 		vrLen = 2224;
 		vrLoc = 8144;
@@ -23508,7 +24357,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 279";
 		rLen = 0;
-		rLoc = 14875;
+		rLoc = 14695;
 		rType = 0;
 		vrLen = 2224;
 		vrLoc = 8144;
@@ -23528,7 +24377,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 279";
 		rLen = 0;
-		rLoc = 14875;
+		rLoc = 14695;
 		rType = 0;
 		vrLen = 2224;
 		vrLoc = 8144;
@@ -23908,7 +24757,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 279";
 		rLen = 0;
-		rLoc = 14875;
+		rLoc = 14695;
 		rType = 0;
 		vrLen = 2234;
 		vrLoc = 8134;
@@ -23978,7 +24827,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 279";
 		rLen = 0;
-		rLoc = 14875;
+		rLoc = 14695;
 		rType = 0;
 		vrLen = 2310;
 		vrLoc = 8134;
@@ -24008,7 +24857,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 279";
 		rLen = 0;
-		rLoc = 14875;
+		rLoc = 14695;
 		rType = 0;
 		vrLen = 2234;
 		vrLoc = 8134;
@@ -24308,7 +25157,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 279";
 		rLen = 0;
-		rLoc = 14875;
+		rLoc = 14695;
 		rType = 0;
 		vrLen = 2230;
 		vrLoc = 8134;
@@ -24388,7 +25237,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 279";
 		rLen = 0;
-		rLoc = 14875;
+		rLoc = 14695;
 		rType = 0;
 		vrLen = 2230;
 		vrLoc = 8134;
@@ -25818,7 +26667,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 372";
 		rLen = 0;
-		rLoc = 27464;
+		rLoc = 27744;
 		rType = 0;
 		vrLen = 3185;
 		vrLoc = 9513;
@@ -25838,7 +26687,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 371";
 		rLen = 0;
-		rLoc = 27464;
+		rLoc = 27744;
 		rType = 0;
 		vrLen = 3097;
 		vrLoc = 9513;
@@ -25878,7 +26727,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 371";
 		rLen = 0;
-		rLoc = 27464;
+		rLoc = 27744;
 		rType = 0;
 		vrLen = 3097;
 		vrLoc = 9513;
@@ -26721,7 +27570,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 0;
-		rLoc = 43492;
+		rLoc = 44118;
 		rType = 0;
 		vrLen = 3110;
 		vrLoc = 14182;
@@ -26801,7 +27650,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 0;
-		rLoc = 43492;
+		rLoc = 44118;
 		rType = 0;
 		vrLen = 3081;
 		vrLoc = 14178;
@@ -26821,7 +27670,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 0;
-		rLoc = 43492;
+		rLoc = 44118;
 		rType = 0;
 		vrLen = 3110;
 		vrLoc = 14182;
@@ -27291,7 +28140,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 527";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2017;
 		vrLoc = 18353;
@@ -27421,7 +28270,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 14;
-		rLoc = 43398;
+		rLoc = 44024;
 		rType = 0;
 		vrLen = 3099;
 		vrLoc = 14178;
@@ -27441,7 +28290,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 113";
 		rLen = 0;
-		rLoc = 8741;
+		rLoc = 8561;
 		rType = 0;
 		vrLen = 3005;
 		vrLoc = 1562;
@@ -27541,7 +28390,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 113";
 		rLen = 0;
-		rLoc = 8741;
+		rLoc = 8561;
 		rType = 0;
 		vrLen = 3027;
 		vrLoc = 1540;
@@ -27601,7 +28450,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 113";
 		rLen = 0;
-		rLoc = 8741;
+		rLoc = 8561;
 		rType = 0;
 		vrLen = 3026;
 		vrLoc = 1540;
@@ -27701,7 +28550,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 675";
 		rLen = 0;
-		rLoc = 48755;
+		rLoc = 49951;
 		rType = 0;
 		vrLen = 2568;
 		vrLoc = 20490;
@@ -27741,7 +28590,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 529";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 3288;
 		vrLoc = 15111;
@@ -27781,7 +28630,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 529";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 3198;
 		vrLoc = 15205;
@@ -27801,7 +28650,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 529";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 3162;
 		vrLoc = 15205;
@@ -27831,7 +28680,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 529";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 3328;
 		vrLoc = 15039;
@@ -27871,7 +28720,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 529";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 3356;
 		vrLoc = 15007;
@@ -27891,7 +28740,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 527";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2017;
 		vrLoc = 18353;
@@ -28061,7 +28910,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 527";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2464;
 		vrLoc = 19755;
@@ -28091,7 +28940,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 686";
 		rLen = 0;
-		rLoc = 48937;
+		rLoc = 50133;
 		rType = 0;
 		vrLen = 2498;
 		vrLoc = 19471;
@@ -28151,7 +29000,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 527";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2464;
 		vrLoc = 19755;
@@ -28171,7 +29020,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 681";
 		rLen = 0;
-		rLoc = 48899;
+		rLoc = 50095;
 		rType = 0;
 		vrLen = 2386;
 		vrLoc = 19466;
@@ -28191,7 +29040,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 681";
 		rLen = 0;
-		rLoc = 48850;
+		rLoc = 50046;
 		rType = 0;
 		vrLen = 2429;
 		vrLoc = 19471;
@@ -28211,7 +29060,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 686";
 		rLen = 0;
-		rLoc = 48937;
+		rLoc = 50133;
 		rType = 0;
 		vrLen = 2498;
 		vrLoc = 19471;
@@ -28380,7 +29229,7 @@
 		isa = PBXTextBookmark;
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		rLen = 0;
-		rLoc = 1367;
+		rLoc = 1392;
 		rType = 1;
 	};
 	05B7D91B103DFE3F0021EEDA /* PBXTextBookmark */ = {
@@ -28398,7 +29247,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 681";
 		rLen = 0;
-		rLoc = 48892;
+		rLoc = 50088;
 		rType = 0;
 		vrLen = 2493;
 		vrLoc = 19471;
@@ -28418,7 +29267,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 681";
 		rLen = 0;
-		rLoc = 48892;
+		rLoc = 50088;
 		rType = 0;
 		vrLen = 2493;
 		vrLoc = 19471;
@@ -28435,7 +29284,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 681";
 		rLen = 0;
-		rLoc = 48892;
+		rLoc = 50088;
 		rType = 0;
 		vrLen = 2493;
 		vrLoc = 19471;
@@ -28515,7 +29364,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 681";
 		rLen = 0;
-		rLoc = 48892;
+		rLoc = 50088;
 		rType = 0;
 		vrLen = 2670;
 		vrLoc = 0;
@@ -28575,7 +29424,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 679";
 		rLen = 20;
-		rLoc = 48827;
+		rLoc = 50023;
 		rType = 0;
 		vrLen = 2565;
 		vrLoc = 19317;
@@ -28585,7 +29434,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 681";
 		rLen = 0;
-		rLoc = 48892;
+		rLoc = 50088;
 		rType = 0;
 		vrLen = 2670;
 		vrLoc = 0;
@@ -28605,7 +29454,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 679";
 		rLen = 20;
-		rLoc = 48827;
+		rLoc = 50023;
 		rType = 0;
 		vrLen = 2565;
 		vrLoc = 19317;
@@ -28665,7 +29514,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 679";
 		rLen = 20;
-		rLoc = 48827;
+		rLoc = 50023;
 		rType = 0;
 		vrLen = 2718;
 		vrLoc = 8960;
@@ -28685,7 +29534,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 679";
 		rLen = 20;
-		rLoc = 48827;
+		rLoc = 50023;
 		rType = 0;
 		vrLen = 2718;
 		vrLoc = 8960;
@@ -28705,7 +29554,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 679";
 		rLen = 20;
-		rLoc = 48827;
+		rLoc = 50023;
 		rType = 0;
 		vrLen = 2718;
 		vrLoc = 8960;
@@ -28835,7 +29684,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 679";
 		rLen = 20;
-		rLoc = 48827;
+		rLoc = 50023;
 		rType = 0;
 		vrLen = 2696;
 		vrLoc = 0;
@@ -28935,7 +29784,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 679";
 		rLen = 20;
-		rLoc = 48827;
+		rLoc = 50023;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 6449;
@@ -28955,7 +29804,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 679";
 		rLen = 20;
-		rLoc = 48827;
+		rLoc = 50023;
 		rType = 0;
 		vrLen = 2696;
 		vrLoc = 0;
@@ -29503,7 +30352,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 679";
 		rLen = 20;
-		rLoc = 48827;
+		rLoc = 50023;
 		rType = 0;
 		vrLen = 3084;
 		vrLoc = 1971;
@@ -29573,7 +30422,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 679";
 		rLen = 20;
-		rLoc = 48827;
+		rLoc = 50023;
 		rType = 0;
 		vrLen = 3084;
 		vrLoc = 1971;
@@ -29593,7 +30442,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 815";
 		rLen = 0;
-		rLoc = 54020;
+		rLoc = 55216;
 		rType = 0;
 		vrLen = 2653;
 		vrLoc = 23683;
@@ -29653,7 +30502,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 815";
 		rLen = 0;
-		rLoc = 54020;
+		rLoc = 55216;
 		rType = 0;
 		vrLen = 2653;
 		vrLoc = 23683;
@@ -29663,7 +30512,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 815";
 		rLen = 0;
-		rLoc = 54020;
+		rLoc = 55216;
 		rType = 0;
 		vrLen = 2653;
 		vrLoc = 23683;
@@ -29753,7 +30602,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 365";
 		rLen = 0;
-		rLoc = 18171;
+		rLoc = 18161;
 		rType = 0;
 		vrLen = 2976;
 		vrLoc = 9409;
@@ -29773,7 +30622,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 358";
 		rLen = 0;
-		rLoc = 18171;
+		rLoc = 18161;
 		rType = 0;
 		vrLen = 3088;
 		vrLoc = 9409;
@@ -29793,7 +30642,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 362";
 		rLen = 0;
-		rLoc = 18171;
+		rLoc = 18161;
 		rType = 0;
 		vrLen = 3088;
 		vrLoc = 9409;
@@ -29813,7 +30662,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 353";
 		rLen = 0;
-		rLoc = 15787;
+		rLoc = 15607;
 		rType = 0;
 		vrLen = 3326;
 		vrLoc = 9409;
@@ -29833,7 +30682,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 353";
 		rLen = 0;
-		rLoc = 15787;
+		rLoc = 15607;
 		rType = 0;
 		vrLen = 3248;
 		vrLoc = 9409;
@@ -29853,7 +30702,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 361";
 		rLen = 47;
-		rLoc = 18124;
+		rLoc = 18114;
 		rType = 0;
 		vrLen = 3254;
 		vrLoc = 9409;
@@ -29873,7 +30722,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 360";
 		rLen = 0;
-		rLoc = 15787;
+		rLoc = 15607;
 		rType = 0;
 		vrLen = 3300;
 		vrLoc = 9409;
@@ -29893,7 +30742,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 353";
 		rLen = 0;
-		rLoc = 15787;
+		rLoc = 15607;
 		rType = 0;
 		vrLen = 3306;
 		vrLoc = 9409;
@@ -29913,7 +30762,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 362";
 		rLen = 0;
-		rLoc = 15787;
+		rLoc = 15607;
 		rType = 0;
 		vrLen = 3306;
 		vrLoc = 9409;
@@ -29933,7 +30782,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 363";
 		rLen = 47;
-		rLoc = 18124;
+		rLoc = 18114;
 		rType = 0;
 		vrLen = 3288;
 		vrLoc = 9409;
@@ -29953,7 +30802,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 350";
 		rLen = 0;
-		rLoc = 15787;
+		rLoc = 15607;
 		rType = 0;
 		vrLen = 3286;
 		vrLoc = 9409;
@@ -29973,7 +30822,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 25";
 		rLen = 367;
-		rLoc = 749;
+		rLoc = 769;
 		rType = 0;
 		vrLen = 1195;
 		vrLoc = 0;
@@ -29983,7 +30832,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 411";
 		rLen = 0;
-		rLoc = 30047;
+		rLoc = 30327;
 		rType = 0;
 		vrLen = 2632;
 		vrLoc = 10999;
@@ -29993,7 +30842,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 411";
 		rLen = 0;
-		rLoc = 30047;
+		rLoc = 30327;
 		rType = 0;
 		vrLen = 2632;
 		vrLoc = 10999;
@@ -30003,7 +30852,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 25";
 		rLen = 367;
-		rLoc = 749;
+		rLoc = 769;
 		rType = 0;
 		vrLen = 1195;
 		vrLoc = 0;
@@ -30013,7 +30862,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 429";
 		rLen = 0;
-		rLoc = 31838;
+		rLoc = 32118;
 		rType = 0;
 		vrLen = 2924;
 		vrLoc = 11233;
@@ -30033,7 +30882,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 38";
 		rLen = 0;
-		rLoc = 1456;
+		rLoc = 1476;
 		rType = 0;
 		vrLen = 1397;
 		vrLoc = 0;
@@ -30043,7 +30892,7 @@
 		comments = "error: 'ratingControl' undeclared (first use in this function)";
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		rLen = 1;
-		rLoc = 749;
+		rLoc = 755;
 		rType = 1;
 	};
 	05B7DA18103F13BA0021EEDA /* PBXTextBookmark */ = {
@@ -30051,7 +30900,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 399";
 		rLen = 0;
-		rLoc = 28387;
+		rLoc = 28667;
 		rType = 0;
 		vrLen = 3127;
 		vrLoc = 10372;
@@ -30061,7 +30910,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 37";
 		rLen = 0;
-		rLoc = 1584;
+		rLoc = 1604;
 		rType = 0;
 		vrLen = 1285;
 		vrLoc = 0;
@@ -30071,7 +30920,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 415";
 		rLen = 0;
-		rLoc = 29438;
+		rLoc = 29718;
 		rType = 0;
 		vrLen = 3400;
 		vrLoc = 10006;
@@ -30081,7 +30930,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 38";
 		rLen = 0;
-		rLoc = 1456;
+		rLoc = 1476;
 		rType = 0;
 		vrLen = 1397;
 		vrLoc = 0;
@@ -30091,7 +30940,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 54";
 		rLen = 0;
-		rLoc = 1808;
+		rLoc = 1498;
 		rType = 0;
 		vrLen = 2310;
 		vrLoc = 0;
@@ -30101,7 +30950,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 38";
 		rLen = 0;
-		rLoc = 1456;
+		rLoc = 1476;
 		rType = 0;
 		vrLen = 1397;
 		vrLoc = 0;
@@ -30111,7 +30960,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 406";
 		rLen = 0;
-		rLoc = 28672;
+		rLoc = 28952;
 		rType = 0;
 		vrLen = 3597;
 		vrLoc = 9801;
@@ -30131,7 +30980,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 337";
 		rLen = 0;
-		rLoc = 15203;
+		rLoc = 15023;
 		rType = 0;
 		vrLen = 1481;
 		vrLoc = 8513;
@@ -30151,7 +31000,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 277";
 		rLen = 0;
-		rLoc = 14728;
+		rLoc = 14548;
 		rType = 0;
 		vrLen = 2919;
 		vrLoc = 9249;
@@ -30171,7 +31020,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 520";
 		rLen = 0;
-		rLoc = 36524;
+		rLoc = 36804;
 		rType = 0;
 		vrLen = 3277;
 		vrLoc = 13333;
@@ -30191,7 +31040,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 520";
 		rLen = 0;
-		rLoc = 36524;
+		rLoc = 36804;
 		rType = 0;
 		vrLen = 3103;
 		vrLoc = 13905;
@@ -30211,7 +31060,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 520";
 		rLen = 0;
-		rLoc = 36524;
+		rLoc = 36804;
 		rType = 0;
 		vrLen = 2916;
 		vrLoc = 9245;
@@ -30231,7 +31080,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 520";
 		rLen = 0;
-		rLoc = 36524;
+		rLoc = 36804;
 		rType = 0;
 		vrLen = 2916;
 		vrLoc = 9245;
@@ -30251,7 +31100,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 520";
 		rLen = 0;
-		rLoc = 36524;
+		rLoc = 36804;
 		rType = 0;
 		vrLen = 3383;
 		vrLoc = 15530;
@@ -30271,7 +31120,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 520";
 		rLen = 0;
-		rLoc = 36524;
+		rLoc = 36804;
 		rType = 0;
 		vrLen = 3060;
 		vrLoc = 9289;
@@ -30291,7 +31140,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 520";
 		rLen = 0;
-		rLoc = 36524;
+		rLoc = 36804;
 		rType = 0;
 		vrLen = 3060;
 		vrLoc = 9289;
@@ -30311,7 +31160,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 513";
 		rLen = 137;
-		rLoc = 36524;
+		rLoc = 36804;
 		rType = 0;
 		vrLen = 3502;
 		vrLoc = 13980;
@@ -30331,7 +31180,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 513";
 		rLen = 137;
-		rLoc = 36524;
+		rLoc = 36804;
 		rType = 0;
 		vrLen = 2484;
 		vrLoc = 9099;
@@ -30351,7 +31200,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 383";
 		rLen = 0;
-		rLoc = 15787;
+		rLoc = 15607;
 		rType = 0;
 		vrLen = 3019;
 		vrLoc = 9553;
@@ -30371,7 +31220,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 386";
 		rLen = 0;
-		rLoc = 18170;
+		rLoc = 18160;
 		rType = 0;
 		vrLen = 2631;
 		vrLoc = 9185;
@@ -30391,7 +31240,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 365";
 		rLen = 0;
-		rLoc = 15787;
+		rLoc = 15607;
 		rType = 0;
 		vrLen = 2631;
 		vrLoc = 9185;
@@ -30421,7 +31270,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 365";
 		rLen = 0;
-		rLoc = 15787;
+		rLoc = 15607;
 		rType = 0;
 		vrLen = 2631;
 		vrLoc = 9185;
@@ -30691,7 +31540,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 493";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3191;
 		vrLoc = 13859;
@@ -30711,7 +31560,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 493";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3191;
 		vrLoc = 13859;
@@ -30731,7 +31580,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 493";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3191;
 		vrLoc = 13859;
@@ -30771,7 +31620,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 493";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3219;
 		vrLoc = 13831;
@@ -30791,7 +31640,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 490";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3204;
 		vrLoc = 13831;
@@ -30811,7 +31660,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 495";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3101;
 		vrLoc = 13831;
@@ -30831,7 +31680,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 495";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3204;
 		vrLoc = 13831;
@@ -30851,7 +31700,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 521";
 		rLen = 0;
-		rLoc = 36606;
+		rLoc = 36886;
 		rType = 0;
 		vrLen = 3096;
 		vrLoc = 13831;
@@ -30871,7 +31720,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3072;
 		vrLoc = 13831;
@@ -30891,7 +31740,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 530";
 		rLen = 0;
-		rLoc = 36606;
+		rLoc = 36886;
 		rType = 0;
 		vrLen = 3436;
 		vrLoc = 13831;
@@ -30911,7 +31760,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 500";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3437;
 		vrLoc = 13831;
@@ -30931,7 +31780,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 530";
 		rLen = 0;
-		rLoc = 36606;
+		rLoc = 36886;
 		rType = 0;
 		vrLen = 3542;
 		vrLoc = 14035;
@@ -30951,7 +31800,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 500";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3579;
 		vrLoc = 14035;
@@ -30971,7 +31820,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 502";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3600;
 		vrLoc = 13887;
@@ -30991,7 +31840,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 536";
 		rLen = 0;
-		rLoc = 36606;
+		rLoc = 36886;
 		rType = 0;
 		vrLen = 3613;
 		vrLoc = 14046;
@@ -31011,7 +31860,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 491";
 		rLen = 0;
-		rLoc = 36176;
+		rLoc = 36456;
 		rType = 0;
 		vrLen = 3652;
 		vrLoc = 14046;
@@ -31031,7 +31880,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 491";
 		rLen = 0;
-		rLoc = 36176;
+		rLoc = 36456;
 		rType = 0;
 		vrLen = 2179;
 		vrLoc = 6711;
@@ -31051,7 +31900,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 491";
 		rLen = 0;
-		rLoc = 36176;
+		rLoc = 36456;
 		rType = 0;
 		vrLen = 3674;
 		vrLoc = 13974;
@@ -31071,7 +31920,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 493";
 		rLen = 0;
-		rLoc = 36176;
+		rLoc = 36456;
 		rType = 0;
 		vrLen = 3670;
 		vrLoc = 13974;
@@ -31091,7 +31940,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 493";
 		rLen = 0;
-		rLoc = 36176;
+		rLoc = 36456;
 		rType = 0;
 		vrLen = 3670;
 		vrLoc = 13974;
@@ -31131,7 +31980,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1086";
 		rLen = 5;
-		rLoc = 58065;
+		rLoc = 59261;
 		rType = 0;
 		vrLen = 2236;
 		vrLoc = 31598;
@@ -31141,7 +31990,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 504";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3676;
 		vrLoc = 13974;
@@ -31161,7 +32010,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 496";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3654;
 		vrLoc = 14112;
@@ -31171,7 +32020,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 45";
 		rLen = 0;
-		rLoc = 2314;
+		rLoc = 2334;
 		rType = 0;
 		vrLen = 1422;
 		vrLoc = 0;
@@ -31181,7 +32030,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 496";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3603;
 		vrLoc = 14112;
@@ -31191,7 +32040,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 46";
 		rLen = 0;
-		rLoc = 2314;
+		rLoc = 2334;
 		rType = 0;
 		vrLen = 1473;
 		vrLoc = 0;
@@ -31211,7 +32060,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 45";
 		rLen = 0;
-		rLoc = 2237;
+		rLoc = 2257;
 		rType = 0;
 		vrLen = 1471;
 		vrLoc = 0;
@@ -31221,7 +32070,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 496";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3591;
 		vrLoc = 13548;
@@ -31231,7 +32080,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 45";
 		rLen = 0;
-		rLoc = 2237;
+		rLoc = 2257;
 		rType = 0;
 		vrLen = 1471;
 		vrLoc = 0;
@@ -31241,7 +32090,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 496";
 		rLen = 0;
-		rLoc = 36298;
+		rLoc = 36578;
 		rType = 0;
 		vrLen = 3591;
 		vrLoc = 13548;
@@ -31251,7 +32100,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 45";
 		rLen = 0;
-		rLoc = 2261;
+		rLoc = 2281;
 		rType = 0;
 		vrLen = 1479;
 		vrLoc = 0;
@@ -31261,7 +32110,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1086";
 		rLen = 5;
-		rLoc = 58065;
+		rLoc = 59261;
 		rType = 0;
 		vrLen = 2236;
 		vrLoc = 31598;
@@ -31341,7 +32190,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 50";
 		rLen = 0;
-		rLoc = 1575;
+		rLoc = 1498;
 		rType = 0;
 		vrLen = 3913;
 		vrLoc = 14343;
@@ -31361,7 +32210,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 50";
 		rLen = 0;
-		rLoc = 1575;
+		rLoc = 1498;
 		rType = 0;
 		vrLen = 3913;
 		vrLoc = 14343;
@@ -31378,7 +32227,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 50";
 		rLen = 0;
-		rLoc = 1575;
+		rLoc = 1498;
 		rType = 0;
 		vrLen = 3913;
 		vrLoc = 14343;
@@ -31417,7 +32266,7 @@
 		isa = PBXTextBookmark;
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		rLen = 0;
-		rLoc = 937;
+		rLoc = 943;
 		rType = 1;
 	};
 	05B7DB24103F2B4E0021EEDA /* PBXTextBookmark */ = {
@@ -31435,7 +32284,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 491";
 		rLen = 0;
-		rLoc = 33232;
+		rLoc = 33512;
 		rType = 0;
 		vrLen = 3920;
 		vrLoc = 14343;
@@ -31455,7 +32304,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 491";
 		rLen = 0;
-		rLoc = 33232;
+		rLoc = 33512;
 		rType = 0;
 		vrLen = 3920;
 		vrLoc = 14343;
@@ -31472,7 +32321,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 491";
 		rLen = 0;
-		rLoc = 33232;
+		rLoc = 33512;
 		rType = 0;
 		vrLen = 3920;
 		vrLoc = 14343;
@@ -31511,7 +32360,7 @@
 		isa = PBXTextBookmark;
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		rLen = 0;
-		rLoc = 937;
+		rLoc = 943;
 		rType = 1;
 	};
 	05B7DB30103F3BCD0021EEDA /* PBXTextBookmark */ = {
@@ -31529,7 +32378,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 501";
 		rLen = 0;
-		rLoc = 36143;
+		rLoc = 36423;
 		rType = 0;
 		vrLen = 3942;
 		vrLoc = 14316;
@@ -31549,7 +32398,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 495";
 		rLen = 0;
-		rLoc = 33400;
+		rLoc = 33680;
 		rType = 0;
 		vrLen = 3385;
 		vrLoc = 13848;
@@ -31569,7 +32418,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 563";
 		rLen = 0;
-		rLoc = 36606;
+		rLoc = 36886;
 		rType = 0;
 		vrLen = 3791;
 		vrLoc = 15411;
@@ -31589,7 +32438,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 551";
 		rLen = 0;
-		rLoc = 36220;
+		rLoc = 36500;
 		rType = 0;
 		vrLen = 3905;
 		vrLoc = 15050;
@@ -31609,7 +32458,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 524";
 		rLen = 0;
-		rLoc = 35003;
+		rLoc = 35283;
 		rType = 0;
 		vrLen = 4097;
 		vrLoc = 14262;
@@ -31629,7 +32478,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 1060";
 		rLen = 0;
-		rLoc = 56195;
+		rLoc = 57391;
 		rType = 0;
 		vrLen = 2583;
 		vrLoc = 31334;
@@ -31649,7 +32498,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 603";
 		rLen = 0;
-		rLoc = 39130;
+		rLoc = 39567;
 		rType = 0;
 		vrLen = 2564;
 		vrLoc = 18294;
@@ -31721,7 +32570,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 742";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2579;
 		vrLoc = 22919;
@@ -31731,7 +32580,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 739";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2492;
 		vrLoc = 22828;
@@ -31751,7 +32600,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 740";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2542;
 		vrLoc = 23041;
@@ -31781,7 +32630,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 740";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2159;
 		vrLoc = 23667;
@@ -31801,7 +32650,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 742";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2579;
 		vrLoc = 22919;
@@ -31821,7 +32670,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 742";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2554;
 		vrLoc = 22944;
@@ -31855,7 +32704,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 742";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2554;
 		vrLoc = 22944;
@@ -31879,7 +32728,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 742";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2554;
 		vrLoc = 22944;
@@ -31919,7 +32768,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 731";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2497;
 		vrLoc = 22075;
@@ -31959,7 +32808,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 742";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2554;
 		vrLoc = 22944;
@@ -31989,7 +32838,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 731";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2497;
 		vrLoc = 22075;
@@ -32159,7 +33008,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 731";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2562;
 		vrLoc = 25183;
@@ -32189,7 +33038,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 710";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2332;
 		vrLoc = 22358;
@@ -32219,7 +33068,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 731";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2562;
 		vrLoc = 25183;
@@ -32239,7 +33088,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 710";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2332;
 		vrLoc = 22358;
@@ -32269,7 +33118,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 710";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2332;
 		vrLoc = 22358;
@@ -32289,7 +33138,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 710";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2332;
 		vrLoc = 22358;
@@ -32389,7 +33238,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 710";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2332;
 		vrLoc = 22358;
@@ -32409,7 +33258,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 711";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2449;
 		vrLoc = 22358;
@@ -32439,7 +33288,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 434";
 		rLen = 0;
-		rLoc = 28875;
+		rLoc = 29155;
 		rType = 0;
 		vrLen = 3108;
 		vrLoc = 11167;
@@ -32459,7 +33308,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 711";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2449;
 		vrLoc = 22358;
@@ -32479,7 +33328,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 434";
 		rLen = 0;
-		rLoc = 28875;
+		rLoc = 29155;
 		rType = 0;
 		vrLen = 3108;
 		vrLoc = 11167;
@@ -32569,7 +33418,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 434";
 		rLen = 0;
-		rLoc = 28875;
+		rLoc = 29155;
 		rType = 0;
 		vrLen = 3108;
 		vrLoc = 11167;
@@ -32589,7 +33438,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 689";
 		rLen = 91;
-		rLoc = 43682;
+		rLoc = 44308;
 		rType = 0;
 		vrLen = 2928;
 		vrLoc = 21795;
@@ -32609,7 +33458,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 689";
 		rLen = 91;
-		rLoc = 43682;
+		rLoc = 44308;
 		rType = 0;
 		vrLen = 2928;
 		vrLoc = 21795;
@@ -32627,7 +33476,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 689";
 		rLen = 91;
-		rLoc = 43682;
+		rLoc = 44308;
 		rType = 0;
 		vrLen = 2928;
 		vrLoc = 21795;
@@ -32677,7 +33526,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 690";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2933;
 		vrLoc = 21133;
@@ -32704,7 +33553,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 854";
 		rLen = 0;
-		rLoc = 48850;
+		rLoc = 50046;
 		rType = 0;
 		vrLen = 2569;
 		vrLoc = 25426;
@@ -32724,7 +33573,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 358";
 		rLen = 102;
-		rLoc = 15468;
+		rLoc = 15288;
 		rType = 0;
 		vrLen = 3383;
 		vrLoc = 10838;
@@ -32744,7 +33593,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 690";
 		rLen = 0;
-		rLoc = 45988;
+		rLoc = 47184;
 		rType = 0;
 		vrLen = 2933;
 		vrLoc = 21133;
@@ -32794,7 +33643,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 435";
 		rLen = 0;
-		rLoc = 28875;
+		rLoc = 29155;
 		rType = 0;
 		vrLen = 3019;
 		vrLoc = 11327;
@@ -32814,7 +33663,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 435";
 		rLen = 0;
-		rLoc = 28875;
+		rLoc = 29155;
 		rType = 0;
 		vrLen = 2951;
 		vrLoc = 20880;
@@ -32854,7 +33703,7 @@
 		comments = "error: request for member 'readOnly' in something not a structure or union";
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		rLen = 1;
-		rLoc = 759;
+		rLoc = 765;
 		rType = 1;
 	};
 	05B7DC12103F4F280021EEDA /* PBXTextBookmark */ = {
@@ -32862,7 +33711,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 435";
 		rLen = 0;
-		rLoc = 28875;
+		rLoc = 29155;
 		rType = 0;
 		vrLen = 2951;
 		vrLoc = 20880;
@@ -32892,7 +33741,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 479";
 		rLen = 0;
-		rLoc = 32052;
+		rLoc = 32332;
 		rType = 0;
 		vrLen = 3270;
 		vrLoc = 12867;
@@ -32912,7 +33761,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 472";
 		rLen = 0;
-		rLoc = 31696;
+		rLoc = 31976;
 		rType = 0;
 		vrLen = 3284;
 		vrLoc = 11899;
@@ -32932,7 +33781,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 431";
 		rLen = 0;
-		rLoc = 28438;
+		rLoc = 28718;
 		rType = 0;
 		vrLen = 3270;
 		vrLoc = 12044;
@@ -32961,7 +33810,7 @@
 		isa = PBXTextBookmark;
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		rLen = 0;
-		rLoc = 1367;
+		rLoc = 1392;
 		rType = 1;
 	};
 	05B7DC23103F4FC20021EEDA /* PBXTextBookmark */ = {
@@ -32969,7 +33818,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 431";
 		rLen = 0;
-		rLoc = 28438;
+		rLoc = 28718;
 		rType = 0;
 		vrLen = 3270;
 		vrLoc = 12044;
@@ -32989,7 +33838,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 865";
 		rLen = 0;
-		rLoc = 48850;
+		rLoc = 50046;
 		rType = 0;
 		vrLen = 2423;
 		vrLoc = 26046;
@@ -33009,7 +33858,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 457";
 		rLen = 0;
-		rLoc = 30145;
+		rLoc = 30425;
 		rType = 0;
 		vrLen = 3120;
 		vrLoc = 12287;
@@ -33029,7 +33878,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 457";
 		rLen = 0;
-		rLoc = 30120;
+		rLoc = 30400;
 		rType = 0;
 		vrLen = 3119;
 		vrLoc = 12404;
@@ -33049,7 +33898,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 458";
 		rLen = 0;
-		rLoc = 30205;
+		rLoc = 30485;
 		rType = 0;
 		vrLen = 3114;
 		vrLoc = 12404;
@@ -33069,7 +33918,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 494";
 		rLen = 0;
-		rLoc = 31772;
+		rLoc = 32052;
 		rType = 0;
 		vrLen = 3466;
 		vrLoc = 12404;
@@ -33089,7 +33938,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 494";
 		rLen = 0;
-		rLoc = 31772;
+		rLoc = 32052;
 		rType = 0;
 		vrLen = 3466;
 		vrLoc = 12404;
@@ -33109,7 +33958,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 476";
 		rLen = 0;
-		rLoc = 30891;
+		rLoc = 31171;
 		rType = 0;
 		vrLen = 3347;
 		vrLoc = 13447;
@@ -33129,7 +33978,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 458";
 		rLen = 0;
-		rLoc = 30039;
+		rLoc = 30319;
 		rType = 0;
 		vrLen = 3342;
 		vrLoc = 13447;
@@ -33149,7 +33998,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 455";
 		rLen = 0;
-		rLoc = 30039;
+		rLoc = 30319;
 		rType = 0;
 		vrLen = 3342;
 		vrLoc = 13447;
@@ -33169,7 +34018,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 455";
 		rLen = 0;
-		rLoc = 30039;
+		rLoc = 30319;
 		rType = 0;
 		vrLen = 3337;
 		vrLoc = 13447;
@@ -33199,7 +34048,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 455";
 		rLen = 0;
-		rLoc = 30039;
+		rLoc = 30319;
 		rType = 0;
 		vrLen = 3337;
 		vrLoc = 13447;
@@ -33209,7 +34058,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 455";
 		rLen = 0;
-		rLoc = 30039;
+		rLoc = 30319;
 		rType = 0;
 		vrLen = 3337;
 		vrLoc = 13447;
@@ -33229,7 +34078,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 458";
 		rLen = 0;
-		rLoc = 30039;
+		rLoc = 30319;
 		rType = 0;
 		vrLen = 3684;
 		vrLoc = 12365;
@@ -33249,7 +34098,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 461";
 		rLen = 0;
-		rLoc = 30039;
+		rLoc = 30319;
 		rType = 0;
 		vrLen = 3673;
 		vrLoc = 12365;
@@ -33269,7 +34118,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 496";
 		rLen = 0;
-		rLoc = 31772;
+		rLoc = 32052;
 		rType = 0;
 		vrLen = 3486;
 		vrLoc = 12365;
@@ -33289,7 +34138,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 49";
 		rLen = 0;
-		rLoc = 2314;
+		rLoc = 2334;
 		rType = 0;
 		vrLen = 1555;
 		vrLoc = 0;
@@ -33299,7 +34148,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 648";
 		rLen = 0;
-		rLoc = 39656;
+		rLoc = 40093;
 		rType = 0;
 		vrLen = 2757;
 		vrLoc = 20045;
@@ -33309,7 +34158,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 648";
 		rLen = 0;
-		rLoc = 39656;
+		rLoc = 40093;
 		rType = 0;
 		vrLen = 2757;
 		vrLoc = 20045;
@@ -33319,7 +34168,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 49";
 		rLen = 0;
-		rLoc = 2314;
+		rLoc = 2334;
 		rType = 0;
 		vrLen = 1555;
 		vrLoc = 0;
@@ -33329,7 +34178,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 665";
 		rLen = 0;
-		rLoc = 41326;
+		rLoc = 41763;
 		rType = 0;
 		vrLen = 3136;
 		vrLoc = 19857;
@@ -33349,7 +34198,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 665";
 		rLen = 0;
-		rLoc = 41326;
+		rLoc = 41763;
 		rType = 0;
 		vrLen = 3723;
 		vrLoc = 11929;
@@ -33369,7 +34218,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 655";
 		rLen = 0;
-		rLoc = 39814;
+		rLoc = 40251;
 		rType = 0;
 		vrLen = 3043;
 		vrLoc = 20402;
@@ -33389,7 +34238,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 47";
 		rLen = 13;
-		rLoc = 2299;
+		rLoc = 2319;
 		rType = 0;
 		vrLen = 1555;
 		vrLoc = 0;
@@ -33399,7 +34248,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 672";
 		rLen = 0;
-		rLoc = 39828;
+		rLoc = 40265;
 		rType = 0;
 		vrLen = 3405;
 		vrLoc = 20402;
@@ -33409,7 +34258,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 672";
 		rLen = 0;
-		rLoc = 39828;
+		rLoc = 40265;
 		rType = 0;
 		vrLen = 3405;
 		vrLoc = 20402;
@@ -33419,7 +34268,7 @@
 		fRef = 05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */;
 		name = "BeerTableViewController.h: 47";
 		rLen = 13;
-		rLoc = 2299;
+		rLoc = 2319;
 		rType = 0;
 		vrLen = 1555;
 		vrLoc = 0;
@@ -33429,7 +34278,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 665";
 		rLen = 0;
-		rLoc = 39828;
+		rLoc = 40265;
 		rType = 0;
 		vrLen = 2887;
 		vrLoc = 20832;
@@ -33449,7 +34298,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 663";
 		rLen = 0;
-		rLoc = 39828;
+		rLoc = 40265;
 		rType = 0;
 		vrLen = 2935;
 		vrLoc = 20832;
@@ -33469,7 +34318,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 667";
 		rLen = 0;
-		rLoc = 39828;
+		rLoc = 40265;
 		rType = 0;
 		vrLen = 2916;
 		vrLoc = 20134;
@@ -33489,7 +34338,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 670";
 		rLen = 0;
-		rLoc = 39828;
+		rLoc = 40265;
 		rType = 0;
 		vrLen = 3136;
 		vrLoc = 20134;
@@ -33509,7 +34358,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 666";
 		rLen = 0;
-		rLoc = 39805;
+		rLoc = 40242;
 		rType = 0;
 		vrLen = 3058;
 		vrLoc = 20134;
@@ -33529,7 +34378,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 417";
 		rLen = 0;
-		rLoc = 27578;
+		rLoc = 27858;
 		rType = 0;
 		vrLen = 3311;
 		vrLoc = 11099;
@@ -33549,7 +34398,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 742";
 		rLen = 0;
-		rLoc = 42711;
+		rLoc = 43337;
 		rType = 0;
 		vrLen = 2865;
 		vrLoc = 23324;
@@ -33569,7 +34418,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 742";
 		rLen = 0;
-		rLoc = 42711;
+		rLoc = 43337;
 		rType = 0;
 		vrLen = 2569;
 		vrLoc = 28442;
@@ -33589,7 +34438,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 437";
 		rLen = 0;
-		rLoc = 28619;
+		rLoc = 28899;
 		rType = 0;
 		vrLen = 3377;
 		vrLoc = 11164;
@@ -33609,7 +34458,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 418";
 		rLen = 0;
-		rLoc = 27572;
+		rLoc = 27852;
 		rType = 0;
 		vrLen = 3645;
 		vrLoc = 10720;
@@ -33629,7 +34478,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 348";
 		rLen = 0;
-		rLoc = 15203;
+		rLoc = 15023;
 		rType = 0;
 		vrLen = 2277;
 		vrLoc = 9160;
@@ -33649,7 +34498,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 417";
 		rLen = 0;
-		rLoc = 27527;
+		rLoc = 27807;
 		rType = 0;
 		vrLen = 3653;
 		vrLoc = 10882;
@@ -33669,7 +34518,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 418";
 		rLen = 0;
-		rLoc = 27572;
+		rLoc = 27852;
 		rType = 0;
 		vrLen = 3827;
 		vrLoc = 10253;
@@ -33689,7 +34538,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 441";
 		rLen = 0;
-		rLoc = 28763;
+		rLoc = 29043;
 		rType = 0;
 		vrLen = 3657;
 		vrLoc = 10720;
@@ -33709,7 +34558,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 441";
 		rLen = 0;
-		rLoc = 28763;
+		rLoc = 29043;
 		rType = 0;
 		vrLen = 3420;
 		vrLoc = 11371;
@@ -33719,7 +34568,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 441";
 		rLen = 0;
-		rLoc = 28763;
+		rLoc = 29043;
 		rType = 0;
 		vrLen = 3420;
 		vrLoc = 11371;
@@ -33839,7 +34688,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 441";
 		rLen = 0;
-		rLoc = 28672;
+		rLoc = 28952;
 		rType = 0;
 		vrLen = 3373;
 		vrLoc = 11418;
@@ -33859,7 +34708,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 441";
 		rLen = 0;
-		rLoc = 28672;
+		rLoc = 28952;
 		rType = 0;
 		vrLen = 3373;
 		vrLoc = 11418;
@@ -33879,7 +34728,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 423";
 		rLen = 0;
-		rLoc = 27839;
+		rLoc = 28119;
 		rType = 0;
 		vrLen = 3359;
 		vrLoc = 11371;
@@ -33899,7 +34748,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 272";
 		rLen = 0;
-		rLoc = 14220;
+		rLoc = 14040;
 		rType = 0;
 		vrLen = 1977;
 		vrLoc = 7816;
@@ -33919,7 +34768,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 207";
 		rLen = 2;
-		rLoc = 11448;
+		rLoc = 11268;
 		rType = 0;
 		vrLen = 3113;
 		vrLoc = 4667;
@@ -33939,7 +34788,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 219";
 		rLen = 0;
-		rLoc = 12244;
+		rLoc = 12064;
 		rType = 0;
 		vrLen = 3154;
 		vrLoc = 4667;
@@ -33959,7 +34808,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 443";
 		rLen = 0;
-		rLoc = 27095;
+		rLoc = 27375;
 		rType = 0;
 		vrLen = 3899;
 		vrLoc = 11457;
@@ -33979,7 +34828,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 401";
 		rLen = 0;
-		rLoc = 15787;
+		rLoc = 15607;
 		rType = 0;
 		vrLen = 3269;
 		vrLoc = 10913;
@@ -33999,7 +34848,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 401";
 		rLen = 0;
-		rLoc = 15787;
+		rLoc = 15607;
 		rType = 0;
 		vrLen = 3269;
 		vrLoc = 10913;
@@ -34019,7 +34868,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 445";
 		rLen = 0;
-		rLoc = 18141;
+		rLoc = 18131;
 		rType = 0;
 		vrLen = 3291;
 		vrLoc = 11211;
@@ -34039,7 +34888,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 291";
 		rLen = 0;
-		rLoc = 14220;
+		rLoc = 14040;
 		rType = 0;
 		vrLen = 2573;
 		vrLoc = 8177;
@@ -34059,7 +34908,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 792";
 		rLen = 0;
-		rLoc = 41459;
+		rLoc = 41896;
 		rType = 0;
 		vrLen = 2691;
 		vrLoc = 26086;
@@ -34079,7 +34928,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 835";
 		rLen = 0;
-		rLoc = 41459;
+		rLoc = 41896;
 		rType = 0;
 		vrLen = 2607;
 		vrLoc = 27070;
@@ -34099,7 +34948,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 841";
 		rLen = 0;
-		rLoc = 41459;
+		rLoc = 41896;
 		rType = 0;
 		vrLen = 2632;
 		vrLoc = 27053;
@@ -34119,7 +34968,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 842";
 		rLen = 0;
-		rLoc = 41459;
+		rLoc = 41896;
 		rType = 0;
 		vrLen = 2578;
 		vrLoc = 27053;
@@ -34139,7 +34988,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 842";
 		rLen = 0;
-		rLoc = 41459;
+		rLoc = 41896;
 		rType = 0;
 		vrLen = 2692;
 		vrLoc = 27053;
@@ -34159,7 +35008,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 284";
 		rLen = 0;
-		rLoc = 13303;
+		rLoc = 13123;
 		rType = 0;
 		vrLen = 3128;
 		vrLoc = 7841;
@@ -34179,7 +35028,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 276";
 		rLen = 0;
-		rLoc = 12539;
+		rLoc = 12359;
 		rType = 0;
 		vrLen = 3075;
 		vrLoc = 7841;
@@ -34199,7 +35048,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 193";
 		rLen = 0;
-		rLoc = 10553;
+		rLoc = 10373;
 		rType = 0;
 		vrLen = 3732;
 		vrLoc = 5033;
@@ -34219,7 +35068,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 193";
 		rLen = 0;
-		rLoc = 10553;
+		rLoc = 10373;
 		rType = 0;
 		vrLen = 3732;
 		vrLoc = 5033;
@@ -34239,7 +35088,7 @@
 		fRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */;
 		name = "BeerTableViewController.m: 193";
 		rLen = 0;
-		rLoc = 10553;
+		rLoc = 10373;
 		rType = 0;
 		vrLen = 3732;
 		vrLoc = 5033;
@@ -35222,17 +36071,17 @@
 	};
 	05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1038, 1121}}";
-			sepNavSelRange = "{894, 0}";
-			sepNavVisRange = "{0, 2362}";
+			sepNavIntBoundsRect = "{{0, 0}, {1158, 1121}}";
+			sepNavSelRange = "{317, 0}";
+			sepNavVisRange = "{0, 2382}";
 			sepNavWindowFrame = "{{1494, 573}, {857, 852}}";
 		};
 	};
 	05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1314, 21008}}";
-			sepNavSelRange = "{44028, 0}";
-			sepNavVisRange = "{42348, 2564}";
+			sepNavIntBoundsRect = "{{0, 0}, {1314, 21619}}";
+			sepNavSelRange = "{2053, 12}";
+			sepNavVisRange = "{1166, 3522}";
 			sepNavWindowFrame = "{{1272, 540}, {857, 852}}";
 		};
 	};
@@ -35355,9 +36204,9 @@
 	};
 	05C637F30F56087F00B1C78A /* BeerListTableViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1182, 8333}}";
-			sepNavSelRange = "{3940, 10}";
-			sepNavVisRange = "{1736, 3617}";
+			sepNavIntBoundsRect = "{{0, 0}, {1182, 8398}}";
+			sepNavSelRange = "{1540, 11}";
+			sepNavVisRange = "{0, 2237}";
 			sepNavWindowFrame = "{{1098, 256}, {857, 852}}";
 		};
 	};
@@ -35632,10 +36481,16 @@
 			1D6058900D05DD3D006BFB54 /* BeerCrush */,
 		);
 		breakpoints = (
-			0545171D1045BBEA00F9400B /* BeerTableViewController.m:467 */,
-			054517201045BC0000F9400B /* BeerTableViewController.m:465 */,
-			054517231045BC1800F9400B /* BeerTableViewController.m:450 */,
-			054517561045C84100F9400B /* BeerTableViewController.m:521 */,
+			0545171D1045BBEA00F9400B /* BeerTableViewController.m:461 */,
+			054517201045BC0000F9400B /* BeerTableViewController.m:459 */,
+			054517231045BC1800F9400B /* BeerTableViewController.m:444 */,
+			054517561045C84100F9400B /* BeerTableViewController.m:520 */,
+			0545175D1045D21F00F9400B /* BeerTableViewController.m:162 */,
+			0545175F1045D22D00F9400B /* BeerTableViewController.m:179 */,
+			054517681045D34F00F9400B /* BeerTableViewController.m:1168 */,
+			0545179D1045DD7600F9400B /* BeerTableViewController.m:1099 */,
+			054517B41045E0B300F9400B /* BeerTableViewController.m:534 */,
+			054517D51045E3B900F9400B /* BeerTableViewController.m:61 */,
 		);
 		codeSenseManager = 056D286B0F53192C00A1F223 /* Code sense */;
 		executables = (
@@ -36835,6 +37690,81 @@
 			0545174A1045C5A500F9400B /* PBXTextBookmark */ = 0545174A1045C5A500F9400B /* PBXTextBookmark */;
 			0545174E1045C60700F9400B /* PBXTextBookmark */ = 0545174E1045C60700F9400B /* PBXTextBookmark */;
 			0545174F1045C60700F9400B /* PBXTextBookmark */ = 0545174F1045C60700F9400B /* PBXTextBookmark */;
+			054517581045D14F00F9400B /* PBXTextBookmark */ = 054517581045D14F00F9400B /* PBXTextBookmark */;
+			054517601045D23200F9400B /* PBXTextBookmark */ = 054517601045D23200F9400B /* PBXTextBookmark */;
+			054517631045D28D00F9400B /* PBXTextBookmark */ = 054517631045D28D00F9400B /* PBXTextBookmark */;
+			054517651045D2A800F9400B /* PBXTextBookmark */ = 054517651045D2A800F9400B /* PBXTextBookmark */;
+			054517661045D33F00F9400B /* PBXTextBookmark */ = 054517661045D33F00F9400B /* PBXTextBookmark */;
+			054517691045D35200F9400B /* PBXTextBookmark */ = 054517691045D35200F9400B /* PBXTextBookmark */;
+			0545176D1045D61A00F9400B /* PBXTextBookmark */ = 0545176D1045D61A00F9400B /* PBXTextBookmark */;
+			0545176E1045D61A00F9400B /* PBXTextBookmark */ = 0545176E1045D61A00F9400B /* PBXTextBookmark */;
+			0545176F1045D61A00F9400B /* PBXTextBookmark */ = 0545176F1045D61A00F9400B /* PBXTextBookmark */;
+			054517701045D61A00F9400B /* PBXTextBookmark */ = 054517701045D61A00F9400B /* PBXTextBookmark */;
+			054517711045D61A00F9400B /* PBXTextBookmark */ = 054517711045D61A00F9400B /* PBXTextBookmark */;
+			054517751045D71D00F9400B /* PBXTextBookmark */ = 054517751045D71D00F9400B /* PBXTextBookmark */;
+			054517771045D73200F9400B /* PBXTextBookmark */ = 054517771045D73200F9400B /* PBXTextBookmark */;
+			054517791045D7FB00F9400B /* PBXTextBookmark */ = 054517791045D7FB00F9400B /* PBXTextBookmark */;
+			0545177D1045D89B00F9400B /* PBXTextBookmark */ = 0545177D1045D89B00F9400B /* PBXTextBookmark */;
+			054517801045D90D00F9400B /* PBXTextBookmark */ = 054517801045D90D00F9400B /* PBXTextBookmark */;
+			054517821045D98E00F9400B /* PBXTextBookmark */ = 054517821045D98E00F9400B /* PBXTextBookmark */;
+			054517841045D9B000F9400B /* PBXTextBookmark */ = 054517841045D9B000F9400B /* PBXTextBookmark */;
+			054517871045D9F200F9400B /* PBXTextBookmark */ = 054517871045D9F200F9400B /* PBXTextBookmark */;
+			054517891045DA2800F9400B /* PBXTextBookmark */ = 054517891045DA2800F9400B /* PBXTextBookmark */;
+			0545178B1045DAB200F9400B /* PBXTextBookmark */ = 0545178B1045DAB200F9400B /* PBXTextBookmark */;
+			0545178E1045DADF00F9400B /* PBXTextBookmark */ = 0545178E1045DADF00F9400B /* PBXTextBookmark */;
+			054517901045DB0500F9400B /* PBXTextBookmark */ = 054517901045DB0500F9400B /* PBXTextBookmark */;
+			054517921045DB2B00F9400B /* PBXTextBookmark */ = 054517921045DB2B00F9400B /* PBXTextBookmark */;
+			054517941045DB5600F9400B /* PBXTextBookmark */ = 054517941045DB5600F9400B /* PBXTextBookmark */;
+			054517961045DB7800F9400B /* PBXTextBookmark */ = 054517961045DB7800F9400B /* PBXTextBookmark */;
+			054517981045DCCC00F9400B /* PBXTextBookmark */ = 054517981045DCCC00F9400B /* PBXTextBookmark */;
+			0545179B1045DD6900F9400B /* PBXTextBookmark */ = 0545179B1045DD6900F9400B /* PBXTextBookmark */;
+			0545179E1045DD7800F9400B /* PBXTextBookmark */ = 0545179E1045DD7800F9400B /* PBXTextBookmark */;
+			054517A31045DDC000F9400B /* PBXTextBookmark */ = 054517A31045DDC000F9400B /* PBXTextBookmark */;
+			054517A41045DDC000F9400B /* PBXTextBookmark */ = 054517A41045DDC000F9400B /* PBXTextBookmark */;
+			054517A51045DDC000F9400B /* PBXTextBookmark */ = 054517A51045DDC000F9400B /* PBXTextBookmark */;
+			054517A61045DDC000F9400B /* PBXTextBookmark */ = 054517A61045DDC000F9400B /* PBXTextBookmark */;
+			054517A71045DDC000F9400B /* PBXTextBookmark */ = 054517A71045DDC000F9400B /* PBXTextBookmark */;
+			054517A91045DDDF00F9400B /* PBXTextBookmark */ = 054517A91045DDDF00F9400B /* PBXTextBookmark */;
+			054517AA1045DEBC00F9400B /* PBXTextBookmark */ = 054517AA1045DEBC00F9400B /* PBXTextBookmark */;
+			054517AF1045DFC000F9400B /* PBXTextBookmark */ = 054517AF1045DFC000F9400B /* PBXTextBookmark */;
+			054517B21045E07D00F9400B /* PBXTextBookmark */ = 054517B21045E07D00F9400B /* PBXTextBookmark */;
+			054517B51045E0B500F9400B /* PBXTextBookmark */ = 054517B51045E0B500F9400B /* PBXTextBookmark */;
+			054517B81045E0E900F9400B /* PBXTextBookmark */ = 054517B81045E0E900F9400B /* PBXTextBookmark */;
+			054517BA1045E0F600F9400B /* PBXTextBookmark */ = 054517BA1045E0F600F9400B /* PBXTextBookmark */;
+			054517BC1045E10D00F9400B /* PBXTextBookmark */ = 054517BC1045E10D00F9400B /* PBXTextBookmark */;
+			054517BE1045E11900F9400B /* PBXTextBookmark */ = 054517BE1045E11900F9400B /* PBXTextBookmark */;
+			054517C11045E1AE00F9400B /* PBXTextBookmark */ = 054517C11045E1AE00F9400B /* PBXTextBookmark */;
+			054517C31045E1BA00F9400B /* PBXTextBookmark */ = 054517C31045E1BA00F9400B /* PBXTextBookmark */;
+			054517C61045E27300F9400B /* PBXTextBookmark */ = 054517C61045E27300F9400B /* PBXTextBookmark */;
+			054517C91045E2B500F9400B /* PBXTextBookmark */ = 054517C91045E2B500F9400B /* PBXTextBookmark */;
+			054517CD1045E31000F9400B /* PBXTextBookmark */ = 054517CD1045E31000F9400B /* PBXTextBookmark */;
+			054517D21045E37D00F9400B /* PBXTextBookmark */ = 054517D21045E37D00F9400B /* PBXTextBookmark */;
+			054517D71045E41500F9400B /* PBXTextBookmark */ = 054517D71045E41500F9400B /* PBXTextBookmark */;
+			054517D81045E41500F9400B /* PBXTextBookmark */ = 054517D81045E41500F9400B /* PBXTextBookmark */;
+			054517D91045E41500F9400B /* PBXTextBookmark */ = 054517D91045E41500F9400B /* PBXTextBookmark */;
+			054517DA1045E41500F9400B /* PBXTextBookmark */ = 054517DA1045E41500F9400B /* PBXTextBookmark */;
+			054517DB1045E41500F9400B /* PBXTextBookmark */ = 054517DB1045E41500F9400B /* PBXTextBookmark */;
+			054517DC1045E41500F9400B /* PBXTextBookmark */ = 054517DC1045E41500F9400B /* PBXTextBookmark */;
+			054517DD1045E41500F9400B /* PBXTextBookmark */ = 054517DD1045E41500F9400B /* PBXTextBookmark */;
+			054517E51045E4B100F9400B /* PBXTextBookmark */ = 054517E51045E4B100F9400B /* PBXTextBookmark */;
+			054517E61045E4B100F9400B /* PBXTextBookmark */ = 054517E61045E4B100F9400B /* PBXTextBookmark */;
+			054517E71045E4B100F9400B /* PBXTextBookmark */ = 054517E71045E4B100F9400B /* PBXTextBookmark */;
+			054517E81045E4B100F9400B /* PBXTextBookmark */ = 054517E81045E4B100F9400B /* PBXTextBookmark */;
+			054517E91045E4B100F9400B /* PBXTextBookmark */ = 054517E91045E4B100F9400B /* PBXTextBookmark */;
+			054517EC1045E4D200F9400B /* PBXTextBookmark */ = 054517EC1045E4D200F9400B /* PBXTextBookmark */;
+			054517EF1045E4F100F9400B /* PBXTextBookmark */ = 054517EF1045E4F100F9400B /* PBXTextBookmark */;
+			054517F21045E51300F9400B /* PBXTextBookmark */ = 054517F21045E51300F9400B /* PBXTextBookmark */;
+			054517F51045E53300F9400B /* PBXTextBookmark */ = 054517F51045E53300F9400B /* PBXTextBookmark */;
+			054517F91045E54B00F9400B /* PBXTextBookmark */ = 054517F91045E54B00F9400B /* PBXTextBookmark */;
+			054517FD1045E56100F9400B /* PBXTextBookmark */ = 054517FD1045E56100F9400B /* PBXTextBookmark */;
+			054518011045E57600F9400B /* PBXTextBookmark */ = 054518011045E57600F9400B /* PBXTextBookmark */;
+			054518041045E59200F9400B /* PBXTextBookmark */ = 054518041045E59200F9400B /* PBXTextBookmark */;
+			054518071045E5AC00F9400B /* PBXTextBookmark */ = 054518071045E5AC00F9400B /* PBXTextBookmark */;
+			0545180A1045E5C200F9400B /* PBXTextBookmark */ = 0545180A1045E5C200F9400B /* PBXTextBookmark */;
+			0545180D1045E5DA00F9400B /* PBXTextBookmark */ = 0545180D1045E5DA00F9400B /* PBXTextBookmark */;
+			054518111045E5F600F9400B /* PBXTextBookmark */ = 054518111045E5F600F9400B /* PBXTextBookmark */;
+			054518141045E63800F9400B /* PBXTextBookmark */ = 054518141045E63800F9400B /* PBXTextBookmark */;
+			054518161045E64C00F9400B /* PBXTextBookmark */ = 054518161045E64C00F9400B /* PBXTextBookmark */;
 			0577EA621002B62900A2468C = 0577EA621002B62900A2468C /* PBXTextBookmark */;
 			0577EA691002B62900A2468C = 0577EA691002B62900A2468C /* PlistBookmark */;
 			0577EA6B1002B62900A2468C = 0577EA6B1002B62900A2468C /* PBXTextBookmark */;
