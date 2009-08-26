@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		051102A1100FDC8300610251 /* UserReviewsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 051102A0100FDC8300610251 /* UserReviewsTVC.m */; };
 		053653960F703F99000389C1 /* PhoneNumberEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */; };
+		05451382104346EF00F9400B /* ColorsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05451381104346EF00F9400B /* ColorsTVC.m */; };
+		0545144710435A4900F9400B /* AvailabilityTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0545144610435A4900F9400B /* AvailabilityTVC.m */; };
 		0577EA4D1002AC7700A2468C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0577EA4C1002AC7700A2468C /* Settings.bundle */; };
 		0577ECB910068A1300A2468C /* RatingControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 0577ECB810068A1300A2468C /* RatingControl.m */; };
 		0577ECC410068CCB00A2468C /* star_empty.png in Resources */ = {isa = PBXBuildFile; fileRef = 0577ECC110068CCB00A2468C /* star_empty.png */; };
@@ -43,6 +45,10 @@
 		051102A0100FDC8300610251 /* UserReviewsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserReviewsTVC.m; sourceTree = "<group>"; };
 		053653940F703F99000389C1 /* PhoneNumberEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneNumberEditTableViewController.h; sourceTree = "<group>"; };
 		053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneNumberEditTableViewController.m; sourceTree = "<group>"; };
+		05451380104346EF00F9400B /* ColorsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsTVC.h; sourceTree = "<group>"; };
+		05451381104346EF00F9400B /* ColorsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorsTVC.m; sourceTree = "<group>"; };
+		0545144510435A4900F9400B /* AvailabilityTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvailabilityTVC.h; sourceTree = "<group>"; };
+		0545144610435A4900F9400B /* AvailabilityTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvailabilityTVC.m; sourceTree = "<group>"; };
 		0577EA4C1002AC7700A2468C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		0577ECB710068A1300A2468C /* RatingControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RatingControl.h; sourceTree = "<group>"; };
 		0577ECB810068A1300A2468C /* RatingControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RatingControl.m; sourceTree = "<group>"; };
@@ -109,6 +115,10 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0545144510435A4900F9400B /* AvailabilityTVC.h */,
+				0545144610435A4900F9400B /* AvailabilityTVC.m */,
+				05451380104346EF00F9400B /* ColorsTVC.h */,
+				05451381104346EF00F9400B /* ColorsTVC.m */,
 				05B7DB5C103F42700021EEDA /* StylesListTVC.h */,
 				05B7DB5D103F42700021EEDA /* StylesListTVC.m */,
 				058FFCA210360A1E00DA6D81 /* FlavorsAromasTVC.h */,
@@ -280,6 +290,8 @@
 				058FFCA410360A1E00DA6D81 /* FlavorsAromasTVC.m in Sources */,
 				05B7DB5E103F42700021EEDA /* StylesListTVC.m in Sources */,
 				05B7DB7B103F45A70021EEDA /* StyleVC.m in Sources */,
+				05451382104346EF00F9400B /* ColorsTVC.m in Sources */,
+				0545144710435A4900F9400B /* AvailabilityTVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
