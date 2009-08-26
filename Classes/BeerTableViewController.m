@@ -282,31 +282,8 @@ const int kButtonHeight=40;
 	{
 		self.title=@"Editing Beer";
 
-//		UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editBeerCancelButtonClicked)] autorelease];
-//		[self.navigationController.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:YES];
 		self.navigationController.navigationBar.topItem.leftBarButtonItem=nil;
 
-//		NSArray* newrows=[NSArray arrayWithObjects:
-//						  [NSIndexPath indexPathForRow:0 inSection:0],
-//						[NSIndexPath indexPathForRow:1 inSection:0],
-//						nil];
-
-//		NSArray* rows=[NSArray arrayWithObjects:
-//					   [NSIndexPath indexPathForRow:0 inSection:1],
-//					   [NSIndexPath indexPathForRow:1 inSection:1],
-//					   [NSIndexPath indexPathForRow:2 inSection:1],
-//					   [NSIndexPath indexPathForRow:3 inSection:1],
-//					   [NSIndexPath indexPathForRow:4 inSection:1],
-//					   [NSIndexPath indexPathForRow:5 inSection:1],
-//					   [NSIndexPath indexPathForRow:6 inSection:1],
-//					   [NSIndexPath indexPathForRow:0 inSection:2],
-//					   [NSIndexPath indexPathForRow:1 inSection:2],
-//					   [NSIndexPath indexPathForRow:0 inSection:3],
-//					   [NSIndexPath indexPathForRow:1 inSection:3],
-//					   [NSIndexPath indexPathForRow:2 inSection:3],
-//					   nil];
-		
-//		NSIndexSet* sections=[NSIndexSet indexSetWithIndex:1];
 		[self.tableView beginUpdates];
 		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
 												[NSIndexPath indexPathForRow:0 inSection:3],
@@ -325,29 +302,18 @@ const int kButtonHeight=40;
 	}
 	else
 	{
-		
 		self.title=@"Beer";
 
-//		NSArray* rows=[NSArray arrayWithObjects:
-//					   [NSIndexPath indexPathForRow:1 inSection:0],
-//					   nil];
 		[self.tableView beginUpdates];
-//		[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
-//		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
-//		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 
-		[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:
-												[NSIndexPath indexPathForRow:0 inSection:3],
-												[NSIndexPath indexPathForRow:1 inSection:3],
-												nil] 
-		 withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
-//		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView endUpdates];
 	}
 }
@@ -625,7 +591,6 @@ const int kButtonHeight=40;
 							ibuTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"];
 							ibuTextField.font=[UIFont boldSystemFontOfSize:16];
 							ibuTextField.keyboardType=UIKeyboardTypeNumberPad;
-//							ibuTextField.borderStyle=UITextBorderStyleRoundedRect;
 						}
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
@@ -647,7 +612,7 @@ const int kButtonHeight=40;
 							ogTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"og"];
 							ogTextField.font=[UIFont boldSystemFontOfSize:16];
 							ogTextField.keyboardType=UIKeyboardTypeNumberPad;
-//							ogTextField.borderStyle=UITextBorderStyleRoundedRect;
+							[ogTextField addTarget:self action:@selector(ogTextFieldChanged) forControlEvents:UIControlEventEditingChanged];
 						}
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
@@ -669,7 +634,7 @@ const int kButtonHeight=40;
 							fgTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"fg"];
 							fgTextField.font=[UIFont boldSystemFontOfSize:16];
 							fgTextField.keyboardType=UIKeyboardTypeNumberPad;
-//							fgTextField.borderStyle=UITextBorderStyleRoundedRect;
+							[fgTextField addTarget:self action:@selector(fgTextFieldChanged) forControlEvents:UIControlEventEditingChanged];
 						}
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
@@ -691,7 +656,6 @@ const int kButtonHeight=40;
 							grainsTextField.text=[self.beerObj.data objectForKey:@"grains"];
 							grainsTextField.font=[UIFont boldSystemFontOfSize:16];
 							grainsTextField.keyboardType=UIKeyboardTypeDefault;
-//							grainsTextField.borderStyle=UITextBorderStyleRoundedRect;
 						}
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
@@ -712,7 +676,6 @@ const int kButtonHeight=40;
 							hopsTextField.text=[self.beerObj.data objectForKey:@"hops"];
 							hopsTextField.font=[UIFont boldSystemFontOfSize:16];
 							hopsTextField.keyboardType=UIKeyboardTypeDefault;
-//							hopsTextField.borderStyle=UITextBorderStyleRoundedRect;
 						}
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
@@ -1112,6 +1075,27 @@ const int kButtonHeight=40;
 	return YES;
 }
 
+-(void)ogTextFieldChanged
+{
+	if (ogTextField)
+	{
+		if ([ogTextField.text length] == 2 && [[ogTextField.text substringWithRange:NSMakeRange(1,1)] isEqualToString:@"."]==NO)
+		{
+			ogTextField.text=[NSString stringWithFormat:@"%@.%@",[ogTextField.text substringToIndex:1],[ogTextField.text substringFromIndex:1]];
+		}
+	}
+}
+
+-(void)fgTextFieldChanged
+{
+	if (fgTextField)
+	{
+		if ([fgTextField.text length] == 2 && [[fgTextField.text substringWithRange:NSMakeRange(1,1)] isEqualToString:@"."]==NO)
+		{
+			fgTextField.text=[NSString stringWithFormat:@"%@.%@",[fgTextField.text substringToIndex:1],[fgTextField.text substringFromIndex:1]];
+		}
+	}
+}
 
 -(void)addToWishListButtonClicked
 {
