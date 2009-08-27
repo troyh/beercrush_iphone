@@ -98,7 +98,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:style]) {
-//		self.title=@"Search";
+//		self.title=@"Beer search";
     }
     return self;
 }
@@ -110,6 +110,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
 	self.searchBar=[[UISearchBar alloc] initWithFrame:CGRectZero];
+	self.searchBar.placeholder=@"Beers, brewers, etc.";
 	self.searchBar.delegate=self;
 	[self.searchBar sizeToFit];
 	[self.navigationController.navigationBar addSubview:self.searchBar];
@@ -118,7 +119,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	searchBar.hidden=NO; // Put searchbar back
-	[searchBar becomeFirstResponder];
+//	[searchBar becomeFirstResponder];
 }
 /*
 - (void)viewDidAppear:(BOOL)animated {
@@ -172,7 +173,7 @@
 {
 	if (bar.text.length)
 	{
-//		[bar resignFirstResponder];
+		[bar resignFirstResponder];
 		
 		[self query:bar.text];
 		[self.tableView reloadData];
@@ -181,7 +182,6 @@
 
 -(void)searchBarTextDidBeginEditing:(UISearchBar*)bar
 {
-	bar.showsCancelButton=YES;
 }
 
 //-(BOOL)searchBarShouldEndEditing:(UISearchBar*)searchBar
