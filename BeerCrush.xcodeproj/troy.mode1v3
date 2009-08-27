@@ -228,8 +228,6 @@
 			<key>Layout</key>
 			<array>
 				<dict>
-					<key>BecomeActive</key>
-					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -277,8 +275,8 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>56</integer>
-									<integer>45</integer>
+									<integer>11</integer>
+									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -302,7 +300,7 @@
 							<real>203</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>1222 102 1323 1423 0 0 2560 1578 </string>
+						<string>1220 126 1323 1423 0 0 2560 1578 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -313,12 +311,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>beer.png</string>
+								<string>FullBeerReviewTVC.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -326,11 +326,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>beer.png</string>
+										<string>FullBeerReviewTVC.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>054519F310471CDA00F9400B</string>
+										<string>05451A8310472C1500F9400B</string>
 										<key>history</key>
 										<array>
 											<string>05C9AA760F53458A0020B102</string>
@@ -359,7 +359,6 @@
 											<string>05B7DC0F103F4F280021EEDA</string>
 											<string>05B7DCD9103F62850021EEDA</string>
 											<string>05B7DD5B10407BC90021EEDA</string>
-											<string>0545100E1040AB4200F9400B</string>
 											<string>0545115F1043004400F9400B</string>
 											<string>054511601043004400F9400B</string>
 											<string>054511611043004400F9400B</string>
@@ -375,7 +374,6 @@
 											<string>054518A91045F96E00F9400B</string>
 											<string>054519091046003E00F9400B</string>
 											<string>0545194A1046F0C300F9400B</string>
-											<string>054519681046F5BD00F9400B</string>
 											<string>054519691046F5BD00F9400B</string>
 											<string>0545197A1046F5E300F9400B</string>
 											<string>05451990104703B800F9400B</string>
@@ -383,7 +381,20 @@
 											<string>054519D81047194C00F9400B</string>
 											<string>054519EB10471C0300F9400B</string>
 											<string>054519F010471CDA00F9400B</string>
-											<string>054519F110471CDA00F9400B</string>
+											<string>05451A0F1047219600F9400B</string>
+											<string>05451A101047219600F9400B</string>
+											<string>05451A111047219600F9400B</string>
+											<string>05451A121047219600F9400B</string>
+											<string>05451A131047219600F9400B</string>
+											<string>05451A141047219600F9400B</string>
+											<string>05451A151047219600F9400B</string>
+											<string>05451A171047219600F9400B</string>
+											<string>05451A181047219600F9400B</string>
+											<string>05451A191047219600F9400B</string>
+											<string>05451A1A1047219600F9400B</string>
+											<string>05451A1B1047219600F9400B</string>
+											<string>05451A51104726DE00F9400B</string>
+											<string>05451A61104728EB00F9400B</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -903,6 +914,31 @@
 											<string>054519DA1047194C00F9400B</string>
 											<string>054519EC10471C0300F9400B</string>
 											<string>054519F210471CDA00F9400B</string>
+											<string>05451A1C1047219600F9400B</string>
+											<string>05451A1D1047219600F9400B</string>
+											<string>05451A1E1047219600F9400B</string>
+											<string>05451A1F1047219600F9400B</string>
+											<string>05451A201047219600F9400B</string>
+											<string>05451A211047219600F9400B</string>
+											<string>05451A221047219600F9400B</string>
+											<string>05451A231047219600F9400B</string>
+											<string>05451A241047219600F9400B</string>
+											<string>05451A251047219600F9400B</string>
+											<string>05451A261047219600F9400B</string>
+											<string>05451A271047219600F9400B</string>
+											<string>05451A281047219600F9400B</string>
+											<string>05451A291047219600F9400B</string>
+											<string>05451A2A1047219600F9400B</string>
+											<string>05451A2B1047219600F9400B</string>
+											<string>05451A2C1047219600F9400B</string>
+											<string>05451A2D1047219600F9400B</string>
+											<string>05451A2E1047219600F9400B</string>
+											<string>05451A2F1047219600F9400B</string>
+											<string>05451A301047219600F9400B</string>
+											<string>05451A311047219600F9400B</string>
+											<string>05451A321047219600F9400B</string>
+											<string>05451A53104726DE00F9400B</string>
+											<string>05451A54104726DE00F9400B</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -916,7 +952,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1098, 1176}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1222 102 1323 1423 0 0 2560 1578 </string>
+								<string>1220 126 1323 1423 0 0 2560 1578 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -936,7 +972,7 @@
 								<key>Frame</key>
 								<string>{{0, 1181}, {1098, 201}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1222 102 1323 1423 0 0 2560 1578 </string>
+								<string>1220 126 1323 1423 0 0 2560 1578 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -1096,7 +1132,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>054519EE10471C0300F9400B</string>
+		<string>05451A8110472BC700F9400B</string>
 		<string>0545171A1045BBE500F9400B</string>
 		<string>05450F80104092CB00F9400B</string>
 		<string>05450F81104092CB00F9400B</string>
@@ -1106,7 +1142,7 @@
 		<string>/Users/troy/Documents/BeerCrush/BeerCrush.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>1222 102 1323 1423 0 0 2560 1578 </string>
+	<string>1220 126 1323 1423 0 0 2560 1578 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

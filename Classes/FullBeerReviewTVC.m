@@ -315,14 +315,11 @@
 		}
 		case 2:
 		{
-			static NSString *CellIdentifier = @"Section2Cell";
-			
-			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-			if (cell == nil) {
-				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier] autorelease];
-				cell.detailTextLabel.backgroundColor=[UIColor clearColor];
-				cell.selectionStyle=UITableViewCellSelectionStyleNone;
-			}
+			/* The cells in this section are too different to bother reusing them, so alloc them every time they're requested. 
+			The view isn't that big so there's not going to be a lot of scrolling/releasing/re-allocing anyway. */
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:nil] autorelease];
+			cell.detailTextLabel.backgroundColor=[UIColor clearColor];
+			cell.selectionStyle=UITableViewCellSelectionStyleNone;
 			
 			switch (indexPath.row)
 			{
@@ -337,8 +334,23 @@
 						bodySlider.minimumValue=1.0;
 						bodySlider.maximumValue=5.0;
 						bodySlider.value=[[self.userReview objectForKey:@"body"] integerValue];
+						[bodySlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 					}
+					
+					UIImageView* leftimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"body_low.png"]] autorelease];
+					CGRect frame=leftimgview.frame;
+					frame.origin.x=self.bodySlider.frame.origin.x-20;
+					frame.origin.y=14;
+					leftimgview.frame=frame;
+					[cell.contentView addSubview:leftimgview];
 
+					UIImageView* rightimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"body_high.png"]] autorelease];
+					frame=rightimgview.frame;
+					frame.origin.x=self.bodySlider.frame.origin.x+self.bodySlider.frame.size.width+3;
+					frame.origin.y=14;
+					rightimgview.frame=frame;
+					[cell.contentView addSubview:rightimgview];
+					
 					[cell.contentView addSubview:bodySlider];
 					break;
 				}
@@ -353,8 +365,23 @@
 						balanceSlider.minimumValue=1.0;
 						balanceSlider.maximumValue=5.0;
 						balanceSlider.value=[[self.userReview objectForKey:@"balance"] integerValue];
+						[balanceSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 					}
 
+					UIImageView* leftimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"balance_low.png"]] autorelease];
+					CGRect frame=leftimgview.frame;
+					frame.origin.x=self.balanceSlider.frame.origin.x-20;
+					frame.origin.y=14;
+					leftimgview.frame=frame;
+					[cell.contentView addSubview:leftimgview];
+					
+					UIImageView* rightimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"balance_high.png"]] autorelease];
+					frame=rightimgview.frame;
+					frame.origin.x=self.balanceSlider.frame.origin.x+self.balanceSlider.frame.size.width+3;
+					frame.origin.y=14;
+					rightimgview.frame=frame;
+					[cell.contentView addSubview:rightimgview];
+					
 					[cell.contentView addSubview:balanceSlider];
 					break;
 				}
@@ -369,7 +396,22 @@
 						aftertasteSlider.minimumValue=1.0;
 						aftertasteSlider.maximumValue=5.0;
 						aftertasteSlider.value=[[self.userReview objectForKey:@"aftertaste"] integerValue];
+						[aftertasteSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 					}
+
+					UIImageView* leftimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"aftertaste_low.png"]] autorelease];
+					CGRect frame=leftimgview.frame;
+					frame.origin.x=self.aftertasteSlider.frame.origin.x-20;
+					frame.origin.y=14;
+					leftimgview.frame=frame;
+					[cell.contentView addSubview:leftimgview];
+					
+					UIImageView* rightimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"aftertaste_high.png"]] autorelease];
+					frame=rightimgview.frame;
+					frame.origin.x=self.aftertasteSlider.frame.origin.x+self.aftertasteSlider.frame.size.width+3;
+					frame.origin.y=14;
+					rightimgview.frame=frame;
+					[cell.contentView addSubview:rightimgview];
 					
 					[cell.contentView addSubview:aftertasteSlider];
 					break;
@@ -445,6 +487,12 @@
     return cell;
 }
 
+-(void)sliderValueChanged:(id)sender
+{
+	// Round the value to an integer and reposition the thumb
+	UISlider* slider=(UISlider*)sender;
+	slider.value=round(slider.value);
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section==3 && indexPath.row==0) // Selected the Flavors & Aromas cell
