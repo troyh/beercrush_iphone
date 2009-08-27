@@ -173,7 +173,7 @@
 {
 	if (bar.text.length)
 	{
-		[bar resignFirstResponder];
+		[bar endEditing:YES];
 		
 		[self query:bar.text];
 		[self.tableView reloadData];
@@ -191,7 +191,7 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)bar
 {
-    [bar resignFirstResponder];
+	[bar endEditing:YES];
     bar.text = @"";
 	self.autoCompleteResultsData=nil;
 	self.autoCompleteResultsCount=0;
@@ -274,7 +274,7 @@
 //	appDelegate.nav.navigationBarHidden=NO;
 
 	self.searchBar.hidden=YES;
-	[searchBar resignFirstResponder];
+	[searchBar endEditing:YES];
 	
 	const char* p=(char*)[autoCompleteResultsData bytes];
 	NSUInteger n=0;
