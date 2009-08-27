@@ -40,18 +40,25 @@
 @synthesize hopsTextField;
 @synthesize buttons;
 @synthesize dataTableView;
+@synthesize delegate;
 
 const int kButtonWidth=80;
 const int kButtonHeight=40;
 
+const int kTagBeerNameLabel=1;
+
 -(id) initWithBeerID:(NSString*)beer_id
 {
-	self.beerID=[beer_id copy];
-	DLog(@"BeerTableViewController initWithBeerID beerID retainCount=%d",[beerID retainCount]);
-
 	self.beerObj=[[BeerObject alloc] init];
-	[self.beerObj.data setObject:beer_id forKey:@"beer_id"];
-	self.title=@"Beer";
+
+	if (beer_id)
+	{
+		self.beerID=[beer_id copy];
+		DLog(@"BeerTableViewController initWithBeerID beerID retainCount=%d",[beerID retainCount]);
+
+		[self.beerObj.data setObject:beer_id forKey:@"beer_id"];
+		self.title=@"Beer";
+	}
 	
 	[super initWithStyle:UITableViewStyleGrouped];
 	
@@ -98,7 +105,6 @@ const int kButtonHeight=40;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	if (self.beerID!=nil)
 	{
 		self.navigationItem.rightBarButtonItem = self.editButtonItem;
@@ -113,72 +119,87 @@ const int kButtonHeight=40;
 	{
 		// Save data to server
 		NSString* bodystr=nil;
+		NSMutableArray* values=[NSMutableArray arrayWithCapacity:10];
 		
-		if (self.beerID)
+		if (self.beerNameTextField.text && [[self.beerObj.data objectForKey:@"name"] isEqualToString:self.beerNameTextField.text]==NO)
+			[values addObject:[NSString stringWithFormat:@"name=%@",self.beerNameTextField.text]];
+		if (self.descriptionTextView.text && [[self.beerObj.data objectForKey:@"description"] isEqualToString:self.descriptionTextView.text]==NO)
+			[values addObject:[NSString stringWithFormat:@"description=%@",self.descriptionTextView.text]];
+		if (self.abvTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"abv"] isEqualToString:self.abvTextField.text]==NO)
+			[values addObject:[NSString stringWithFormat:@"abv=%@",self.abvTextField.text]];
+		if (self.ibuTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"] isEqualToString:self.ibuTextField.text]==NO)
+			[values addObject:[NSString stringWithFormat:@"ibu=%@",self.ibuTextField.text]];
+		if (self.ogTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"og"] isEqualToString:self.ogTextField.text]==NO)
+			[values addObject:[NSString stringWithFormat:@"og=%@",self.ogTextField.text]];
+		if (self.fgTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"fg"] isEqualToString:self.fgTextField.text]==NO)
+			[values addObject:[NSString stringWithFormat:@"fg=%@",self.fgTextField.text]];
+		if (self.grainsTextField.text && [[self.beerObj.data objectForKey:@"grains"] isEqualToString:self.grainsTextField.text]==NO)
+			[values addObject:[NSString stringWithFormat:@"grains=%@",self.grainsTextField.text]];
+		if (self.hopsTextField.text && [[self.beerObj.data objectForKey:@"hops"] isEqualToString:self.hopsTextField.text]==NO)
+			[values addObject:[NSString stringWithFormat:@"hops=%@",self.hopsTextField.text]];
+		if ([self.beerObj.data objectForKey:@"availability"])
+			[values addObject:[NSString stringWithFormat:@"availability=%@",[self.beerObj.data objectForKey:@"availability"]]];
+		if ([[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"])
+			[values addObject:[NSString stringWithFormat:@"srm=%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]];
+		if ([self.beerObj.data objectForKey:@"style"])
+			[values addObject:[NSString stringWithFormat:@"bjcp_style_id=%@",[self.beerObj.data objectForKey:@"style"]]];
+		
+		if ([values count]) // Only send request if there is something that is changing
 		{
-			NSMutableArray* values=[NSMutableArray arrayWithCapacity:10];
-			
-			if (self.beerNameTextField.text && [[self.beerObj.data objectForKey:@"name"] isEqualToString:self.beerNameTextField.text]==NO)
-				[values addObject:[NSString stringWithFormat:@"name=%@",self.beerNameTextField.text]];
-			if (self.descriptionTextView.text && [[self.beerObj.data objectForKey:@"description"] isEqualToString:self.descriptionTextView.text]==NO)
-				[values addObject:[NSString stringWithFormat:@"description=%@",self.descriptionTextView.text]];
-			if (self.abvTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"abv"] isEqualToString:self.abvTextField.text]==NO)
-				[values addObject:[NSString stringWithFormat:@"abv=%@",self.abvTextField.text]];
-			if (self.ibuTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"] isEqualToString:self.ibuTextField.text]==NO)
-				[values addObject:[NSString stringWithFormat:@"ibu=%@",self.ibuTextField.text]];
-			if (self.ogTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"og"] isEqualToString:self.ogTextField.text]==NO)
-				[values addObject:[NSString stringWithFormat:@"og=%@",self.ogTextField.text]];
-			if (self.fgTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"fg"] isEqualToString:self.fgTextField.text]==NO)
-				[values addObject:[NSString stringWithFormat:@"fg=%@",self.fgTextField.text]];
-			if (self.grainsTextField.text && [[self.beerObj.data objectForKey:@"grains"] isEqualToString:self.grainsTextField.text]==NO)
-				[values addObject:[NSString stringWithFormat:@"grains=%@",self.grainsTextField.text]];
-			if (self.hopsTextField.text && [[self.beerObj.data objectForKey:@"hops"] isEqualToString:self.hopsTextField.text]==NO)
-				[values addObject:[NSString stringWithFormat:@"hops=%@",self.hopsTextField.text]];
-			if ([self.beerObj.data objectForKey:@"availability"])
-				[values addObject:[NSString stringWithFormat:@"availability=%@",[self.beerObj.data objectForKey:@"availability"]]];
-			if ([[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"])
-				[values addObject:[NSString stringWithFormat:@"srm=%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]];
-			if ([self.beerObj.data objectForKey:@"style"])
-				[values addObject:[NSString stringWithFormat:@"bjcp_style_id=%@",[self.beerObj.data objectForKey:@"style"]]];
-			
-			if ([values count]) // Only send request if there is something that is changing
+			if (self.beerID) // Editing an existing beer
 			{
 				[values addObject:[NSString stringWithFormat:@"beer_id=%@",self.beerID]];
-				bodystr=[values componentsJoinedByString:@"&"];
-				DLog(@"POST data:%@",bodystr);
-				
-				BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-				NSData* answer;
-				NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC];
-				NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
-				if ([response statusCode]==200)
+			}
+			else if (self.breweryID) // Adding a new beer
+			{
+				[values addObject:[NSString stringWithFormat:@"brewery_id=%@",self.breweryID]];
+			}
+			else
+			{
+				NSException* x=[NSException exceptionWithName:@"" reason:@"Either a beer ID or a brewery ID is required to save beers" userInfo:nil];
+				[x raise];
+			}
+			
+			bodystr=[values componentsJoinedByString:@"&"];
+			DLog(@"POST data:%@",bodystr);
+			
+			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			NSData* answer;
+			NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC];
+			NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
+			if ([response statusCode]==200)
+			{
+				// Parse the XML response, which is the new beer doc
+				NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
+				[parser setDelegate:self];
+				if ([parser parse]==YES)
 				{
-					// Parse the XML response, which is the new beer doc
-					NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
-					[parser setDelegate:self];
-					if ([parser parse]==YES)
-					{
-						[self.dataTableView removeFromSuperview];
-						self.dataTableView=nil; // Causes it to be recreated in cellForRowAtIndexPath, which causes the updated data to appear
-						
-						[self setEditing:self.editing?NO:YES animated:YES];
-					}
-					else
-					{
-						// TODO: alert the user that it failed and/or give a chance to retry
-					}
+					[self.dataTableView removeFromSuperview];
+					self.dataTableView=nil; // Causes it to be recreated in cellForRowAtIndexPath, which causes the updated data to appear
+					
+					[self setEditing:NO animated:YES];
+					[self.tableView reloadData];
 				}
 				else
 				{
 					// TODO: alert the user that it failed and/or give a chance to retry
+					UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"XML Error" message:@"Unable to read XML result" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+					[alert show];
 				}
 			}
-			
+			else
+			{
+				// TODO: alert the user that it failed and/or give a chance to retry
+				UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"HTTP Error" message:[NSString stringWithFormat:@"Status code %d",[response statusCode]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+				[alert show];
+			}
 		}
+		
+		[self.delegate didSaveBeerEdits];
 	}
 	else
 	{
-		[self setEditing:self.editing?NO:YES animated:YES];
+		[self setEditing:YES animated:YES];
 	}
 	
 }
@@ -203,10 +224,18 @@ const int kButtonHeight=40;
 //		self.view.frame=vf;
 //		[self.view sizeToFit];
 		self.title=@"New Beer";
+
+		// Add cancel and save buttons
+		UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:delegate action:@selector(didCancelBeerEdits)] autorelease];
+		UIBarButtonItem* saveButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(editButtonClicked)] autorelease];
+		
+		self.navigationItem.leftBarButtonItem=cancelButton;
+		self.navigationItem.rightBarButtonItem=saveButton;
+		
 	}
-	else if ([self.beerObj.data count]<2)
+	else if ([self.beerObj.data count]<2) // Do we need to get the beer data? TODO: should just ask for it and it would be cached in AppDelegate
 	{
-		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 
 		// Separate the brewery ID and the beer ID from the beerID
 		NSArray* idparts=[self.beerID componentsSeparatedByString:@":"];
@@ -214,7 +243,7 @@ const int kButtonHeight=40;
 		// Retrieve XML doc for this beer
 		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_DOC, [idparts objectAtIndex:1], [idparts objectAtIndex:2] ]];
 		NSData* answer;
-		NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+		NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
 		if ([response statusCode]==200)
 		{
 			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
@@ -227,7 +256,7 @@ const int kButtonHeight=40;
 									  [idparts objectAtIndex:1], 
 									  [idparts objectAtIndex:2], 
 									  [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
-			response=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+			response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
 			if ([response statusCode]==200)
 			{
 				// The user has a review for this beer
@@ -462,15 +491,19 @@ const int kButtonHeight=40;
 							[cell.contentView addSubview:breweryNameLabel];
 							
 							UILabel* beerNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 20, 200, 30)] autorelease];
+							beerNameLabel.tag=kTagBeerNameLabel;
 							beerNameLabel.font=[UIFont boldSystemFontOfSize:20];
 							beerNameLabel.backgroundColor=[UIColor clearColor];
-							[beerNameLabel setText:[beerObj.data objectForKey:@"name"]];
 							[cell.contentView addSubview:beerNameLabel];
 							
 							UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
 							transparentBackground.backgroundColor=[UIColor clearColor];
 							cell.backgroundView=transparentBackground;
 						}
+
+						UILabel* beerNameLabel=(UILabel*)[cell viewWithTag:kTagBeerNameLabel];
+						[beerNameLabel setText:[beerObj.data objectForKey:@"name"]];
+						
 					}
 					break;
 				default:
@@ -965,12 +998,12 @@ const int kButtonHeight=40;
 						else
 						{
 							self.descriptionTextView=[[UITextView alloc] initWithFrame:CGRectInset(cell.contentView.frame, 8, 8)];
-							self.descriptionTextView.text=[beerObj.data objectForKey:@"description"];
 							
 							self.descriptionTextView.delegate=self;
 							self.descriptionTextView.font=[UIFont systemFontOfSize:14.0];
 							self.descriptionTextView.autoresizingMask|=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleRightMargin;
 						}
+						self.descriptionTextView.text=[beerObj.data objectForKey:@"description"];
 						[self.descriptionTextView sizeToFit];
 						
 						[cell.textLabel setText:@""];
@@ -1101,9 +1134,9 @@ const int kButtonHeight=40;
 	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_WISHLIST_DOC];
 	NSString* bodystr=[NSString stringWithFormat:@"add_item=%@",self.beerID];
 	
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSData* answer;
-	NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
+	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
 	if ([response statusCode]==200)
 	{
 		// TODO: signify somehow that it worked
@@ -1134,8 +1167,8 @@ const int kButtonHeight=40;
 	
 	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
 	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&beer_id=%@", rating, beerID];
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:nil];
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:nil];
 	
 	if ([response statusCode]==200) {
 		[self.userReviewData setObject:[NSString stringWithFormat:@"%d",rating] forKey:@"rating"];

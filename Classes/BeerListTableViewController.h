@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BeerTableViewController.h"
 
-@interface BeerListTableViewController : UITableViewController {
+@interface BeerListTableViewController : UITableViewController <BeerTableViewControllerDelegate> {
 	NSString* breweryID;
 	NSString* placeID;
 	NSString* wishlistID;
@@ -33,8 +33,8 @@
 
 -(id)initWithBreweryID:(NSString*)brewery_id;
 -(void)newBeerPanel;
--(void)newBeerSaveButtonClicked;
--(void)newBeerCancelButtonClicked;
 -(void)addBeerToMenu:(NSString*)beerID;
+-(void)didSaveBeerEdits;
+-(void)didCancelBeerEdits;
 
 @end

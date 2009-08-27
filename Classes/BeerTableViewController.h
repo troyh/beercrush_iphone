@@ -14,6 +14,8 @@
 #import "ColorsTVC.h"
 #import "AvailabilityTVC.h"
 
+@protocol BeerTableViewControllerDelegate;
+
 @interface BeerTableViewController : UITableViewController <FullBeerReviewTVCDelegate,StylesListTVCDelegate,ColorsTVCDelegate,AvailabilityTVCDelegate,UITextViewDelegate,UITextFieldDelegate> {
 	NSString* beerID;
 	NSString* breweryID;
@@ -39,6 +41,8 @@
 	
 	NSMutableArray* buttons;
 	UIView* dataTableView;
+	
+	id<BeerTableViewControllerDelegate> delegate;
 }
 
 @property (nonatomic,retain) NSString* beerID;
@@ -62,7 +66,15 @@
 @property (nonatomic,retain) UITextField* hopsTextField;
 @property (nonatomic,assign) NSMutableArray* buttons;
 @property (nonatomic,retain) UIView* dataTableView;
+@property (assign) id<BeerTableViewControllerDelegate> delegate;
 
 -(id) initWithBeerID:(NSString*)beer_id;
+
+@end
+
+@protocol BeerTableViewControllerDelegate
+
+-(void)didSaveBeerEdits;
+-(void)didCancelBeerEdits;
 
 @end
