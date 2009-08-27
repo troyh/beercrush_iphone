@@ -12,9 +12,7 @@
 @implementation StylesListTVC
 
 @synthesize stylesDictionary;
-@synthesize currentStyleNum;
-@synthesize currentElemValue;
-@synthesize xmlParserPath;
+@synthesize selectedStyleID;
 @synthesize delegate;
 
 - (id)initWithStyle:(UITableViewStyle)style {
@@ -119,7 +117,11 @@
     }
     
     // Set up the cell...
-	[cell.textLabel setText:[[self.stylesDictionary objectForKey:@"names"] objectForKey:[[[self.stylesDictionary objectForKey:@"list"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]]];
+	NSString* styleID=[[[self.stylesDictionary objectForKey:@"list"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+	[cell.textLabel setText:[[self.stylesDictionary objectForKey:@"names"] objectForKey:styleID]];
+	
+	if ([styleID isEqualToString:self.selectedStyleID])
+		cell.accessoryType=UITableViewCellAccessoryCheckmark;
 	
     return cell;
 }
@@ -177,8 +179,6 @@
 
 - (void)dealloc {
 	[stylesDictionary release];
-	self.currentElemValue=nil;
-	self.xmlParserPath=nil;
     [super dealloc];
 }
 

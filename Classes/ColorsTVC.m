@@ -12,6 +12,7 @@
 @implementation ColorsTVC
 
 @synthesize colorsDict;
+@synthesize selectedColorSRM;
 @synthesize delegate;
 
 - (id)initWithStyle:(UITableViewStyle)style {
@@ -100,6 +101,11 @@
     // Set up the cell...
 	NSString* s=[[self.colorsDict objectForKey:@"nums"] objectAtIndex:indexPath.row];
 	[cell.textLabel setText:[[self.colorsDict objectForKey:@"list"] objectForKey:s]];
+
+	if (self.selectedColorSRM==[s integerValue])
+	{
+		cell.accessoryType=UITableViewCellAccessoryCheckmark;
+	}
 	
     return cell;
 }

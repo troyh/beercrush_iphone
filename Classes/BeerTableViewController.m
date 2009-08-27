@@ -134,10 +134,12 @@ const int kButtonHeight=40;
 				[values addObject:[NSString stringWithFormat:@"grains=%@",self.grainsTextField.text]];
 			if (self.hopsTextField.text && [[self.beerObj.data objectForKey:@"hops"] isEqualToString:self.hopsTextField.text]==NO)
 				[values addObject:[NSString stringWithFormat:@"hops=%@",self.hopsTextField.text]];
-			if ([self.beerObj.data objectForKey:@"srm"])
-				[values addObject:[NSString stringWithFormat:@"srm=%@",[self.beerObj.data objectForKey:@"srm"]]];
+			if ([self.beerObj.data objectForKey:@"availability"])
+				[values addObject:[NSString stringWithFormat:@"availability=%@",[self.beerObj.data objectForKey:@"availability"]]];
+			if ([[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"])
+				[values addObject:[NSString stringWithFormat:@"srm=%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]];
 			if ([self.beerObj.data objectForKey:@"style"])
-				[values addObject:[NSString stringWithFormat:@"style=%@",[self.beerObj.data objectForKey:@"style"]]];
+				[values addObject:[NSString stringWithFormat:@"bjcp_style_id=%@",[self.beerObj.data objectForKey:@"style"]]];
 			
 			if ([values count]) // Only send request if there is something that is changing
 			{
@@ -520,13 +522,13 @@ const int kButtonHeight=40;
 						cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Row1Editing"];
 						if (cell == nil)
 						{
-							BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-							NSDictionary* stylesDict=[appDelegate getStylesDictionary];
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section1Row1Editing"] autorelease];
 							[cell.textLabel setText:@"Style"];
-							[cell.detailTextLabel setText:[[stylesDict objectForKey:@"names"] objectForKey:[beerObj.data objectForKey:@"style"]]];
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
+						BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+						NSDictionary* stylesDict=[appDelegate getStylesDictionary];
+						[cell.detailTextLabel setText:[[stylesDict objectForKey:@"names"] objectForKey:[beerObj.data objectForKey:@"style"]]];
 						break;
 					}
 					case 2:
@@ -538,11 +540,7 @@ const int kButtonHeight=40;
 						BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 						NSDictionary* colorsDict=[appDelegate getColorsDictionary];
 						[cell.textLabel setText:@"Color"];
-						DLog(@"srm=%@",[self.beerObj.data objectForKey:@"srm"]);
-						DLog(@"list=%@",[colorsDict objectForKey:@"list"]);
-						DLog(@"key=%@",[NSString stringWithFormat:@"%@",[self.beerObj.data objectForKey:@"srm"]]);
-						DLog(@"color=%@",[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[self.beerObj.data objectForKey:@"srm"]]]);
-						[cell.detailTextLabel setText:[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[self.beerObj.data objectForKey:@"srm"]]]];
+						[cell.detailTextLabel setText:[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]]];
 						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						break;
 					}
@@ -1169,6 +1167,7 @@ const int kButtonHeight=40;
 					{
 						StylesListTVC* tvc=[[[StylesListTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
 						tvc.delegate=self;
+						tvc.selectedStyleID=[self.beerObj.data objectForKey:@"style"];
 						[self.navigationController pushViewController:tvc animated:YES];
 						break;
 					}
@@ -1176,6 +1175,7 @@ const int kButtonHeight=40;
 					{
 						ColorsTVC* ctvc=[[[ColorsTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
 						ctvc.delegate=self;
+						ctvc.selectedColorSRM=[[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"] integerValue];
 						[self.navigationController pushViewController:ctvc animated:YES];
 						break;
 					}
@@ -1183,6 +1183,7 @@ const int kButtonHeight=40;
 					{
 						AvailabilityTVC* atvc=[[[AvailabilityTVC alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
 						atvc.delegate=self;
+						atvc.selectedAvailability=[self.beerObj.data objectForKey:@"availability"];
 						[self.navigationController pushViewController:atvc animated:YES];
 						break;
 					}
@@ -1346,7 +1347,7 @@ const int kButtonHeight=40;
 
 -(void)colorsTVC:(ColorsTVC*)tvc didSelectColor:(NSUInteger)srm
 {
-	[self.beerObj.data setObject:[NSNumber numberWithUnsignedInt:srm] forKey:@"srm"];
+	[[self.beerObj.data objectForKey:@"attribs"] setObject:[NSNumber numberWithUnsignedInt:srm] forKey:@"srm"];
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -1462,6 +1463,11 @@ const int kButtonHeight=40;
 			[self.currentElemValue release];
 			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:32];
 		}
+		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",@"styles",nil]])
+		{
+			[self.currentElemValue release];
+			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
+		}
 	}
 	else if ([elementName isEqualToString:@"beer"])
 	{
@@ -1484,14 +1490,6 @@ const int kButtonHeight=40;
 		{
 			[self.currentElemValue release];
 			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
-		}
-	}
-	else if ([elementName isEqualToString:@"style"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",@"styles",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
 		}
 	}
 	else if ([elementName isEqualToString:@"availability"])
@@ -1599,6 +1597,11 @@ const int kButtonHeight=40;
 				else
 					[flavors addObject:currentElemValue];
 			}
+			else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",@"styles",nil]])
+			{
+				if ([[beerObj.data objectForKey:@"style"] length] == 0) // Only take the 1st style
+					[beerObj.data setObject:currentElemValue forKey:@"style"];
+			}
 		}
 		else if ([elementName isEqualToString:@"name"])
 		{
@@ -1612,14 +1615,6 @@ const int kButtonHeight=40;
 			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
 			{
 				[beerObj.data setObject:currentElemValue forKey:@"description"];
-			}
-		}
-		else if ([elementName isEqualToString:@"style"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",@"styles",nil]])
-			{
-				if ([[beerObj.data objectForKey:@"style"] length] == 0) // Only take the 1st style
-					[beerObj.data setObject:currentElemValue forKey:@"style"];
 			}
 		}
 		else if ([elementName isEqualToString:@"availability"])
@@ -1669,10 +1664,7 @@ const int kButtonHeight=40;
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if (self.currentElemValue)
-	{
-		[self.currentElemValue appendString:string];
-	}
+	[self.currentElemValue appendString:string];
 }
 
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock

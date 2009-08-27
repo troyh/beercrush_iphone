@@ -12,10 +12,12 @@
 
 @interface ColorsTVC : UITableViewController {
 	NSDictionary* colorsDict;
+	NSUInteger selectedColorSRM;
 	id<ColorsTVCDelegate> delegate;
 }
 
 @property (nonatomic,retain) NSDictionary* colorsDict;
+@property (nonatomic,assign) NSUInteger selectedColorSRM;
 @property (assign) id<ColorsTVCDelegate> delegate;
 
 @end

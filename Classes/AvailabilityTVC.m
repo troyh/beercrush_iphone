@@ -12,6 +12,7 @@
 @implementation AvailabilityTVC
 
 @synthesize options;
+@synthesize selectedAvailability;
 @synthesize delegate;
 
 - (id)initWithStyle:(UITableViewStyle)style {
@@ -98,6 +99,9 @@
     
     // Set up the cell...
 	[cell.textLabel setText:[self.options objectAtIndex:indexPath.row]];
+	
+	if ([[self.options objectAtIndex:indexPath.row] isEqualToString:self.selectedAvailability])
+		cell.accessoryType=UITableViewCellAccessoryCheckmark;
 	
     return cell;
 }

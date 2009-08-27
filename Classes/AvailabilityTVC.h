@@ -12,10 +12,12 @@
 
 @interface AvailabilityTVC : UITableViewController {
 	NSArray* options;
+	NSString* selectedAvailability;
 	id<AvailabilityTVCDelegate> delegate;
 }
 
 @property (nonatomic,retain) NSArray* options;
+@property (nonatomic,retain) NSString* selectedAvailability;
 @property (assign) id<AvailabilityTVCDelegate> delegate;
 
 @end
