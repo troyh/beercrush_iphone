@@ -159,12 +159,14 @@
 {
 	if (searchText.length)
 	{
+		[bar setShowsCancelButton:NO animated:YES];
 		[self query:searchText];
 	}
 	else
 	{
 		self.autoCompleteResultsData=nil;
 		self.autoCompleteResultsCount=0;
+		[bar setShowsCancelButton:YES animated:YES];
 	}
 	[self.tableView reloadData];
 }
@@ -182,6 +184,8 @@
 
 -(void)searchBarTextDidBeginEditing:(UISearchBar*)bar
 {
+	if (bar.text.length)
+		[bar setShowsCancelButton:NO animated:YES];
 }
 
 //-(BOOL)searchBarShouldEndEditing:(UISearchBar*)searchBar
@@ -195,6 +199,7 @@
     bar.text = @"";
 	self.autoCompleteResultsData=nil;
 	self.autoCompleteResultsCount=0;
+	[bar setShowsCancelButton:NO animated:YES];
 	[self.tableView reloadData];
 }
 
