@@ -14,11 +14,17 @@
 #import "LoginVC.h"
 #import "BeerListTableViewController.h"
 
+// Unique numbers to identify the tabs (they are not necessarily in this order)
 #define kTabBarItemTagBeers 1
-#define kTabBarItemTagSearch 2
+#define kTabBarItemTagPlaces 2
 #define kTabBarItemTagNearby 3
-#define kTabBarItemTagMyReviews 4
+#define kTabBarItemTagMyBeerReviews 4
 #define kTabBarItemTagWishList 5
+#define kTabBarItemTagMyPlaces 6
+#define kTabBarItemTagProfile 7
+#define kTabBarItemTagBuddies 8
+#define kTabBarItemTagRecommended 9
+#define kTabBarItemTagBookmarks 10
 
 @implementation BeerObject
 
@@ -93,52 +99,24 @@
 {
 	if (loginVC)
 	{
-		//[loginVC release];
 		loginVC=nil; // releases it too
 	}
 
-	tabBarController.viewControllers=[[NSArray alloc] initWithObjects:
-									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
-									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
-									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
-									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
-									  [[UINavigationController alloc] initWithNibName:nil bundle:nil],
-									  nil];
-	
-	UINavigationController* ctl=[tabBarController.viewControllers objectAtIndex:0];
-	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Beers" image:[UIImage imageNamed:@"dot.png"] tag:kTabBarItemTagBeers] autorelease];
-	
-	ctl=[tabBarController.viewControllers objectAtIndex:1];
-	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag:kTabBarItemTagSearch] autorelease];
-	
-	ctl=[tabBarController.viewControllers objectAtIndex:2];
-	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Nearby" image:[UIImage imageNamed:@"dot.png"] tag:kTabBarItemTagNearby] autorelease];
-	
-	ctl=[tabBarController.viewControllers objectAtIndex:3];
-	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Reviews" image:[UIImage imageNamed:@"star_filled.png"] tag:kTabBarItemTagMyReviews] autorelease];
-	
-	ctl=[tabBarController.viewControllers objectAtIndex:4];
-	ctl.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Wish List" image:[UIImage imageNamed:@"star_empty.png"] tag:kTabBarItemTagWishList] autorelease];
+//	tabBarController.viewControllers=[NSArray arrayWithObjects:
+//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
+//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
+//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
+//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
+//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
+//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
+//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
+//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
+//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
+//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
+//									  nil];
 	
 	// Add the tab bar controller's current view as a subview of the window
 	[window addSubview:tabBarController.view];
-	
-	//	UIViewController* searchResultsController=[[[UIViewController alloc] initWithNibName:nil bundle:nil] autorelease];
-	//	nav=[[UINavigationController alloc] initWithRootViewController:searchResultsController];
-	//	nav=[[UINavigationController alloc] initWithNibName:nil bundle:nil];
-	//	nav=[tabBarController.viewControllers objectAtIndex:0];
-	//	nav.navigationBarHidden=YES;
-//	nav.delegate=self;
-	
-	//
-	// Automatically navigate to where the user last closed the app
-	//
-	
-	// Hide search bar
-//	[mySearchBar resignFirstResponder];
-//	mySearchBar.hidden=YES;
-//	self.nav.view.frame=app.keyWindow.frame;
-//	self.nav.navigationBarHidden=NO;
 	
 	/*
 		 Restore the previous state of navigation:
@@ -196,40 +174,117 @@
 	NSMutableArray* stacks=[NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
 	for (int i=0;i<[self.tabBarController.viewControllers count];++i)
 	{
-		[stacks addObject:[NSMutableArray arrayWithCapacity:5]];
+		[stacks addObject:[NSMutableArray arrayWithCapacity:10]];
 	}
 	[self.appState setObject:stacks forKey:@"navstacks"];
+
+	// This determines the order that the tabs appear
+	int tabOrder[]={
+		kTabBarItemTagBeers,
+		kTabBarItemTagPlaces,
+		kTabBarItemTagNearby,
+		kTabBarItemTagWishList,
+		kTabBarItemTagMyBeerReviews,
+		kTabBarItemTagMyPlaces,
+		kTabBarItemTagProfile,
+		kTabBarItemTagBuddies,
+		kTabBarItemTagRecommended,
+		kTabBarItemTagBookmarks
+	};
 	
+	NSMutableArray* tabBarControllers=[NSMutableArray arrayWithCapacity:(sizeof(tabOrder)/sizeof(tabOrder[0]))];
 	
-	for (NSUInteger tabBarControllerIndex=0;tabBarControllerIndex < [tabBarController.viewControllers count];++tabBarControllerIndex)
+	for (size_t tabBarControllerIndex=0; tabBarControllerIndex < (sizeof(tabOrder)/sizeof(tabOrder[0]));++tabBarControllerIndex)
 	{
-		switch (tabBarControllerIndex+1) {
+		switch (tabOrder[tabBarControllerIndex]) {
 			case kTabBarItemTagBeers:
-				break;
-			case kTabBarItemTagMyReviews:
 			{
-				UserReviewsTVC* urtvc=[[UserReviewsTVC alloc] initWithStyle:UITableViewStylePlain];
-				[[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] pushViewController:urtvc animated:NO];
-				[urtvc release];
+				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				[tabBarControllers addObject:nc];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Beers" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagBeers] autorelease];
+				MyTableViewController* tvc=[[[MyTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+				[nc pushViewController:tvc animated:NO];
+				break;
+			}
+			case kTabBarItemTagPlaces:
+			{
+				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				[tabBarControllers addObject:nc];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Places" image:[UIImage imageNamed:@"dot.png"] tag:kTabBarItemTagPlaces] autorelease];
+				MyTableViewController* tvc=[[[MyTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+				[nc pushViewController:tvc animated:NO];
 				break;
 			}
 			case kTabBarItemTagNearby:
 			{
+				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				[tabBarControllers addObject:nc];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Nearby" image:[UIImage imageNamed:@"dot.png"] tag:kTabBarItemTagNearby] autorelease];
 				NearbyTableViewController* ntvc=[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain];
-				[[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] pushViewController:ntvc animated:NO ];
-				break;
-			}
-			case kTabBarItemTagSearch:
-			{
-				MyTableViewController* tvc=[[[MyTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
-				[[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] pushViewController:tvc animated:NO ];
+				[nc pushViewController:ntvc animated:NO ];
 				break;
 			}
 			case kTabBarItemTagWishList:
 			{
-				BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
-				[[tabBarController.viewControllers objectAtIndex:tabBarControllerIndex] pushViewController:bltvc animated:NO];
-				[bltvc release];
+				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				[tabBarControllers addObject:nc];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Wish List" image:[UIImage imageNamed:@"star_empty.png"] tag:kTabBarItemTagWishList] autorelease];
+				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
+				[nc pushViewController:bltvc animated:NO];
+				break;
+			}
+			case kTabBarItemTagMyBeerReviews:
+			{
+				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				[tabBarControllers addObject:nc];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Beers" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagMyBeerReviews] autorelease];
+				UserReviewsTVC* urtvc=[[[UserReviewsTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
+				[nc pushViewController:urtvc animated:NO];
+				break;
+			}
+			case kTabBarItemTagMyPlaces:
+			{
+				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				[tabBarControllers addObject:nc];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Places" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagMyPlaces] autorelease];
+				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
+				[nc pushViewController:bltvc animated:NO];
+				break;
+			}
+			case kTabBarItemTagProfile:
+			{
+				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				[tabBarControllers addObject:nc];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagProfile] autorelease];
+				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
+				[nc pushViewController:bltvc animated:NO];
+				break;
+			}
+			case kTabBarItemTagBuddies:
+			{
+				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				[tabBarControllers addObject:nc];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Buddies" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagBuddies] autorelease];
+				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
+				[nc pushViewController:bltvc animated:NO];
+				break;
+			}
+			case kTabBarItemTagRecommended:
+			{
+				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				[tabBarControllers addObject:nc];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Recommended" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagRecommended] autorelease];
+				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
+				[nc pushViewController:bltvc animated:NO];
+				break;
+			}
+			case kTabBarItemTagBookmarks:
+			{
+				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				[tabBarControllers addObject:nc];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag:kTabBarItemTagBookmarks] autorelease];
+				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
+				[nc pushViewController:bltvc animated:NO];
 				break;
 			}
 			default:
@@ -238,11 +293,20 @@
 		}
 	}
 	
+	tabBarController.viewControllers=tabBarControllers;
+	
 	if (self.restoringNavState)
 	{
-		// We don't need to test if 'selectedtab' is there, it'll just set it to the 0-th controller anyway
-		NSUInteger n=[(NSNumber*)[self.restoringNavState valueForKey:@"selectedtab"] integerValue];
-		tabBarController.selectedViewController=[tabBarController.viewControllers objectAtIndex:n];
+		// We don't need to test if 'selectedtabtag' is there, it'll just set it to the 0-th controller anyway
+		NSInteger tag=[(NSNumber*)[self.restoringNavState valueForKey:@"selectedtabtag"] integerValue];
+		// Find the viewcontroller with the tabbaritem that has this tag
+		for (UIViewController* vc in self.tabBarController.viewControllers) {
+			if (tag == vc.tabBarItem.tag)
+			{
+				tabBarController.selectedViewController=vc;
+				break;
+			}
+		}
 	}
 
 }
@@ -262,7 +326,9 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
 	// Save the current app state
-	[self.appState setValue:[NSNumber numberWithUnsignedInt:[self.tabBarController.viewControllers indexOfObjectIdenticalTo:[self.tabBarController selectedViewController]]] forKey:@"selectedtab"];
+	NSInteger tag=self.tabBarController.selectedViewController.tabBarItem.tag;
+//	[NSNumber numberWithUnsignedInt:[self.tabBarController.viewControllers indexOfObjectIdenticalTo:[self.tabBarController selectedViewController]]];
+	[self.appState setValue:[NSNumber numberWithInt:tag] forKey:@"selectedtabtag"];
 	// TODO: if the app state is empty, just remove the key 'appstate' from NSUserDefaults
 	[[NSUserDefaults standardUserDefaults] setObject:self.appState forKey:@"appstate"];
 }
@@ -278,6 +344,9 @@
 		return NO;
 
 	NSUInteger idx=[self.tabBarController.viewControllers indexOfObjectIdenticalTo:self.tabBarController.selectedViewController];
+	if (idx >= [stacks count])
+		return NO;
+	
 	return [[stacks objectAtIndex:idx] count]?YES:NO;
 }
 
