@@ -248,15 +248,15 @@
 		[cell.textLabel setText:[NSString stringWithCString:p encoding:NSASCIIStringEncoding]];
 		if (!strncmp(p+strlen(p)+1,"beer:",5))
 		{ // Beer
-			[cell.imageView initWithImage:[UIImage imageNamed:@"star_filled.png"]];
+			[cell.imageView initWithImage:[UIImage imageNamed:@"beer.png"]];
 		}
 		else if (!strncmp(p+strlen(p)+1,"place:",6))
 		{ // Place
-			[cell.imageView initWithImage:[UIImage imageNamed:@"dot.png"]];
+			[cell.imageView initWithImage:[UIImage imageNamed:@"restaurant.png"]];
 		}
 		else if (!strncmp(p+strlen(p)+1,"brewery:",8))
 		{ // Brewery
-			[cell.imageView initWithImage:[UIImage imageNamed:@"dot.png"]];
+			[cell.imageView initWithImage:[UIImage imageNamed:@"brewery.png"]];
 		}
 		
 		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
