@@ -107,6 +107,11 @@ const NSInteger kViewTagDistance=2;
 		self.locationManager.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
 		[self.locationManager startUpdatingLocation];
 		
+		UISegmentedControl* segmentedControl=[[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"All",@"Food",@"Bars",@"Stores",nil]] autorelease];
+		segmentedControl.segmentedControlStyle=UISegmentedControlStyleBar;
+		[segmentedControl setEnabled:YES forSegmentAtIndex:0];
+		self.navigationItem.titleView=segmentedControl;
+		
 		self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshNearby:)] autorelease];
 	}
 	
