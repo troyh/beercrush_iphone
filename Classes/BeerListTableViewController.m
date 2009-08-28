@@ -321,10 +321,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
 	
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	if ([delegate onBeerSelected:[beer.data valueForKey:@"id"]]==NO)
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	if ([appDelegate onBeerSelected:[beer.data valueForKey:@"id"]]==NO)
 	{
-		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[beer.data valueForKey:@"id"]]; // Saves the new nav state
 		
 		BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:[beer.data valueForKey:@"id"]] autorelease];

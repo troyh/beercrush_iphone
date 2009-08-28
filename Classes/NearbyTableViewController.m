@@ -56,6 +56,15 @@
 		return NSOrderedSame;
 }
 
+-(void)dealloc
+{
+	[place_id release];
+	[data release];
+	[editeddata release];
+
+	[super dealloc];
+}	
+
 @end
 
 
@@ -65,6 +74,7 @@
 @synthesize currentElemValue;
 @synthesize placeObject;
 @synthesize places;
+@synthesize locationManager;
 
 /*
 - (id)initWithStyle:(UITableViewStyle)style {
@@ -89,10 +99,12 @@
 	{
 		// Get location
 		//	CLLocationManager* locman=[[[CLLocationManager alloc] init] autorelease];
-		CLLocationManager* locman=[[CLLocationManager alloc] init];
-		locman.delegate=self;
-		locman.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
-		[locman startUpdatingLocation];
+		self.locationManager=[[CLLocationManager alloc] init];
+		self.locationManager.delegate=self;
+		self.locationManager.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
+		[self.locationManager startUpdatingLocation];
+		
+		self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshNearby:)] autorelease];
 	}
 	
 	self.title=@"Nearby";
@@ -100,16 +112,25 @@
     [super viewWillAppear:animated];
 }
 
+-(void)refreshNearby:(id)sender
+{
+	[places removeAllObjects];
+	[self.tableView reloadData];
+	[self.locationManager startUpdatingLocation];
+}
+
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 }
 */
-/*
+
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
+	DLog(@"Stopping updating Location");
+	[locationManager stopUpdatingLocation];
 }
-*/
+
 /*
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
@@ -149,7 +170,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
     }
     
     // Set up the cell...
@@ -157,17 +178,19 @@
 //	cell.font=[UIFont boldSystemFontOfSize:14.0];
 	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
-	UILabel* nametext=[[UILabel alloc] initWithFrame:CGRectMake(10.0, 5.0, 300.0, 20.0)];
-	nametext.text=[p.data valueForKey:@"name"];
-	nametext.font=[UIFont boldSystemFontOfSize:16.0];
+//	UILabel* nametext=[[UILabel alloc] initWithFrame:CGRectMake(10.0, 5.0, 300.0, 20.0)];
+	[cell.textLabel setText:[p.data valueForKey:@"name"]];
+//	nametext.font=[UIFont boldSystemFontOfSize:16.0];
 //	nametext.textColor=[UIColor grayColor];
-	[cell.contentView addSubview:nametext];
+//	[cell.contentView addSubview:nametext];
 	
-	UILabel* disttext=[[UILabel alloc] initWithFrame:CGRectMake(10.0, 30.0, 300.0, 10.0)];
-	disttext.text=[NSString stringWithFormat:@"%0.1f miles",(p.distanceAway/1000*0.62137119)]; // Convert meters to miles
-	disttext.font=[UIFont systemFontOfSize: [UIFont smallSystemFontSize]];
-	disttext.textColor=[UIColor grayColor];
-	[cell.contentView addSubview:disttext];
+//	UILabel* disttext=[[UILabel alloc] initWithFrame:CGRectMake(10.0, 30.0, 300.0, 10.0)];
+	[cell.detailTextLabel setText:[NSString stringWithFormat:@"%0.1f mi",(p.distanceAway/1000*0.62137119)]]; // Convert meters to miles
+	cell.detailTextLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+//	disttext.text=[NSString stringWithFormat:@"%0.1f miles",(p.distanceAway/1000*0.62137119)]; // Convert meters to miles
+//	disttext.font=[UIFont systemFontOfSize: [UIFont smallSystemFontSize]];
+//	disttext.textColor=[UIColor grayColor];
+//	[cell.contentView addSubview:disttext];
 
     return cell;
 }
@@ -246,6 +269,11 @@
 
 
 - (void)dealloc {
+	[currentElemValue release];
+	[myLocation release];
+	[placeObject release];
+	[places release];
+	[locationManager release];
     [super dealloc];
 }
 
@@ -258,11 +286,12 @@
 	// TODO: check timestamp of newLocation and if it's within a few seconds, stop updating location.
 	
 	DLog(@"newLocation timestamp=%@ timeIntervalSinceNow=%d",newLocation.timestamp.description,[newLocation.timestamp timeIntervalSinceNow]);
-	if ([newLocation.timestamp timeIntervalSinceNow] > -3)
-	{
-		DLog(@"Stopping updating Location");
-		[manager stopUpdatingLocation];
-	}
+//	if ([newLocation.timestamp timeIntervalSinceNow] > -3)
+//	{
+//		DLog(@"Stopping updating Location");
+//		[manager stopUpdatingLocation];
+//	}
+	[manager stopUpdatingLocation]; // Just do it once, the user can ask to do it again
 	
 	if (myLocation)
 		[myLocation release];
@@ -270,7 +299,7 @@
 	[myLocation retain];
 	
 	// Ask server for nearby places
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_NEARBY_QUERY, myLocation.coordinate.latitude, myLocation.coordinate.longitude, 50]];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_NEARBY_QUERY, myLocation.coordinate.latitude, myLocation.coordinate.longitude, 10]];
 	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSData* data;
 	NSHTTPURLResponse* answer=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&data];
@@ -285,6 +314,8 @@
 // Called when there is an error getting the location
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
+	DLog(@"Stopping updating Location because of an error");
+	[manager stopUpdatingLocation];
 }
 	
 

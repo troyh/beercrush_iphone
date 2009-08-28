@@ -379,9 +379,13 @@
 	{
 		if (vc.tabBarItem.tag==tabBarItem.tag)
 		{	// Found it
-			NSMutableArray* stack=[[self.appState objectForKey:@"navstacks"] objectAtIndex:idx];
-			[stack addObject:data];
-			return stack?YES:NO;
+			NSMutableArray* stacks=[self.appState objectForKey:@"navstacks"];
+			if (idx < [stacks count])
+			{
+				[[stacks objectAtIndex:idx] addObject:data];
+				return YES;
+			}
+			break;
 		}
 		++idx;
 	}
