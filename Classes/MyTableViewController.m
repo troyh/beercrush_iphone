@@ -136,7 +136,7 @@
 	if (self.searchTypes==(BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
 		self.searchBar.placeholder=@"Beers, brewers, etc.";
 	else if (self.searchTypes==BeerCrushSearchTypePlaces)
-		self.searchBar.placeholder=@"Pubs, restaurants, stores, etc.";
+		self.searchBar.placeholder=@"Pubs, restaurants, bars, stores, etc.";
 	
 	self.searchBar.delegate=self;
 	[self.searchBar sizeToFit];

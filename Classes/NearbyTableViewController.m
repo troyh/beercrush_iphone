@@ -76,6 +76,9 @@
 @synthesize places;
 @synthesize locationManager;
 
+const NSInteger kViewTagName=1;
+const NSInteger kViewTagDistance=2;
+
 /*
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -170,28 +173,35 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+
+		UILabel* namelabel=[[[UILabel alloc] initWithFrame:CGRectMake(40, 2, 250, 30)] autorelease];
+		namelabel.tag=kViewTagName;
+		namelabel.font=[UIFont boldSystemFontOfSize:16.0];
+		[cell.contentView addSubview:namelabel];
+		
+		UILabel* distanceLabel=[[[UILabel alloc] initWithFrame:CGRectMake(255, 17, 40, 10)] autorelease];
+		distanceLabel.tag=kViewTagDistance;
+		distanceLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+		distanceLabel.textColor=[UIColor grayColor];
+		[cell.contentView addSubview:distanceLabel];
     }
     
     // Set up the cell...
 	PlaceObject* p=[places objectAtIndex:indexPath.row];
-//	cell.font=[UIFont boldSystemFontOfSize:14.0];
-	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
-//	UILabel* nametext=[[UILabel alloc] initWithFrame:CGRectMake(10.0, 5.0, 300.0, 20.0)];
-	[cell.textLabel setText:[p.data valueForKey:@"name"]];
-//	nametext.font=[UIFont boldSystemFontOfSize:16.0];
-//	nametext.textColor=[UIColor grayColor];
-//	[cell.contentView addSubview:nametext];
+	UILabel* namelabel=(UILabel*)[cell.contentView viewWithTag:kViewTagName];
+	[namelabel setText:[p.data valueForKey:@"name"]];
 	
-//	UILabel* disttext=[[UILabel alloc] initWithFrame:CGRectMake(10.0, 30.0, 300.0, 10.0)];
-	[cell.detailTextLabel setText:[NSString stringWithFormat:@"%0.1f mi",(p.distanceAway/1000*0.62137119)]]; // Convert meters to miles
-	cell.detailTextLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
-//	disttext.text=[NSString stringWithFormat:@"%0.1f miles",(p.distanceAway/1000*0.62137119)]; // Convert meters to miles
-//	disttext.font=[UIFont systemFontOfSize: [UIFont smallSystemFontSize]];
-//	disttext.textColor=[UIColor grayColor];
-//	[cell.contentView addSubview:disttext];
+	UILabel* distlabel=(UILabel*)[cell.contentView viewWithTag:kViewTagDistance];
+	[distlabel setText:[NSString stringWithFormat:@"%0.1f mi",(p.distanceAway/1000*0.62137119)]]; // Convert meters to miles
 
+	if ([p.place_id hasPrefix:@"brewery:"])
+		cell.imageView.image=[UIImage imageNamed:@"brewery.png"];
+	else
+		cell.imageView.image=[UIImage imageNamed:@"restaurant.png"];
+	
     return cell;
 }
 
