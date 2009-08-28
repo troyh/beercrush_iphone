@@ -13,6 +13,11 @@
 #import "UserReviewsTVC.h"
 #import "LoginVC.h"
 #import "BeerListTableViewController.h"
+#import "UserProfileTVC.h"
+#import "BuddiesTVC.h"
+#import "RecommendedTVC.h"
+#import "BookmarksTVC.h"
+#import "PlacesTVC.h"
 
 // Unique numbers to identify the tabs (they are not necessarily in this order)
 #define kTabBarItemTagBeers 1
@@ -249,7 +254,7 @@
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Places" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagMyPlaces] autorelease];
-				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
+				PlacesTVC* bltvc=[[[PlacesTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
 				[nc pushViewController:bltvc animated:NO];
 				break;
 			}
@@ -258,8 +263,8 @@
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagProfile] autorelease];
-				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
-				[nc pushViewController:bltvc animated:NO];
+				UserProfileTVC* uptvc=[[[UserProfileTVC alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
+				[nc pushViewController:uptvc animated:NO];
 				break;
 			}
 			case kTabBarItemTagBuddies:
@@ -267,8 +272,8 @@
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Buddies" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagBuddies] autorelease];
-				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
-				[nc pushViewController:bltvc animated:NO];
+				BuddiesTVC* btvc=[[[BuddiesTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
+				[nc pushViewController:btvc animated:NO];
 				break;
 			}
 			case kTabBarItemTagRecommended:
@@ -276,8 +281,8 @@
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Recommended" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagRecommended] autorelease];
-				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
-				[nc pushViewController:bltvc animated:NO];
+				RecommendedTVC* rtvc=[[[RecommendedTVC alloc]  initWithStyle:UITableViewStylePlain] autorelease];
+				[nc pushViewController:rtvc animated:NO];
 				break;
 			}
 			case kTabBarItemTagBookmarks:
@@ -285,8 +290,8 @@
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag:kTabBarItemTagBookmarks] autorelease];
-				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
-				[nc pushViewController:bltvc animated:NO];
+				BookmarksTVC* btvc=[[[BookmarksTVC alloc]  initWithStyle:UITableViewStylePlain] autorelease];
+				[nc pushViewController:btvc animated:NO];
 				break;
 			}
 			default:
