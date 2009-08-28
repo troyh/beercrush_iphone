@@ -132,7 +132,12 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
 	self.searchBar=[[UISearchBar alloc] initWithFrame:CGRectZero];
-	self.searchBar.placeholder=@"Beers, brewers, etc.";
+
+	if (self.searchTypes==(BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
+		self.searchBar.placeholder=@"Beers, brewers, etc.";
+	else if (self.searchTypes==BeerCrushSearchTypePlaces)
+		self.searchBar.placeholder=@"Pubs, restaurants, stores, etc.";
+	
 	self.searchBar.delegate=self;
 	[self.searchBar sizeToFit];
 	[self.navigationController.navigationBar addSubview:self.searchBar];
