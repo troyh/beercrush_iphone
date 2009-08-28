@@ -179,6 +179,8 @@ const int kTagBeerNameLabel=1;
 					
 					[self setEditing:NO animated:YES];
 					[self.tableView reloadData];
+
+					[self.delegate didSaveBeerEdits];
 				}
 				else
 				{
@@ -194,8 +196,6 @@ const int kTagBeerNameLabel=1;
 				[alert show];
 			}
 		}
-		
-		[self.delegate didSaveBeerEdits];
 	}
 	else
 	{
