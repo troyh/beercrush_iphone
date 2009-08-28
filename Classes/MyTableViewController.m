@@ -114,6 +114,33 @@
 	self.searchBar.delegate=self;
 	[self.searchBar sizeToFit];
 	[self.navigationController.navigationBar addSubview:self.searchBar];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardDidHideNotification object:nil];
+}
+
+-(void)keyboardWillShow:(NSNotification*)notification
+{
+	// Resize the tableview so that it isn't obscured by the keyboard
+	CGRect bounds=[[[notification userInfo] objectForKey:UIKeyboardBoundsUserInfoKey] CGRectValue];
+	CGPoint center=[[[notification userInfo] objectForKey:UIKeyboardCenterEndUserInfoKey] CGPointValue];
+	
+	CGRect keyboardFrame=CGRectMake(round(center.x - bounds.size.width/2.0), round(center.y - bounds.size.height/2.0), bounds.size.width, bounds.size.height);
+	CGRect tableViewFrame=[self.tableView.window convertRect:self.tableView.frame fromView:self.tableView.superview];
+	
+	CGRect intersectionFrame=CGRectIntersection(tableViewFrame, keyboardFrame);
+	
+	UIEdgeInsets insets=UIEdgeInsetsMake(0, 0, intersectionFrame.size.height, 0);
+	
+	[self.tableView setContentInset:insets];
+	[self.tableView setScrollIndicatorInsets:insets];
+}
+
+-(void)keyboardWillHide:(NSNotification*)notification
+{
+	// Resize the tableview back to normal
+	[self.tableView setContentInset:UIEdgeInsetsZero];
+	[self.tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -420,6 +447,9 @@
 - (void)dealloc {
 	[searchBar release];
 	[autoCompleteResultsData release];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
     [super dealloc];
 }
 
