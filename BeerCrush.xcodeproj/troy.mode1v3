@@ -275,7 +275,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>11</integer>
+									<integer>29</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -318,7 +318,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>FullBeerReviewTVC.m</string>
+								<string>BeerListTableViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -326,11 +326,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>FullBeerReviewTVC.m</string>
+										<string>BeerListTableViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>05451A8310472C1500F9400B</string>
+										<string>05451BC0104773C300F9400B</string>
 										<key>history</key>
 										<array>
 											<string>05C9AA760F53458A0020B102</string>
@@ -359,13 +359,10 @@
 											<string>05B7DC0F103F4F280021EEDA</string>
 											<string>05B7DCD9103F62850021EEDA</string>
 											<string>05B7DD5B10407BC90021EEDA</string>
-											<string>0545115F1043004400F9400B</string>
-											<string>054511601043004400F9400B</string>
 											<string>054511611043004400F9400B</string>
 											<string>054511621043004400F9400B</string>
 											<string>054511641043004400F9400B</string>
 											<string>0545124B1043167900F9400B</string>
-											<string>054512B1104336E800F9400B</string>
 											<string>0545146A10435BFB00F9400B</string>
 											<string>054517141045BB9C00F9400B</string>
 											<string>0545186C1045F53600F9400B</string>
@@ -378,9 +375,7 @@
 											<string>0545197A1046F5E300F9400B</string>
 											<string>05451990104703B800F9400B</string>
 											<string>054519B11047044200F9400B</string>
-											<string>054519D81047194C00F9400B</string>
 											<string>054519EB10471C0300F9400B</string>
-											<string>054519F010471CDA00F9400B</string>
 											<string>05451A0F1047219600F9400B</string>
 											<string>05451A101047219600F9400B</string>
 											<string>05451A111047219600F9400B</string>
@@ -392,9 +387,15 @@
 											<string>05451A181047219600F9400B</string>
 											<string>05451A191047219600F9400B</string>
 											<string>05451A1A1047219600F9400B</string>
-											<string>05451A1B1047219600F9400B</string>
 											<string>05451A51104726DE00F9400B</string>
-											<string>05451A61104728EB00F9400B</string>
+											<string>05451A8510472DC300F9400B</string>
+											<string>05451A941047317D00F9400B</string>
+											<string>05451B3C1047504B00F9400B</string>
+											<string>05451B6410475AA500F9400B</string>
+											<string>05451B8E10476CFD00F9400B</string>
+											<string>05451BA9104771B500F9400B</string>
+											<string>05451BB4104772EF00F9400B</string>
+											<string>05451BB5104772EF00F9400B</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -939,6 +940,44 @@
 											<string>05451A321047219600F9400B</string>
 											<string>05451A53104726DE00F9400B</string>
 											<string>05451A54104726DE00F9400B</string>
+											<string>05451A8710472DC300F9400B</string>
+											<string>05451A8810472DC300F9400B</string>
+											<string>05451A961047317D00F9400B</string>
+											<string>05451A971047317D00F9400B</string>
+											<string>05451AA6104738D600F9400B</string>
+											<string>05451B1B10474DAC00F9400B</string>
+											<string>05451B2010474DBB00F9400B</string>
+											<string>05451B2510474F5700F9400B</string>
+											<string>05451B2A10474F6200F9400B</string>
+											<string>05451B2E10474FD500F9400B</string>
+											<string>05451B3310474FE300F9400B</string>
+											<string>05451B3E1047504B00F9400B</string>
+											<string>05451B3F1047504B00F9400B</string>
+											<string>05451B401047504B00F9400B</string>
+											<string>05451B451047507600F9400B</string>
+											<string>05451B461047507600F9400B</string>
+											<string>05451B6710475AA500F9400B</string>
+											<string>05451B6810475AA500F9400B</string>
+											<string>05451B6910475AA500F9400B</string>
+											<string>05451B6A10475AA500F9400B</string>
+											<string>05451B6B10475AA500F9400B</string>
+											<string>05451B6C10475AA500F9400B</string>
+											<string>05451B6D10475AA500F9400B</string>
+											<string>05451B6E10475AA500F9400B</string>
+											<string>05451B6F10475AA500F9400B</string>
+											<string>05451B7010475AA500F9400B</string>
+											<string>05451B7110475AA500F9400B</string>
+											<string>05451B83104763C500F9400B</string>
+											<string>05451B84104763C500F9400B</string>
+											<string>05451B85104763C500F9400B</string>
+											<string>05451B86104763C500F9400B</string>
+											<string>05451B9010476CFD00F9400B</string>
+											<string>05451B9110476CFD00F9400B</string>
+											<string>05451BAB104771B500F9400B</string>
+											<string>05451BB6104772EF00F9400B</string>
+											<string>05451BB7104772EF00F9400B</string>
+											<string>05451BB8104772EF00F9400B</string>
+											<string>05451BB9104772EF00F9400B</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -1132,7 +1171,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>05451A8110472BC700F9400B</string>
 		<string>0545171A1045BBE500F9400B</string>
 		<string>05450F80104092CB00F9400B</string>
 		<string>05450F81104092CB00F9400B</string>
