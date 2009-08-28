@@ -203,6 +203,7 @@
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Beers" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagBeers] autorelease];
 				MyTableViewController* tvc=[[[MyTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+				tvc.searchTypes=BeerCrushSearchTypeBeers|BeerCrushSearchTypeBreweries; // Search both beers and breweries
 				[nc pushViewController:tvc animated:NO];
 				break;
 			}
@@ -212,6 +213,7 @@
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Places" image:[UIImage imageNamed:@"dot.png"] tag:kTabBarItemTagPlaces] autorelease];
 				MyTableViewController* tvc=[[[MyTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+				tvc.searchTypes=BeerCrushSearchTypePlaces; // Search only Places
 				[nc pushViewController:tvc animated:NO];
 				break;
 			}

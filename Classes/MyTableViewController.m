@@ -62,6 +62,7 @@
 @synthesize searchBar;
 @synthesize autoCompleteResultsData;
 @synthesize autoCompleteResultsCount;
+@synthesize searchTypes;
 
 -(void)query:(NSString*)qs 
 {
@@ -69,30 +70,51 @@
 	self.autoCompleteResultsData=nil;
 	
 	// Send the query off to the server
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY, qs ]];
-	self.autoCompleteResultsData=[[NSData dataWithContentsOfURL:url] retain];
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 
-	char* p=(char*)[autoCompleteResultsData bytes];
-	while (p)
-	{	// Count the number of items
-		char* tab=strchr(p,'\t');
-		if (!tab)
-			p=nil; // Quit
-		else
-		{
-			*tab='\0';
-			char* nl=strchr(tab+1, '\n');
-			if (!nl)
+	const char* dataset;
+	if (self.searchTypes == (BeerCrushSearchTypeBeers & BeerCrushSearchTypeBreweries))
+		dataset="beersandbreweries";
+	else if (self.searchTypes == BeerCrushSearchTypeBreweries)
+		dataset="breweries";
+	else if (self.searchTypes == BeerCrushSearchTypeBeers)
+		dataset="beers";
+	else if (self.searchTypes == BeerCrushSearchTypePlaces)
+		dataset="places";
+	
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY, qs, dataset ]];
+	NSData* answer;
+	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+	self.autoCompleteResultsData=answer;
+	
+	if ([response statusCode]==200)
+	{
+		char* p=(char*)[self.autoCompleteResultsData bytes];
+		while (p)
+		{	// Count the number of items
+			char* tab=strchr(p,'\t');
+			if (!tab)
 				p=nil; // Quit
 			else
 			{
-				*nl='\0';
-				p=nl+1;
-				++self.autoCompleteResultsCount;
+				*tab='\0';
+				char* nl=strchr(tab+1, '\n');
+				if (!nl)
+					p=nil; // Quit
+				else
+				{
+					*nl='\0';
+					p=nl+1;
+					++self.autoCompleteResultsCount;
+				}
 			}
 		}
+		DLog(@"%d results",self.autoCompleteResultsCount);
 	}
-	DLog(@"%d results",self.autoCompleteResultsCount);
+	else
+	{
+//		[appDelegate alertUser:@"Search failed"];
+	}
 }
 
 - (id)initWithStyle:(UITableViewStyle)style {

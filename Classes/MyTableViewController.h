@@ -9,15 +9,24 @@
 #import <UIKit/UIKit.h>
 #import "BeerCrushAppDelegate.h"
 
+typedef enum
+{
+	BeerCrushSearchTypeBeers = 1,
+	BeerCrushSearchTypeBreweries = 2,
+	BeerCrushSearchTypePlaces = 4
+} BeerCrushSearchType;
+
 @interface MyTableViewController : UITableViewController <UISearchBarDelegate> {
 	UISearchBar* searchBar;
 	NSInteger autoCompleteResultsCount;
 	NSData* autoCompleteResultsData;
+	int searchTypes;
 }
 
 @property (nonatomic,retain) UISearchBar* searchBar;
 @property (nonatomic) NSInteger autoCompleteResultsCount;
 @property (nonatomic, retain) NSData* autoCompleteResultsData;
+@property (nonatomic, assign) int searchTypes;
 
 -(void)query:(NSString*)qs;
 
