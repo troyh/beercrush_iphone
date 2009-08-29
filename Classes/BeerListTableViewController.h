@@ -13,6 +13,9 @@
 	NSString* breweryID;
 	NSString* placeID;
 	NSString* wishlistID;
+	
+	NSString* breweryName;
+	
 	NSMutableArray* beerList;
 	NSMutableString* currentElemValue;
 	NSMutableDictionary* currentElemAttribs;
@@ -24,6 +27,7 @@
 @property (nonatomic,retain) NSString* breweryID;
 @property (nonatomic,retain) NSString* placeID;
 @property (nonatomic,retain) NSString* wishlistID;
+@property (nonatomic,retain) NSString* breweryName;
 @property (nonatomic,retain) NSMutableArray* beerList;
 @property (nonatomic,retain) NSMutableString* currentElemValue;
 @property (nonatomic,retain) NSMutableDictionary* currentElemAttribs;

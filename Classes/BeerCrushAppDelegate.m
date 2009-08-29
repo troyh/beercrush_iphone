@@ -173,17 +173,8 @@
 			}
 		}
 	}
-
-	// Create a new appstate dictionary to store the app's state as it runs
-	self.appState=[[NSMutableDictionary alloc] init];
-	NSMutableArray* stacks=[NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
-	for (int i=0;i<[self.tabBarController.viewControllers count];++i)
-	{
-		[stacks addObject:[NSMutableArray arrayWithCapacity:10]];
-	}
-	[self.appState setObject:stacks forKey:@"navstacks"];
-
-	// This determines the order that the tabs appear
+	
+	// This determines the default order that the tabs appear
 	int tabOrder[]={
 		kTabBarItemTagBeers,
 		kTabBarItemTagPlaces,
@@ -196,7 +187,16 @@
 		kTabBarItemTagRecommended,
 		kTabBarItemTagBookmarks
 	};
-	
+
+	// Create a new appstate dictionary to store the app's state as it runs
+	self.appState=[[NSMutableDictionary alloc] init];
+	NSMutableArray* stacks=[NSMutableArray arrayWithCapacity:(sizeof(tabOrder)/sizeof(tabOrder[0]))];
+	for (int i=0;i<(sizeof(tabOrder)/sizeof(tabOrder[0]));++i)
+	{
+		[stacks addObject:[NSMutableArray arrayWithCapacity:10]];
+	}
+	[self.appState setObject:stacks forKey:@"navstacks"];
+
 	NSMutableArray* tabBarControllers=[NSMutableArray arrayWithCapacity:(sizeof(tabOrder)/sizeof(tabOrder[0]))];
 	
 	for (size_t tabBarControllerIndex=0; tabBarControllerIndex < (sizeof(tabOrder)/sizeof(tabOrder[0]));++tabBarControllerIndex)

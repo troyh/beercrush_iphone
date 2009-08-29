@@ -340,6 +340,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Navigation logic may go here. Create and push another view controller.
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+
 	if (indexPath.section == 0 && indexPath.row == 0) // Brewery name
 	{
 		if (self.tableView.editing==YES)
@@ -364,6 +366,8 @@
 		BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.breweryID];
 		[self.navigationController pushViewController: bltvc animated:YES];
 		[bltvc release];
+		
+		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:self.breweryID];
 	}
 	else if (indexPath.section == 1 && indexPath.row == 0) // Web site cell
 	{

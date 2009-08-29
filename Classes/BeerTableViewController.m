@@ -45,7 +45,7 @@
 const int kButtonWidth=80;
 const int kButtonHeight=40;
 
-const int kTagBeerNameLabel=1;
+static const int kTagBeerNameLabel=1;
 
 -(id) initWithBeerID:(NSString*)beer_id
 {

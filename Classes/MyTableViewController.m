@@ -72,8 +72,8 @@
 	// Send the query off to the server
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 
-	const char* dataset;
-	if (self.searchTypes == (BeerCrushSearchTypeBeers & BeerCrushSearchTypeBreweries))
+	const char* dataset="";
+	if (self.searchTypes == (BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
 		dataset="beersandbreweries";
 	else if (self.searchTypes == BeerCrushSearchTypeBreweries)
 		dataset="breweries";
@@ -365,23 +365,31 @@
 		else if (!strncmp(idp, "place:", 6))
 			t=Place;
 		
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		
 		if (t == Brewer)
 		{
 			BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:[NSString stringWithCString:idp]];
 			[self.navigationController pushViewController: btvc animated:YES];
 			[btvc release];
+			
+			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[NSString stringWithCString:idp]];
 		}
 		else if (t == Beer)
 		{
 			BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID: [NSString stringWithCString:idp]];
 			[self.navigationController pushViewController:btvc animated:YES];
 			[btvc release];
+
+			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[NSString stringWithCString:idp]];
 		}
 		else if (t == Place)
 		{
 			PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID: [NSString stringWithCString:idp]];
 			[self.navigationController pushViewController: btvc animated:YES];
 			[btvc release];
+
+			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[NSString stringWithCString:idp]];
 		}
 	}
 		

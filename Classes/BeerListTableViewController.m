@@ -16,12 +16,16 @@
 @synthesize placeID;
 @synthesize wishlistID;
 // TODO: just use one ID string above and use an enum to signify the type of ID it is
+@synthesize breweryName;
 @synthesize currentElemValue;
 @synthesize	currentElemAttribs;
 @synthesize xmlParserPath;
 @synthesize beerList;
 @synthesize btvc;
 @synthesize setRightBarButtonItem;
+
+static const NSInteger kTagBreweryNameLabel=1;
+static const NSInteger kTagBeerNameLabel=2;
 
 -(id)initWithBreweryID:(NSString*)brewery_id
 {
@@ -39,6 +43,7 @@
 	{
 		self.breweryID=brewery_id;
 		self.title=@"Beer List";
+		self.breweryName=@"Name of Brewery";
 	}
 	else if ([[parts objectAtIndex:0] isEqualToString:@"wishlist"])
 	{
@@ -302,17 +307,35 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"BeerCell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
+		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+
+		UILabel* beerNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 8, 250, 30)] autorelease];
+		beerNameLabel.font=[UIFont boldSystemFontOfSize:15];
+		beerNameLabel.textColor=[UIColor blackColor];
+		beerNameLabel.tag=kTagBeerNameLabel;
+		[cell.contentView addSubview:beerNameLabel];
+		
+		UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 1, 200, 12)] autorelease];
+		breweryNameLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+		breweryNameLabel.textColor=[UIColor grayColor];
+		breweryNameLabel.tag=kTagBreweryNameLabel;
+		[cell.contentView addSubview:breweryNameLabel];
     }
     
     // Set up the cell...
 	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
-	[cell.textLabel setText:[NSString stringWithFormat:@"%@", [beer.data objectForKey:@"name"] ]];
-	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+	UILabel* beerNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBeerNameLabel];
+	[beerNameLabel setText:[beer.data objectForKey:@"name"]];
+
+	cell.imageView.image=[UIImage imageNamed:@"beer.png"];
+	
+	UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
+	[breweryNameLabel setText:self.breweryName];
 
     return cell;
 }
