@@ -74,6 +74,8 @@
 -(BOOL)pushNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem withData:(NSObject*)data;
 -(void)popNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem;
 
+-(NSString*)breweryNameFromBeerID:(NSString*)beer_id;
+
 @end
 
 #ifdef DEBUG
@@ -98,6 +100,7 @@
 #define BEERCRUSH_API_URL_GET_BEER_DOC					@BEERCRUSH_API_URL_HOST"/xml/beer/%@/%@"
 #define BEERCRUSH_API_URL_GET_BEER_REVIEW_DOC			@BEERCRUSH_API_URL_HOST"/xml/review/beer/%@/%@/%@"
 #define BEERCRUSH_API_URL_GET_BREWERY_DOC				@BEERCRUSH_API_URL_HOST"/xml/brewery/%@"
+#define BEERCRUSH_API_URL_GET_BREWERY_DOC_JSON			@BEERCRUSH_API_URL_HOST"/json/brewery/%@.json"
 #define BEERCRUSH_API_URL_GET_COLORSLIST				@BEERCRUSH_API_URL_HOST"/xml/beercolors"
 #define BEERCRUSH_API_URL_GET_FLAVORS_DOC				@BEERCRUSH_API_URL_HOST"/xml/flavors"
 #define BEERCRUSH_API_URL_GET_MENU_DOC					@BEERCRUSH_API_URL_HOST"/xml/menu/%@/%@"

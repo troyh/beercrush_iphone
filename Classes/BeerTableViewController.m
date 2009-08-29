@@ -487,7 +487,8 @@ static const int kTagBeerNameLabel=1;
 							breweryNameLabel.backgroundColor=[UIColor clearColor];
 							breweryNameLabel.font=[UIFont boldSystemFontOfSize:12];
 							breweryNameLabel.textColor=[UIColor grayColor];
-							[breweryNameLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"brewery_id"]];
+							BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+							[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"brewery_id"]]];
 							[cell.contentView addSubview:breweryNameLabel];
 							
 							UILabel* beerNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 20, 200, 30)] autorelease];

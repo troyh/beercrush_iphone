@@ -16,7 +16,6 @@
 @synthesize placeID;
 @synthesize wishlistID;
 // TODO: just use one ID string above and use an enum to signify the type of ID it is
-@synthesize breweryName;
 @synthesize currentElemValue;
 @synthesize	currentElemAttribs;
 @synthesize xmlParserPath;
@@ -43,7 +42,6 @@ static const NSInteger kTagBeerNameLabel=2;
 	{
 		self.breweryID=brewery_id;
 		self.title=@"Beer List";
-		self.breweryName=@"Name of Brewery";
 	}
 	else if ([[parts objectAtIndex:0] isEqualToString:@"wishlist"])
 	{
@@ -334,8 +332,10 @@ static const NSInteger kTagBeerNameLabel=2;
 
 	cell.imageView.image=[UIImage imageNamed:@"beer.png"];
 	
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	
 	UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
-	[breweryNameLabel setText:self.breweryName];
+	[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[beer.data objectForKey:@"id"]]];
 
     return cell;
 }

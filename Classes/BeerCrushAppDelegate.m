@@ -18,6 +18,7 @@
 #import "RecommendedTVC.h"
 #import "BookmarksTVC.h"
 #import "PlacesTVC.h"
+#import "JSON.h"
 
 // Unique numbers to identify the tabs (they are not necessarily in this order)
 #define kTabBarItemTagBeers 1
@@ -506,6 +507,26 @@
 	}	
 
 }
+
+-(NSString*)breweryNameFromBeerID:(NSString*)beer_id
+{
+	NSArray* parts=[beer_id componentsSeparatedByString:@":"];
+
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC_JSON,[parts objectAtIndex:1]]];
+
+	NSData* answer;
+	NSHTTPURLResponse* response=[self sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+	if ([response statusCode]==200)
+	{
+		NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
+		id json=[s JSONValue];
+		// TODO: cache this data so that we aren't doing an HTTP request too often
+		return [json objectForKey:@"name"];
+	}
+	
+	return @"";
+}
+
 
 -(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSString*)data returningData:(NSData**)responseData
 {
