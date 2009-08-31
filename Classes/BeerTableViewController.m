@@ -1167,7 +1167,7 @@ static const int kTagBeerNameLabel=1;
 	// Send the review to the site
 	
 	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
-	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&beer_id=%@", rating, beerID];
+	NSString* bodystr=[[[NSString alloc] initWithFormat:@"rating=%u&beer_id=%@", rating, beerID] autorelease];
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:nil];
 	

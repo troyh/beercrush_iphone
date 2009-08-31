@@ -31,8 +31,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-	[self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelChanges:)]];
-	[self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveChanges:)]];
+	[self.navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelChanges:)] autorelease]];
+	[self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveChanges:)] autorelease]];
 
 }
 
@@ -269,7 +269,7 @@
 			CGRect f=cell.frame;
 			f.size.width-=20;
 			f.origin.x+=10;
-			UITextField* fld=[[UITextField alloc] initWithFrame:f];
+			UITextField* fld=[[[UITextField alloc] initWithFrame:f] autorelease];
 			
 			if ([[self.data objectForKey:self.editableValueName] isKindOfClass:[NSString class]])
 				fld.text=[self.data objectForKey:self.editableValueName];

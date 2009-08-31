@@ -106,8 +106,8 @@ static const NSInteger kTagBeerNameLabel=2;
 //	UIActionSheet* sheet=[[[UIActionSheet alloc] initWithTitle:@"New Beer" delegate:nil cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil] autorelease];
 //	[sheet showInView:self.tableView];
 
-	UIViewController* vc=[[UIViewController alloc] init];
-	UINavigationController* nc=[[UINavigationController alloc] initWithRootViewController:vc];
+	UIViewController* vc=[[[UIViewController alloc] init] autorelease];
+	UINavigationController* nc=[[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
 	
 	self.btvc=[[BeerTableViewController alloc] initWithBeerID:nil];
 	self.btvc.breweryID=self.breweryID;
@@ -144,10 +144,10 @@ static const NSInteger kTagBeerNameLabel=2;
 	//	UIActionSheet* sheet=[[[UIActionSheet alloc] initWithTitle:@"New Beer" delegate:nil cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil] autorelease];
 	//	[sheet showInView:self.tableView];
 	
-	UIViewController* vc=[[UIViewController alloc] init];
+	UIViewController* vc=[[[UIViewController alloc] init] autorelease];
 	UINavigationController* nc=[[UINavigationController alloc] initWithRootViewController:vc];
 	
-	BrowseBrewersTVC* bbtvc=[[BrowseBrewersTVC alloc] init];
+	BrowseBrewersTVC* bbtvc=[[[BrowseBrewersTVC alloc] init] autorelease];
 	[nc pushViewController:bbtvc animated:NO];
 	
 	// Add cancel buttons
@@ -155,7 +155,7 @@ static const NSInteger kTagBeerNameLabel=2;
 	
 	[self presentModalViewController:nc animated:YES];
 	// Take the (left) Back button off the navbar
-	[nc.navigationBar.topItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:[[UIView alloc] initWithFrame:CGRectZero]] autorelease] animated:NO];
+	[nc.navigationBar.topItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:[[[UIView alloc] initWithFrame:CGRectZero] autorelease]] autorelease]];
 	// Put a cancel button on the right
 	[nc.navigationBar.topItem setRightBarButtonItem:cancelButton animated:NO];
 

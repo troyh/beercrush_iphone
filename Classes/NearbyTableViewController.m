@@ -39,7 +39,7 @@
 		[self.data setObject:@"" forKey:@"name"];
 		[self.data setObject:@"" forKey:@"uri"];
 		[self.data setObject:@"" forKey:@"phone"];
-		[self.data setObject:[[NSMutableDictionary alloc] initWithCapacity:4] forKey:@"address"];
+		[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease] forKey:@"address"];
 	}
 	
 	return self;
@@ -363,7 +363,7 @@ const NSInteger kViewTagDistance=2;
 	else if ([elementName isEqualToString:@"place"])
 	{
 		placeObject=[[PlaceObject alloc] init];
-		CLLocation* loc=[[CLLocation alloc] initWithLatitude:[[attributeDict valueForKey:@"latitude"] doubleValue] longitude:[[attributeDict valueForKey:@"longitude"] doubleValue]];
+		CLLocation* loc=[[[CLLocation alloc] initWithLatitude:[[attributeDict valueForKey:@"latitude"] doubleValue] longitude:[[attributeDict valueForKey:@"longitude"] doubleValue]] autorelease];
 		[placeObject.data setObject:loc forKey:@"loc"];
 		placeObject.place_id=[attributeDict valueForKey:@"id"];
 	}

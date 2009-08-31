@@ -156,7 +156,7 @@
 	{
 		// Save data to server
 		
-		NSMutableString* bodystr=[[NSMutableString alloc] initWithFormat:@"brewery_id=%@",self.breweryID];
+		NSMutableString* bodystr=[[[NSMutableString alloc] initWithFormat:@"brewery_id=%@",self.breweryID] autorelease];
 		// Add in changed fields to the POST data
 		// TODO: Only change the fields that were edited by the user
 		if (YES)
@@ -325,7 +325,7 @@
 	
 	// Send the review to the site
 	
-	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&brewery_id=%@", rating+1, breweryID];
+	NSString* bodystr=[[[NSString alloc] initWithFormat:@"rating=%u&brewery_id=%@", rating+1, breweryID] autorelease];
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSHTTPURLResponse* response=[appDelegate sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_POST_PLACE_REVIEW] usingMethod:@"POST" withData:bodystr returningData:nil];
 	if ([response statusCode]==200)
@@ -385,7 +385,7 @@
 		{
 			NSString* uri=[breweryObject.data objectForKey:@"uri"];
 			if (uri && [uri length])
-				[[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString: uri]];
+				[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString: uri] autorelease]];
 		}
 	}
 	else if (indexPath.section == 1 && indexPath.row == 1) // Address cell
@@ -410,7 +410,7 @@
 							[addr valueForKey:@"zip"]] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 			
 			DLog(@"Opening URL:%@",url);
-			[[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:url ]];
+			[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:url] autorelease]];
 		}
 	}
 	else if (indexPath.section == 1 && indexPath.row == 2) // Phone number cell

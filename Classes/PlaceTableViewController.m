@@ -114,7 +114,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 		if (self.placeObject.editeddata && [self.placeObject.editeddata count])
 		{
 			// Save data to server
-			NSMutableString* bodystr=[[NSMutableString alloc] initWithFormat:@"place_id=%@",self.placeID];
+			NSMutableString* bodystr=[[[NSMutableString alloc] initWithFormat:@"place_id=%@",self.placeID] autorelease];
 			// Copy edited data fields to the real data fields
 			appendValuesToPostBodyString(bodystr,self.placeObject.data,self.placeObject.editeddata,@"");
 			
@@ -129,7 +129,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 			[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
 			
 			// create the connection with the request and start loading the data
-			NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+			NSURLConnection *theConnection=[[[NSURLConnection alloc] initWithRequest:theRequest delegate:self] autorelease];
 			
 			if (theConnection) {
 				// Create the NSMutableData that will hold
@@ -448,7 +448,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 	
 	// Send the review to the site
 	
-	NSString* bodystr=[[NSString alloc] initWithFormat:@"rating=%u&place_id=%@", rating, placeID];
+	NSString* bodystr=[[[NSString alloc] initWithFormat:@"rating=%u&place_id=%@", rating, placeID] autorelease];
 	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 	
 	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_POST_PLACE_REVIEW]
@@ -459,7 +459,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
 	
 	// create the connection with the request and start loading the data
-	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+	NSURLConnection *theConnection=[[[NSURLConnection alloc] initWithRequest:theRequest delegate:self] autorelease];
 	
 	if (theConnection) {
 		// Create the NSMutableData that will hold
@@ -529,7 +529,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 		}
 		else
 		{
-			[[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString: [placeObject.data valueForKey:@"uri" ]]];
+			[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:[placeObject.data valueForKey:@"uri"]] autorelease]];
 		}
 	}
 	else if (indexPath.section == 1 && indexPath.row == 1) // Address cell
@@ -555,7 +555,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 															[addr valueForKey:@"zip"]] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 			
 			DLog(@"Opening URL:%@",url);
-			[[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:url ]];
+			[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:url ] autorelease]];
 //			[url release];
 		}
 	}

@@ -476,7 +476,7 @@
 	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
 	
 	DLog(@"Logging in...");
-	NSString* bodystr=[[NSString alloc] initWithFormat:@"userid=%@&password=%@", userid, password];
+	NSString* bodystr=[[[NSString alloc] initWithFormat:@"userid=%@&password=%@", userid, password] autorelease];
 	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 
 	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_LOGIN]
@@ -642,8 +642,8 @@
 	{
 		stylesDictionary=[[NSMutableDictionary alloc] initWithCapacity:2];
 
-		[self.stylesDictionary setObject:[[NSMutableArray alloc] initWithCapacity:32] forKey:@"list"];
-		[self.stylesDictionary setObject:[[NSMutableDictionary alloc] initWithCapacity:32] forKey:@"names"];
+		[self.stylesDictionary setObject:[[[NSMutableArray alloc] initWithCapacity:32] autorelease] forKey:@"list"];
+		[self.stylesDictionary setObject:[[[NSMutableDictionary alloc] initWithCapacity:32] autorelease] forKey:@"names"];
 
 		// Get styles list from server
 		NSData* answer;
@@ -668,8 +668,8 @@
 	if (self.colorsDictionary==nil)
 	{
 		self.colorsDictionary=[[NSMutableDictionary alloc] initWithCapacity:2];
-		[self.colorsDictionary setObject:[[NSMutableDictionary alloc] initWithCapacity:12] forKey:@"list"];
-		[self.colorsDictionary setObject:[[NSMutableArray alloc] initWithCapacity:12] forKey:@"nums"];
+		[self.colorsDictionary setObject:[[[NSMutableDictionary alloc] initWithCapacity:12] autorelease] forKey:@"list"];
+		[self.colorsDictionary setObject:[[[NSMutableArray alloc] initWithCapacity:12] autorelease] forKey:@"nums"];
 	
 		NSData* answer;
 		NSHTTPURLResponse* response=[self sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_GET_COLORSLIST] usingMethod:@"GET" withData:nil returningData:&answer];
@@ -950,7 +950,7 @@
 				// Add an array in groups for this title
 				if ([flavorsDictionary objectForKey:@"groups"]==nil)
 					[flavorsDictionary setObject:[NSMutableArray arrayWithCapacity:24] forKey:@"groups"];
-				[[flavorsDictionary objectForKey:@"groups"] addObject:[[NSMutableArray alloc] initWithCapacity:10]];
+				[[flavorsDictionary objectForKey:@"groups"] addObject:[[[NSMutableArray alloc] initWithCapacity:10] autorelease]];
 			}
 		}
 		else if ([elementName isEqualToString:@"flavor"])
