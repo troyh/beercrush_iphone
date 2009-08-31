@@ -22,6 +22,7 @@
 @synthesize beerID;
 @synthesize breweryID;
 @synthesize beerObj;
+@synthesize originalBeerData;
 @synthesize currentElemValue;
 @synthesize xmlParserPath;
 @synthesize userReviewData;
@@ -31,7 +32,6 @@
 @synthesize balanceSlider;
 @synthesize aftertasteSlider;
 @synthesize beerNameTextField;
-@synthesize descriptionTextView;
 @synthesize abvTextField;
 @synthesize ibuTextField;
 @synthesize ogTextField;
@@ -46,6 +46,8 @@ const int kButtonWidth=80;
 const int kButtonHeight=40;
 
 static const int kTagBeerNameLabel=1;
+static const int kTagDescriptionLabel=2;
+static const int kTagStyleLabel=3;
 
 -(id) initWithBeerID:(NSString*)beer_id
 {
@@ -71,6 +73,7 @@ static const int kTagBeerNameLabel=1;
 	DLog(@"BeerTableViewController release: beerID retainCount=%d",[beerID retainCount]);
 	//	[beerID release];
 	[self.beerObj release];
+	[self.originalBeerData release];
 	[self.currentElemValue release];
 	[self.xmlParserPath release];
 	[self.userReviewData release];
@@ -81,7 +84,6 @@ static const int kTagBeerNameLabel=1;
 	[self.balanceSlider release];
 	[self.aftertasteSlider release];
 	[self.beerNameTextField release];
-	[self.descriptionTextView release];
 	[self.abvTextField release];
 	[self.ibuTextField release];
 	[self.ogTextField release];
@@ -123,8 +125,8 @@ static const int kTagBeerNameLabel=1;
 		
 		if (self.beerNameTextField.text && [[self.beerObj.data objectForKey:@"name"] isEqualToString:self.beerNameTextField.text]==NO)
 			[values addObject:[NSString stringWithFormat:@"name=%@",self.beerNameTextField.text]];
-		if (self.descriptionTextView.text && [[self.beerObj.data objectForKey:@"description"] isEqualToString:self.descriptionTextView.text]==NO)
-			[values addObject:[NSString stringWithFormat:@"description=%@",self.descriptionTextView.text]];
+		if ([[self.beerObj.data objectForKey:@"description"] isEqualToString:[self.originalBeerData objectForKey:@"description"]]==NO)
+			[values addObject:[NSString stringWithFormat:@"description=%@",[self.beerObj.data objectForKey:@"description"]]];
 		if (self.abvTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"abv"] isEqualToString:self.abvTextField.text]==NO)
 			[values addObject:[NSString stringWithFormat:@"abv=%@",self.abvTextField.text]];
 		if (self.ibuTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"] isEqualToString:self.ibuTextField.text]==NO)
@@ -137,11 +139,11 @@ static const int kTagBeerNameLabel=1;
 			[values addObject:[NSString stringWithFormat:@"grains=%@",self.grainsTextField.text]];
 		if (self.hopsTextField.text && [[self.beerObj.data objectForKey:@"hops"] isEqualToString:self.hopsTextField.text]==NO)
 			[values addObject:[NSString stringWithFormat:@"hops=%@",self.hopsTextField.text]];
-		if ([self.beerObj.data objectForKey:@"availability"])
+		if ([[self.beerObj.data objectForKey:@"availability"] isEqualToString:[self.originalBeerData objectForKey:@"availability"]]==NO)
 			[values addObject:[NSString stringWithFormat:@"availability=%@",[self.beerObj.data objectForKey:@"availability"]]];
-		if ([[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"])
+		if ([[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"] isEqualToString:[[self.originalBeerData objectForKey:@"attribs"] objectForKey:@"srm"]]==NO)
 			[values addObject:[NSString stringWithFormat:@"srm=%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]];
-		if ([self.beerObj.data objectForKey:@"style"])
+		if ([[self.beerObj.data objectForKey:@"style"] isEqualToString:[self.originalBeerData objectForKey:@"style"]]==NO)
 			[values addObject:[NSString stringWithFormat:@"bjcp_style_id=%@",[self.beerObj.data objectForKey:@"style"]]];
 		
 		if ([values count]) // Only send request if there is something that is changing
@@ -199,6 +201,8 @@ static const int kTagBeerNameLabel=1;
 	}
 	else
 	{
+		// Make a copy of the beer data so we can compare it to the new beer data to see if we should save to the server
+		self.originalBeerData=[self.beerObj.data copy];
 		[self setEditing:YES animated:YES];
 	}
 	
@@ -248,7 +252,7 @@ static const int kTagBeerNameLabel=1;
 		{
 			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
 			[parser setDelegate:self];
-			BOOL retval=[parser parse];
+			[parser parse];
 			[parser release];
 			
 			// Retrieve user's review for this beer
@@ -262,7 +266,7 @@ static const int kTagBeerNameLabel=1;
 				// The user has a review for this beer
 				parser=[[NSXMLParser alloc] initWithData:answer];
 				[parser setDelegate:self];
-				retval=[parser parse];
+				[parser parse];
 				[parser release];
 
 				if (userReviewData && [userReviewData count])
@@ -316,19 +320,27 @@ static const int kTagBeerNameLabel=1;
 		self.navigationController.navigationBar.topItem.leftBarButtonItem=nil;
 
 		[self.tableView beginUpdates];
-		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
-												[NSIndexPath indexPathForRow:0 inSection:3],
-												[NSIndexPath indexPathForRow:1 inSection:3],
-												nil] 
-			withRowAnimation:UITableViewRowAnimationFade];
+//		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
+//												[NSIndexPath indexPathForRow:0 inSection:3],
+//												[NSIndexPath indexPathForRow:1 inSection:3],
+//												nil] 
+//			withRowAnimation:UITableViewRowAnimationFade];
 
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+//		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
 
+		
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+//		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+//		[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:
+//												[NSIndexPath indexPathForRow:1 inSection:0],
+//												nil]
+//							  withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView endUpdates];
 	}
 	else
@@ -337,14 +349,16 @@ static const int kTagBeerNameLabel=1;
 
 		[self.tableView beginUpdates];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+//		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+//		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+//		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView endUpdates];
 	}
 }
@@ -352,7 +366,7 @@ static const int kTagBeerNameLabel=1;
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.editing?4:4;
+    return self.editing?3:6;
 }
 
 //-(void)editBeerCancelButtonClicked
@@ -365,16 +379,22 @@ static const int kTagBeerNameLabel=1;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return self.editing?1:1;
+			return self.editing?2:1;
 			break;
 		case 1:
-			return self.editing?10:6;
+			return self.editing?1:6;
 			break;
 		case 2:
-			return self.editing?1:2;
+			return self.editing?10:1;
 			break;
 		case 3:
-			return self.editing?1:3;
+			return self.editing?0:1;
+			break;
+		case 4:
+			return self.editing?0:1;
+			break;
+		case 5:
+			return self.editing?0:1;
 			break;
 		default:
 			break;
@@ -387,19 +407,20 @@ static const int kTagBeerNameLabel=1;
 	switch (indexPath.section) 
 	{
 		case 0:
+			if (self.editing)
+			{
+			}
+			else 
+			{
+				return 60; // Beer name, brewery and style cell
+			}
+
 			break;
 		case 1:
 		{
 			if (self.editing)
 			{
-				switch (indexPath.row)
-				{
-					case 0:
-						return 100;
-						break;
-					default:
-						break;
-				}
+				return 80; // Description cell
 			}
 			else
 			{
@@ -407,9 +428,14 @@ static const int kTagBeerNameLabel=1;
 			break;
 		}
 		case 2:
-		{
+			if (self.editing)
+			{
+			}
+			else
+			{
+				return 80; // Description cell
+			}
 			break;
-		}
 		case 3:
 		{
 			if (self.editing)
@@ -417,17 +443,7 @@ static const int kTagBeerNameLabel=1;
 			}
 			else
 			{
-				switch (indexPath.row)
-				{
-					case 0:
-						return 100;
-						break;
-					case 1:
-						break;
-					case 2:
-						return 250;
-						break;
-				}
+				return 250; // Details cell
 			}
 		}
 		default:
@@ -437,9 +453,48 @@ static const int kTagBeerNameLabel=1;
 	return tableView.rowHeight;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+	if (self.editing)
+	{
+		switch (section) {
+			case 1:
+				return @"Brewer's Description";
+				break;
+			case 2:
+				return @"Details";
+				break;
+			default:
+				break;
+		}
+	}
+	else {
+		switch (section) {
+			case 2:
+				return @"Brewer's Description";
+				break;
+			case 3:
+				return @"Details";
+				break;
+			default:
+				break;
+		}
+	}
+	return nil;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+//	DLog(@"section=%d row=%d",indexPath.section,indexPath.row);
+//	if (indexPath.section==0)
+//		return YES;
+	return NO;
+}
+
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 
     UITableViewCell *cell = nil;
 
@@ -461,8 +516,9 @@ static const int kTagBeerNameLabel=1;
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section0CellEditing"] autorelease];
 							[cell.textLabel setText:@"Name"];
 							cell.selectionStyle=UITableViewCellSelectionStyleNone;
-							self.beerNameTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 200, 30)];
+							self.beerNameTextField=[[UITextField alloc] initWithFrame:CGRectMake(80, 10, 200, 30)];
 							self.beerNameTextField.font=[UIFont boldSystemFontOfSize:20];
+							self.beerNameTextField.textAlignment=UITextAlignmentLeft;
 							
 							self.beerNameTextField.autocorrectionType=UITextAutocorrectionTypeNo;
 							self.beerNameTextField.autocapitalizationType=UITextAutocapitalizationTypeWords;
@@ -487,15 +543,21 @@ static const int kTagBeerNameLabel=1;
 							breweryNameLabel.backgroundColor=[UIColor clearColor];
 							breweryNameLabel.font=[UIFont boldSystemFontOfSize:12];
 							breweryNameLabel.textColor=[UIColor grayColor];
-							BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 							[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"brewery_id"]]];
 							[cell.contentView addSubview:breweryNameLabel];
 							
-							UILabel* beerNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 20, 200, 30)] autorelease];
+							UILabel* beerNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 15, 200, 30)] autorelease];
 							beerNameLabel.tag=kTagBeerNameLabel;
-							beerNameLabel.font=[UIFont boldSystemFontOfSize:20];
+							beerNameLabel.font=[UIFont boldSystemFontOfSize:22];
 							beerNameLabel.backgroundColor=[UIColor clearColor];
 							[cell.contentView addSubview:beerNameLabel];
+							
+							UILabel* styleLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 40, 200, 20)] autorelease];
+							styleLabel.backgroundColor=[UIColor clearColor];
+							styleLabel.font=[UIFont boldSystemFontOfSize:14];
+							styleLabel.textColor=[UIColor blackColor];
+							styleLabel.tag=kTagStyleLabel;
+							[cell.contentView addSubview:styleLabel];
 							
 							UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
 							transparentBackground.backgroundColor=[UIColor clearColor];
@@ -504,7 +566,27 @@ static const int kTagBeerNameLabel=1;
 
 						UILabel* beerNameLabel=(UILabel*)[cell viewWithTag:kTagBeerNameLabel];
 						[beerNameLabel setText:[beerObj.data objectForKey:@"name"]];
+
+						UILabel* styleLabel=(UILabel*)[cell viewWithTag:kTagStyleLabel];
+						NSDictionary* stylesDict=[appDelegate getStylesDictionary];
+						[styleLabel setText:[[stylesDict objectForKey:@"names"] objectForKey:[beerObj.data objectForKey:@"style"]]];
 						
+					}
+					break;
+				case 1:
+					if (self.editing)
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section0Row1CellEditing"];
+						if (cell == nil)
+						{
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section0Row1CellEditing"] autorelease];
+							[cell.textLabel setText:@"Style"];
+						}
+						NSDictionary* stylesDict=[appDelegate getStylesDictionary];
+						[cell.detailTextLabel setText:[[stylesDict objectForKey:@"names"] objectForKey:[beerObj.data objectForKey:@"style"]]];
+					}
+					else 
+					{
 					}
 					break;
 				default:
@@ -514,208 +596,22 @@ static const int kTagBeerNameLabel=1;
 		}
 		case 1:  // Section 1
 			if (self.editing)
-			{
-				switch (indexPath.row) {
-					case 0:
-					{
-						cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Row0Editing"];
-						if (cell == nil)
-						{
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section1Row0Editing"] autorelease];
-							cell.selectionStyle=UITableViewCellSelectionStyleNone;
-							cell.accessoryType=UITableViewCellAccessoryNone;
-							cell.backgroundView.backgroundColor=[UIColor whiteColor];
-
-							[cell.textLabel setText:@""];
-							[cell.detailTextLabel setText:@""];
-							cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						}
-						
-						/* The descriptionTextView is used in both edit and non-edit modes, but it moves between cells in each mode. So we have to remove 
-						  it from the superview if it's already created. */
-						if (self.descriptionTextView)
-						{
-							[self.descriptionTextView removeFromSuperview];
-							self.descriptionTextView.frame=CGRectInset(cell.contentView.frame, 8, 8);
-						}
-						else
-						{
-							self.descriptionTextView=[[UITextView alloc] initWithFrame:CGRectInset(cell.contentView.frame, 8, 8)];
-							self.descriptionTextView.text=[beerObj.data objectForKey:@"description"];
-							
-							self.descriptionTextView.delegate=self;
-							self.descriptionTextView.font=[UIFont systemFontOfSize:14.0];
-							self.descriptionTextView.autoresizingMask|=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleRightMargin;
-						}
-						[cell.contentView addSubview:self.descriptionTextView];
-						[self.descriptionTextView sizeToFit];
-						break;
-					}
-					case 1:
-					{
-						cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Row1Editing"];
-						if (cell == nil)
-						{
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section1Row1Editing"] autorelease];
-							[cell.textLabel setText:@"Style"];
-							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-						}
-						BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-						NSDictionary* stylesDict=[appDelegate getStylesDictionary];
-						[cell.detailTextLabel setText:[[stylesDict objectForKey:@"names"] objectForKey:[beerObj.data objectForKey:@"style"]]];
-						break;
-					}
-					case 2:
-					{
-						cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Row2Editing"];
-						if (cell == nil)
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section1Row2Editing"] autorelease];
-						
-						BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-						NSDictionary* colorsDict=[appDelegate getColorsDictionary];
-						[cell.textLabel setText:@"Color"];
-						[cell.detailTextLabel setText:[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]]];
-						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-						break;
-					}
-					case 3:
-						cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Row3Editing"];
-						if (cell == nil)
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section1Row3Editing"] autorelease];
-						
-						[cell.textLabel setText:@"Availability"];
-						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"availability"]];
-						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-						break;
-					case 4:
-					{
-						cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Row4Editing"];
-						if (cell == nil)
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section1Row4Editing"] autorelease];
-
-						[cell.textLabel setText:@"ABV"];
-						[cell.detailTextLabel setText:nil];
-						
-						if (abvTextField==nil)
-						{
-							abvTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 50, 30)];
-							abvTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"abv"];
-							abvTextField.font=[UIFont boldSystemFontOfSize:16];
-							abvTextField.keyboardType=UIKeyboardTypeNumberPad;
-						}
-						
-						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell addSubview:abvTextField];
-						break;
-					}
-					case 5:
-					{
-						cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Row5Editing"];
-						if (cell == nil)
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section1Row5Editing"] autorelease];
-
-						[cell.textLabel setText:@"IBUs"];
-						[cell.detailTextLabel setText:nil];
-						
-						if (ibuTextField==nil)
-						{
-							ibuTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 50, 30)];
-							ibuTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"];
-							ibuTextField.font=[UIFont boldSystemFontOfSize:16];
-							ibuTextField.keyboardType=UIKeyboardTypeNumberPad;
-						}
-						
-						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell addSubview:ibuTextField];
-						break;
-					}
-					case 6:
-					{
-						cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Row6Editing"];
-						if (cell == nil)
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section1Row6Editing"] autorelease];
-
-						[cell.textLabel setText:@"OG"];
-						[cell.detailTextLabel setText:nil];
-						
-						if (ogTextField==nil)
-						{
-							ogTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 50, 30)];
-							ogTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"og"];
-							ogTextField.font=[UIFont boldSystemFontOfSize:16];
-							ogTextField.keyboardType=UIKeyboardTypeNumberPad;
-							[ogTextField addTarget:self action:@selector(ogTextFieldChanged) forControlEvents:UIControlEventEditingChanged];
-						}
-						
-						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell addSubview:ogTextField];
-						break;
-					}
-					case 7:
-					{
-						cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Row7Editing"];
-						if (cell == nil)
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section1Row7Editing"] autorelease];
-						
-						[cell.textLabel setText:@"FG"];
-						[cell.detailTextLabel setText:nil];
-						
-						if (fgTextField==nil)
-						{
-							fgTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 50, 30)];
-							fgTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"fg"];
-							fgTextField.font=[UIFont boldSystemFontOfSize:16];
-							fgTextField.keyboardType=UIKeyboardTypeNumberPad;
-							[fgTextField addTarget:self action:@selector(fgTextFieldChanged) forControlEvents:UIControlEventEditingChanged];
-						}
-						
-						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell addSubview:fgTextField];
-						break;
-					}
-					case 8:
-					{
-						cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Row8Editing"];
-						if (cell == nil)
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section1Row8Editing"] autorelease];
-						
-						[cell.textLabel setText:@"Grains"];
-						[cell.detailTextLabel setText:nil];
-						
-						if (grainsTextField==nil)
-						{
-							grainsTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 150, 30)];
-							grainsTextField.text=[self.beerObj.data objectForKey:@"grains"];
-							grainsTextField.font=[UIFont boldSystemFontOfSize:16];
-							grainsTextField.keyboardType=UIKeyboardTypeDefault;
-						}
-						
-						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell addSubview:grainsTextField];
-						break;
-					}
-					case 9:
-						cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Row9Editing"];
-						if (cell == nil)
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section1Row9Editing"] autorelease];
-						
-						[cell.textLabel setText:@"Hops"];
-						[cell.detailTextLabel setText:nil];
-						
-						if (hopsTextField==nil)
-						{
-							hopsTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 150, 30)];
-							hopsTextField.text=[self.beerObj.data objectForKey:@"hops"];
-							hopsTextField.font=[UIFont boldSystemFontOfSize:16];
-							hopsTextField.keyboardType=UIKeyboardTypeDefault;
-						}
-						
-						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell addSubview:hopsTextField];
-						break;
-					default:
-						break;
+			{ // Brewer's description
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section1CellEditing"];
+				if (cell == nil)
+				{
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section1CellEditing"] autorelease];
+					
+					UILabel* descriptionLabel=[[[UILabel alloc] initWithFrame:CGRectMake(8, 0, 275, 70)] autorelease];
+					[descriptionLabel setFont:[UIFont systemFontOfSize:14.0]];
+					descriptionLabel.tag=kTagDescriptionLabel;
+					descriptionLabel.numberOfLines=3;
+					descriptionLabel.lineBreakMode=UILineBreakModeTailTruncation;
+					[cell.contentView addSubview:descriptionLabel];
 				}
+				
+				UILabel* descriptionLabel=(UILabel*)[cell viewWithTag:kTagDescriptionLabel];
+				[descriptionLabel setText:[beerObj.data objectForKey:@"description"]];
 			}
 			else
 			{
@@ -855,105 +751,211 @@ static const int kTagBeerNameLabel=1;
 		case 2: // Section 2
 			if (self.editing)
 			{
-				cell = [tableView dequeueReusableCellWithIdentifier:@"Section2CellEditing"];
-				if (cell == nil)
-				{
-					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2CellEditing"] autorelease];
-				}
-				
 				switch (indexPath.row) {
 					case 0:
-						[cell.textLabel setText:@"Sizes"];
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row0Editing"];
+						if (cell == nil)
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row0Editing"] autorelease];
+						
+						[cell.textLabel setText:@"Availability"];
+						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"availability"]];
+						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						break;
+					case 1:
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row1Editing"];
+						if (cell == nil)
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row1Editing"] autorelease];
+						
+						NSDictionary* colorsDict=[appDelegate getColorsDictionary];
+						[cell.textLabel setText:@"Color"];
+						[cell.detailTextLabel setText:[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]]];
+						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						break;
+					}
+					case 2:
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row2Editing"];
+						if (cell == nil)
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row2Editing"] autorelease];
+						
+						[cell.textLabel setText:@"ABV"];
+						[cell.detailTextLabel setText:nil];
+						
+						if (abvTextField==nil)
+						{
+							abvTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 50, 30)];
+							abvTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"abv"];
+							abvTextField.font=[UIFont boldSystemFontOfSize:16];
+							abvTextField.keyboardType=UIKeyboardTypeNumberPad;
+						}
+						
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+						[cell addSubview:abvTextField];
+						break;
+					}
+					case 3:
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row3Editing"];
+						if (cell == nil)
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row3Editing"] autorelease];
+						
+						[cell.textLabel setText:@"IBUs"];
+						[cell.detailTextLabel setText:nil];
+						
+						if (ibuTextField==nil)
+						{
+							ibuTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 50, 30)];
+							ibuTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"];
+							ibuTextField.font=[UIFont boldSystemFontOfSize:16];
+							ibuTextField.keyboardType=UIKeyboardTypeNumberPad;
+						}
+						
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+						[cell addSubview:ibuTextField];
+						break;
+					}
+					case 4:
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row4Editing"];
+						if (cell == nil)
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row4Editing"] autorelease];
+						
+						[cell.textLabel setText:@"OG"];
+						[cell.detailTextLabel setText:nil];
+						
+						if (ogTextField==nil)
+						{
+							ogTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 50, 30)];
+							ogTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"og"];
+							ogTextField.font=[UIFont boldSystemFontOfSize:16];
+							ogTextField.keyboardType=UIKeyboardTypeNumberPad;
+							[ogTextField addTarget:self action:@selector(ogTextFieldChanged) forControlEvents:UIControlEventEditingChanged];
+						}
+						
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+						[cell addSubview:ogTextField];
+						break;
+					}
+					case 5:
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row5Editing"];
+						if (cell == nil)
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row5Editing"] autorelease];
+						
+						[cell.textLabel setText:@"FG"];
+						[cell.detailTextLabel setText:nil];
+						
+						if (fgTextField==nil)
+						{
+							fgTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 50, 30)];
+							fgTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"fg"];
+							fgTextField.font=[UIFont boldSystemFontOfSize:16];
+							fgTextField.keyboardType=UIKeyboardTypeNumberPad;
+							[fgTextField addTarget:self action:@selector(fgTextFieldChanged) forControlEvents:UIControlEventEditingChanged];
+						}
+						
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+						[cell addSubview:fgTextField];
+						break;
+					}
+					case 6:
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row6Editing"];
+						if (cell == nil)
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row6Editing"] autorelease];
+						
+						[cell.textLabel setText:@"Grains"];
+						[cell.detailTextLabel setText:nil];
+						
+						if (grainsTextField==nil)
+						{
+							grainsTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 150, 30)];
+							grainsTextField.text=[self.beerObj.data objectForKey:@"grains"];
+							grainsTextField.font=[UIFont boldSystemFontOfSize:16];
+							grainsTextField.keyboardType=UIKeyboardTypeDefault;
+						}
+						
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+						[cell addSubview:grainsTextField];
+						break;
+					}
+					case 7:
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row7Editing"];
+						if (cell == nil)
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row7Editing"] autorelease];
+						
+						[cell.textLabel setText:@"Hops"];
+						[cell.detailTextLabel setText:nil];
+						
+						if (hopsTextField==nil)
+						{
+							hopsTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 150, 30)];
+							hopsTextField.text=[self.beerObj.data objectForKey:@"hops"];
+							hopsTextField.font=[UIFont boldSystemFontOfSize:16];
+							hopsTextField.keyboardType=UIKeyboardTypeDefault;
+						}
+						
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+						[cell addSubview:hopsTextField];
+						break;
+					case 8:
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row8Editing"];
+						if (cell == nil)
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row8Editing"] autorelease];
+						
+						[cell.textLabel setText:@"Misc Ingredients"];
+						
+//						if (ingsTextField==nil)
+//						{
+//							ingsTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 150, 30)];
+//							ingsTextField.text=[self.beerObj.data objectForKey:@"otherings"];
+//							ingsTextField.font=[UIFont boldSystemFontOfSize:16];
+//							ingsTextField.keyboardType=UIKeyboardTypeDefault;
+//						}
+						
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+//						[cell addSubview:ingsTextField];
+						break;
+					case 9:
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row9Editing"];
+						if (cell == nil)
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row9Editing"] autorelease];
+						
+						[cell.textLabel setText:@"Calories/12oz"];
+						
+//						if (ingsTextField==nil)
+//						{
+//							ingsTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 150, 30)];
+//							ingsTextField.text=[self.beerObj.data objectForKey:@"otherings"];
+//							ingsTextField.font=[UIFont boldSystemFontOfSize:16];
+//							ingsTextField.keyboardType=UIKeyboardTypeDefault;
+//						}
+						
+						cell.selectionStyle=UITableViewCellSelectionStyleNone;
+//						[cell addSubview:ingsTextField];
 						break;
 					default:
 						break;
 				}
 			}
 			else
-			{
+			{ // Brewer's description
 				cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Cell"];
 				if (cell == nil)
 				{
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section2Cell"] autorelease];
-					UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
-					transparentBackground.backgroundColor=[UIColor clearColor];
-					cell.backgroundView=transparentBackground;
-					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
+					UILabel* descriptionLabel=[[[UILabel alloc] initWithFrame:CGRectMake(8, 0, 275, 70)] autorelease];
+					[descriptionLabel setFont:[UIFont systemFontOfSize:14.0]];
+					descriptionLabel.tag=kTagDescriptionLabel;
+					descriptionLabel.numberOfLines=3;
+					descriptionLabel.lineBreakMode=UILineBreakModeTailTruncation;
+					[cell.contentView addSubview:descriptionLabel];
 				}
-
-				if ([self.buttons count]==0)
-				{
-					self.buttons=[[NSArray alloc] initWithObjects:
-													[UIButton buttonWithType:UIButtonTypeRoundedRect],
-													[UIButton buttonWithType:UIButtonTypeRoundedRect],
-													[UIButton buttonWithType:UIButtonTypeRoundedRect],
-													[UIButton buttonWithType:UIButtonTypeRoundedRect],
-													[UIButton buttonWithType:UIButtonTypeRoundedRect],
-													nil];
-
-					int centerButtonX=(cell.contentView.frame.size.width-kButtonWidth)/2;
-					DLog(@"centerButtonX=%d",centerButtonX);
-					
-					// Make Add a Photo button
-					UIButton* button=[self.buttons objectAtIndex:0];
-					button.frame=CGRectMake(centerButtonX-kButtonWidth-10, 0, kButtonWidth, kButtonHeight);
-					[button setTitle:@"Add Photo" forState:UIControlStateNormal];
-					button.titleLabel.lineBreakMode=UILineBreakModeWordWrap;
-					button.titleLabel.textAlignment=UITextAlignmentCenter;
-					//[button addTarget:self action:@selector(addToWishListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-					
-					// Make Add a Review button
-					button=[self.buttons objectAtIndex:1];
-					button.frame=CGRectMake(centerButtonX, 0, kButtonWidth, kButtonHeight);
-					[button setTitle:@"Add Review" forState:UIControlStateNormal];
-					button.titleLabel.lineBreakMode=UILineBreakModeWordWrap;
-					button.titleLabel.textAlignment=UITextAlignmentCenter;
-					//[button addTarget:self action:@selector(addToWishListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-
-					// Make Add to Wishlist button
-					button=[self.buttons objectAtIndex:2];
-					button.frame=CGRectMake(centerButtonX+kButtonWidth+10, 0, kButtonWidth, kButtonHeight);
-					[button setTitle:@"Add to Wish List" forState:UIControlStateNormal];
-					button.titleLabel.lineBreakMode=UILineBreakModeWordWrap;
-					button.titleLabel.textAlignment=UITextAlignmentCenter;
-					[button addTarget:self action:@selector(addToWishListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-
-					// Make Find Nearby button
-					button=[self.buttons objectAtIndex:3];
-					button.frame=CGRectMake(centerButtonX-kButtonWidth-10, 0, kButtonWidth, kButtonHeight);
-					[button setTitle:@"Find Nearby" forState:UIControlStateNormal];
-					button.titleLabel.lineBreakMode=UILineBreakModeWordWrap;
-					button.titleLabel.textAlignment=UITextAlignmentCenter;
-					//[button addTarget:self action:@selector(addToWishListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-
-					// Make Email Beer button
-					button=[self.buttons objectAtIndex:4];
-					button.frame=CGRectMake(centerButtonX, 0, kButtonWidth, kButtonHeight);
-					[button setTitle:@"Email Beer" forState:UIControlStateNormal];
-					button.titleLabel.lineBreakMode=UILineBreakModeWordWrap;
-					button.titleLabel.textAlignment=UITextAlignmentCenter;
-					//[button addTarget:self action:@selector(addToWishListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-				}
-
 				
-				switch (indexPath.row)
-				{
-					case 0: // First row of buttons
-					{
-						[cell addSubview:[self.buttons objectAtIndex:0]]; // Add a Photo button
-						[cell addSubview:[self.buttons objectAtIndex:1]]; // Add a Review button
-						[cell addSubview:[self.buttons objectAtIndex:2]]; // Add to Wishlist button
-						break;
-					}
-					case 1: // Second row of buttons
-					{
-						[cell addSubview:[self.buttons objectAtIndex:3]]; // Add Find Nearby button
-						[cell addSubview:[self.buttons objectAtIndex:4]]; // Add Email Beer button
-						break;
-					}
-					default:
-						break;
-				}
+				UILabel* descriptionLabel=(UILabel*)[cell viewWithTag:kTagDescriptionLabel];
+				[descriptionLabel setText:[beerObj.data objectForKey:@"description"]];
 			}
 			break;
 		case 3: // Section 3
@@ -987,98 +989,73 @@ static const int kTagBeerNameLabel=1;
 				if (cell == nil)
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section3Cell"] autorelease];
 
-				switch (indexPath.row)
+				UIColor* stdBlueColor=cell.textLabel.textColor;
+				
+				static struct { NSString* name; NSString* propname; BOOL inattribs; } fields[]={
+					{@"Availability",@"availability",NO},
+					{@"Color",@"srm",YES},
+					{@"ABV",@"abv",YES},
+					{@"IBUs",@"ibu",YES},
+					{@"OG",@"og",YES},
+					{@"FG",@"fg",YES},
+					{@"Grains",@"grains",NO},
+					{@"Hops",@"hops",NO},
+					{@"Yeast",@"yeast",NO},
+					{@"Misc Ingredients",@"otherings",NO},
+					{@"Sizes",@"sizes",NO}
+				};
+				
+				if (self.dataTableView==nil)
 				{
-					case 0: // Brewer's description
+					dataTableView=[[UIView alloc] initWithFrame:CGRectMake(10, 10, cell.contentView.frame.size.width-20, 100)];
+					
+					for (int i=0;i<(sizeof(fields)/sizeof(fields[0]));++i)
 					{
-						if (self.descriptionTextView)
+						UILabel* label=[[[UILabel alloc] initWithFrame:CGRectMake(0, i*20-1, dataTableView.frame.size.width*1/3-5, 20)] autorelease];
+						[label setFont:[UIFont systemFontOfSize:[UIFont smallSystemFontSize]]];
+						[label setTextColor:stdBlueColor];
+						[label setText:fields[i].name];
+						label.textAlignment=UITextAlignmentRight;
+						[dataTableView addSubview:label];
+						
+						label=[[[UILabel alloc] initWithFrame:CGRectMake(dataTableView.frame.size.width*1/3, i*20, dataTableView.frame.size.width*2/3, 20)] autorelease];
+						[label setFont:[UIFont boldSystemFontOfSize:14]];
+						if (fields[i].inattribs)
 						{
-							[self.descriptionTextView removeFromSuperview];
-							self.descriptionTextView.frame=CGRectInset(cell.contentView.frame, 8, 8);
+							if ([fields[i].propname isEqualToString:@"srm"]) 
+							{ // Treat SRM (Color) specially
+								BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+								NSDictionary* colorsDict=[appDelegate getColorsDictionary];
+								[label setText:[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]]]];
+							}
+							else
+								[label setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]];
 						}
 						else
-						{
-							self.descriptionTextView=[[UITextView alloc] initWithFrame:CGRectInset(cell.contentView.frame, 8, 8)];
-							
-							self.descriptionTextView.delegate=self;
-							self.descriptionTextView.font=[UIFont systemFontOfSize:14.0];
-							self.descriptionTextView.autoresizingMask|=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleRightMargin;
-						}
-						self.descriptionTextView.text=[beerObj.data objectForKey:@"description"];
-						[self.descriptionTextView sizeToFit];
-						
-						[cell.textLabel setText:@""];
-						[cell.detailTextLabel setText:@""];
-						[cell.contentView addSubview:self.descriptionTextView];
-						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						break;
+							[label setText:[self.beerObj.data objectForKey:fields[i].propname]];
+						[dataTableView addSubview:label];
 					}
-					case 1: // Style
-					{
-						BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-						NSDictionary* stylesDict=[appDelegate getStylesDictionary];
-						[cell.textLabel setText:@"Style"];
-						[cell.detailTextLabel setText:[[stylesDict objectForKey:@"names"] objectForKey:[beerObj.data objectForKey:@"style"]]];
-						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-						break;
-					}
-					case 2: // All other data
-					{
-						static struct { NSString* name; NSString* propname; BOOL inattribs; } fields[]={
-							{@"Availability:",@"availability",NO},
-							{@"Color:",@"srm",YES},
-							{@"ABV:",@"abv",YES},
-							{@"IBUs:",@"ibu",YES},
-							{@"OG:",@"og",YES},
-							{@"FG:",@"fg",YES},
-							{@"Grains:",@"grains",NO},
-							{@"Hops:",@"hops",NO},
-							{@"Yeast:",@"yeast",NO},
-							{@"Other ingredients:",@"otherings",NO},
-							{@"Sizes:",@"sizes",NO}
-						};
-						
-						if (self.dataTableView==nil)
-						{
-							dataTableView=[[UIView alloc] initWithFrame:CGRectMake(10, 10, cell.contentView.frame.size.width-20, 100)];
-							
-							for (int i=0;i<(sizeof(fields)/sizeof(fields[0]));++i)
-							{
-								UILabel* label=[[[UILabel alloc] initWithFrame:CGRectMake(0, i*20, dataTableView.frame.size.width/2, 20)] autorelease];
-								[label setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-								[label setText:fields[i].name];
-								label.textAlignment=UITextAlignmentRight;
-								[dataTableView addSubview:label];
-								
-								label=[[[UILabel alloc] initWithFrame:CGRectMake(dataTableView.frame.size.width/2, i*20, dataTableView.frame.size.width/2, 20)] autorelease];
-								[label setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-								if (fields[i].inattribs)
-								{
-									if ([fields[i].propname isEqualToString:@"srm"]) 
-									{ // Treat SRM (Color) specially
-										BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-										NSDictionary* colorsDict=[appDelegate getColorsDictionary];
-										[label setText:[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]]]];
-									}
-									else
-										[label setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]];
-								}
-								else
-									[label setText:[self.beerObj.data objectForKey:fields[i].propname]];
-								[dataTableView addSubview:label];
-							}
-							[cell addSubview:dataTableView];
-						}
-
-						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						break;
-					}
-					default:
-						break;
+					[cell addSubview:dataTableView];
 				}
+
+				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 			}
 			break;
 		}
+		case 4: // Find Nearby Button Cell
+			cell = [tableView dequeueReusableCellWithIdentifier:@"Section4Cell"];
+			if (cell == nil)
+				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section4Cell"] autorelease];
+			[cell.textLabel setText:@"Find Nearby"];
+			cell.textLabel.textAlignment=UITextAlignmentCenter;
+			break;
+		case 5: // Add To Wishlist Button Cell
+			cell = [tableView dequeueReusableCellWithIdentifier:@"Section5Cell"];
+			if (cell == nil)
+				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section5Cell"] autorelease];
+			[cell.textLabel setText:@"Add to Wishlist"];
+			cell.textLabel.textAlignment=UITextAlignmentCenter;
+			break;
 		default:
 			break;
 	}
@@ -1095,15 +1072,12 @@ static const int kTagBeerNameLabel=1;
 {
 	if (textField==self.beerNameTextField)
 	{ // Go to next field
-		[self.descriptionTextView becomeFirstResponder];
 	}
 	return NO;
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-	if (textView==self.descriptionTextView && self.editing==NO)
-		return NO;
 	return YES;
 }
 
@@ -1126,26 +1100,6 @@ static const int kTagBeerNameLabel=1;
 		{
 			fgTextField.text=[NSString stringWithFormat:@"%@.%@",[fgTextField.text substringToIndex:1],[fgTextField.text substringFromIndex:1]];
 		}
-	}
-}
-
--(void)addToWishListButtonClicked
-{
-	// Add beerID to wish list
-	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_WISHLIST_DOC];
-	NSString* bodystr=[NSString stringWithFormat:@"add_item=%@",self.beerID];
-	
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSData* answer;
-	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
-	if ([response statusCode]==200)
-	{
-		// TODO: signify somehow that it worked
-		// TODO: store new wishlist locally (the returned doc)
-	}
-	else
-	{
-		// TODO: tell the user it didn't work
 	}
 }
 
@@ -1189,13 +1143,9 @@ static const int kTagBeerNameLabel=1;
 		{
 			case 0: // Beer name
 			{
-				[self.beerNameTextField becomeFirstResponder];
-				break;
-			}
-			case 1:
-			{
 				switch (indexPath.row) {
-					case 0: // Description field
+					case 0:
+						[self.beerNameTextField becomeFirstResponder];
 						break;
 					case 1: // Style
 					{
@@ -1205,15 +1155,30 @@ static const int kTagBeerNameLabel=1;
 						[self.navigationController pushViewController:tvc animated:YES];
 						break;
 					}
-					case 2: // Color
+					default:
+						break;
+				}
+				break;
+			}
+			case 1:
+			{
+				switch (indexPath.row) {
+					case 0: // Description field
 					{
-						ColorsTVC* ctvc=[[[ColorsTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
-						ctvc.delegate=self;
-						ctvc.selectedColorSRM=[[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"] integerValue];
-						[self.navigationController pushViewController:ctvc animated:YES];
+						EditTextVC* etfvc=[[[EditTextVC alloc] initWithNibName:nil bundle:nil] autorelease];
+						etfvc.delegate=self;
+						etfvc.textToEdit=[self.beerObj.data objectForKey:@"description"];
+						[self.navigationController pushViewController:etfvc animated:YES];
 						break;
 					}
-					case 3: // Availability
+				}
+				break;
+			}
+			case 2:
+			{
+				
+				switch (indexPath.row) {
+					case 0: // Availability
 					{
 						AvailabilityTVC* atvc=[[[AvailabilityTVC alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
 						atvc.delegate=self;
@@ -1221,39 +1186,47 @@ static const int kTagBeerNameLabel=1;
 						[self.navigationController pushViewController:atvc animated:YES];
 						break;
 					}
-					case 4: // ABV edit field
+					case 1: // Color
+					{
+						ColorsTVC* ctvc=[[[ColorsTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
+						ctvc.delegate=self;
+						ctvc.selectedColorSRM=[[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"] integerValue];
+						[self.navigationController pushViewController:ctvc animated:YES];
+						break;
+					}
+					case 2: // ABV edit field
 						[self.abvTextField becomeFirstResponder];
 						break;
-					case 5: // IBUs
+					case 3: // IBUs
 						[self.ibuTextField becomeFirstResponder];
 						break;
-					case 6: // OG
+					case 4: // OG
 						[self.ogTextField becomeFirstResponder];
 						break;
-					case 7: // FG
+					case 5: // FG
 						[self.fgTextField becomeFirstResponder];
 						break;
-					case 8: // Grains
+					case 6: // Grains
 						[self.grainsTextField becomeFirstResponder];
 						break;
-					case 9: // Hops
+					case 7: // Hops
 						[self.hopsTextField becomeFirstResponder];
+						break;
+					case 8: // Misc Ingredients
+						break;
+					case 9: // Calories/12oz
 						break;
 					default:
 						break;
 				}
 				break;
 			}
-			case 2:
-			{
-				// Sizes
-			}
-			case 3:
-			{
-				// Retire this beer
-				UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"NYI" message:@"This is not yet implemented. Sorry." delegate:nil cancelButtonTitle:@"Troy is Lazy" otherButtonTitles:nil] autorelease];
-				[alert show];
-			}
+//			case 3:
+//			{
+//				// Retire this beer
+//				UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"NYI" message:@"This is not yet implemented. Sorry." delegate:nil cancelButtonTitle:@"Troy is Lazy" otherButtonTitles:nil] autorelease];
+//				[alert show];
+//			}
 			default:
 				break;
 		}
@@ -1290,10 +1263,52 @@ static const int kTagBeerNameLabel=1;
 				}
 				break;
 			}
+			case 4:
+			{
+				UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"NYI" message:@"This is not yet implemented." delegate:nil cancelButtonTitle:@"Hurry up, Troy" otherButtonTitles:nil] autorelease];
+				[alert show];
+
+				UITableViewCell* cell=[self.tableView cellForRowAtIndexPath:indexPath];
+				[cell setSelected:NO animated:YES];
+				
+				break;
+			}
+			case 5:
+			{
+				// Add beerID to wish list
+				NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_WISHLIST_DOC];
+				NSString* bodystr=[NSString stringWithFormat:@"add_item=%@",self.beerID];
+				
+				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+				NSData* answer;
+				NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
+				
+				UITableViewCell* cell=[self.tableView cellForRowAtIndexPath:indexPath];
+				[cell setSelected:NO animated:YES];
+				
+				if ([response statusCode]==200)
+				{
+					// TODO: signify somehow that it worked
+					// TODO: store new wishlist locally (the returned doc)
+				}
+				else
+				{
+					// TODO: tell the user it didn't work
+				}
+				break;
+			}
 			default:
 				break;
 		}
 	}
+}
+
+-(void)editTextVC:(id)sender didChangeText:(NSString*)text
+{
+	// Save the text to the beer's description
+	[self.beerObj.data setObject:text forKey:@"description"];
+	// Dismiss view controller
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -1338,11 +1353,6 @@ static const int kTagBeerNameLabel=1;
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	return UITableViewCellEditingStyleNone;
-}
-
-- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	return NO;
 }
 
 

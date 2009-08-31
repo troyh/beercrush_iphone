@@ -145,7 +145,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:[[[breweryList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"id"]];
+	BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[[[breweryList objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"id"]] autorelease];
 	bltvc.setRightBarButtonItem=NO;
 	[self.navigationController pushViewController:bltvc animated:YES];
 	[self.navigationController.navigationBar.topItem setRightBarButtonItem:

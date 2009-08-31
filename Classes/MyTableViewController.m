@@ -369,27 +369,27 @@
 		
 		if (t == Brewer)
 		{
-			BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:[NSString stringWithCString:idp]];
+			BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:[NSString stringWithCString:idp encoding:NSUnicodeStringEncoding]];
 			[self.navigationController pushViewController: btvc animated:YES];
 			[btvc release];
 			
-			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[NSString stringWithCString:idp]];
+			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[NSString stringWithCString:idp encoding:NSUnicodeStringEncoding]];
 		}
 		else if (t == Beer)
 		{
-			BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID: [NSString stringWithCString:idp]];
+			BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID: [NSString stringWithCString:idp encoding:NSUnicodeStringEncoding]];
 			[self.navigationController pushViewController:btvc animated:YES];
 			[btvc release];
 
-			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[NSString stringWithCString:idp]];
+			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[NSString stringWithCString:idp encoding:NSUnicodeStringEncoding]];
 		}
 		else if (t == Place)
 		{
-			PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID: [NSString stringWithCString:idp]];
+			PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID: [NSString stringWithCString:idp encoding:NSUnicodeStringEncoding]];
 			[self.navigationController pushViewController: btvc animated:YES];
 			[btvc release];
 
-			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[NSString stringWithCString:idp]];
+			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[NSString stringWithCString:idp encoding:NSUnicodeStringEncoding]];
 		}
 	}
 		

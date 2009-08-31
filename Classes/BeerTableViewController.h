@@ -13,13 +13,15 @@
 #import "StylesListTVC.h"
 #import "ColorsTVC.h"
 #import "AvailabilityTVC.h"
+#import "EditTextVC.h"
 
 @protocol BeerTableViewControllerDelegate;
 
-@interface BeerTableViewController : UITableViewController <FullBeerReviewTVCDelegate,StylesListTVCDelegate,ColorsTVCDelegate,AvailabilityTVCDelegate,UITextViewDelegate,UITextFieldDelegate> {
+@interface BeerTableViewController : UITableViewController <FullBeerReviewTVCDelegate,StylesListTVCDelegate,ColorsTVCDelegate,AvailabilityTVCDelegate,UITextViewDelegate,UITextFieldDelegate, EditTextVCDelegate> {
 	NSString* beerID;
 	NSString* breweryID;
 	BeerObject* beerObj;
+	NSMutableDictionary* originalBeerData;
 	NSMutableString* currentElemValue;
 	NSMutableArray* xmlParserPath;
 	NSMutableDictionary* userReviewData;
@@ -31,7 +33,6 @@
 	UISlider* balanceSlider;
 	UISlider* aftertasteSlider;
 	UITextField* beerNameTextField;
-	UITextView* descriptionTextView;
 	UITextField* abvTextField;
 	UITextField* ibuTextField;
 	UITextField* ogTextField;
@@ -48,6 +49,7 @@
 @property (nonatomic,retain) NSString* beerID;
 @property (nonatomic,retain) NSString* breweryID;
 @property (nonatomic,retain) BeerObject* beerObj;
+@property (nonatomic,retain) NSMutableDictionary* originalBeerData;
 @property (nonatomic,retain) NSMutableString* currentElemValue;
 @property (nonatomic,retain) NSMutableArray* xmlParserPath;
 @property (nonatomic,retain) NSMutableDictionary* userReviewData;
@@ -57,7 +59,6 @@
 @property (nonatomic,retain) UISlider* balanceSlider;
 @property (nonatomic,retain) UISlider* aftertasteSlider;
 @property (nonatomic,retain) UITextField* beerNameTextField;
-@property (nonatomic,retain) UITextView* descriptionTextView;
 @property (nonatomic,retain) UITextField* abvTextField;
 @property (nonatomic,retain) UITextField* ibuTextField;
 @property (nonatomic,retain) UITextField* ogTextField;
