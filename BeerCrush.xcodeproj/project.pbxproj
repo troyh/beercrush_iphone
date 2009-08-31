@@ -45,6 +45,7 @@
 		058FFCA410360A1E00DA6D81 /* FlavorsAromasTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 058FFCA310360A1E00DA6D81 /* FlavorsAromasTVC.m */; };
 		05944DBD0F72E2BB0043D34C /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05944DBC0F72E2BB0043D34C /* MainWindow.xib */; };
 		05944DC50F72E7C30043D34C /* BeerCrush.png in Resources */ = {isa = PBXBuildFile; fileRef = 05944DC40F72E7C30043D34C /* BeerCrush.png */; };
+		059DA054104C70B200D5652E /* EditTextVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 059DA053104C70B200D5652E /* EditTextVC.m */; };
 		05B7DB5E103F42700021EEDA /* StylesListTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B7DB5D103F42700021EEDA /* StylesListTVC.m */; };
 		05B7DB7B103F45A70021EEDA /* StyleVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B7DB7A103F45A70021EEDA /* StyleVC.m */; };
 		05C6364D0F55C03C00B1C78A /* BreweryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */; };
@@ -123,6 +124,8 @@
 		058FFCA310360A1E00DA6D81 /* FlavorsAromasTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlavorsAromasTVC.m; sourceTree = "<group>"; };
 		05944DBC0F72E2BB0043D34C /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		05944DC40F72E7C30043D34C /* BeerCrush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BeerCrush.png; sourceTree = "<group>"; };
+		059DA052104C70B200D5652E /* EditTextVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditTextVC.h; sourceTree = "<group>"; };
+		059DA053104C70B200D5652E /* EditTextVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditTextVC.m; sourceTree = "<group>"; };
 		05B7DB5C103F42700021EEDA /* StylesListTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StylesListTVC.h; sourceTree = "<group>"; };
 		05B7DB5D103F42700021EEDA /* StylesListTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StylesListTVC.m; sourceTree = "<group>"; };
 		05B7DB79103F45A70021EEDA /* StyleVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleVC.h; sourceTree = "<group>"; };
@@ -193,6 +196,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				059DA052104C70B200D5652E /* EditTextVC.h */,
+				059DA053104C70B200D5652E /* EditTextVC.m */,
 				05451D7A1049DAE800F9400B /* JSON */,
 				05451C44104883E800F9400B /* PlacesTVC.h */,
 				05451C45104883E800F9400B /* PlacesTVC.m */,
@@ -416,6 +421,7 @@
 				05451D8B1049DAE800F9400B /* SBJsonBase.m in Sources */,
 				05451D8C1049DAE800F9400B /* SBJsonParser.m in Sources */,
 				05451D8D1049DAE800F9400B /* SBJsonWriter.m in Sources */,
+				059DA054104C70B200D5652E /* EditTextVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
