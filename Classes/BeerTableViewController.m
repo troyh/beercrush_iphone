@@ -142,7 +142,7 @@ static const int kTagStyleLabel=3;
 			[values addObject:[NSString stringWithFormat:@"hops=%@",self.hopsTextField.text]];
 		if ([[self.beerObj.data objectForKey:@"availability"] isEqualToString:[self.originalBeerData objectForKey:@"availability"]]==NO)
 			[values addObject:[NSString stringWithFormat:@"availability=%@",[self.beerObj.data objectForKey:@"availability"]]];
-		if ([[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"] isEqualToString:[[self.originalBeerData objectForKey:@"attribs"] objectForKey:@"srm"]]==NO)
+		if ([[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"] && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"] isEqualToString:[[self.originalBeerData objectForKey:@"attribs"] objectForKey:@"srm"]]==NO)
 			[values addObject:[NSString stringWithFormat:@"srm=%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]];
 		if ([[self.beerObj.data objectForKey:@"style"] isEqualToString:[self.originalBeerData objectForKey:@"style"]]==NO)
 			[values addObject:[NSString stringWithFormat:@"bjcp_style_id=%@",[self.beerObj.data objectForKey:@"style"]]];
