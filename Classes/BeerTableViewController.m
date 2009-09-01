@@ -695,6 +695,21 @@ static const int kTagStyleLabel=3;
 								self.bodySlider.value=1;
 							else
 								[self.bodySlider setValue:[value integerValue] animated:YES];
+
+							UIImageView* leftimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"body_low.png"]] autorelease];
+							CGRect frame=leftimgview.frame;
+							frame.origin.x=self.bodySlider.frame.origin.x-20;
+							frame.origin.y=14;
+							leftimgview.frame=frame;
+							[cell.contentView addSubview:leftimgview];
+							
+							UIImageView* rightimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"body_high.png"]] autorelease];
+							frame=rightimgview.frame;
+							frame.origin.x=self.bodySlider.frame.origin.x+self.bodySlider.frame.size.width+3;
+							frame.origin.y=14;
+							rightimgview.frame=frame;
+							[cell.contentView addSubview:rightimgview];
+							
 						}
 						[cell.contentView addSubview:self.bodySlider];
 						
@@ -717,6 +732,20 @@ static const int kTagStyleLabel=3;
 								self.balanceSlider.value=1;
 							else
 								[self.balanceSlider setValue:[value floatValue] animated:YES];
+
+							UIImageView* leftimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"balance_low.png"]] autorelease];
+							CGRect frame=leftimgview.frame;
+							frame.origin.x=self.balanceSlider.frame.origin.x-20;
+							frame.origin.y=14;
+							leftimgview.frame=frame;
+							[cell.contentView addSubview:leftimgview];
+							
+							UIImageView* rightimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"balance_high.png"]] autorelease];
+							frame=rightimgview.frame;
+							frame.origin.x=self.balanceSlider.frame.origin.x+self.balanceSlider.frame.size.width+3;
+							frame.origin.y=14;
+							rightimgview.frame=frame;
+							[cell.contentView addSubview:rightimgview];
 						}
 						[cell.contentView addSubview:self.balanceSlider];
 
@@ -739,6 +768,20 @@ static const int kTagStyleLabel=3;
 								self.aftertasteSlider.value=1;
 							else
 								[self.aftertasteSlider setValue:[value integerValue] animated:YES];
+							
+							UIImageView* leftimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"aftertaste_low.png"]] autorelease];
+							CGRect frame=leftimgview.frame;
+							frame.origin.x=self.aftertasteSlider.frame.origin.x-20;
+							frame.origin.y=14;
+							leftimgview.frame=frame;
+							[cell.contentView addSubview:leftimgview];
+							
+							UIImageView* rightimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"aftertaste_high.png"]] autorelease];
+							frame=rightimgview.frame;
+							frame.origin.x=self.aftertasteSlider.frame.origin.x+self.aftertasteSlider.frame.size.width+3;
+							frame.origin.y=14;
+							rightimgview.frame=frame;
+							[cell.contentView addSubview:rightimgview];
 						}
 						[cell.contentView addSubview:self.aftertasteSlider];
 
@@ -750,6 +793,15 @@ static const int kTagStyleLabel=3;
 					case 5: // Flavors summary
 					{
 						[cell.textLabel setText:@"Flavors"];
+						NSString* flavors=[self.beerObj.data objectForKey:@"flavors"];
+						if (flavors==nil)
+						{
+							[cell.detailTextLabel setText:@"No flavors or aromas rated yet"];
+							[cell.detailTextLabel setFont:[UIFont systemFontOfSize:14]];
+							[cell.detailTextLabel setTextColor:[UIColor grayColor]];
+						}
+						else
+							[cell.detailTextLabel setText:flavors];
 						cell.accessoryType=UITableViewCellAccessoryNone;
 						break;
 					}
