@@ -44,6 +44,7 @@
 
 const int kButtonWidth=80;
 const int kButtonHeight=40;
+const int kDescriptionCellDefaultRowHeight=80;
 
 static const int kTagBeerNameLabel=1;
 static const int kTagDescriptionLabel=2;
@@ -433,7 +434,7 @@ static const int kTagStyleLabel=3;
 			}
 			else
 			{
-				return 80; // Description cell
+				return kDescriptionCellDefaultRowHeight; // Description cell
 			}
 			break;
 		case 3:
@@ -558,6 +559,15 @@ static const int kTagStyleLabel=3;
 							styleLabel.textColor=[UIColor blackColor];
 							styleLabel.tag=kTagStyleLabel;
 							[cell.contentView addSubview:styleLabel];
+							
+							// Put photo to the left
+							UIView* photoFrame=[[[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)] autorelease];
+							photoFrame.backgroundColor=[UIColor blackColor];
+							UIImageView* photo=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"beer.png"]] autorelease];
+							photo.frame=CGRectMake(1, 1, 73, 73);
+							[photoFrame addSubview:photo];
+							[cell.contentView addSubview:photoFrame];
+							[cell.contentView addSubview:photo];
 							
 							UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
 							transparentBackground.backgroundColor=[UIColor clearColor];
@@ -952,6 +962,7 @@ static const int kTagStyleLabel=3;
 					descriptionLabel.numberOfLines=3;
 					descriptionLabel.lineBreakMode=UILineBreakModeTailTruncation;
 					[cell.contentView addSubview:descriptionLabel];
+					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				}
 				
 				UILabel* descriptionLabel=(UILabel*)[cell viewWithTag:kTagDescriptionLabel];
@@ -1237,8 +1248,12 @@ static const int kTagStyleLabel=3;
 			case 1: // Overall ratings and reviews
 			{
 				switch (indexPath.row) {
-					case 1: // Overall reviews
-					{
+					case 1:
+					case 2:
+					case 3:
+					case 4:
+					case 5:
+					{	 // Overall reviews
 						ReviewsTableViewController*	rtvc=[[[ReviewsTableViewController alloc] initWithID:self.beerID dataType:Beer] autorelease];
 						rtvc.fullBeerReviewDelegate=self; // I'll be the FullBeerReviewTVCDelegate when the user selects on of the reviews to look at
 						[self.navigationController pushViewController: rtvc animated:YES];
@@ -1249,18 +1264,39 @@ static const int kTagStyleLabel=3;
 				}
 				break;
 			}
+			case 2:
+			{
+				// Make the cell big enough to see all the text
+				UITableViewCell* cell=[self.tableView cellForRowAtIndexPath:indexPath];
+				[UIView beginAnimations:@"bigdescriptioncell" context:nil];
+				CGRect f=cell.frame;
+				if (cell.frame.size.height <= kDescriptionCellDefaultRowHeight) // Make it expand to show the full text
+				{
+					f.size.height+=100;
+					
+					// Move the next section down too
+//					UITableViewCell* next
+				}
+				else // Shrink it to its normal height
+				{
+					f.size.height=kDescriptionCellDefaultRowHeight;
+				}
+				cell.frame=f;
+				[UIView commitAnimations];
+				break;
+			}
 			case 3:
 			{
-				switch (indexPath.row) {
-					case 1: // Beer style
-					{
-						StyleVC* svc=[[[StyleVC alloc] initWithStyleID:[self.beerObj.data objectForKey:@"style"]] autorelease];
-						[self.navigationController pushViewController:svc animated:YES];
-						break;
-					}
-					default:
-						break;
-				}
+//				switch (indexPath.row) {
+//					case 1: // Beer style
+//					{
+//						StyleVC* svc=[[[StyleVC alloc] initWithStyleID:[self.beerObj.data objectForKey:@"style"]] autorelease];
+//						[self.navigationController pushViewController:svc animated:YES];
+//						break;
+//					}
+//					default:
+//						break;
+//				}
 				break;
 			}
 			case 4:
