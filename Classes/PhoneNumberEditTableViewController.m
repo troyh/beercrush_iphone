@@ -157,7 +157,7 @@
 //			f.size.height-=5;
 			f.origin.x+=10;
 //			f.origin.y+=5;
-			UITextField* fld=[[UITextField alloc] initWithFrame:f];
+			UITextField* fld=[[[UITextField alloc] initWithFrame:f] autorelease];
 
 			if ([self.initialdata isKindOfClass:[NSString class]])
 			{
@@ -191,7 +191,7 @@
 			CGRect f=cell.frame;
 			f.size.width-=20;
 			f.origin.x+=10;
-			UITextView* fld=[[UITextView alloc] initWithFrame:f];
+			UITextView* fld=[[[UITextView alloc] initWithFrame:f] autorelease];
 			
 			if ([[self.data objectForKey:self.editableValueName] isKindOfClass:[NSString class]])
 				fld.text=[self.data objectForKey:self.editableValueName];
@@ -236,7 +236,7 @@
 			CGRect f=cell.frame;
 			f.size.width-=20;
 			f.origin.x+=10;
-			UITextField* fld=[[UITextField alloc] initWithFrame:f];
+			UITextField* fld=[[[UITextField alloc] initWithFrame:f] autorelease];
 			
 			if ([self.initialdata isKindOfClass:[NSDictionary class]]) // It better be!
 			{
