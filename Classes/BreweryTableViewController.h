@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "BeerCrushAppDelegate.h"
+#import "CountryListTVC.h"
+#import "EditTextVC.h"
 
 @interface BreweryObject: NSObject
 {
@@ -20,7 +22,7 @@
 
 @end
 
-@interface BreweryTableViewController : UITableViewController <UITableViewDataSource,UITableViewDelegate> {
+@interface BreweryTableViewController : UITableViewController <UITableViewDataSource,UITableViewDelegate,CountryListTVCDelegate,EditTextVCDelegate> {
 	NSString* breweryID;
 	BreweryObject* breweryObject;
 	NSMutableString* currentElemValue;

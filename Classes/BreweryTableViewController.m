@@ -14,7 +14,6 @@
 #import "RatingControl.h"
 
 
-
 @implementation BreweryObject
 
 @synthesize data;
@@ -22,8 +21,15 @@
 -(id)init
 {
 	self.data=[[NSMutableDictionary alloc] initWithCapacity:10];
-	[self.data release];
-	[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease] forKey:@"address"];
+	
+	// Init address data to empty strings (so we don't see '(null)' pop up anywhere)
+	NSMutableDictionary* addr=[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease];
+	[addr setObject:@"" forKey:@"street"];
+	[addr setObject:@"" forKey:@"city"];
+	[addr setObject:@"" forKey:@"state"];
+	[addr setObject:@"" forKey:@"zip"];
+	[addr setObject:@"" forKey:@"country"];
+	[self.data setObject:addr forKey:@"address"];
 
 	// Init with blank values for URI and Phone
 	[self.data setObject:@"" forKey:@"uri"];
@@ -34,8 +40,8 @@
 
 -(void)dealloc
 {
-	if (self.data)
-		[self.data release];
+	[self.data release];
+	
 	[super dealloc];
 }
 
@@ -80,8 +86,10 @@
 
 -(void)dealloc
 {
+	[self.breweryID release];
 	[self.breweryObject release];
 	[self.currentElemValue release];
+	[self.xmlParserPath release];
 	[super dealloc];
 }
 
@@ -144,48 +152,61 @@
 	if (editing==YES)
 	{
 		self.title=@"Editing Brewery";
-		NSArray* rows=[NSArray arrayWithObjects:
-					   [NSIndexPath indexPathForRow:1 inSection:0],
-					   [NSIndexPath indexPathForRow:2 inSection:0],
-					   nil];
+
 		[self.tableView beginUpdates];
-		[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
+												[NSIndexPath indexPathForRow:0 inSection:2],
+												[NSIndexPath indexPathForRow:3 inSection:4],
+												nil
+												] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
+		
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:
+												[NSIndexPath indexPathForRow:0 inSection:1], // Edit Street
+												[NSIndexPath indexPathForRow:1 inSection:1], // Edit Street 2
+												[NSIndexPath indexPathForRow:2 inSection:1], // Edit City, State ZIP
+												[NSIndexPath indexPathForRow:3 inSection:1], // Edit Country
+												nil] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView endUpdates];
+		
+		[self.tableView reloadData];
 	}
 	else
 	{
 		// Save data to server
 		
-		NSMutableString* bodystr=[[[NSMutableString alloc] initWithFormat:@"brewery_id=%@",self.breweryID] autorelease];
-		// Add in changed fields to the POST data
-		// TODO: Only change the fields that were edited by the user
-		if (YES)
-			[bodystr appendFormat:@"&address:city=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"city"]];
-		if (YES)
-			[bodystr appendFormat:@"&address:state=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"state"]];
-		if (YES)
-			[bodystr appendFormat:@"&address:street=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"street"]];
-		if (YES)
-			[bodystr appendFormat:@"&address:zip=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"zip"]];
-		if (YES)
-			[bodystr appendFormat:@"&name=%@",[self.breweryObject.data objectForKey:@"name"]];
-		if (YES)
-			[bodystr appendFormat:@"&phone=%@",[self.breweryObject.data objectForKey:@"phone"]];
-		if (YES)
-			[bodystr appendFormat:@"&uri=%@",[self.breweryObject.data objectForKey:@"uri"]];
-		
-		
-		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		NSData* answer;
-		NSHTTPURLResponse* response=[appDelegate sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BREWERY_DOC] usingMethod:@"POST" withData:bodystr returningData:&answer];
-		if ([response statusCode]==200)
-		{
-			// Parse the XML response, which is the new brewery doc
-			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
-			[parser setDelegate:self];
-			[parser parse];
-			[parser release];
-		}
+//		NSMutableString* bodystr=[[[NSMutableString alloc] initWithFormat:@"brewery_id=%@",self.breweryID] autorelease];
+//		// Add in changed fields to the POST data
+//		// TODO: Only change the fields that were edited by the user
+//		if (YES)
+//			[bodystr appendFormat:@"&address:city=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"city"]];
+//		if (YES)
+//			[bodystr appendFormat:@"&address:state=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"state"]];
+//		if (YES)
+//			[bodystr appendFormat:@"&address:street=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"street"]];
+//		if (YES)
+//			[bodystr appendFormat:@"&address:zip=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"zip"]];
+//		if (YES)
+//			[bodystr appendFormat:@"&name=%@",[self.breweryObject.data objectForKey:@"name"]];
+//		if (YES)
+//			[bodystr appendFormat:@"&phone=%@",[self.breweryObject.data objectForKey:@"phone"]];
+//		if (YES)
+//			[bodystr appendFormat:@"&uri=%@",[self.breweryObject.data objectForKey:@"uri"]];
+//		
+//		
+//		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+//		NSData* answer;
+//		NSHTTPURLResponse* response=[appDelegate sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BREWERY_DOC] usingMethod:@"POST" withData:bodystr returningData:&answer];
+//		if ([response statusCode]==200)
+//		{
+//			// Parse the XML response, which is the new brewery doc
+//			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
+//			[parser setDelegate:self];
+//			[parser parse];
+//			[parser release];
+//		}
 		
 		self.title=@"Brewery";
 
@@ -206,7 +227,7 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return self.editing?5:6;
 }
 
 
@@ -214,10 +235,22 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return self.editing?1:3;
+			return self.editing?1:1;
 			break;
 		case 1:
-			return 3;
+			return self.editing?6:1;
+			break;
+		case 2:
+			return self.editing?1:3;
+			break;
+		case 3:
+			return self.editing?3:1;
+			break;
+		case 4:
+			return self.editing?3:4;
+			break;
+		case 5:
+			return 1;
 			break;
 		default:
 			break;
@@ -225,214 +258,500 @@
 	return 0;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+	if (self.editing)
+	{
+		switch (section) {
+			case 2:
+				return @"Owner's Description";
+				break;
+			case 3:
+				return @"Details";
+				break;
+			case 4:
+				return @"Buy to go";
+				break;
+			default:
+				break;
+		}
+	}
+	else 
+	{
+		switch (section) {
+			case 3:
+				return @"Owner's Description";
+				break;
+			case 4:
+				return @"Details";
+				break;
+			default:
+				break;
+		}
+	}
+	return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	if (self.editing)
+	{
+		switch (indexPath.section) {
+			case 0: // Brewery name
+				return 50;
+				break;
+			case 2: // Owner's Description
+				return 80;
+				break;
+			case 3: // Details
+				return 80;
+				break;
+		}
+		
+	}
+	else 
+	{
+		switch (indexPath.section) {
+			case 0: // Brewery name
+				return 50;
+				break;
+			case 2:
+			{
+				switch (indexPath.row) {
+					case 0: // Address
+						return 80;
+						break;
+				}
+				break;
+			}
+			case 3:
+				return 80;
+				break;
+		}
+	}
+	
+	return tableView.rowHeight;
+}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-	// TODO: If we don't have the data yet, request it from the server
-	
-    static NSString *CellIdentifier = @"Cell";
-    
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    UITableViewCell *cell = nil;
-
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
-    }
-	
 	tableView.allowsSelectionDuringEditing=YES;
-    
-    // Set up the cell...
-	switch (indexPath.section) 
+	
+	UITableViewCell *cell=nil;
+	
+	if (self.editing)
 	{
-		case 0:
-			switch (indexPath.row)
+		switch (indexPath.section) 
+		{
+			case 0: // Name and photo
 			{
-				case 0:
-					[cell.textLabel setText:[breweryObject.data objectForKey:@"name"]];
+				cell = [tableView dequeueReusableCellWithIdentifier:@"EditNameCell"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EditNameCell"] autorelease];
+
+					UITextField* textField=[[[UITextField alloc] initWithFrame:CGRectMake(15, 10, 290, 30)] autorelease];
+					textField.font=[UIFont boldSystemFontOfSize:20];
+					textField.tag=1;
+					textField.placeholder=@"Name";
+//					textField.autoresizingMask=UIViewAutoresizingFlexibleLeftMargin|
+//												UIViewAutoresizingFlexibleWidth|
+//												UIViewAutoresizingFlexibleRightMargin|
+//												UIViewAutoresizingFlexibleHeight|
+//												UIViewAutoresizingFlexibleTopMargin|
+//												UIViewAutoresizingFlexibleBottomMargin;
+//					[textField sizeToFit];
+					[cell addSubview:textField];
+				}
+				UITextField* textField=(UITextField*)[cell viewWithTag:1];
+				[textField setText:[self.breweryObject.data objectForKey:@"name"]];
+				break;
+			}
+			case 1: // Address, phone & URI
+			{
+				NSDictionary* addr=[self.breweryObject.data objectForKey:@"address"];
+				
+				switch (indexPath.row) {
+					case 0: // Street
+					case 1: // Street #2
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditStreetCell"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EditStreetCell"] autorelease];
+							UITextField* textField=[[[UITextField alloc] initWithFrame:CGRectMake(5, 8, 290, 30)] autorelease];
+							textField.tag=1;
+							textField.placeholder=@"Street";
+							textField.font=[UIFont boldSystemFontOfSize:16];
+							[cell.contentView addSubview:textField];
+						}
+						UITextField* textField=(UITextField*)[cell viewWithTag:1];
+						if (indexPath.row==0)
+							[textField setText:[addr objectForKey:@"street"]];
+						else
+							[textField setText:[addr objectForKey:@"street2"]];
+						break;
+					case 2: // City, State & Zip
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditCityStateZIPCell"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EditCityStateZIPCell"] autorelease];
+
+							UITextField* cityTextField=[[[UITextField alloc] initWithFrame:CGRectMake(5, 8, 150, 30)] autorelease];
+							cityTextField.tag=1;
+							cityTextField.placeholder=@"City";
+							cityTextField.font=[UIFont boldSystemFontOfSize:16];
+							[cell.contentView addSubview:cityTextField];
+
+							UITextField* stateTextField=[[[UITextField alloc] initWithFrame:CGRectMake(155, 8, 30, 30)] autorelease];
+							stateTextField.tag=2;
+							stateTextField.placeholder=@"State";
+							stateTextField.keyboardType=UIKeyboardTypeAlphabet;
+							stateTextField.font=[UIFont boldSystemFontOfSize:16];
+							[cell.contentView addSubview:stateTextField];
+
+							UITextField* zipTextField=[[[UITextField alloc] initWithFrame:CGRectMake(180, 8, 110, 30)] autorelease];
+							zipTextField.tag=3;
+							zipTextField.placeholder=@"Zip";
+							zipTextField.keyboardType=UIKeyboardTypeNumberPad;
+							zipTextField.font=[UIFont boldSystemFontOfSize:16];
+							[cell.contentView addSubview:zipTextField];
+						}
+						
+						UITextField* cityTextField=(UITextField*)[cell viewWithTag:1];
+						UITextField* stateTextField=(UITextField*)[cell viewWithTag:2];
+						UITextField* zipTextField=(UITextField*)[cell viewWithTag:3];
+						
+						[cityTextField setText:[addr objectForKey:@"city"]];
+						[stateTextField setText:[addr objectForKey:@"state"]];
+						[zipTextField setText:[addr objectForKey:@"zip"]];
+						break;
+					}
+					case 3: // Country
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditCountry"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EditCountry"] autorelease];
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						}
+						[cell.textLabel setText:[addr objectForKey:@"country"]];
+						break;
+					}
+					case 4: // Phone
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditPhone"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EditPhone"] autorelease];
+							
+							UITextField* phoneTextField=[[[UITextField alloc] initWithFrame:CGRectMake(5, 8, 300, 30)] autorelease];
+							phoneTextField.tag=1;
+							phoneTextField.placeholder=@"Phone";
+							phoneTextField.font=[UIFont systemFontOfSize:20];
+							phoneTextField.textAlignment=UITextAlignmentCenter;
+							phoneTextField.keyboardType=UIKeyboardTypePhonePad;
+							[cell addSubview:phoneTextField];
+						}
+						
+						UITextField* textField=(UITextField*)[cell viewWithTag:1];
+						[textField setText:[self.breweryObject.data objectForKey:@"phone"]];
+						break;
+					}
+					case 5: // Web site
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditURI"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EditURI"] autorelease];
+							
+							UITextField* uriTextField=[[[UITextField alloc] initWithFrame:CGRectMake(5, 8, 300, 30)] autorelease];
+							uriTextField.tag=1;
+							uriTextField.placeholder=@"Web site";
+							uriTextField.textAlignment=UITextAlignmentCenter;
+							uriTextField.keyboardType=UIKeyboardTypeURL;
+							[cell addSubview:uriTextField];
+						}
+						
+						UITextField* textField=(UITextField*)[cell viewWithTag:1];
+						[textField setText:[self.breweryObject.data objectForKey:@"uri"]];
+						break;
+					}
+					default:
+						break;
+				}
+				break;
+			}
+			case 2: // Owner's Description
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section2CellEditing"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section2CellEditing"] autorelease];
+				}
+				
+				[cell.textLabel setText:[self.breweryObject.data objectForKey:@"description"]];
+				cell.textLabel.numberOfLines=3;
+				break;
+			case 3: // Details
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section3CellEditing"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section3CellEditing"] autorelease];
+				}
+				switch (indexPath.row) {
+					case 0:
+						[cell.textLabel setText:@"tasting"];
+						break;
+					case 1:
+						[cell.textLabel setText:@"tour info"];
+						break;
+					case 2:
+						[cell.textLabel setText:@"hours"];
+						break;
+					default:
+						break;
+				}
+				break;
+			case 4: // Buy to go
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section4CellEditing"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Section4CellEditing"] autorelease];
+					
+					UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+					switchControl.tag=1;
+					[cell.contentView addSubview:switchControl];
+				}
+				switch (indexPath.row) {
+					case 0:
+					{
+						[cell.textLabel setText:@"Kegs"];
+						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:1];
+						[switchControl setOn:NO animated:NO];
+						break;
+					}
+					case 1:
+					{
+						[cell.textLabel setText:@"Growlers"];
+						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:1];
+						[switchControl setOn:NO animated:NO];
+						break;
+					}
+					case 2:
+					{
+						[cell.textLabel setText:@"Bottles/cans"];
+						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:1];
+						[switchControl setOn:NO animated:NO];
+						break;
+					}
+					default:
+						break;
+				}
+				break;
+		}
+	}
+	else 
+	{
+		switch (indexPath.section) 
+		{
+			case 0: // Name and photo
+			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section0Cell"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section0Cell"] autorelease];
+					
+					UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+					transparentBackground.backgroundColor=[UIColor clearColor];
+					cell.backgroundView=transparentBackground;
+					cell.backgroundColor=[UIColor clearColor];
+					
+					CGRect f=cell.textLabel.frame;
+					f.origin.x=80;
+					cell.textLabel.frame=f;
 					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
-					break;
-				case 1:
-				{
-					RatingControl* ratingctl=[[RatingControl alloc] initWithFrame:cell.contentView.frame];
-					DLog(@"RatingControl retainCount=%d",[ratingctl retainCount]);
-					
-					// Set current user's rating (if any)
-					NSString* user_rating=[self.breweryObject.data objectForKey:@"user_rating"];
-					if (user_rating!=nil) // No user review
-						ratingctl.currentRating=[user_rating integerValue];
-					
-					// Set the callback for a review
-					[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
-					
-					[cell.contentView addSubview:ratingctl];
-					[ratingctl release];
-					break;
 				}
-//				case 2:
-//					[cell.textLabel setText:@"Ratings & Reviews"];
-//					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-//					break;
-				case 2:
-					[cell.textLabel setText:@"List of Beers"];
-					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-					break;
-				default:
-					break;
+
+				[cell.textLabel setText:[breweryObject.data objectForKey:@"name"]];
+				break;
 			}
-			break;
-		case 1:
-			switch (indexPath.row)
+			case 1: // Beers Brewed
 			{
-				case 0:
-					[cell.textLabel setText:[breweryObject.data objectForKey:@"uri"]];
-					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-					[cell.textLabel setTextAlignment:UITextAlignmentCenter];
-					break;
-				case 1:
-				{
-					NSMutableDictionary* addr=[breweryObject.data objectForKey:@"address"];
-					[cell.textLabel setText:[NSString stringWithFormat:@"%@, %@ %@ %@",
-											[addr objectForKey:@"street"],
-											[addr objectForKey:@"city"],
-											[addr objectForKey:@"state"],
-											[addr objectForKey:@"zip"]]];
-					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-					[cell.textLabel setTextAlignment:UITextAlignmentCenter];
-//					cell.selectionStyle=UITableViewCellSelectionStyleNone;
-					break;
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Cell"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section1Cell"] autorelease];
 				}
-				case 2:
-					[cell.textLabel setText:[breweryObject.data objectForKey:@"phone"]];
-					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-					[cell.textLabel setTextAlignment:UITextAlignmentCenter];
-//					cell.selectionStyle=UITableViewCellSelectionStyleNone;
-					break;
-				default:
-					break;
+				[cell.textLabel setText:[NSString stringWithFormat:@"%d Beers Brewed",0]];
+				break;
 			}
+			case 2: // Address, phone and web site
+			{
+				switch (indexPath.row)
+				{
+					case 0:
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row0Cell"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row0Cell"] autorelease];
+						}
+						
+						NSMutableDictionary* addr=[breweryObject.data objectForKey:@"address"];
+						[cell.detailTextLabel setText:[NSString stringWithFormat:@"%@\n%@, %@ %@\n%@",
+												[addr objectForKey:@"street"],
+												[addr objectForKey:@"city"],
+												[addr objectForKey:@"state"],
+												[addr objectForKey:@"zip"],
+												[addr objectForKey:@"country"]]];
+						cell.detailTextLabel.numberOfLines=3;
+						//[cell.detailTextLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+						//[cell.detailTextLabel setTextAlignment:UITextAlignmentCenter];
+						[cell.textLabel setText:@"map"];
+						break;
+					}
+					case 1:
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row1Cell"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row1Cell"] autorelease];
+						}
+						
+						[cell.detailTextLabel setText:[breweryObject.data objectForKey:@"phone"]];
+	//					[cell.detailTextLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+						[cell.textLabel setText:@"call"];
+						break;
+					}
+					case 2:
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row2Cell"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section2Row2Cell"] autorelease];
+						}
+						
+						[cell.textLabel setText:[breweryObject.data objectForKey:@"uri"]];
+	//					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+						[cell.textLabel setTextAlignment:UITextAlignmentCenter];
+						break;
+					}
+					default:
+						break;
+				}
+				break;
+			}
+			case 3: // Owner's Description
+			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section3Cell"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section3Cell"] autorelease];
+					
+					UILabel* descriptionLabel=[[[UILabel alloc] initWithFrame:CGRectMake(5, 0, 275, 30)] autorelease];
+					descriptionLabel.font=[UIFont systemFontOfSize:14];
+					descriptionLabel.numberOfLines=3;
+					[descriptionLabel setText:[self.breweryObject.data objectForKey:@"description"]];
+					[cell.contentView addSubview:descriptionLabel];
+				}
+				break;
+			}
+			case 4: // Details
+			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section4Cell"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section4Cell"] autorelease];
+				}
+				switch (indexPath.row)
+				{
+					case 0:
+						[cell.textLabel setText:@"tastings"];
+						break;
+					case 1:
+						[cell.textLabel setText:@"tour info"];
+						break;
+					case 2:
+						[cell.textLabel setText:@"hours"];
+						break;
+					case 3:
+						[cell.textLabel setText:@"to go"];
+						break;
+				}
+				break;
+			}
+			case 5: // Affiliated bars/restaurants
+			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Section5Cell"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section5Cell"] autorelease];
+				}
+				[cell.textLabel setText:[NSString stringWithFormat:@"%d Affiliated Bars/Restaurants",0]];
+				break;
+			}
+		}
 	}
-	
 
     return cell;
-}
-
--(void)ratingButtonTapped:(id)sender event:(id)event
-{
-	UISegmentedControl* segctl=(UISegmentedControl*)sender;
-	NSInteger rating=segctl.selectedSegmentIndex;
-	
-	// Send the review to the site
-	
-	NSString* bodystr=[[[NSString alloc] initWithFormat:@"rating=%u&brewery_id=%@", rating+1, breweryID] autorelease];
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSHTTPURLResponse* response=[appDelegate sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_POST_PLACE_REVIEW] usingMethod:@"POST" withData:bodystr returningData:nil];
-	if ([response statusCode]==200)
-	{
-	}
-	else
-	{
-		// TODO: alert the user
-	}
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Navigation logic may go here. Create and push another view controller.
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-
-	if (indexPath.section == 0 && indexPath.row == 0) // Brewery name
+	if (self.editing)
 	{
-		if (self.tableView.editing==YES)
-		{
-			// Go to view to edit name
-			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=breweryObject.data;
-			pnetvc.editableValueName=@"name";
-			pnetvc.editableValueType=kBeerCrushEditableValueTypeText;
-			[self.navigationController pushViewController:pnetvc animated:YES];
-			[pnetvc release];
+		switch (indexPath.section) {
+			case 0:
+				break;
+			case 1:
+			{
+				switch (indexPath.row) 
+				{
+					case 3: // Pick Country
+					{
+						CountryListTVC* cltvc=[[[CountryListTVC alloc] init] autorelease];
+						cltvc.delegate=self;
+						[self.navigationController pushViewController:cltvc animated:YES];
+						break;
+					}
+				}
+				break;
+			}
+			case 2: // Owner's Description
+			{
+				EditTextVC* editText=[[[EditTextVC alloc] init] autorelease];
+				editText.delegate=self;
+				editText.textToEdit=[self.breweryObject.data objectForKey:@"description"];
+				[self.navigationController pushViewController:editText animated:YES];
+				break;
+			}
 		}
 	}
-//	else if (indexPath.section == 0 && indexPath.row == 2) // Reviews is the 2nd row in the 1st section
-//	{
-//		ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.breweryID dataType:Brewer];
-//		[self.navigationController pushViewController: rtvc animated:YES];
-//		[rtvc release];
-//	}
-	else if (indexPath.section == 0 && indexPath.row == 2) // List of beers is the 3rd row in the 1st section
+	else
 	{
-		BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.breweryID];
-		[self.navigationController pushViewController: bltvc animated:YES];
-		[bltvc release];
-		
-		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:self.breweryID];
-	}
-	else if (indexPath.section == 1 && indexPath.row == 0) // Web site cell
-	{
-		if (self.tableView.editing==YES)
-		{
-			// Go to view to edit URI
-			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=breweryObject.data;
-			pnetvc.editableValueName=@"uri";
-			pnetvc.editableValueType=kBeerCrushEditableValueTypeURI;
-			[self.navigationController pushViewController:pnetvc animated:YES];
-			[pnetvc release];
-		}
-		else
-		{
-			NSString* uri=[breweryObject.data objectForKey:@"uri"];
-			if (uri && [uri length])
-				[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString: uri] autorelease]];
-		}
-	}
-	else if (indexPath.section == 1 && indexPath.row == 1) // Address cell
-	{
-		if (self.tableView.editing==YES)
-		{
-			// Go to view to edit address
-			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=breweryObject.data;
-			pnetvc.editableValueName=@"address";
-			pnetvc.editableValueType=kBeerCrushEditableValueTypeAddress;
-			[self.navigationController pushViewController:pnetvc animated:YES];
-			[pnetvc release];
-		}
-		else
-		{
-			NSMutableDictionary* addr=[breweryObject.data valueForKey:@"address"];
-			NSString* url=[[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@, %@ %@ %@",
-							[addr valueForKey:@"street"],
-							[addr valueForKey:@"city"],
-							[addr valueForKey:@"state"],
-							[addr valueForKey:@"zip"]] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-			
-			DLog(@"Opening URL:%@",url);
-			[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:url] autorelease]];
-		}
-	}
-	else if (indexPath.section == 1 && indexPath.row == 2) // Phone number cell
-	{
-		if (self.tableView.editing==YES)
-		{
-			// Go to view to edit phone
-			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=breweryObject.data;
-			pnetvc.editableValueName=@"phone";
-			pnetvc.editableValueType=kBeerCrushEditableValueTypePhoneNumber;
-			[self.navigationController pushViewController:pnetvc animated:YES];
-			[pnetvc release];
-		}
-		else
-		{
-			NSString* s=[[[[breweryObject.data objectForKey:@"phone"] stringByReplacingOccurrencesOfString:@" " withString:@""] 
-						  stringByReplacingOccurrencesOfString:@"(" withString:@""] 
-						 stringByReplacingOccurrencesOfString:@")" withString:@""];
-			NSString* url=[NSString stringWithFormat:@"tel:%@",s];
-			DLog(@"Opening URL:%@", url);
-			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+		switch (indexPath.section) {
+			case 2:
+			{
+				switch (indexPath.row) 
+				{
+					case 0: // Address
+					{
+						NSMutableDictionary* addr=[breweryObject.data valueForKey:@"address"];
+						NSString* url=[[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@, %@ %@ %@",
+										[addr valueForKey:@"street"],
+										[addr valueForKey:@"city"],
+										[addr valueForKey:@"state"],
+										[addr valueForKey:@"zip"]] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+						
+						DLog(@"Opening URL:%@",url);
+						[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:url] autorelease]];
+						break;
+					}
+					case 1: // Phone
+					{
+						NSString* s=[[[[breweryObject.data objectForKey:@"phone"] stringByReplacingOccurrencesOfString:@" " withString:@""] 
+									  stringByReplacingOccurrencesOfString:@"(" withString:@""] 
+									 stringByReplacingOccurrencesOfString:@")" withString:@""];
+						NSString* url=[NSString stringWithFormat:@"tel:%@",s];
+						DLog(@"Opening URL:%@", url);
+						[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+						break;
+					}
+					case 2: // Web site
+					{
+						NSString* uri=[breweryObject.data objectForKey:@"uri"];
+						if ([uri length])
+							[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString: uri] autorelease]];
+						break;
+					}
+				}
+			}
 		}
 	}
 }
@@ -515,6 +834,23 @@
     return YES;
 }
 */
+
+#pragma mark EditTextVCDelegate methods
+
+-(void)editTextVC:(id)sender didChangeText:(NSString*)text
+{
+	[self.breweryObject.data setObject:text forKey:@"description"];
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark CountryListTVCDelegate methods
+
+-(void)countryList:(CountryListTVC*)countryList didSelectCountry:(NSString*)countryName
+{
+	DLog(@"Selected country:%@",countryName);
+	[[self.breweryObject.data objectForKey:@"address"] setObject:countryName forKey:@"country"];
+	[self.navigationController popViewControllerAnimated:YES];
+}
 
 
 // NSXMLParser delegate methods
