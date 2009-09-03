@@ -45,9 +45,7 @@
 					[self.starImageViews addObject:iv];
 					
 					[iv release];
-					[starImage release];
 				}
-				[emptyStarImage release];
 			}
 		}
 	}
