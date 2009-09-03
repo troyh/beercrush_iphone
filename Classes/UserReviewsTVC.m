@@ -86,7 +86,7 @@
 			{
 				[appDelegate pushNavigationStateForTabBarItem:self.tabBarItem withData:reviewData]; // Saves the new nav state
 				
-				FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData];
+				FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData] autorelease];
 				fbrtvc.delegate=self;
 				[self.navigationController pushViewController:fbrtvc animated:NO];
 			}
@@ -212,7 +212,7 @@
 	else
 	{
 		// Add the "More reviews..." table cell
-		cell=[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+		cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
 		[cell.textLabel setText:[NSString stringWithFormat:@"%d more reviews",self.totalReviews-[self.reviewsList count]]];
 		cell.textLabel.textAlignment=UITextAlignmentCenter;
 	}
@@ -229,7 +229,7 @@
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:reviewData]; // Saves the new nav state
 		
-		FullBeerReviewTVC* fbrtvc=[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData];
+		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData] autorelease];
 		fbrtvc.delegate=self;
 		[self.navigationController pushViewController:fbrtvc animated:YES];
 	}
