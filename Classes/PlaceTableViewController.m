@@ -95,13 +95,19 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 	if (editing==YES)
 	{
 		self.title=@"Editing Place";
-		NSArray* rows=[NSArray arrayWithObjects:
-					   [NSIndexPath indexPathForRow:1 inSection:0],
-					   [NSIndexPath indexPathForRow:2 inSection:0],
-					   [NSIndexPath indexPathForRow:3 inSection:0],
-					   nil];
+
 		[self.tableView beginUpdates];
-		[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:6] withRowAnimation:UITableViewRowAnimationFade];
+
+		[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:
+												[NSIndexPath indexPathForRow:1 inSection:0],
+												nil] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView endUpdates];
 		
 		// Initialize editeddata
@@ -111,49 +117,54 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 	}
 	else
 	{
-		if (self.placeObject.editeddata && [self.placeObject.editeddata count])
-		{
-			// Save data to server
-			NSMutableString* bodystr=[[[NSMutableString alloc] initWithFormat:@"place_id=%@",self.placeID] autorelease];
-			// Copy edited data fields to the real data fields
-			appendValuesToPostBodyString(bodystr,self.placeObject.data,self.placeObject.editeddata,@"");
-			
-			DLog(@"POST data:%@",bodystr);
-			NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
-			
-			NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_PLACE_DOC]
-																	cachePolicy:NSURLRequestUseProtocolCachePolicy
-																timeoutInterval:60.0];
-			[theRequest setHTTPMethod:@"POST"];
-			[theRequest setHTTPBody:body];
-			[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
-			
-			// create the connection with the request and start loading the data
-			NSURLConnection *theConnection=[[[NSURLConnection alloc] initWithRequest:theRequest delegate:self] autorelease];
-			
-			if (theConnection) {
-				// Create the NSMutableData that will hold
-				// the received data
-				// receivedData is declared as a method instance elsewhere
-				xmlPostResponse=[[NSMutableData data] retain];
-			} else {
-				// TODO: inform the user that the download could not be made
-			}	
-			
-			[self.placeObject.editeddata removeAllObjects];
-			[self.placeObject.editeddata release];
-			self.placeObject.editeddata=nil;
-		}
+//		if (self.placeObject.editeddata && [self.placeObject.editeddata count])
+//		{
+//			// Save data to server
+//			NSMutableString* bodystr=[[[NSMutableString alloc] initWithFormat:@"place_id=%@",self.placeID] autorelease];
+//			// Copy edited data fields to the real data fields
+//			appendValuesToPostBodyString(bodystr,self.placeObject.data,self.placeObject.editeddata,@"");
+//			
+//			DLog(@"POST data:%@",bodystr);
+//			NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
+//			
+//			NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_PLACE_DOC]
+//																	cachePolicy:NSURLRequestUseProtocolCachePolicy
+//																timeoutInterval:60.0];
+//			[theRequest setHTTPMethod:@"POST"];
+//			[theRequest setHTTPBody:body];
+//			[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+//			
+//			// create the connection with the request and start loading the data
+//			NSURLConnection *theConnection=[[[NSURLConnection alloc] initWithRequest:theRequest delegate:self] autorelease];
+//			
+//			if (theConnection) {
+//				// Create the NSMutableData that will hold
+//				// the received data
+//				// receivedData is declared as a method instance elsewhere
+//				xmlPostResponse=[[NSMutableData data] retain];
+//			} else {
+//				// TODO: inform the user that the download could not be made
+//			}	
+//			
+//			[self.placeObject.editeddata removeAllObjects];
+//			[self.placeObject.editeddata release];
+//			self.placeObject.editeddata=nil;
+//		}
 		
 		self.title=@"Place";
 
-		NSArray* rows=[NSArray arrayWithObjects:
-					   [NSIndexPath indexPathForRow:1 inSection:0],
-					   [NSIndexPath indexPathForRow:2 inSection:0],
-					   [NSIndexPath indexPathForRow:3 inSection:0],
-					   nil];
 		[self.tableView beginUpdates];
-		[self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
+												[NSIndexPath indexPathForRow:1 inSection:0],
+												nil] withRowAnimation:UITableViewRowAnimationFade];
+
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:6] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView endUpdates];
 	}
 }
@@ -284,7 +295,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return self.editing?6:7;
 }
 
 
@@ -292,10 +303,24 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return self.editing?1:4;
+			return self.editing?2:1;
 			break;
 		case 1:
-			return 3;
+			return self.editing?1:3;
+			break;
+		case 2:
+			return self.editing?3:1;
+			break;
+		case 3:
+			return self.editing?1:1;
+			break;
+		case 4:
+			return self.editing?6:3;
+		case 5:
+			return self.editing?3:1;
+			break;
+		case 6:
+			return self.editing?0:1;
 			break;
 		default:
 			break;
@@ -303,114 +328,518 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 	return 0;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+	if (self.editing)
+	{
+		switch (section) {
+			case 3:
+				return @"Owner's Description";
+				break;
+			case 4:
+				return @"Details";
+				break;
+			case 5:
+				return @"To Go";
+				break;
+			default:
+				break;
+		}
+	}
+	else 
+	{
+		switch (section) {
+			case 5:
+				return @"Owner's Description";
+				break;
+			case 6:
+				return @"Details";
+				break;
+			default:
+				break;
+		}
+	}
+	return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	if (self.editing)
+	{
+		switch (indexPath.section) {
+			case 0: // Place name
+				return 50;
+				break;
+			case 3: // Owner's Description
+				return 80;
+				break;
+			case 4: // Details
+			{
+				switch (indexPath.row) 
+				{
+					case 0:
+					case 1:
+						return 100;
+						break;
+					default:
+						break;
+				}
+			}
+			break;
+		}
+	}
+	else 
+	{
+		switch (indexPath.section) {
+			case 0: // Place name
+				return 50;
+				break;
+			case 1:
+			{
+				switch (indexPath.row) {
+					case 1: // Overall Ratings
+						return 100;
+						break;
+					default:
+						break;
+				}
+				break;
+			}
+			case 4:
+			{
+				switch (indexPath.row) {
+					case 0:
+						return 80;
+						break;
+					default:
+						break;
+				}
+				break;
+			}
+			case 5: // Owner's Description
+				return 80;
+				break;
+			case 6: // Details
+				return 100;
+				break;
+		}
+	}
+	
+	return tableView.rowHeight;
+}
+
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"Cell";
-    
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+  
     UITableViewCell *cell = nil;
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
-    }
     
 	tableView.allowsSelectionDuringEditing=YES;
 
-    // Set up the cell...
-	switch (indexPath.section) 
+	if (self.editing)
 	{
-		case 0:
-			switch (indexPath.row)
-			{
+		switch (indexPath.section) {
 			case 0:
 			{
-				if (self.editing && [placeObject.editeddata valueForKey:@"name"])
-					[cell.textLabel setText:[placeObject.editeddata valueForKey:@"name"]];
-				else
-					[cell.textLabel setText:[placeObject.data valueForKey:@"name"]];
-				
-				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
-				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+				switch (indexPath.row) {
+					case 0:
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditPlaceName"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EditPlaceName"] autorelease];
+							[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+						}
+						
+						[cell.textLabel setText:[placeObject.data valueForKey:@"name"]];
+						break;
+					case 1:
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditPlaceType"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditPlaceType"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						}
+						
+						[cell.detailTextLabel setText:[placeObject.data valueForKey:@""]];
+						[cell.textLabel setText:@"type"];
+						break;
+					default:
+						break;
+				}
 				break;
 			}
 			case 1:
 			{
-				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+				cell = [tableView dequeueReusableCellWithIdentifier:@"EditPlaceStyle"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditPlaceStyle"] autorelease];
+					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+				}
 				
-				RatingControl* ratingctl=[[RatingControl alloc] initWithFrame:cell.contentView.frame];
-				
-				// Set current user's rating (if any)
-				NSString* user_rating=[self.placeObject.data objectForKey:@"user_rating"];
-				if (user_rating!=nil) // No user review
-					ratingctl.currentRating=[user_rating integerValue];
-				DLog(@"Current rating:%d",ratingctl.currentRating);
-				
-				// Set the callback for a review
-				[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
-				
-				[cell.contentView addSubview:ratingctl];
-				[ratingctl release];
-				
+				[cell.detailTextLabel setText:[placeObject.data valueForKey:@""]];
+				[cell.textLabel setText:@"style"];
 				break;
 			}
 			case 2:
-				[cell.textLabel setText:@"Ratings & Reviews"];
-				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+			{
+				switch (indexPath.row) {
+					case 0: // Address
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditAddress"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditAddress"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						}
+						
+						[cell.detailTextLabel setText:[placeObject.data valueForKey:@""]];
+						[cell.textLabel setText:@"address"];
+						break;
+					case 1: // Phone
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditPhone"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditPhone"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						}
+						
+						[cell.detailTextLabel setText:[placeObject.data valueForKey:@""]];
+						[cell.textLabel setText:@"phone"];
+						break;
+					case 2: // Web site
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditURI"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditURI"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						}
+						
+						[cell.detailTextLabel setText:[placeObject.data valueForKey:@"uri"]];
+						break;
+					default:
+						break;
+				}
 				break;
-			case 3:
-				[cell.textLabel setText:@"Now Serving"];
-				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+			}
+			case 3: // Owner's Description
+				cell = [tableView dequeueReusableCellWithIdentifier:@"EditOwnerDescription"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditOwnerDescription"] autorelease];
+					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+				}
 				break;
+			case 4: // Details
+			{
+				switch (indexPath.row) {
+					case 0: // Hours
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditHours"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditHours"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						}
+						
+						[cell.detailTextLabel setText:[placeObject.data valueForKey:@"hours"]];
+						[cell.textLabel setText:@"hours"];
+						break;
+					case 1: // Meals
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditMeals"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditMeals"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						}
+						
+						[cell.detailTextLabel setText:[placeObject.data valueForKey:@"meals"]];
+						[cell.textLabel setText:@"meals"];
+						break;
+					case 2: // Price
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditPrice"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditPrice"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						}
+						
+						[cell.detailTextLabel setText:[placeObject.data valueForKey:@"price"]];
+						[cell.textLabel setText:@"price"];
+						break;
+					case 3: // Free WiFi
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditWiFi"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditWiFi"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+							
+							UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+							[cell.contentView addSubview:switchControl];
+						}
+						
+						[cell.textLabel setText:@"free wifi"];
+						break;
+					case 4: // Outdoor seating
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditOutdoorSeating"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditOutdoorSeating"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+							
+							UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+							[cell.contentView addSubview:switchControl];
+						}
+						
+						[cell.textLabel setText:@"outdoor seating"];
+						break;
+					case 5: // Kid-friendly
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditKidFriendly"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditKidFriendly"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+							
+							UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+							[cell.contentView addSubview:switchControl];
+						}
+						
+						[cell.textLabel setText:@"kid-friendly"];
+						break;
+					default:
+						break;
+				}
+				break;
+			}
+				break;
+			case 5: // To Go
+			{
+				switch (indexPath.row) {
+					case 0: // Bottles/cans
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditBottlesCans"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditBottlesCans"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+							
+							UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+							[cell.contentView addSubview:switchControl];
+						}
+						
+						[cell.textLabel setText:@"bottles/cans"];
+						break;
+					case 1: // Growlers
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditGrowlers"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditGrowlers"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+							
+							UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+							[cell.contentView addSubview:switchControl];
+						}
+						
+						[cell.textLabel setText:@"growlers"];
+						break;
+					case 2: // Kegs
+						cell = [tableView dequeueReusableCellWithIdentifier:@"EditKegs"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditKegs"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+							
+							UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+							[cell.contentView addSubview:switchControl];
+						}
+						
+						[cell.textLabel setText:@"kegs"];
+						break;
+					default:
+						break;
+				}
+				break;
+			}
 			default:
 				break;
-			}
-			break;
-		case 1:
-			switch (indexPath.row)
-			{
-			case 0:
-				if (self.editing && [placeObject.editeddata valueForKey:@"uri"])
-					[cell.textLabel setText:[placeObject.editeddata valueForKey:@"uri"]];
-				else
-					[cell.textLabel setText:[placeObject.data valueForKey:@"uri"]];
-				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-				[cell.textLabel setTextAlignment:UITextAlignmentCenter];
-				break;
-			case 1:
-			{
-				NSDictionary* addr;
-				if (self.editing && [placeObject.editeddata valueForKey:@"address"])
-					addr=[placeObject.editeddata valueForKey:@"address"];
-				else
-					addr=[placeObject.data objectForKey:@"address"];
-					
-				[cell.textLabel setText:[NSString stringWithFormat:@"%@, %@ %@ %@",
-						[addr objectForKey:@"street"],
-						[addr objectForKey:@"city"],
-						[addr objectForKey:@"state"],
-						[addr objectForKey:@"zip"]]];
-				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-//				cell.selectionStyle=UITableViewCellSelectionStyleNone;
-				[cell.textLabel setTextAlignment:UITextAlignmentCenter];
-				break;
-			}
-			case 2:
-				if (self.editing && [placeObject.editeddata valueForKey:@"phone"])
-					[cell.textLabel setText:[placeObject.editeddata valueForKey:@"phone"]];
-				else
-					[cell.textLabel setText:[placeObject.data valueForKey:@"phone"]];
-				[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
-//				cell.selectionStyle=UITableViewCellSelectionStyleNone;
-				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-				cell.editingAccessoryType=UITableViewCellAccessoryDisclosureIndicator;
-				[cell.textLabel setTextAlignment:UITextAlignmentCenter];
-				break;
-			default:
-				break;
-			}
+		}
 	}
-	
+	else 
+	{
+		switch (indexPath.section) 
+		{
+			case 0: // Name & Photo
+			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"PlaceName"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PlaceName"] autorelease];
+					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
+					cell.textLabel.backgroundColor=[UIColor clearColor];
+					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+					
+					UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+					transparentBackground.backgroundColor=[UIColor clearColor];
+					cell.backgroundView=transparentBackground;
+					cell.backgroundColor=[UIColor clearColor];
+				}
+				
+				[cell.textLabel setText:[placeObject.data valueForKey:@"name"]];
+				break;
+			}
+			case 1: // My Rating, others' ratings and reviews
+			{
+				switch (indexPath.row) {
+					case 0: // My Rating
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"PlaceName"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"PlaceName"] autorelease];
+							[cell.textLabel setText:@"My Rating"];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
+							RatingControl* ratingctl=[[[RatingControl alloc] initWithFrame:CGRectMake(80, 7, 180, 30)] autorelease];
+							ratingctl.tag=1;
+							// Set the callback for a review
+							[ratingctl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
+							
+							[cell.contentView addSubview:ratingctl];
+						}
+
+						// Set current user's rating (if any)
+						NSString* user_rating=[self.placeObject.data objectForKey:@"user_rating"];
+						if (user_rating!=nil) // No user review
+						{
+							RatingControl* ratingctl=(RatingControl*)[cell viewWithTag:1];
+							ratingctl.currentRating=[user_rating integerValue];
+							DLog(@"Current rating:%d",ratingctl.currentRating);
+							cell.accessoryType=UITableViewCellAccessoryDetailDisclosureButton;
+						}
+						
+						break;
+					}
+					case 1: // Others' overall ratings
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"OverallRating"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OverallRating"] autorelease];
+							[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						}
+						
+						break;
+					}
+					case 2: // Reviews
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Reviews"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Reviews"] autorelease];
+							[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						}
+						
+						break;
+					}
+				}
+				break;
+			}
+			case 2: // Available Beers
+			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"AvailableBeers"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EditNameCell"] autorelease];
+					[cell.textLabel setText:[NSString stringWithFormat:@"%d Available Beers",0]];
+					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+				}
+				break;
+			}
+			case 3: // Affiliations
+			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Affiliations"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Affiliations"] autorelease];
+					[cell.textLabel setText:[NSString stringWithFormat:@"Affiliated with %@",@""]];
+					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+				}
+				break;
+			}
+			case 4: // Map, phone and web
+			{
+				switch (indexPath.row)
+				{
+					case 0: // Address
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Address"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Address"] autorelease];
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+							
+							[cell.detailTextLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+							cell.detailTextLabel.numberOfLines=3;
+
+							[cell.textLabel setText:@"map"];
+						}
+
+						NSDictionary* addr;
+						addr=[placeObject.data objectForKey:@"address"];
+						
+						[cell.detailTextLabel setText:[NSString stringWithFormat:@"%@, %@ %@ %@",
+												 [addr objectForKey:@"street"],
+												 [addr objectForKey:@"city"],
+												 [addr objectForKey:@"state"],
+												 [addr objectForKey:@"zip"]]];
+						break;
+					}
+					case 1: // Phone
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Phone"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Phone"] autorelease];
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+							[cell.textLabel setText:@"call"];
+						}
+						
+						[cell.detailTextLabel setText:[placeObject.data valueForKey:@"phone"]];
+						break;
+					}
+					case 2: // Web site
+					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"URI"];
+						if (cell == nil) {
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"URI"] autorelease];
+							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+						}
+						
+						[cell.textLabel setText:[placeObject.data valueForKey:@"uri"]];
+						break;
+					}
+					default:
+						break;
+				}
+				break;
+			}
+			case 5: // Owner's Description
+			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"OwnerDescription"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"OwnerDescription"] autorelease];
+					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+					cell.textLabel.numberOfLines=3;
+				}
+				
+				[cell.textLabel setText:[placeObject.data valueForKey:@"description"]];
+				break;
+			}
+			case 6: // Details
+			{
+				cell = [tableView dequeueReusableCellWithIdentifier:@"Details"];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Details"] autorelease];
+				}
+				
+				break;
+			}
+		}
+	}
 	
     return cell;
 }

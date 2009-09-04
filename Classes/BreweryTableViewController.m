@@ -38,7 +38,7 @@
 	[self.data setObject:@"" forKey:@"tasting"];
 	[self.data setObject:@"" forKey:@"hours"];
 	
-	[self.data setObject:[[NSMutableDictionary alloc] initWithCapacity:3] forKey:@"togo"];
+	[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:3] autorelease] forKey:@"togo"];
 
 	return self;
 }
