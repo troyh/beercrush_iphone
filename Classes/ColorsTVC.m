@@ -100,7 +100,7 @@
     
 	NSDictionary* colorInfo=[[self.colorsDict objectForKey:@"colors"] objectAtIndex:indexPath.row];
 
-	UILabel* colorNameLabel=[[UILabel alloc] initWithFrame:CGRectMake(50, 5, 200, 30)];
+	UILabel* colorNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(50, 5, 200, 30)] autorelease];
 	colorNameLabel.font=[UIFont boldSystemFontOfSize:21];
 	[cell.contentView addSubview:colorNameLabel];
 	[colorNameLabel setText:[colorInfo objectForKey:@"name"]];

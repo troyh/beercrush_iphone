@@ -274,7 +274,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>30</integer>
+									<integer>50</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -317,7 +317,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>ColorsTVC.m</string>
+								<string>BeerTableViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -325,11 +325,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>ColorsTVC.m</string>
+										<string>BeerTableViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>05165FD91052E31E00D9C98D</string>
+										<string>0516602710530A1E00D9C98D</string>
 										<key>history</key>
 										<array>
 											<string>0577EA621002B62900A2468C</string>
@@ -400,9 +400,9 @@
 											<string>05165F151052CDAD00D9C98D</string>
 											<string>05165F3C1052D62B00D9C98D</string>
 											<string>05165F9B1052DFD300D9C98D</string>
-											<string>05165FD31052E2F300D9C98D</string>
-											<string>05165FD81052E31E00D9C98D</string>
-											<string>05165FD21052E2F300D9C98D</string>
+											<string>05165FEA105307A700D9C98D</string>
+											<string>05165FFD105308CB00D9C98D</string>
+											<string>05165FFE105308CB00D9C98D</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -598,7 +598,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>05165FDA1052E31E00D9C98D</string>
+		<string>0516602810530A1E00D9C98D</string>
 		<string>05165BE110506AEC00D9C98D</string>
 		<string>05165BE210506AEC00D9C98D</string>
 		<string>1CD10A99069EF8BA00B06720</string>
@@ -623,12 +623,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>PlaceTableViewController.m</string>
+								<string>ColorsTVC.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -645,8 +647,6 @@
 							<string>604pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>

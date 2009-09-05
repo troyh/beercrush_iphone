@@ -1087,11 +1087,24 @@ static const int kTagStyleLabel=3;
 						{
 							if ([fields[i].propname isEqualToString:@"srm"]) 
 							{ // Treat SRM (Color) specially
+								CGRect newFrame=label.frame;
+								newFrame.origin.x+=25; // Move it over so that the color swatch can be seen
+								newFrame.size.width-=25; // Make it narrower too
+								label.frame=newFrame;
 								BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 								NSDictionary* colorsDict=[appDelegate getColorsDictionary];
 								NSString* srmval=[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]];
 								NSDictionary* colorInfo=[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:srmval];
 								[label setText:[colorInfo objectForKey:@"name"]];
+								
+								// Add a color swatch
+								UIView* colorSwatch=[[[UIView alloc] initWithFrame:CGRectMake(dataTableView.frame.size.width*1/3, i*20, 20, 20)] autorelease];
+								NSArray* rgbValues=[[colorInfo objectForKey:@"@attributes"] objectForKey:@"rgb"];
+								colorSwatch.backgroundColor=[UIColor colorWithRed:[[rgbValues objectAtIndex:0] integerValue]/255.0 
+																		green:[[rgbValues objectAtIndex:1] integerValue]/255.0 
+																		blue:[[rgbValues objectAtIndex:2] integerValue]/255.0 
+																		alpha:1.0];
+								[dataTableView addSubview:colorSwatch];
 							}
 							else
 								[label setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]];
