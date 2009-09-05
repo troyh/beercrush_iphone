@@ -831,7 +831,7 @@ static const int kTagStyleLabel=3;
 						
 						NSDictionary* colorsDict=[appDelegate getColorsDictionary];
 						[cell.textLabel setText:@"Color"];
-						[cell.detailTextLabel setText:[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]]];
+						[cell.detailTextLabel setText:[[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]] objectForKey:@"name" ]];
 						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						break;
 					}
@@ -1089,7 +1089,9 @@ static const int kTagStyleLabel=3;
 							{ // Treat SRM (Color) specially
 								BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 								NSDictionary* colorsDict=[appDelegate getColorsDictionary];
-								[label setText:[[colorsDict objectForKey:@"list"] objectForKey:[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]]]];
+								NSString* srmval=[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]];
+								NSDictionary* colorInfo=[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:srmval];
+								[label setText:[colorInfo objectForKey:@"name"]];
 							}
 							else
 								[label setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]];

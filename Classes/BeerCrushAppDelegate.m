@@ -667,17 +667,19 @@
 {
 	if (self.colorsDictionary==nil)
 	{
-		self.colorsDictionary=[[NSMutableDictionary alloc] initWithCapacity:2];
-		[self.colorsDictionary setObject:[[[NSMutableDictionary alloc] initWithCapacity:12] autorelease] forKey:@"list"];
-		[self.colorsDictionary setObject:[[[NSMutableArray alloc] initWithCapacity:12] autorelease] forKey:@"nums"];
-	
 		NSData* answer;
 		NSHTTPURLResponse* response=[self sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_GET_COLORSLIST] usingMethod:@"GET" withData:nil returningData:&answer];
 		if ([response statusCode]==200)
 		{
-			NSXMLParser* parser=[[[NSXMLParser alloc] initWithData:answer] autorelease];
-			parser.delegate=self;
-			[parser parse];
+			NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
+			self.colorsDictionary=[NSMutableDictionary dictionaryWithDictionary:[s JSONValue]];
+			
+			// Make colornamebysrm key
+			[self.colorsDictionary setObject:[NSMutableDictionary dictionaryWithCapacity:12] forKey:@"colornamebysrm"];
+			for (NSDictionary* colorInfo in [self.colorsDictionary objectForKey:@"colors"])
+			{
+				[[self.colorsDictionary objectForKey:@"colornamebysrm"] setObject:colorInfo forKey:[[colorInfo objectForKey:@"@attributes"] objectForKey:@"srm"]];
+			}
 		}
 		else
 		{

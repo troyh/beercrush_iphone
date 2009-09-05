@@ -84,7 +84,7 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[self.colorsDict objectForKey:@"nums"] count];
+    return [[self.colorsDict objectForKey:@"colors"] count];
 }
 
 
@@ -98,26 +98,30 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    // Set up the cell...
-	NSString* s=[[self.colorsDict objectForKey:@"nums"] objectAtIndex:indexPath.row];
-	[cell.textLabel setText:[[self.colorsDict objectForKey:@"list"] objectForKey:s]];
+	NSDictionary* colorInfo=[[self.colorsDict objectForKey:@"colors"] objectAtIndex:indexPath.row];
 
-	if (self.selectedColorSRM==[s integerValue])
-	{
+	UILabel* colorNameLabel=[[UILabel alloc] initWithFrame:CGRectMake(50, 5, 200, 30)];
+	colorNameLabel.font=[UIFont boldSystemFontOfSize:21];
+	[cell.contentView addSubview:colorNameLabel];
+	[colorNameLabel setText:[colorInfo objectForKey:@"name"]];
+
+	if (self.selectedColorSRM==[[[colorInfo objectForKey:@"@attributes"] objectForKey:@"srm"] integerValue])
 		cell.accessoryType=UITableViewCellAccessoryCheckmark;
-	}
+	else
+		cell.accessoryType=UITableViewCellAccessoryNone;
+	
+	// Put color swatch on the cell
+	NSArray* rgbValues=[[colorInfo objectForKey:@"@attributes"] objectForKey:@"rgb"];
+	UIView* colorSwatch=[[[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.rowHeight, tableView.rowHeight)] autorelease];
+	colorSwatch.backgroundColor=[UIColor colorWithRed:[[rgbValues objectAtIndex:0] integerValue]/255.0 green:[[rgbValues objectAtIndex:1] integerValue]/255.0 blue:[[rgbValues objectAtIndex:2] integerValue]/255.0 alpha:1.0];
+	[cell.contentView addSubview:colorSwatch];
 	
     return cell;
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	// AnotherViewController *anotherViewController = [[AnotherViewController alloc] initWithNibName:@"AnotherView" bundle:nil];
-	// [self.navigationController pushViewController:anotherViewController];
-	// [anotherViewController release];
-	
-	[delegate colorsTVC:self didSelectColor:[[[self.colorsDict objectForKey:@"nums"] objectAtIndex:indexPath.row] integerValue]];
+	[delegate colorsTVC:self didSelectColor:[[[[[self.colorsDict objectForKey:@"colors"] objectAtIndex:indexPath.row] objectForKey:@"@attributes"] objectForKey:@"srm"] integerValue]];
 }
 
 
