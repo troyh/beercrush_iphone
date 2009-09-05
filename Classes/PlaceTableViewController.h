@@ -9,8 +9,23 @@
 #import <UIKit/UIKit.h>
 #import "BeerCrushAppDelegate.h"
 #import "NearbyTableViewController.h"
+#import "PlaceTypeTVC.h"
+#import "PlaceStyleTVC.h"
+#import "EditTextVC.h"
+#import "PlacePriceTVC.h"
+#import "EditAddressVC.h"
+#import "EditURIVC.h"
 
-@interface PlaceTableViewController : UITableViewController <UITableViewDataSource,UITableViewDelegate> {
+@interface PlaceTableViewController : UITableViewController 
+	<UITableViewDataSource,
+	UITableViewDelegate,
+	EditTextVCDelegate,
+	PlaceTypeTVCDelegate,
+	PlaceStyleTVCDelegate,
+	PlacePriceTVCDelegate,
+	EditAddressVCDelegate,
+	EditURIVCDelegate> 
+{
 	NSString* placeID;
 	//	NSMutableArray* breweryInfo;
 	PlaceObject* placeObject;

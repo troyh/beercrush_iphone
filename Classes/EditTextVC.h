@@ -15,11 +15,13 @@
 	NSString* textToEdit;
 	UITextView* textView;
 	id<EditTextVCDelegate> delegate;
+	NSUInteger tag;
 }
 
 @property (nonatomic,retain) NSString* textToEdit;
 @property (assign) id<EditTextVCDelegate> delegate;
 @property (nonatomic,retain) UITextView* textView;
+@property (assign) NSUInteger tag;
 
 @end
 

@@ -40,6 +40,7 @@
 		[self.data setObject:@"" forKey:@"uri"];
 		[self.data setObject:@"" forKey:@"phone"];
 		[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease] forKey:@"address"];
+		[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease] forKey:@"togo"];
 	}
 	
 	return self;

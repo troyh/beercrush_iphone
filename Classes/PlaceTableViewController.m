@@ -13,7 +13,6 @@
 #import "PhoneNumberEditTableViewController.h"
 #import "RatingControl.h"
 
-
 @implementation PlaceTableViewController
 
 @synthesize placeID;
@@ -23,6 +22,19 @@
 @synthesize overlay;
 @synthesize spinner;
 @synthesize xmlParserPath;
+
+enum mytags {
+	kTagEditTextOwnerDescription=1,
+	kTagEditTextHours,
+	kTagEditTextMeals,
+	kTagSwitchControlFreeWiFi,
+	kTagSwitchControlOutdoorSeating,
+	kTagSwitchControlKidFriendly,
+	kTagSwitchControlBottlesCans,
+	kTagSwitchControlGrowlers,
+	kTagSwitchControlKegs
+};
+
 
 -(id) initWithPlaceID:(NSString*)place_id
 {
@@ -461,7 +473,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.detailTextLabel setText:[placeObject.data valueForKey:@""]];
+						[cell.detailTextLabel setText:[placeObject.data valueForKey:@"placetype"]];
 						[cell.textLabel setText:@"type"];
 						break;
 					default:
@@ -478,7 +490,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				}
 				
-				[cell.detailTextLabel setText:[placeObject.data valueForKey:@""]];
+				[cell.detailTextLabel setText:[placeObject.data valueForKey:@"placestyle"]];
 				[cell.textLabel setText:@"style"];
 				break;
 			}
@@ -529,6 +541,8 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				}
+				
+				[cell.detailTextLabel setText:[self.placeObject.data objectForKey:@"description"]];
 				break;
 			case 4: // Details
 			{
@@ -541,7 +555,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.detailTextLabel setText:[placeObject.data valueForKey:@"hours"]];
+						[cell.detailTextLabel setText:[placeObject.data objectForKey:@"hours"]];
 						[cell.textLabel setText:@"hours"];
 						break;
 					case 1: // Meals
@@ -552,20 +566,23 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.detailTextLabel setText:[placeObject.data valueForKey:@"meals"]];
+						[cell.detailTextLabel setText:[placeObject.data objectForKey:@"meals"]];
 						[cell.textLabel setText:@"meals"];
 						break;
 					case 2: // Price
+					{
 						cell = [tableView dequeueReusableCellWithIdentifier:@"EditPrice"];
 						if (cell == nil) {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditPrice"] autorelease];
 							cell.selectionStyle=UITableViewCellSelectionStyleNone;
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
-						
-						[cell.detailTextLabel setText:[placeObject.data valueForKey:@"price"]];
+						NSArray* dollars=[NSArray arrayWithObjects:@"",@"$",@"$$",@"$$$",@"$$$$",nil];
+						NSUInteger n=[[placeObject.data valueForKey:@"price"] unsignedIntValue];
+						[cell.detailTextLabel setText:[dollars objectAtIndex:n]];
 						[cell.textLabel setText:@"price"];
 						break;
+					}
 					case 3: // Free WiFi
 						cell = [tableView dequeueReusableCellWithIdentifier:@"EditWiFi"];
 						if (cell == nil) {
@@ -574,12 +591,17 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 							
 							UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+							switchControl.tag=kTagSwitchControlFreeWiFi;
+							[switchControl addTarget:self action:@selector(toggleSwitchChanged:) forControlEvents:UIControlEventValueChanged];
 							[cell.contentView addSubview:switchControl];
 						}
 						
+						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:kTagSwitchControlFreeWiFi];
+						[switchControl setOn:[self.placeObject.data objectForKey:@"freewifi"]?YES:NO];
 						[cell.textLabel setText:@"free wifi"];
 						break;
 					case 4: // Outdoor seating
+					{
 						cell = [tableView dequeueReusableCellWithIdentifier:@"EditOutdoorSeating"];
 						if (cell == nil) {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditOutdoorSeating"] autorelease];
@@ -587,12 +609,18 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 							
 							UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+							switchControl.tag=kTagSwitchControlOutdoorSeating;
+							[switchControl addTarget:self action:@selector(toggleSwitchChanged:) forControlEvents:UIControlEventValueChanged];
 							[cell.contentView addSubview:switchControl];
 						}
 						
+						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:kTagSwitchControlOutdoorSeating];
+						[switchControl setOn:[self.placeObject.data objectForKey:@"outdoorseating"]?YES:NO];
 						[cell.textLabel setText:@"outdoor seating"];
 						break;
+					}
 					case 5: // Kid-friendly
+					{
 						cell = [tableView dequeueReusableCellWithIdentifier:@"EditKidFriendly"];
 						if (cell == nil) {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditKidFriendly"] autorelease];
@@ -600,11 +628,16 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 							
 							UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+							switchControl.tag=kTagSwitchControlKidFriendly;
+							[switchControl addTarget:self action:@selector(toggleSwitchChanged:) forControlEvents:UIControlEventValueChanged];
 							[cell.contentView addSubview:switchControl];
 						}
 						
+						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:kTagSwitchControlKidFriendly];
+						[switchControl setOn:[self.placeObject.data objectForKey:@"kidfriendly"]?YES:NO];
 						[cell.textLabel setText:@"kid-friendly"];
 						break;
+					}
 					default:
 						break;
 				}
@@ -622,12 +655,17 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 							
 							UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+							switchControl.tag=kTagSwitchControlBottlesCans;
+							[switchControl addTarget:self action:@selector(toggleSwitchChanged:) forControlEvents:UIControlEventValueChanged];
 							[cell.contentView addSubview:switchControl];
 						}
 						
+						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:kTagSwitchControlBottlesCans];
+						[switchControl setOn:[[self.placeObject.data objectForKey:@"togo"] objectForKey:@"bottlescans"]?YES:NO];
 						[cell.textLabel setText:@"bottles/cans"];
 						break;
 					case 1: // Growlers
+					{
 						cell = [tableView dequeueReusableCellWithIdentifier:@"EditGrowlers"];
 						if (cell == nil) {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditGrowlers"] autorelease];
@@ -635,12 +673,18 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 							
 							UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+							switchControl.tag=kTagSwitchControlGrowlers;
+							[switchControl addTarget:self action:@selector(toggleSwitchChanged:) forControlEvents:UIControlEventValueChanged];
 							[cell.contentView addSubview:switchControl];
 						}
 						
+						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:kTagSwitchControlGrowlers];
+						[switchControl setOn:[[self.placeObject.data objectForKey:@"togo"] objectForKey:@"growlers"]?YES:NO];
 						[cell.textLabel setText:@"growlers"];
 						break;
+					}
 					case 2: // Kegs
+					{
 						cell = [tableView dequeueReusableCellWithIdentifier:@"EditKegs"];
 						if (cell == nil) {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditKegs"] autorelease];
@@ -648,11 +692,16 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 							
 							UISwitch* switchControl=[[[UISwitch alloc] initWithFrame:CGRectMake(200, 8, 30, 30)] autorelease];
+							switchControl.tag=kTagSwitchControlKegs;
+							[switchControl addTarget:self action:@selector(toggleSwitchChanged:) forControlEvents:UIControlEventValueChanged];
 							[cell.contentView addSubview:switchControl];
 						}
 						
+						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:kTagSwitchControlKegs];
+						[switchControl setOn:[[self.placeObject.data objectForKey:@"togo"] objectForKey:@"kegs"]?YES:NO];
 						[cell.textLabel setText:@"kegs"];
 						break;
+					}
 					default:
 						break;
 				}
@@ -689,9 +738,9 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 				switch (indexPath.row) {
 					case 0: // My Rating
 					{
-						cell = [tableView dequeueReusableCellWithIdentifier:@"PlaceName"];
+						cell = [tableView dequeueReusableCellWithIdentifier:@"MyRating"];
 						if (cell == nil) {
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"PlaceName"] autorelease];
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"MyRating"] autorelease];
 							[cell.textLabel setText:@"My Rating"];
 							cell.selectionStyle=UITableViewCellSelectionStyleNone;
 
@@ -904,113 +953,209 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-	if (indexPath.section == 0 && indexPath.row == 0) // Name is the 1st row in the 1st section
+	if (self.editing)
 	{
-		if (self.tableView.editing==YES)
-		{
-			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=placeObject.editeddata;
-			pnetvc.initialdata=[placeObject.data objectForKey:@"name"];
-			pnetvc.editableValueName=@"name";
-			pnetvc.editableValueType=kBeerCrushEditableValueTypeText;
-			[self.navigationController pushViewController:pnetvc animated:YES];
-			[pnetvc release];
+		switch (indexPath.section) {
+			case 0:
+			{
+				switch (indexPath.row) {
+					case 0: // Place Name
+						break;
+					case 1: // Place type
+					{
+						PlaceTypeTVC* ptvc=[[[PlaceTypeTVC alloc] init] autorelease];
+						ptvc.delegate=self;
+						ptvc.currentlySelectedType=[self.placeObject.data objectForKey:@"placetype"];
+						[self.navigationController pushViewController:ptvc animated:YES];
+						break;
+					}
+					default:
+						break;
+				}
+				break;
+			}
+			case 1: // Place style (i.e., cuisine)
+			{
+				PlaceStyleTVC* pstvc=[[[PlaceStyleTVC alloc] init] autorelease];
+				pstvc.delegate=self;
+				pstvc.currentlySelectedStyle=[self.placeObject.data objectForKey:@"placestyle"];
+				[self.navigationController pushViewController:pstvc animated:YES];
+				break;
+			}
+			case 2:
+			{
+				switch (indexPath.row) {
+					case 0: // Address
+					{
+						EditAddressVC* vc=[[[EditAddressVC alloc] init] autorelease];
+						vc.delegate=self;
+						vc.addressToEdit=[self.placeObject.data objectForKey:@"address"];
+						[self.navigationController pushViewController:vc animated:YES];
+						break;
+					}
+					case 1: // Phone
+					{
+						PhoneNumberEditTableViewController* vc=[[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+						[self.navigationController pushViewController:vc animated:YES];
+						break;
+					}
+					case 2: // Web site
+					{
+						EditURIVC* vc=[[[EditURIVC alloc] init] autorelease];
+						vc.delegate=self;
+						vc.uriToEdit=[self.placeObject.data objectForKey:@"uri"];
+						[self.navigationController pushViewController:vc animated:YES];
+						break;
+					}
+					default:
+						break;
+				}
+				break;
+			}
+			case 3: // Owner's Description
+			{
+				EditTextVC* vc=[[[EditTextVC alloc] init] autorelease];
+				vc.tag=kTagEditTextOwnerDescription;
+				vc.delegate=self;
+				vc.textToEdit=[self.placeObject.data objectForKey:@"description"];
+				[self.navigationController pushViewController:vc animated:YES];
+				break;
+			}
+			case 4: // Details section
+			{
+				switch (indexPath.row) {
+					case 0: // Hours
+					{
+						EditTextVC* vc=[[[EditTextVC alloc] init] autorelease];
+						vc.tag=kTagEditTextHours;
+						vc.delegate=self;
+						vc.textToEdit=[self.placeObject.data objectForKey:@"hours"];
+						[self.navigationController pushViewController:vc animated:YES];
+						break;
+					}
+					case 1: // Meals
+					{
+						EditTextVC* vc=[[[EditTextVC alloc] init] autorelease];
+						vc.tag=kTagEditTextMeals;
+						vc.delegate=self;
+						vc.textToEdit=[self.placeObject.data objectForKey:@"meals"];
+						[self.navigationController pushViewController:vc animated:YES];
+						break;
+					}
+					case 2: // Price
+					{
+						PlacePriceTVC* pptvc=[[[PlacePriceTVC alloc] init] autorelease];
+						pptvc.delegate=self;
+						pptvc.currentlySelectedPrice=(NSUInteger)[self.placeObject.data valueForKey:@"price"];
+						[self.navigationController pushViewController:pptvc animated:YES];
+					}
+						break;
+					case 3: // Free WiFi
+						break;
+					case 4: // Outdoor seating
+						break;
+					case 5: // Kid-friendly
+						break;
+					default:
+						break;
+				}
+				break;
+			}
+			case 5: // To Go section
+			{
+				switch (indexPath.row) {
+					case 0: // Bottles/cans
+						break;
+					case 1: // Growlers
+						break;
+					case 2: // Kegs
+						break;
+					default:
+						break;
+				}
+				break;
+			}
+			default:
+				break;
 		}
+		
 	}
-	else if (indexPath.section == 0 && indexPath.row == 2) // Reviews is the 2nd row in the 1st section
+	else 
 	{
-		if (self.tableView.editing==YES)
+		switch (indexPath.section) 
 		{
-			// Do nothing
-		}
-		else
-		{
-			ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.placeID dataType:Place];
-			[self.navigationController pushViewController: rtvc animated:YES];
-			[rtvc release];
-		}
-	}
-	else if (indexPath.section == 0 && indexPath.row == 3) // List of beers is the 3rd row in the 1st section
-	{
-		if (self.tableView.editing==YES)
-		{
-			// Do nothing
-		}
-		else
-		{
-			BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.placeID];
-			[self.navigationController pushViewController: bltvc animated:YES];
-			[bltvc release];
-		}
-	}
-	else if (indexPath.section == 1 && indexPath.row == 0) // Web site cell
-	{
-		if (self.tableView.editing==YES)
-		{
-			// Go to view to edit URL
-			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=placeObject.editeddata;
-			pnetvc.initialdata=[placeObject.data objectForKey:@"uri"];
-			pnetvc.editableValueName=@"uri";
-			pnetvc.editableValueType=kBeerCrushEditableValueTypeURI;
-			[self.navigationController pushViewController:pnetvc animated:YES];
-			[pnetvc release];
-		}
-		else
-		{
-			[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:[placeObject.data valueForKey:@"uri"]] autorelease]];
-		}
-	}
-	else if (indexPath.section == 1 && indexPath.row == 1) // Address cell
-	{
-		if (self.tableView.editing==YES)
-		{
-			// Go to view to edit address
-			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.data=placeObject.editeddata;
-			pnetvc.initialdata=[placeObject.data objectForKey:@"address"];
-			pnetvc.editableValueName=@"address";
-			pnetvc.editableValueType=kBeerCrushEditableValueTypeAddress;
-			[self.navigationController pushViewController:pnetvc animated:YES];
-			[pnetvc release];
-		}
-		else
-		{
-			NSMutableDictionary* addr=[placeObject.data valueForKey:@"address"];
-			NSString* url=[[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@, %@ %@ %@",
-															[addr valueForKey:@"street"],
-															[addr valueForKey:@"city"],
-															[addr valueForKey:@"state"],
-															[addr valueForKey:@"zip"]] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-			
-			DLog(@"Opening URL:%@",url);
-			[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:url ] autorelease]];
-//			[url release];
-		}
-	}
-	else if (indexPath.section == 1 && indexPath.row == 2) // Phone number cell
-	{
-		if (self.tableView.editing==YES)
-		{
-			// Go to view to edit phone number
-			PhoneNumberEditTableViewController* pnetvc=[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			pnetvc.editableValueName=@"phone";
-			pnetvc.data=placeObject.editeddata;
-			pnetvc.initialdata=[placeObject.data objectForKey:@"phone"];
-			pnetvc.editableValueType=kBeerCrushEditableValueTypePhoneNumber;
-			[self.navigationController pushViewController:pnetvc animated:YES];
-			[pnetvc release];
-		}
-		else
-		{
-			NSString* s=[[[[placeObject.data valueForKey:@"phone"] stringByReplacingOccurrencesOfString:@" " withString:@""] 
-																	stringByReplacingOccurrencesOfString:@"(" withString:@""] 
-																	stringByReplacingOccurrencesOfString:@")" withString:@""];
-			NSString* url=[NSString stringWithFormat:@"tel:%@",s];
-			DLog(@"Opening URL:%@", url);
-			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-//			[s release];
-//			[url release];
+			case 0: // Place Name
+				break;
+			case 1:
+			{
+				switch (indexPath.row) {
+					case 0: // My Rating
+					{
+						break;
+					}
+					case 1: // Overall ratings
+					{
+						ReviewsTableViewController*	rtvc=[[ReviewsTableViewController alloc] initWithID:self.placeID dataType:Place];
+						[self.navigationController pushViewController: rtvc animated:YES];
+						[rtvc release];
+						break;
+					}
+					case 2: // Reviews
+					{
+						break;
+					}
+					default:
+						break;
+				}
+				break;
+			}
+			case 2: // Available Beers
+			{
+				BeerListTableViewController* bltvc=[[BeerListTableViewController alloc] initWithBreweryID:self.placeID];
+				[self.navigationController pushViewController: bltvc animated:YES];
+				[bltvc release];
+				break;
+			}
+			case 3: // Affiliated With
+			{
+				break;
+			}
+			case 4:
+			{
+				switch (indexPath.row) {
+					case 0: // Address
+					{
+						NSMutableDictionary* addr=[placeObject.data valueForKey:@"address"];
+						NSString* url=[[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@, %@ %@ %@",
+										[addr valueForKey:@"street"],
+										[addr valueForKey:@"city"],
+										[addr valueForKey:@"state"],
+										[addr valueForKey:@"zip"]] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+						
+						DLog(@"Opening URL:%@",url);
+						[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:url ] autorelease]];
+						break;
+					}
+					case 1: // Phone
+					{
+						NSString* s=[[[[placeObject.data valueForKey:@"phone"] stringByReplacingOccurrencesOfString:@" " withString:@""] 
+									  stringByReplacingOccurrencesOfString:@"(" withString:@""] 
+									 stringByReplacingOccurrencesOfString:@")" withString:@""];
+						NSString* url=[NSString stringWithFormat:@"tel:%@",s];
+						DLog(@"Opening URL:%@", url);
+						[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+						break;
+					}
+					case 2: // Web site
+					{
+						[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:[placeObject.data valueForKey:@"uri"]] autorelease]];
+						break;
+					}
+					default:
+						break;
+				}
+				break;
+			}
 		}
 	}
 }
@@ -1094,7 +1239,92 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 	return NO;
 }
 
-// NSXMLParser delegate methods
+#pragma mark EditTextVCDelegate methods
+
+-(void)editTextVC:(id)sender didChangeText:(NSString*)text
+{
+	EditTextVC* vc=(EditTextVC*)sender;
+	if (vc.tag==kTagEditTextOwnerDescription)
+		[self.placeObject.data setObject:text forKey:@"description"];
+	else if (vc.tag==kTagEditTextHours)
+		[self.placeObject.data setObject:text forKey:@"hours"];
+	else if (vc.tag==kTagEditTextMeals)
+		[self.placeObject.data setObject:text forKey:@"meals"];
+	
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark PlaceTypeTVCDelegate methods
+
+-(void)placeType:(PlaceTypeTVC*)placeType didSelectType:(NSString*)typeName
+{
+	[self.placeObject.data setObject:typeName forKey:@"placetype"];
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+
+#pragma mark PlaceStyleTVCDelegate methods
+
+-(void)placeStyleTVC:(id)placeStyleTVC didSelectStyle:(NSDictionary*)style
+{
+	DLog(@"Selected style:%@",[style objectForKey:@"name"]);
+	[self.placeObject.data setObject:[style objectForKey:@"name"] forKey:@"placestyle"];
+	[self.navigationController popToViewController:self animated:YES];
+}
+
+#pragma mark PlacePriceTVCDelegate methods
+
+-(void)placePriceTVC:(PlacePriceTVC*)tvc didSelectPrice:(NSUInteger)price
+{
+	[self.placeObject.data setValue:[NSNumber numberWithUnsignedInt:price] forKey:@"price"];
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark UISwitch action method
+
+-(void)toggleSwitchChanged:(id)sender
+{
+	UISwitch* switchControl=(UISwitch*)sender;
+	switch (switchControl.tag) {
+		case kTagSwitchControlFreeWiFi:
+			[self.placeObject.data setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"freewifi"];
+			break;
+		case kTagSwitchControlOutdoorSeating:
+			[self.placeObject.data setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"outdoorseating"];
+			break;
+		case kTagSwitchControlKidFriendly:
+			[self.placeObject.data setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"kidfriendly"];
+			break;
+		case kTagSwitchControlBottlesCans:
+			[[self.placeObject.data objectForKey:@"togo"] setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"bottlescans"];
+			break;
+		case kTagSwitchControlGrowlers:
+			[[self.placeObject.data objectForKey:@"togo"] setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"growlers"];
+			break;
+		case kTagSwitchControlKegs:
+			[[self.placeObject.data objectForKey:@"togo"] setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"kegs"];
+			break;
+		default:
+			break;
+	}
+}
+
+#pragma mark EditAddressVCDelegate methods
+
+-(void)editAddressVC:(EditAddressVC *)editAddressVC didEditAddress:(NSDictionary *)dict
+{
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark EditURIVCDelegate methods
+
+-(void)editURIVC:(EditURIVC *)editURIVC didEditURI:(NSString *)uri
+{
+	[self.placeObject.data setObject:uri forKey:@"uri"];
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark NSXMLParser delegate methods
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {

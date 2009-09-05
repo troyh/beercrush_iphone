@@ -14,6 +14,7 @@
 @synthesize textToEdit;
 @synthesize delegate;
 @synthesize textView;
+@synthesize tag;
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
