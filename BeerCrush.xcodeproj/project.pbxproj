@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		051102A1100FDC8300610251 /* UserReviewsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 051102A0100FDC8300610251 /* UserReviewsTVC.m */; };
+		05165D0A10519C3D00D9C98D /* PlaceTypeTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05165D0910519C3D00D9C98D /* PlaceTypeTVC.m */; };
+		05165D0D10519C5300D9C98D /* PlaceStyleTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05165D0C10519C5300D9C98D /* PlaceStyleTVC.m */; };
+		05165E391051C5C800D9C98D /* PlacePriceTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05165E381051C5C800D9C98D /* PlacePriceTVC.m */; };
+		05165EB11051D60E00D9C98D /* EditAddressVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05165EB01051D60E00D9C98D /* EditAddressVC.m */; };
+		05165EBC1051D76500D9C98D /* EditURIVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05165EBB1051D76500D9C98D /* EditURIVC.m */; };
 		053653960F703F99000389C1 /* PhoneNumberEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */; };
 		05451382104346EF00F9400B /* ColorsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05451381104346EF00F9400B /* ColorsTVC.m */; };
 		0545144710435A4900F9400B /* AvailabilityTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0545144610435A4900F9400B /* AvailabilityTVC.m */; };
@@ -68,6 +73,16 @@
 /* Begin PBXFileReference section */
 		0511029F100FDC8300610251 /* UserReviewsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserReviewsTVC.h; sourceTree = "<group>"; };
 		051102A0100FDC8300610251 /* UserReviewsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserReviewsTVC.m; sourceTree = "<group>"; };
+		05165D0810519C3D00D9C98D /* PlaceTypeTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceTypeTVC.h; sourceTree = "<group>"; };
+		05165D0910519C3D00D9C98D /* PlaceTypeTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceTypeTVC.m; sourceTree = "<group>"; };
+		05165D0B10519C5300D9C98D /* PlaceStyleTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceStyleTVC.h; sourceTree = "<group>"; };
+		05165D0C10519C5300D9C98D /* PlaceStyleTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceStyleTVC.m; sourceTree = "<group>"; };
+		05165E371051C5C800D9C98D /* PlacePriceTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlacePriceTVC.h; sourceTree = "<group>"; };
+		05165E381051C5C800D9C98D /* PlacePriceTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlacePriceTVC.m; sourceTree = "<group>"; };
+		05165EAF1051D60E00D9C98D /* EditAddressVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditAddressVC.h; sourceTree = "<group>"; };
+		05165EB01051D60E00D9C98D /* EditAddressVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditAddressVC.m; sourceTree = "<group>"; };
+		05165EBA1051D76500D9C98D /* EditURIVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditURIVC.h; sourceTree = "<group>"; };
+		05165EBB1051D76500D9C98D /* EditURIVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditURIVC.m; sourceTree = "<group>"; };
 		053653940F703F99000389C1 /* PhoneNumberEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneNumberEditTableViewController.h; sourceTree = "<group>"; };
 		053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneNumberEditTableViewController.m; sourceTree = "<group>"; };
 		05451380104346EF00F9400B /* ColorsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsTVC.h; sourceTree = "<group>"; };
@@ -199,6 +214,16 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				05165EBA1051D76500D9C98D /* EditURIVC.h */,
+				05165EBB1051D76500D9C98D /* EditURIVC.m */,
+				05165EAF1051D60E00D9C98D /* EditAddressVC.h */,
+				05165EB01051D60E00D9C98D /* EditAddressVC.m */,
+				05165E371051C5C800D9C98D /* PlacePriceTVC.h */,
+				05165E381051C5C800D9C98D /* PlacePriceTVC.m */,
+				05165D0B10519C5300D9C98D /* PlaceStyleTVC.h */,
+				05165D0C10519C5300D9C98D /* PlaceStyleTVC.m */,
+				05165D0810519C3D00D9C98D /* PlaceTypeTVC.h */,
+				05165D0910519C3D00D9C98D /* PlaceTypeTVC.m */,
 				059DA301104F3F3600D5652E /* CountryListTVC.h */,
 				059DA302104F3F3600D5652E /* CountryListTVC.m */,
 				059DA052104C70B200D5652E /* EditTextVC.h */,
@@ -428,6 +453,11 @@
 				05451D8D1049DAE800F9400B /* SBJsonWriter.m in Sources */,
 				059DA054104C70B200D5652E /* EditTextVC.m in Sources */,
 				059DA303104F3F3600D5652E /* CountryListTVC.m in Sources */,
+				05165D0A10519C3D00D9C98D /* PlaceTypeTVC.m in Sources */,
+				05165D0D10519C5300D9C98D /* PlaceStyleTVC.m in Sources */,
+				05165E391051C5C800D9C98D /* PlacePriceTVC.m in Sources */,
+				05165EB11051D60E00D9C98D /* EditAddressVC.m in Sources */,
+				05165EBC1051D76500D9C98D /* EditURIVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
