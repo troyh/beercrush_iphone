@@ -142,7 +142,7 @@ static const int kTagStyleLabel=3;
 			[values addObject:[NSString stringWithFormat:@"hops=%@",self.hopsTextField.text]];
 		if ([[self.beerObj.data objectForKey:@"availability"] isEqualToString:[self.originalBeerData objectForKey:@"availability"]]==NO)
 			[values addObject:[NSString stringWithFormat:@"availability=%@",[self.beerObj.data objectForKey:@"availability"]]];
-		if ([[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"] && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"] isEqualToString:[[self.originalBeerData objectForKey:@"attribs"] objectForKey:@"srm"]]==NO)
+		if ([[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"] && [[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]!=[[self.originalBeerData objectForKey:@"attribs"] objectForKey:@"srm"])
 			[values addObject:[NSString stringWithFormat:@"srm=%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]];
 		if ([[self.beerObj.data objectForKey:@"style"] isEqualToString:[self.originalBeerData objectForKey:@"style"]]==NO)
 			[values addObject:[NSString stringWithFormat:@"bjcp_style_id=%@",[self.beerObj.data objectForKey:@"style"]]];
@@ -203,7 +203,7 @@ static const int kTagStyleLabel=3;
 	else
 	{
 		// Make a copy of the beer data so we can compare it to the new beer data to see if we should save to the server
-		self.originalBeerData=[self.beerObj.data copy];
+		self.originalBeerData=[[NSDictionary alloc] initWithDictionary:self.beerObj.data copyItems:YES];
 		[self setEditing:YES animated:YES];
 	}
 	

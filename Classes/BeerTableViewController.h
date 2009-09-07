@@ -21,7 +21,7 @@
 	NSString* beerID;
 	NSString* breweryID;
 	BeerObject* beerObj;
-	NSMutableDictionary* originalBeerData;
+	NSDictionary* originalBeerData;
 	NSMutableString* currentElemValue;
 	NSMutableArray* xmlParserPath;
 	NSMutableDictionary* userReviewData;
@@ -49,7 +49,7 @@
 @property (nonatomic,retain) NSString* beerID;
 @property (nonatomic,retain) NSString* breweryID;
 @property (nonatomic,retain) BeerObject* beerObj;
-@property (nonatomic,retain) NSMutableDictionary* originalBeerData;
+@property (nonatomic,retain) NSDictionary* originalBeerData;
 @property (nonatomic,retain) NSMutableString* currentElemValue;
 @property (nonatomic,retain) NSMutableArray* xmlParserPath;
 @property (nonatomic,retain) NSMutableDictionary* userReviewData;
