@@ -625,18 +625,18 @@ static const int kTagStyleLabel=3;
 			}
 			else
 			{
-				cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Cell"];
-				if (cell == nil)
-				{
-					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section1Cell"] autorelease];
-					cell.selectionStyle=UITableViewCellSelectionStyleNone;
-					cell.accessoryType=UITableViewCellAccessoryNone;
-				}
-
 				switch (indexPath.row)
 				{
 					case 0: // My Rating
 					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"MyRatingCell"];
+						if (cell == nil)
+						{
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"MyRatingCell"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryNone;
+						}
+						
 						[cell.textLabel setText:@"My Rating"];
 						
 						if (self.userRatingControl==nil)
@@ -658,6 +658,14 @@ static const int kTagStyleLabel=3;
 						break;
 					}
 					case 1: // Overall rating
+						cell = [tableView dequeueReusableCellWithIdentifier:@"OverallRating"];
+						if (cell == nil)
+						{
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"OverallRating"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryNone;
+						}
+						
 						cell.selectionStyle=UITableViewCellSelectionStyleBlue;
 						[cell.textLabel setText:[NSString stringWithFormat:@"%d Ratings",[self.beerObj.data objectForKey:@"ratingcount"]]];
 
@@ -683,6 +691,14 @@ static const int kTagStyleLabel=3;
 						break;
 					case 2: // Body meter
 					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"BodyMeter"];
+						if (cell == nil)
+						{
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"BodyMeter"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryNone;
+						}
+						
 						if (self.bodySlider==nil)
 						{
 							self.bodySlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
@@ -720,6 +736,13 @@ static const int kTagStyleLabel=3;
 					}
 					case 3: // Balance meter
 					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"BalanceMeter"];
+						if (cell == nil)
+						{
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"BalanceMeter"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryNone;
+						}
 						if (self.balanceSlider==nil)
 						{
 							self.balanceSlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
@@ -756,6 +779,13 @@ static const int kTagStyleLabel=3;
 					}
 					case 4: // Aftertaste meter
 					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"AftertasteMeter"];
+						if (cell == nil)
+						{
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"AftertasteMeter"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryNone;
+						}
 						if (self.aftertasteSlider==nil)
 						{
 							self.aftertasteSlider=[[UISlider alloc] initWithFrame:CGRectMake(125,(tableView.rowHeight-30)/2,150,30)];
@@ -792,6 +822,13 @@ static const int kTagStyleLabel=3;
 					}
 					case 5: // Flavors summary
 					{
+						cell = [tableView dequeueReusableCellWithIdentifier:@"Flavors"];
+						if (cell == nil)
+						{
+							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Flavors"] autorelease];
+							cell.selectionStyle=UITableViewCellSelectionStyleNone;
+							cell.accessoryType=UITableViewCellAccessoryNone;
+						}
 						[cell.textLabel setText:@"Flavors"];
 						NSString* flavors=[self.beerObj.data objectForKey:@"flavors"];
 						if (flavors==nil)
