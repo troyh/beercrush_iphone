@@ -880,17 +880,37 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 				cell = [tableView dequeueReusableCellWithIdentifier:@"PlaceName"];
 				if (cell == nil) {
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PlaceName"] autorelease];
-					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
-					cell.textLabel.backgroundColor=[UIColor clearColor];
-					cell.selectionStyle=UITableViewCellSelectionStyleNone;
+					
+					UILabel* nameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 0, 220, 45)] autorelease];
+					nameLabel.font=[UIFont boldSystemFontOfSize:20];
+					nameLabel.backgroundColor=[UIColor clearColor];
+					nameLabel.numberOfLines=2;
+					nameLabel.adjustsFontSizeToFitWidth=YES;
+					nameLabel.minimumFontSize=14.0;
+					nameLabel.lineBreakMode=UILineBreakModeWordWrap;
+					nameLabel.tag=1;
+					
+					UILabel* styleLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 40, 220, 20)] autorelease];
+					styleLabel.font=[UIFont boldSystemFontOfSize:15];
+					styleLabel.textColor=[UIColor grayColor];
+					styleLabel.backgroundColor=[UIColor clearColor];
+					styleLabel.text=[self.placeData objectForKey:@"placestyle"];
+					styleLabel.tag=2;
+					
+					[cell.contentView addSubview:nameLabel];
+					[cell.contentView addSubview:styleLabel];
 					
 					UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
 					transparentBackground.backgroundColor=[UIColor clearColor];
 					cell.backgroundView=transparentBackground;
 					cell.backgroundColor=[UIColor clearColor];
+					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				}
 				
-				[cell.textLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"name",@"")];
+				[(UILabel*)[cell.contentView viewWithTag:1] setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"name",@"")];
+				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+				NSDictionary* styleDict=[appDelegate getPlaceStylesDictionary];
+				[(UILabel*)[cell.contentView viewWithTag:2] setText:[[[styleDict objectForKey:@"byid"] objectForKey:[self.placeData objectForKey:@"placestyle"]] objectForKey:@"name"]];
 				break;
 			}
 			case 1: // My Rating, others' ratings and reviews
