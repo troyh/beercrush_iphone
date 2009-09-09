@@ -13,6 +13,8 @@
 		05165E391051C5C800D9C98D /* PlacePriceTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05165E381051C5C800D9C98D /* PlacePriceTVC.m */; };
 		05165EB11051D60E00D9C98D /* EditAddressVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05165EB01051D60E00D9C98D /* EditAddressVC.m */; };
 		05165EBC1051D76500D9C98D /* EditURIVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05165EBB1051D76500D9C98D /* EditURIVC.m */; };
+		051665421058310D00D9C98D /* PhotoThumbnailControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 051665411058310D00D9C98D /* PhotoThumbnailControl.m */; };
+		0516656710583A1B00D9C98D /* PhotoViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0516656610583A1B00D9C98D /* PhotoViewer.m */; };
 		053653960F703F99000389C1 /* PhoneNumberEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */; };
 		05451382104346EF00F9400B /* ColorsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05451381104346EF00F9400B /* ColorsTVC.m */; };
 		0545144710435A4900F9400B /* AvailabilityTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0545144610435A4900F9400B /* AvailabilityTVC.m */; };
@@ -83,6 +85,10 @@
 		05165EB01051D60E00D9C98D /* EditAddressVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditAddressVC.m; sourceTree = "<group>"; };
 		05165EBA1051D76500D9C98D /* EditURIVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditURIVC.h; sourceTree = "<group>"; };
 		05165EBB1051D76500D9C98D /* EditURIVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditURIVC.m; sourceTree = "<group>"; };
+		051665401058310D00D9C98D /* PhotoThumbnailControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoThumbnailControl.h; sourceTree = "<group>"; };
+		051665411058310D00D9C98D /* PhotoThumbnailControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoThumbnailControl.m; sourceTree = "<group>"; };
+		0516656510583A1B00D9C98D /* PhotoViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewer.h; sourceTree = "<group>"; };
+		0516656610583A1B00D9C98D /* PhotoViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewer.m; sourceTree = "<group>"; };
 		053653940F703F99000389C1 /* PhoneNumberEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneNumberEditTableViewController.h; sourceTree = "<group>"; };
 		053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneNumberEditTableViewController.m; sourceTree = "<group>"; };
 		05451380104346EF00F9400B /* ColorsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsTVC.h; sourceTree = "<group>"; };
@@ -214,6 +220,10 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0516656510583A1B00D9C98D /* PhotoViewer.h */,
+				0516656610583A1B00D9C98D /* PhotoViewer.m */,
+				051665401058310D00D9C98D /* PhotoThumbnailControl.h */,
+				051665411058310D00D9C98D /* PhotoThumbnailControl.m */,
 				05165EBA1051D76500D9C98D /* EditURIVC.h */,
 				05165EBB1051D76500D9C98D /* EditURIVC.m */,
 				05165EAF1051D60E00D9C98D /* EditAddressVC.h */,
@@ -374,6 +384,9 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "Optional Corporation";
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "BeerCrush" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
@@ -458,6 +471,8 @@
 				05165E391051C5C800D9C98D /* PlacePriceTVC.m in Sources */,
 				05165EB11051D60E00D9C98D /* EditAddressVC.m in Sources */,
 				05165EBC1051D76500D9C98D /* EditURIVC.m in Sources */,
+				051665421058310D00D9C98D /* PhotoThumbnailControl.m in Sources */,
+				0516656710583A1B00D9C98D /* PhotoViewer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
