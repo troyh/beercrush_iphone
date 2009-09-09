@@ -159,7 +159,6 @@ void normalizePlaceData(NSMutableDictionary* placeData)
 
 - (void)dealloc {
 	[self.placeID release];
-//	[self.placeObject release];
 	[self.placeData release];
 	[self.originalPlaceData release];
 	
@@ -238,17 +237,9 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView endUpdates];
 
-//		NSString* jsonString=[self.placeData JSONRepresentation];
-//		self.originalPlaceData=[jsonString JSONValue];
-		
+		/* Note that NSDictionary does not recursively make copies, it seems to only make copies of the first
+		   level. So deeper levels point to the original, which is wrong. */
 		self.originalPlaceData=[[NSMutableDictionary alloc] initWithDictionary:self.placeData copyItems:YES];
-//		[[tmpDict objectForKey:@"restaurant"] setObject:nil forKey:@"@attributes"];
-//		[[tmpDict objectForKey:@"restaurant"] setObject:[[[NSDictionary alloc] initWithDictionary:[[self.placeData objectForKey:@"restaurant"] objectForKey:@"@attributes"] copyItems:YES] autorelease] forKey:@"@attributes"];
-//		self.originalPlaceData=tmpDict;
-		DLog(@"current restaurant=%p",[self.placeData objectForKey:@"restaurant"]);
-		DLog(@"original restaurant=%p",[self.originalPlaceData objectForKey:@"restaurant"]);
-		DLog(@"current restaurant attributes=%p",[[self.placeData objectForKey:@"restaurant"] objectForKey:@"@attributes"]);
-		DLog(@"original restaurant attributes=%p",[[self.originalPlaceData objectForKey:@"restaurant"] objectForKey:@"@attributes"]);
 	}
 	else
 	{
@@ -277,7 +268,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 		];
 		
 		NSMutableArray* values=appendDifferentValuesToArray(keyNames,self.originalPlaceData,self.placeData);
-		
+
 		BOOL endEditMode=YES;
 
 		if ([values count])
@@ -623,7 +614,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 							cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						}
 						
-						[cell.textLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"name",@"")];
+						[cell.textLabel setText:[self.placeData objectForKey:@"name"]];
 						break;
 					case 1:
 						cell = [tableView dequeueReusableCellWithIdentifier:@"EditPlaceType"];
@@ -633,7 +624,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.detailTextLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"placetype",@"")];
+						[cell.detailTextLabel setText:[self.placeData objectForKey:@"placetype"]];
 						[cell.textLabel setText:@"type"];
 						break;
 					default:
@@ -687,7 +678,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.detailTextLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"phone",@"")];
+						[cell.detailTextLabel setText:[self.placeData objectForKey:@"phone"]];
 						[cell.textLabel setText:@"phone"];
 						break;
 					case 2: // Web site
@@ -698,7 +689,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.detailTextLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"uri",@"")];
+						[cell.detailTextLabel setText:[self.placeData objectForKey:@"uri"]];
 						break;
 					default:
 						break;
@@ -713,7 +704,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				}
 				
-				[cell.detailTextLabel setText:JSON_STRING_VALUE_OR_ELSE(self.placeData,@"description",@"")];
+				[cell.detailTextLabel setText:[self.placeData objectForKey:@"description"]];
 				break;
 			case 4: // Details
 			{
@@ -726,7 +717,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.detailTextLabel setText:JSON_STRING_VALUE_OR_ELSE([placeData objectForKey:@"hours"],@"open",@"")];
+						[cell.detailTextLabel setText:[[self.placeData objectForKey:@"hours"] objectForKey:@"open"]];
 						[cell.textLabel setText:@"hours"];
 						break;
 					case 1: // Price
@@ -907,7 +898,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 					cell.selectionStyle=UITableViewCellSelectionStyleNone;
 				}
 				
-				[(UILabel*)[cell.contentView viewWithTag:1] setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"name",@"")];
+				[(UILabel*)[cell.contentView viewWithTag:1] setText:[self.placeData objectForKey:@"name"]];
 				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 				NSDictionary* styleDict=[appDelegate getPlaceStylesDictionary];
 				[(UILabel*)[cell.contentView viewWithTag:2] setText:[[[styleDict objectForKey:@"byid"] objectForKey:[self.placeData objectForKey:@"placestyle"]] objectForKey:@"name"]];
@@ -1052,11 +1043,11 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 						addr=[placeData objectForKey:@"address"];
 						
 						[cell.detailTextLabel setText:[NSString stringWithFormat:@"%@\n%@, %@ %@\n%@",
-												 JSON_STRING_VALUE_OR_ELSE(addr,@"street",@""),
-												 JSON_STRING_VALUE_OR_ELSE(addr,@"city",@""),
-												 JSON_STRING_VALUE_OR_ELSE(addr,@"state",@""),
-												 JSON_STRING_VALUE_OR_ELSE(addr,@"zip",@""),
-												 JSON_STRING_VALUE_OR_ELSE(addr,@"country",@"")]];
+													   [addr objectForKey:@"street"],
+												 [addr objectForKey:@"city"],
+												 [addr objectForKey:@"state"],
+												 [addr objectForKey:@"zip"],
+												 [addr objectForKey:@"country"]]];
 						break;
 					}
 					case 1: // Phone
@@ -1067,7 +1058,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 							[cell.textLabel setText:@"call"];
 						}
-						[cell.detailTextLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"phone",@"")];
+						[cell.detailTextLabel setText:[self.placeData objectForKey:@"phone"]];
 						break;
 					}
 					case 2: // Web site
@@ -1078,7 +1069,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.textLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"uri",@"")];
+						[cell.textLabel setText:[self.placeData objectForKey:@"uri"]];
 						break;
 					}
 					default:
@@ -1096,7 +1087,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 					cell.textLabel.font=[UIFont systemFontOfSize:15];
 				}
 				
-				[cell.textLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"description",@"")];
+				[cell.textLabel setText:[self.placeData objectForKey:@"description"]];
 				break;
 			}
 			case 6: // Details
@@ -1194,8 +1185,8 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 					[togoValues addObject:@"kegs"];
 				[(UILabel*)[cell.contentView viewWithTag:4] setText:[togoValues componentsJoinedByString:@", "]];
 
-				[(UILabel*)[cell.contentView viewWithTag:5] setText:[[self.placeData objectForKey:@"@attributes"] objectForKey:@"wifi"]?@"yes":@"no"];
-				[(UILabel*)[cell.contentView viewWithTag:6] setText:[[self.placeData objectForKey:@"restaurant"] objectForKey:@"outdoor_seating"]?@"yes":@"no"];
+				[(UILabel*)[cell.contentView viewWithTag:5] setText:[[[self.placeData objectForKey:@"@attributes"] objectForKey:@"wifi"] boolValue] ?@"yes":@"no"];
+				[(UILabel*)[cell.contentView viewWithTag:6] setText:[[[self.placeData objectForKey:@"restaurant"] objectForKey:@"outdoor_seating"] boolValue]?@"yes":@"no"];
 
 				break;
 			}
@@ -1331,7 +1322,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 				EditTextVC* vc=[[[EditTextVC alloc] init] autorelease];
 				vc.tag=kTagEditTextOwnerDescription;
 				vc.delegate=self;
-				vc.textToEdit=JSON_STRING_VALUE_OR_ELSE(self.placeData,@"description",@"");
+				vc.textToEdit=[self.placeData objectForKey:@"description"];
 				[self.navigationController pushViewController:vc animated:YES];
 				break;
 			}
@@ -1343,7 +1334,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 						EditTextVC* vc=[[[EditTextVC alloc] init] autorelease];
 						vc.tag=kTagEditTextHours;
 						vc.delegate=self;
-						vc.textToEdit=JSON_STRING_VALUE_OR_ELSE([self.placeData objectForKey:@"restaurant"],@"hours",@"");
+						vc.textToEdit=[[self.placeData objectForKey:@"restaurant"] objectForKey:@"hours"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1432,10 +1423,10 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 					{
 						NSMutableDictionary* addr=[placeData valueForKey:@"address"];
 						NSString* url=[[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@, %@ %@ %@",
-										JSON_STRING_VALUE_OR_ELSE(addr,@"street",@""),
-										JSON_STRING_VALUE_OR_ELSE(addr,@"city",@""),
-										JSON_STRING_VALUE_OR_ELSE(addr,@"state",@""),
-										JSON_STRING_VALUE_OR_ELSE(addr,@"zip",@"")] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+										[addr objectForKey:@"street"],
+										[addr objectForKey:@"city"],
+										[addr objectForKey:@"state"],
+										[addr objectForKey:@"zip"]] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 						
 						DLog(@"Opening URL:%@",url);
 						[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:url ] autorelease]];
