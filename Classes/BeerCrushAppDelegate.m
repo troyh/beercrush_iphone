@@ -71,6 +71,7 @@
 @synthesize flavorsDictionary;
 @synthesize stylesDictionary;
 @synthesize colorsDictionary;
+@synthesize placeStylesDictionary;
 @synthesize restoringNavState;
 @synthesize appState;
 
@@ -688,6 +689,46 @@
 	}
 
 	return self.colorsDictionary;
+}
+
+void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* toDict)
+{
+	for (NSDictionary* category in [fromDict objectForKey:@"categories"]) 
+	{
+		if ([category objectForKey:@"id"])
+		{
+			[toDict setObject:category forKey:[category objectForKey:@"id"]];
+		}
+		
+		if ([category objectForKey:@"categories"])
+		{
+			recursivelyGetPlaceStyleIDs(category, toDict);
+		}
+	}
+}
+
+-(NSDictionary*)getPlaceStylesDictionary
+{
+	if (self.placeStylesDictionary==nil)
+	{
+		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URI_GET_PLACE_STYLES];
+		NSData* answer;
+		NSHTTPURLResponse* response=[self sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+		if ([response statusCode]==200)
+		{
+			NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
+			self.placeStylesDictionary=[s JSONValue];
+			
+			// Create the 'byid' dictionary
+			NSMutableDictionary* byid=[[[NSMutableDictionary alloc] initWithCapacity:30] autorelease];
+			
+			recursivelyGetPlaceStyleIDs(self.placeStylesDictionary,byid);
+			
+			[self.placeStylesDictionary setObject:byid forKey:@"byid"];
+			
+		}
+	}
+	return self.placeStylesDictionary;
 }
 
 -(NSHTTPURLResponse*)postBeerReview:(NSDictionary*)userReview returningData:(NSData**)answer

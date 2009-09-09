@@ -21,15 +21,8 @@
 	if (self=[super initWithStyle:UITableViewStylePlain])
 	{
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URI_GET_PLACE_STYLES];
-		NSData* answer;
-		NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-		if ([response statusCode]==200)
-		{
-			NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
-			self.stylesDict=[s JSONValue];
-		}
-		self.title=@"Place Type";
+		self.stylesDict=[appDelegate getPlaceStylesDictionary];
+		self.title=@"Place Style";
 	}
 	return self;
 }
@@ -39,7 +32,7 @@
 	if (self=[super initWithStyle:UITableViewStylePlain])
 	{
 		self.stylesDict=dict;
-		self.title=@"Place Type";
+		self.title=@"Place Style";
 	}
 	return self;
 }

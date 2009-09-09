@@ -39,8 +39,20 @@
 		[self.data setObject:@"" forKey:@"name"];
 		[self.data setObject:@"" forKey:@"uri"];
 		[self.data setObject:@"" forKey:@"phone"];
+		[self.data setObject:@"" forKey:@"hours"];
+		[self.data setObject:@"" forKey:@"meals"];
+		[self.data setObject:@"" forKey:@"price"];
+		[self.data setObject:@"" forKey:@"placetype"];
+		[self.data setObject:@"" forKey:@"placestyle"];
+
 		[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease] forKey:@"address"];
 		[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease] forKey:@"togo"];
+		
+		[[self.data objectForKey:@"address"] setObject:@"" forKey:@"street"];
+		[[self.data objectForKey:@"address"] setObject:@"" forKey:@"city"];
+		[[self.data objectForKey:@"address"] setObject:@"" forKey:@"state"];
+		[[self.data objectForKey:@"address"] setObject:@"" forKey:@"zip"];
+		[[self.data objectForKey:@"address"] setObject:@"" forKey:@"country"];
 	}
 	
 	return self;

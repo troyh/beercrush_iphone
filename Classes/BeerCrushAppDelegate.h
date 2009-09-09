@@ -24,6 +24,10 @@
 // ALog always displays output regardless of the DEBUG setting  
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 
+
+#define JSON_NUMBER_VALUE_OR_ELSE(d,k,e) ([[d objectForKey:k] isKindOfClass:[NSNumber class]]?[d valueForKey:k]:[NSNumber numberWithInt:e])
+#define JSON_STRING_VALUE_OR_ELSE(d,k,e) ([[d objectForKey:k] isKindOfClass:[NSString class]]?[d valueForKey:k]:e)
+
 @interface BeerCrushAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UINavigationControllerDelegate> {
     UIWindow *window;
 	LoginVC* loginVC;
@@ -39,6 +43,7 @@
 	NSMutableDictionary* flavorsDictionary;
 	NSMutableDictionary* stylesDictionary;
 	NSMutableDictionary* colorsDictionary;
+	NSMutableDictionary* placeStylesDictionary;
 	
 	NSMutableDictionary* restoringNavState;
 	NSMutableDictionary* appState;
@@ -56,6 +61,7 @@
 @property (nonatomic, retain) NSMutableDictionary* flavorsDictionary;
 @property (nonatomic, retain) NSMutableDictionary* stylesDictionary;
 @property (nonatomic, retain) NSMutableDictionary* colorsDictionary;
+@property (nonatomic, retain) NSMutableDictionary* placeStylesDictionary;
 @property (nonatomic, retain) NSMutableDictionary* restoringNavState;
 @property (nonatomic, retain) NSMutableDictionary* appState;
 
@@ -68,6 +74,7 @@
 -(NSDictionary*)getFlavorsDictionary;
 -(NSDictionary*)getStylesDictionary;
 -(NSDictionary*)getColorsDictionary;
+-(NSDictionary*)getPlaceStylesDictionary;
 -(NSHTTPURLResponse*)postBeerReview:(NSDictionary*)userReview returningData:(NSData**)answer;
 -(BOOL)restoringNavigationStateAutomatically;
 -(NSObject*)nextNavigationStateToRestore;
@@ -104,7 +111,7 @@
 #define BEERCRUSH_API_URL_GET_COLORSLIST				@BEERCRUSH_API_URL_HOST"/json/beercolors.json"
 #define BEERCRUSH_API_URL_GET_FLAVORS_DOC				@BEERCRUSH_API_URL_HOST"/xml/flavors"
 #define BEERCRUSH_API_URL_GET_MENU_DOC					@BEERCRUSH_API_URL_HOST"/xml/menu/%@/%@"
-#define BEERCRUSH_API_URL_GET_PLACE_DOC					@BEERCRUSH_API_URL_HOST"/xml/place/%@"
+#define BEERCRUSH_API_URL_GET_PLACE_DOC					@BEERCRUSH_API_URL_HOST"/json/place/%@.json"
 #define BEERCRUSH_API_URL_GET_PLACE_REVIEW_DOC			@BEERCRUSH_API_URL_HOST"/xml/review/place/%@/%@"
 #define BEERCRUSH_API_URI_GET_PLACE_STYLES				@BEERCRUSH_API_URL_HOST"/json/restaurantcategories.json"
 #define BEERCRUSH_API_URL_GET_STYLESLIST				@BEERCRUSH_API_URL_HOST"/xml/styles"

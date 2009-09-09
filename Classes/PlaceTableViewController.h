@@ -15,6 +15,7 @@
 #import "PlacePriceTVC.h"
 #import "EditAddressVC.h"
 #import "EditURIVC.h"
+#import "PhoneNumberEditTableViewController.h"
 
 @interface PlaceTableViewController : UITableViewController 
 	<UITableViewDataSource,
@@ -24,11 +25,12 @@
 	PlaceStyleTVCDelegate,
 	PlacePriceTVCDelegate,
 	EditAddressVCDelegate,
-	EditURIVCDelegate> 
+	EditURIVCDelegate,
+	PhoneNumberEditVCDelegate> 
 {
 	NSString* placeID;
-	//	NSMutableArray* breweryInfo;
-	PlaceObject* placeObject;
+	NSMutableDictionary* placeData;
+	NSDictionary* originalPlaceData;
 	NSMutableString* currentElemValue;
 	NSMutableData* xmlPostResponse;
 	UIView* overlay;
@@ -37,7 +39,8 @@
 }
 
 @property (nonatomic,retain) NSString* placeID;
-@property (nonatomic,retain) PlaceObject* placeObject;
+@property (nonatomic, retain) NSMutableDictionary* placeData;
+@property (nonatomic,retain) NSDictionary* originalPlaceData;
 @property (nonatomic,retain) NSMutableString* currentElemValue;
 @property (nonatomic,retain) NSMutableData* xmlPostResponse;
 @property (nonatomic, retain) UIView* overlay;

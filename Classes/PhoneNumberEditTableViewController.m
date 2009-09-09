@@ -11,19 +11,15 @@
 
 @implementation PhoneNumberEditTableViewController
 
-@synthesize editingControls;
-@synthesize data;
-@synthesize initialdata;
-@synthesize editableValueName;
-@synthesize editableValueType;
-@synthesize editableChoices;
+@synthesize phoneNumberToEdit;
+@synthesize textField;
+@synthesize delegate;
 
-- (id)initWithStyle:(UITableViewStyle)style {
+- (id)init {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-    if (self = [super initWithStyle:style]) {
+    if (self = [super initWithStyle:UITableViewStyleGrouped]) {
     }
 	
-	self.editingControls=[[NSMutableArray alloc] initWithCapacity:5];
     return self;
 }
 
@@ -33,53 +29,6 @@
 
 	[self.navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelChanges:)] autorelease]];
 	[self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveChanges:)] autorelease]];
-
-}
-
-- (void)saveChanges:(id)sender
-{
-	for (NSUInteger i=0; i<[self.editingControls count]; ++i) {
-		[[self.editingControls objectAtIndex:i] resignFirstResponder];
-	}
-	
-	// Report the new value back to the editable item
-	switch (editableValueType)
-	{
-		case kBeerCrushEditableValueTypeURI:
-		case kBeerCrushEditableValueTypePhoneNumber:
-		case kBeerCrushEditableValueTypeText:
-		{
-			UITextField* fld=(UITextField*)[self.editingControls objectAtIndex:0]; // Should just be 1
-			[self.data setObject:fld.text forKey:self.editableValueName];
-			break;
-		}
-		case kBeerCrushEditableValueTypeAddress:
-		{
-			// Get the value from each cell's editing control
-			[self.data setObject:self.initialdata forKey:self.editableValueName];
-			NSMutableDictionary* addr=[self.data objectForKey:self.editableValueName];
-			
-			UITextField* txtfld=(UITextField*)[self.editingControls objectAtIndex:0];
-			[addr setObject:txtfld.text forKey:@"street"];
-			txtfld=(UITextField*)[self.editingControls objectAtIndex:1];
-			[addr setObject:txtfld.text forKey:@"city"];
-			txtfld=(UITextField*)[self.editingControls objectAtIndex:2];
-			[addr setObject:txtfld.text forKey:@"state"];
-			txtfld=(UITextField*)[self.editingControls objectAtIndex:3];
-			[addr setObject:txtfld.text forKey:@"zip"];
-			break;
-		}
-	}
-	[self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)cancelChanges:(id)sender
-{
-	for (NSUInteger i=0; i<[self.editingControls count]; ++i) {
-		[[self.editingControls objectAtIndex:i] resignFirstResponder];
-	}
-
-	[self.navigationController popViewControllerAnimated:YES];
 }
 
 /*
@@ -90,10 +39,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-	
-	// Show keyboard
-	UIControl* ctl=[self.editingControls objectAtIndex:0];
-	[ctl becomeFirstResponder];
 }
 
 /*
@@ -120,6 +65,18 @@
     // Release anything that's not essential, such as cached data
 }
 
+#pragma mark UIBarButtonItem action selectors
+
+- (void)saveChanges:(id)sender
+{
+	[self.delegate editPhoneNumber:self didChangePhoneNumber:self.textField.text];
+}
+	 
+ - (void)cancelChanges:(id)sender
+{
+	[self.delegate editPhoneNumberdidCancelEdit:self];
+}
+	 
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -129,12 +86,8 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (editableValueType==kBeerCrushEditableValueTypeAddress)
-		return 4;
-	else
-		return 1;
+	return 1;
 }
-
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -146,156 +99,20 @@
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
     }
     
-	switch (editableValueType)
-	{
-		case kBeerCrushEditableValueTypeURI:
-		case kBeerCrushEditableValueTypePhoneNumber:
-		case kBeerCrushEditableValueTypeText:
-		{
-			CGRect f=cell.frame;
-			f.size.width-=20;
-//			f.size.height-=5;
-			f.origin.x+=10;
-//			f.origin.y+=5;
-			UITextField* fld=[[[UITextField alloc] initWithFrame:f] autorelease];
+	CGRect f=cell.frame;
+	f.size.width-=20;
+	f.origin.x+=10;
+	self.textField=[[[UITextField alloc] initWithFrame:f] autorelease];
 
-			if ([self.initialdata isKindOfClass:[NSString class]])
-			{
-				fld.text=(NSString*)self.initialdata;
-			}
-			else
-				fld.text=@"";
-			fld.font=[UIFont systemFontOfSize: 40.0];
-			fld.textAlignment=UITextAlignmentCenter;
-			fld.clearButtonMode=UITextFieldViewModeWhileEditing;
-			fld.adjustsFontSizeToFitWidth=YES;
-			
-			if (editableValueType==kBeerCrushEditableValueTypeURI)
-			{
-				fld.keyboardType=UIKeyboardTypeURL;
-				fld.autocorrectionType=UITextAutocorrectionTypeNo;
-				fld.autocapitalizationType=UITextAutocapitalizationTypeNone;
-				fld.enablesReturnKeyAutomatically=YES;
-			}
-			else if (editableValueType==kBeerCrushEditableValueTypePhoneNumber)
-				fld.keyboardType=UIKeyboardTypePhonePad;
-			else if (editableValueType==kBeerCrushEditableValueTypeText)
-				fld.keyboardType=UIKeyboardTypeDefault;
-			
-			[cell addSubview:fld];
-			[self.editingControls addObject:fld];
-			break;
-		}
-		case kBeerCrushEditableValueTypeMultiText:
-		{
-			CGRect f=cell.frame;
-			f.size.width-=20;
-			f.origin.x+=10;
-			UITextView* fld=[[[UITextView alloc] initWithFrame:f] autorelease];
-			
-			if ([[self.data objectForKey:self.editableValueName] isKindOfClass:[NSString class]])
-				fld.text=[self.data objectForKey:self.editableValueName];
-			else
-				fld.text=@"";
-			fld.font=[UIFont systemFontOfSize: 14.0];
-//			fld.textAlignment=UITextAlignmentLeft;
-//			fld.clearButtonMode=UITextFieldViewModeWhileEditing;
-//			fld.adjustsFontSizeToFitWidth=YES;
-			
-//			fld.keyboardType=UIKeyboardTypeDefault;
-			
-			[cell addSubview:fld];
-			[self.editingControls addObject:fld];
-			break;
-		}
-		case kBeerCrushEditableValueTypeAddress:
-		{
-			BOOL bOnStreet=NO;
-			NSString* addr_field;
-			switch (indexPath.row)
-			{
-				case 0: // Street
-					addr_field=@"street";
-					bOnStreet=YES;
-					break;
-				case 1: // City
-					addr_field=@"city";
-					break;
-				case 2: // State
-					addr_field=@"state";
-					break;
-				case 3: // Zip
-					addr_field=@"zip";
-					break;
-				default:
-					// Shouldn't happen
-					return nil;
-					break;
-			}
-			
-			CGRect f=cell.frame;
-			f.size.width-=20;
-			f.origin.x+=10;
-			UITextField* fld=[[[UITextField alloc] initWithFrame:f] autorelease];
-			
-			if ([self.initialdata isKindOfClass:[NSDictionary class]]) // It better be!
-			{
-				NSDictionary* addr=(NSDictionary*)self.initialdata;
-				if ([[addr objectForKey:addr_field] isKindOfClass:[NSString class]])
-					fld.text=[addr objectForKey:addr_field];
-				else
-					fld.text=@"";
-			}
-			
-			fld.font=[UIFont systemFontOfSize:40.0];
-			fld.textAlignment=UITextAlignmentCenter;
-			fld.clearButtonMode=UITextFieldViewModeWhileEditing;
-			fld.adjustsFontSizeToFitWidth=YES;
-			
-			if (indexPath.row==3) // Zip
-				fld.keyboardType=UIKeyboardTypeNumberPad;
-			else
-				fld.keyboardType=UIKeyboardTypeDefault;
-			
-			[cell addSubview:fld];
-			if (bOnStreet) // Make sure Street is the first item in the array so it becomes first responder in viewDidAppear()
-				[self.editingControls insertObject:fld atIndex:0];
-			else
-				[self.editingControls addObject:fld];
-			break;
-		}
-		case kBeerCrushEditableValueTypeNumber:
-		{
-			CGRect f=cell.frame;
-			f.size.width-=20;
-			f.origin.x+=10;
-			UITextField* fld=[[[UITextField alloc] initWithFrame:f] autorelease];
-			
-			if ([[self.data objectForKey:self.editableValueName] isKindOfClass:[NSString class]])
-				fld.text=[self.data objectForKey:self.editableValueName];
-			else
-				fld.text=@"";
-			fld.font=[UIFont systemFontOfSize: 20.0];
-			fld.textAlignment=UITextAlignmentCenter;
-			fld.clearButtonMode=UITextFieldViewModeWhileEditing;
-			fld.adjustsFontSizeToFitWidth=YES;
-			
-			fld.keyboardType=UIKeyboardTypeNumberPad;
-			
-			[cell addSubview:fld];
-			[self.editingControls addObject:fld];
-			break;
-		}
-		case kBeerCrushEditableValueTypeChoice:
-		{
-			break;
-		}
-		default:
-			// Shouldn't happen
-			return nil;
-			break;
-	}
+	self.textField.text=self.phoneNumberToEdit;
+
+	self.textField.font=[UIFont systemFontOfSize: 40.0];
+	self.textField.textAlignment=UITextAlignmentCenter;
+	self.textField.clearButtonMode=UITextFieldViewModeWhileEditing;
+	self.textField.adjustsFontSizeToFitWidth=YES;
+	self.textField.keyboardType=UIKeyboardTypePhonePad;
 	
+	[cell addSubview:self.textField];
 
     return cell;
 }
@@ -350,6 +167,8 @@
 
 
 - (void)dealloc {
+	[self.phoneNumberToEdit release];
+	
     [super dealloc];
 }
 

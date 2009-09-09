@@ -210,6 +210,12 @@
 
 -(void)doneButtonClicked:(id)sender
 {
+	// Take data from edit controls
+	[self.addressToEdit setObject:self.street1.text forKey:@"street"];
+	[self.addressToEdit setObject:self.city.text forKey:@"city"];
+	[self.addressToEdit setObject:self.state.text forKey:@"state"];
+	[self.addressToEdit setObject:self.zip.text forKey:@"zip"];
+	
 	[self.delegate editAddressVC:self didEditAddress:self.addressToEdit];
 }
 

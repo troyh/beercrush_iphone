@@ -188,21 +188,21 @@
 				if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
 				{
 					BreweryTableViewController* btvc=[[[BreweryTableViewController alloc] initWithBreweryID:idstr] autorelease];
-					[self.navigationController pushViewController: btvc animated:YES];
+					[self.navigationController pushViewController: btvc animated:NO];
 					
 					[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
 				}
 				else if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
 				{
 					BeerTableViewController* btvc=[[[BeerTableViewController alloc] initWithBeerID:idstr] autorelease];
-					[self.navigationController pushViewController:btvc animated:YES];
+					[self.navigationController pushViewController:btvc animated:NO];
 					
 					[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
 				}
 				else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
 				{
 					PlaceTableViewController* btvc=[[[PlaceTableViewController alloc] initWithPlaceID:idstr] autorelease];
-					[self.navigationController pushViewController: btvc animated:YES];
+					[self.navigationController pushViewController: btvc animated:NO];
 					
 					[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
 				}

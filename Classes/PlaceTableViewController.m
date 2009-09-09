@@ -12,11 +12,13 @@
 #import "BeerListTableViewController.h"
 #import "PhoneNumberEditTableViewController.h"
 #import "RatingControl.h"
+#import "JSON.h"
 
 @implementation PlaceTableViewController
 
 @synthesize placeID;
-@synthesize placeObject;
+@synthesize placeData;
+@synthesize originalPlaceData;
 @synthesize currentElemValue;
 @synthesize xmlPostResponse;
 @synthesize overlay;
@@ -26,7 +28,6 @@
 enum mytags {
 	kTagEditTextOwnerDescription=1,
 	kTagEditTextHours,
-	kTagEditTextMeals,
 	kTagSwitchControlFreeWiFi,
 	kTagSwitchControlOutdoorSeating,
 	kTagSwitchControlKidFriendly,
@@ -34,6 +35,100 @@ enum mytags {
 	kTagSwitchControlGrowlers,
 	kTagSwitchControlKegs
 };
+
+
+
+void normalizeToString(NSMutableDictionary* dict,NSString* key)
+{
+	if ([dict objectForKey:key]==nil)
+	{
+		[dict setObject:@"" forKey:key];
+	}
+	else if ([[dict objectForKey:key] isKindOfClass:[NSString class]])
+	{
+		if ([dict objectForKey:key]==nil)
+			[dict setObject:@"" forKey:key];
+		else {
+			// Do nothing, it's already a valid string
+		}
+	}
+	else if ([[dict objectForKey:key] isKindOfClass:[NSArray class]])
+	{
+		NSArray* a=[dict objectForKey:key];
+		if ([a count])
+			[dict setObject:[NSString stringWithFormat:@"%@",[dict objectForKey:key]] forKey:key];
+		else
+			[dict setObject:@"" forKey:key];
+	}
+	else
+		[dict setObject:[NSString stringWithFormat:@"%@",[dict objectForKey:key]] forKey:key];
+}
+
+void normalizeToNumber(NSMutableDictionary* dict,NSString* key)
+{
+	if ([dict objectForKey:key]==nil)
+	{
+		[dict setObject:[NSNumber numberWithInt:0] forKey:key];
+	}
+	else if ([[dict objectForKey:key] isKindOfClass:[NSNumber class]])
+	{
+		// Do nothing, it's already a number
+	}
+	else if ([[dict objectForKey:key] isKindOfClass:[NSString class]])
+	{
+		[dict setObject:[NSNumber numberWithInt:[[dict objectForKey:key] intValue]] forKey:key];
+	}
+	else
+	{
+		[dict setObject:[NSNumber numberWithInt:0] forKey:key];
+	}
+}
+
+void normalizeToBoolean(NSMutableDictionary* dict,NSString* key)
+{
+	if ([dict objectForKey:key]==nil)
+	{
+		[dict setObject:[NSNumber numberWithInt:0] forKey:key];
+	}
+	else if ([[dict objectForKey:key] isKindOfClass:[NSString class]])
+	{
+		[dict setObject:[NSNumber numberWithInt:[[dict objectForKey:key] boolValue]?1:0] forKey:key];
+	}
+	else if ([[dict objectForKey:key] isKindOfClass:[NSNumber class]])
+	{
+		[dict setObject:[NSNumber numberWithInt:[[dict objectForKey:key] boolValue]?1:0] forKey:key];
+	}
+	else
+		[dict setObject:[NSNumber numberWithInt:0] forKey:key];
+}
+
+void normalizePlaceData(NSMutableDictionary* placeData)
+{
+	normalizeToString(placeData, @"name");
+	normalizeToString(placeData, @"description");
+	normalizeToString(placeData, @"phone");
+	normalizeToString(placeData, @"placestyle");
+	normalizeToString(placeData, @"placetype");
+	normalizeToString(placeData, @"uri");
+	normalizeToBoolean(placeData, @"kid_friendly");
+	normalizeToString([placeData objectForKey:@"hours"], @"open");
+	
+	normalizeToNumber([placeData objectForKey:@"restaurant"],@"price_range");
+	normalizeToBoolean([placeData objectForKey:@"restaurant"], @"outdoor_seating");
+	normalizeToString([placeData objectForKey:@"restaurant"],@"food_description");
+	
+	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"wifi");
+	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"bottled_beer_to_go");
+	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"growlers_to_go");
+	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"kegs_to_go");
+	
+	normalizeToString([placeData objectForKey:@"address"], @"street");
+	normalizeToString([placeData objectForKey:@"address"], @"city");
+	normalizeToString([placeData objectForKey:@"address"], @"state");
+	normalizeToString([placeData objectForKey:@"address"], @"zip");
+	normalizeToString([placeData objectForKey:@"address"], @"country");
+}
+
 
 
 -(id) initWithPlaceID:(NSString*)place_id
@@ -48,9 +143,8 @@ enum mytags {
 	self.title=@"Place";
 	
 	[super initWithStyle:UITableViewStyleGrouped];
-	
-	placeObject=[[PlaceObject alloc] init];
-	
+
+	self.placeData=[[NSMutableDictionary alloc] initWithCapacity:10];
 	
 //	NSArray* parts=[self.placeID componentsSeparatedByString:@":"];
 //	
@@ -65,47 +159,69 @@ enum mytags {
 
 - (void)dealloc {
 	[self.placeID release];
-	[self.placeObject release];
+//	[self.placeObject release];
+	[self.placeData release];
+	[self.originalPlaceData release];
+	
 	[super dealloc];
 }
 
-void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* orig,NSDictionary* newvalues,NSString* prefix)
+NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* orig,NSDictionary* curr)
 {
-	NSEnumerator* iter=[newvalues keyEnumerator];
-	id key;
-	while ((key=[iter nextObject])!=nil)
+	NSMutableArray* values=[[[NSMutableArray alloc] init] autorelease];
+	for (NSString* keyName in keyNames)
 	{
-		[orig setObject:[newvalues objectForKey:key] forKey:key];
+		NSDictionary* origDict=orig;
+		NSDictionary* currDict=curr;
 		
-		if ([key isKindOfClass:[NSString class]]) // Just make sure, they should always be NSStrings
+		NSArray* parts=[keyName componentsSeparatedByString:@":"];
+		for (NSUInteger i=1;i < [parts count];++i)
 		{
-			id obj=[newvalues objectForKey:key];
-			if ([obj isKindOfClass:[NSDictionary class]])
+			origDict=[origDict objectForKey:[parts objectAtIndex:i-1]];
+			currDict=[currDict objectForKey:[parts objectAtIndex:i-1]];
+		}
+
+		NSObject* origObj=[origDict objectForKey:[parts objectAtIndex:[parts count]-1]];
+		NSObject* currObj=[currDict objectForKey:[parts objectAtIndex:[parts count]-1]];
+		
+		if ([origObj class] == [currObj class])
+		{
+			if ([origObj isKindOfClass:[NSString class]])
 			{
-//				[bodystr appendFormat:@"&address:city=%@",[s stringByReplacingOccurrencesOfString:@"&" withString:@"%26"]];
-				NSMutableString* newprefix=[NSMutableString string];
-				[newprefix appendFormat:@"%@%@:",prefix,key];
-//				[newprefix appendString:prefix];
-//				[newprefix appendString:key];
-//				[newprefix appendString:@":"];
-					
-				appendValuesToPostBodyString(bodystr,orig,obj,newprefix);
+				NSString* origString=(NSString*)origObj;
+				NSString* currString=(NSString*)currObj;
+				if ([origString isEqualToString:currString]==NO)
+				{
+					[values addObject:[NSString stringWithFormat:@"%@=%@",keyName,currString]];
+				}
 			}
-			else if ([obj isKindOfClass:[NSString class]])
+			else if ([origObj isKindOfClass:[NSNumber class]])
 			{
-				NSString* s=obj;
-				[bodystr appendFormat:@"&%@%@=%@",prefix,key,[s stringByReplacingOccurrencesOfString:@"&" withString:@"%26"]];
+				NSNumber* origNumber=(NSNumber*)origObj;
+				NSNumber* currNumber=(NSNumber*)currObj;
+				if ([origNumber intValue] != [currNumber intValue])
+				{
+					[values addObject:[NSString stringWithFormat:@"%@=%d",keyName,[currNumber intValue]]];
+				}
+			}
+			else {
+				// What to do?
 			}
 		}
+		else {
+			[values addObject:[NSString stringWithFormat:@"%@=%@",keyName,currObj]];
+		}
 	}
+	
+	return values;
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
-	[super setEditing:editing animated:animated];
-	
 	if (editing==YES)
 	{
+		[super setEditing:editing animated:animated];
+
 		self.title=@"Editing Place";
 
 		[self.tableView beginUpdates];
@@ -121,63 +237,95 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView endUpdates];
+
+//		NSString* jsonString=[self.placeData JSONRepresentation];
+//		self.originalPlaceData=[jsonString JSONValue];
 		
-		// Initialize editeddata
-		if (self.placeObject.editeddata)
-			[self.placeObject.editeddata release];
-		self.placeObject.editeddata=[[NSMutableDictionary alloc] initWithCapacity:10];
+		self.originalPlaceData=[[NSMutableDictionary alloc] initWithDictionary:self.placeData copyItems:YES];
+//		[[tmpDict objectForKey:@"restaurant"] setObject:nil forKey:@"@attributes"];
+//		[[tmpDict objectForKey:@"restaurant"] setObject:[[[NSDictionary alloc] initWithDictionary:[[self.placeData objectForKey:@"restaurant"] objectForKey:@"@attributes"] copyItems:YES] autorelease] forKey:@"@attributes"];
+//		self.originalPlaceData=tmpDict;
+		DLog(@"current restaurant=%p",[self.placeData objectForKey:@"restaurant"]);
+		DLog(@"original restaurant=%p",[self.originalPlaceData objectForKey:@"restaurant"]);
+		DLog(@"current restaurant attributes=%p",[[self.placeData objectForKey:@"restaurant"] objectForKey:@"@attributes"]);
+		DLog(@"original restaurant attributes=%p",[[self.originalPlaceData objectForKey:@"restaurant"] objectForKey:@"@attributes"]);
 	}
 	else
 	{
-//		if (self.placeObject.editeddata && [self.placeObject.editeddata count])
-//		{
-//			// Save data to server
-//			NSMutableString* bodystr=[[[NSMutableString alloc] initWithFormat:@"place_id=%@",self.placeID] autorelease];
-//			// Copy edited data fields to the real data fields
-//			appendValuesToPostBodyString(bodystr,self.placeObject.data,self.placeObject.editeddata,@"");
-//			
-//			DLog(@"POST data:%@",bodystr);
-//			NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
-//			
-//			NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_PLACE_DOC]
-//																	cachePolicy:NSURLRequestUseProtocolCachePolicy
-//																timeoutInterval:60.0];
-//			[theRequest setHTTPMethod:@"POST"];
-//			[theRequest setHTTPBody:body];
-//			[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
-//			
-//			// create the connection with the request and start loading the data
-//			NSURLConnection *theConnection=[[[NSURLConnection alloc] initWithRequest:theRequest delegate:self] autorelease];
-//			
-//			if (theConnection) {
-//				// Create the NSMutableData that will hold
-//				// the received data
-//				// receivedData is declared as a method instance elsewhere
-//				xmlPostResponse=[[NSMutableData data] retain];
-//			} else {
-//				// TODO: inform the user that the download could not be made
-//			}	
-//			
-//			[self.placeObject.editeddata removeAllObjects];
-//			[self.placeObject.editeddata release];
-//			self.placeObject.editeddata=nil;
-//		}
+		NSArray* keyNames=[NSArray arrayWithObjects:
+			@"name",
+			@"phone",
+			@"placestyle",
+			@"placetype",
+			@"uri",
+			@"kid_friendly",
+			@"description",
+			@"restaurant:price_range",
+			@"restaurant:outdoor_seating",
+			@"restaurant:food_description",
+			@"hours:open",
+			@"@attributes:wifi",
+			@"@attributes:bottled_beer_to_go",
+			@"@attributes:growlers_to_go",
+			@"@attributes:kegs_to_go",
+			@"address:street",
+			@"address:city",
+			@"address:state",
+			@"address:zip",
+			@"address:country",
+			nil
+		];
 		
-		self.title=@"Place";
+		NSMutableArray* values=appendDifferentValuesToArray(keyNames,self.originalPlaceData,self.placeData);
+		
+		BOOL endEditMode=YES;
 
-		[self.tableView beginUpdates];
-		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
-												[NSIndexPath indexPathForRow:1 inSection:0],
-												nil] withRowAnimation:UITableViewRowAnimationFade];
+		if ([values count])
+		{
+			[values addObject:[NSString stringWithFormat:@"place_id=%@",self.placeID]];
+			
+			// Save data to server
+			NSString* bodystr=[values componentsJoinedByString:@"&"];
+			DLog(@"POST data:%@",bodystr);
 
-		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:6] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView endUpdates];
+			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_PLACE_DOC];
+			NSData* answer;
+			NSHTTPURLResponse* response=[appDelegate sendRequest:url  usingMethod:@"POST" withData:bodystr returningData:&answer];
+			
+			if ([response statusCode]==200)
+			{
+				NSString* json=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
+				self.placeData=[json JSONValue];
+				normalizePlaceData(self.placeData);
+			} 
+			else 
+			{
+				endEditMode=NO;
+				// TODO: inform the user that the download could not be made
+			}	
+		}
+
+		if (endEditMode)
+		{
+			[super setEditing:editing animated:animated];
+
+			self.title=@"Place";
+			
+			[self.tableView beginUpdates];
+			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
+													[NSIndexPath indexPathForRow:1 inSection:0],
+													nil] withRowAnimation:UITableViewRowAnimationFade];
+			
+			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:6] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView endUpdates];
+		}
 	}
 }
 
@@ -245,28 +393,31 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 			// Separate the 2 parts of the place ID
 			NSArray* idparts=[self.placeID componentsSeparatedByString:@":"];
 
-			// Retrieve XML doc for this place
+			// Retrieve JSON doc for this place
 			NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_DOC, [idparts objectAtIndex:1]]];
-			NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-			[parser setDelegate:self];
-			BOOL retval=[parser parse];
-			[parser release];
-			
-			if (retval==YES)
+			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			NSData* answer;
+			NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+			if ([response statusCode]==200)
 			{
+				NSString* json=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
+				self.placeData=[json JSONValue];
+				
+				normalizePlaceData(self.placeData);
+				
 				// Retrieve user's review for this place (if any)
 				url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_REVIEW_DOC, 
 										  [idparts objectAtIndex:1], 
 										  [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
-				parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+				NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
 				[parser setDelegate:self];
-				retval=[parser parse];
+				BOOL retval=[parser parse];
 				[parser release];
 				
 				if (retval==YES)
 				{
 					// The user has a review for this place
-					DLog(@"User rating:%@", [self.placeObject.data objectForKey:@"user_rating"]);
+					DLog(@"User rating:%@", [self.placeData objectForKey:@"user_rating"]);
 				}
 			}
 		}
@@ -327,7 +478,8 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 			return self.editing?1:1;
 			break;
 		case 4:
-			return self.editing?6:3;
+			return self.editing?5:3;
+			break;
 		case 5:
 			return self.editing?3:1;
 			break;
@@ -382,6 +534,15 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 			case 0: // Place name
 				return 50;
 				break;
+			case 2:
+				switch (indexPath.row) {
+					case 0: // Address
+						return 80;
+						break;
+					default:
+						break;
+				}
+				break;
 			case 3: // Owner's Description
 				return 80;
 				break;
@@ -390,7 +551,6 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 				switch (indexPath.row) 
 				{
 					case 0:
-					case 1:
 						return 100;
 						break;
 					default:
@@ -410,7 +570,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 			{
 				switch (indexPath.row) {
 					case 1: // Overall Ratings
-						return 100;
+						return 140;
 						break;
 					default:
 						break;
@@ -420,7 +580,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 			case 4:
 			{
 				switch (indexPath.row) {
-					case 0:
+					case 0: // Address
 						return 80;
 						break;
 					default:
@@ -432,7 +592,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 				return 80;
 				break;
 			case 6: // Details
-				return 100;
+				return 130;
 				break;
 		}
 	}
@@ -463,7 +623,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						}
 						
-						[cell.textLabel setText:[placeObject.data valueForKey:@"name"]];
+						[cell.textLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"name",@"")];
 						break;
 					case 1:
 						cell = [tableView dequeueReusableCellWithIdentifier:@"EditPlaceType"];
@@ -473,7 +633,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.detailTextLabel setText:[placeObject.data valueForKey:@"placetype"]];
+						[cell.detailTextLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"placetype",@"")];
 						[cell.textLabel setText:@"type"];
 						break;
 					default:
@@ -490,7 +650,9 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				}
 				
-				[cell.detailTextLabel setText:[placeObject.data valueForKey:@"placestyle"]];
+				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+				NSDictionary* styleDict=[appDelegate getPlaceStylesDictionary];
+				[cell.detailTextLabel setText:[[[styleDict objectForKey:@"byid"] objectForKey:[placeData objectForKey:@"placestyle"]] objectForKey:@"name"]];
 				[cell.textLabel setText:@"style"];
 				break;
 			}
@@ -503,9 +665,18 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditAddress"] autorelease];
 							cell.selectionStyle=UITableViewCellSelectionStyleNone;
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+							cell.detailTextLabel.numberOfLines=3;
 						}
 						
-						[cell.detailTextLabel setText:[placeObject.data valueForKey:@""]];
+						NSDictionary* addr;
+						addr=[placeData objectForKey:@"address"];
+						
+						[cell.detailTextLabel setText:[NSString stringWithFormat:@"%@\n%@, %@ %@\n%@",
+													   [addr objectForKey:@"street"],
+													   [addr objectForKey:@"city"],
+													   [addr objectForKey:@"state"],
+													   [addr objectForKey:@"zip"],
+													   [addr objectForKey:@"country"]]];
 						[cell.textLabel setText:@"address"];
 						break;
 					case 1: // Phone
@@ -516,7 +687,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.detailTextLabel setText:[placeObject.data valueForKey:@""]];
+						[cell.detailTextLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"phone",@"")];
 						[cell.textLabel setText:@"phone"];
 						break;
 					case 2: // Web site
@@ -527,7 +698,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.detailTextLabel setText:[placeObject.data valueForKey:@"uri"]];
+						[cell.detailTextLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"uri",@"")];
 						break;
 					default:
 						break;
@@ -542,7 +713,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				}
 				
-				[cell.detailTextLabel setText:[self.placeObject.data objectForKey:@"description"]];
+				[cell.detailTextLabel setText:JSON_STRING_VALUE_OR_ELSE(self.placeData,@"description",@"")];
 				break;
 			case 4: // Details
 			{
@@ -555,21 +726,10 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.detailTextLabel setText:[placeObject.data objectForKey:@"hours"]];
+						[cell.detailTextLabel setText:JSON_STRING_VALUE_OR_ELSE([placeData objectForKey:@"hours"],@"open",@"")];
 						[cell.textLabel setText:@"hours"];
 						break;
-					case 1: // Meals
-						cell = [tableView dequeueReusableCellWithIdentifier:@"EditMeals"];
-						if (cell == nil) {
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditMeals"] autorelease];
-							cell.selectionStyle=UITableViewCellSelectionStyleNone;
-							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-						}
-						
-						[cell.detailTextLabel setText:[placeObject.data objectForKey:@"meals"]];
-						[cell.textLabel setText:@"meals"];
-						break;
-					case 2: // Price
+					case 1: // Price
 					{
 						cell = [tableView dequeueReusableCellWithIdentifier:@"EditPrice"];
 						if (cell == nil) {
@@ -578,12 +738,12 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						NSArray* dollars=[NSArray arrayWithObjects:@"",@"$",@"$$",@"$$$",@"$$$$",nil];
-						NSUInteger n=[[placeObject.data valueForKey:@"price"] unsignedIntValue];
+						NSUInteger n=[JSON_NUMBER_VALUE_OR_ELSE([placeData objectForKey:@"restaurant"],@"price_range",0) unsignedIntValue];
 						[cell.detailTextLabel setText:[dollars objectAtIndex:n]];
 						[cell.textLabel setText:@"price"];
 						break;
 					}
-					case 3: // Free WiFi
+					case 2: // Free WiFi
 						cell = [tableView dequeueReusableCellWithIdentifier:@"EditWiFi"];
 						if (cell == nil) {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditWiFi"] autorelease];
@@ -597,10 +757,10 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 						}
 						
 						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:kTagSwitchControlFreeWiFi];
-						[switchControl setOn:[self.placeObject.data objectForKey:@"freewifi"]?YES:NO];
+						[switchControl setOn:[[[self.placeData objectForKey:@"@attributes"] objectForKey:@"wifi"] intValue]?YES:NO];
 						[cell.textLabel setText:@"free wifi"];
 						break;
-					case 4: // Outdoor seating
+					case 3: // Outdoor seating
 					{
 						cell = [tableView dequeueReusableCellWithIdentifier:@"EditOutdoorSeating"];
 						if (cell == nil) {
@@ -615,11 +775,11 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 						}
 						
 						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:kTagSwitchControlOutdoorSeating];
-						[switchControl setOn:[self.placeObject.data objectForKey:@"outdoorseating"]?YES:NO];
+						[switchControl setOn:([[[self.placeData objectForKey:@"restaurant"] objectForKey:@"outdoor_seating"] intValue]?YES:NO) animated:NO];
 						[cell.textLabel setText:@"outdoor seating"];
 						break;
 					}
-					case 5: // Kid-friendly
+					case 4: // Kid-friendly
 					{
 						cell = [tableView dequeueReusableCellWithIdentifier:@"EditKidFriendly"];
 						if (cell == nil) {
@@ -634,7 +794,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 						}
 						
 						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:kTagSwitchControlKidFriendly];
-						[switchControl setOn:[self.placeObject.data objectForKey:@"kidfriendly"]?YES:NO];
+						[switchControl setOn:([[self.placeData objectForKey:@"kid_friendly"] intValue]?YES:NO) animated:NO];
 						[cell.textLabel setText:@"kid-friendly"];
 						break;
 					}
@@ -661,7 +821,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 						}
 						
 						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:kTagSwitchControlBottlesCans];
-						[switchControl setOn:[[self.placeObject.data objectForKey:@"togo"] objectForKey:@"bottlescans"]?YES:NO];
+						[switchControl setOn:[[[self.placeData objectForKey:@"@attributes"] objectForKey:@"bottled_beer_to_go"] intValue]?YES:NO];
 						[cell.textLabel setText:@"bottles/cans"];
 						break;
 					case 1: // Growlers
@@ -679,7 +839,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 						}
 						
 						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:kTagSwitchControlGrowlers];
-						[switchControl setOn:[[self.placeObject.data objectForKey:@"togo"] objectForKey:@"growlers"]?YES:NO];
+						[switchControl setOn:[[[self.placeData objectForKey:@"@attributes"] objectForKey:@"growlers_to_go"] intValue]?YES:NO];
 						[cell.textLabel setText:@"growlers"];
 						break;
 					}
@@ -698,7 +858,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 						}
 						
 						UISwitch* switchControl=(UISwitch*)[cell viewWithTag:kTagSwitchControlKegs];
-						[switchControl setOn:[[self.placeObject.data objectForKey:@"togo"] objectForKey:@"kegs"]?YES:NO];
+						[switchControl setOn:[[[self.placeData objectForKey:@"@attributes"] objectForKey:@"kegs_to_go"] intValue]?YES:NO];
 						[cell.textLabel setText:@"kegs"];
 						break;
 					}
@@ -730,7 +890,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 					cell.backgroundColor=[UIColor clearColor];
 				}
 				
-				[cell.textLabel setText:[placeObject.data valueForKey:@"name"]];
+				[cell.textLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"name",@"")];
 				break;
 			}
 			case 1: // My Rating, others' ratings and reviews
@@ -753,7 +913,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 						}
 
 						// Set current user's rating (if any)
-						NSString* user_rating=[self.placeObject.data objectForKey:@"user_rating"];
+						NSString* user_rating=[self.placeData objectForKey:@"user_rating"];
 						if (user_rating!=nil) // No user review
 						{
 							RatingControl* ratingctl=(RatingControl*)[cell viewWithTag:1];
@@ -772,6 +932,46 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							[cell.textLabel setFont:[UIFont boldSystemFontOfSize:20]];
 							cell.selectionStyle=UITableViewCellSelectionStyleNone;
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+							
+							UILabel* overallRatingLabel=[[[UILabel alloc] initWithFrame:CGRectMake(10,   7, 70, 30)] autorelease];
+							UILabel* serviceRatingLabel=[[[UILabel alloc] initWithFrame:CGRectMake(10,  40, 70, 30)] autorelease];
+							UILabel* atmosphRatingLabel=[[[UILabel alloc] initWithFrame:CGRectMake(10,  73, 70, 30)] autorelease];
+							UILabel* foodRatingLabel   =[[[UILabel alloc] initWithFrame:CGRectMake(10, 106, 70, 30)] autorelease];
+							
+							[overallRatingLabel setText:[NSString stringWithFormat:@"%d Ratings",0]];
+							overallRatingLabel.font=[UIFont systemFontOfSize:12];
+							overallRatingLabel.textAlignment=UITextAlignmentRight;
+							overallRatingLabel.textColor=[UIColor blueColor];
+							
+							[serviceRatingLabel setText:@"service"];
+							serviceRatingLabel.font=[UIFont systemFontOfSize:12];
+							serviceRatingLabel.textAlignment=UITextAlignmentRight;
+							serviceRatingLabel.textColor=[UIColor blueColor];
+							
+							[atmosphRatingLabel setText:@"atmosphere"];
+							atmosphRatingLabel.font=[UIFont systemFontOfSize:12];
+							atmosphRatingLabel.textAlignment=UITextAlignmentRight;
+							atmosphRatingLabel.textColor=[UIColor blueColor];
+							
+							[foodRatingLabel    setText:@"food"];
+							foodRatingLabel.font=[UIFont systemFontOfSize:12];
+							foodRatingLabel.textAlignment=UITextAlignmentRight;
+							foodRatingLabel.textColor=[UIColor blueColor];
+							
+							[cell.contentView addSubview:overallRatingLabel];
+							[cell.contentView addSubview:serviceRatingLabel];
+							[cell.contentView addSubview:atmosphRatingLabel];
+							[cell.contentView addSubview:foodRatingLabel];
+							
+							RatingControl* overallRating=[[[RatingControl alloc] initWithFrame:CGRectMake(80,   7, 180, 30)] autorelease];
+							RatingControl* serviceRating=[[[RatingControl alloc] initWithFrame:CGRectMake(80,  40, 180, 30)] autorelease];
+							RatingControl* atmosphRating=[[[RatingControl alloc] initWithFrame:CGRectMake(80,  73, 180, 30)] autorelease];
+							RatingControl* foodRating   =[[[RatingControl alloc] initWithFrame:CGRectMake(80, 106, 180, 30)] autorelease];
+							
+							[cell.contentView addSubview:overallRating];
+							[cell.contentView addSubview:serviceRating];
+							[cell.contentView addSubview:atmosphRating];
+							[cell.contentView addSubview:foodRating];
 						}
 						
 						break;
@@ -829,13 +1029,14 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 						}
 
 						NSDictionary* addr;
-						addr=[placeObject.data objectForKey:@"address"];
+						addr=[placeData objectForKey:@"address"];
 						
-						[cell.detailTextLabel setText:[NSString stringWithFormat:@"%@, %@ %@ %@",
-												 [addr objectForKey:@"street"],
-												 [addr objectForKey:@"city"],
-												 [addr objectForKey:@"state"],
-												 [addr objectForKey:@"zip"]]];
+						[cell.detailTextLabel setText:[NSString stringWithFormat:@"%@\n%@, %@ %@\n%@",
+												 JSON_STRING_VALUE_OR_ELSE(addr,@"street",@""),
+												 JSON_STRING_VALUE_OR_ELSE(addr,@"city",@""),
+												 JSON_STRING_VALUE_OR_ELSE(addr,@"state",@""),
+												 JSON_STRING_VALUE_OR_ELSE(addr,@"zip",@""),
+												 JSON_STRING_VALUE_OR_ELSE(addr,@"country",@"")]];
 						break;
 					}
 					case 1: // Phone
@@ -846,8 +1047,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 							[cell.textLabel setText:@"call"];
 						}
-						
-						[cell.detailTextLabel setText:[placeObject.data valueForKey:@"phone"]];
+						[cell.detailTextLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"phone",@"")];
 						break;
 					}
 					case 2: // Web site
@@ -858,7 +1058,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.textLabel setText:[placeObject.data valueForKey:@"uri"]];
+						[cell.textLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"uri",@"")];
 						break;
 					}
 					default:
@@ -873,9 +1073,10 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"OwnerDescription"] autorelease];
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 					cell.textLabel.numberOfLines=3;
+					cell.textLabel.font=[UIFont systemFontOfSize:15];
 				}
 				
-				[cell.textLabel setText:[placeObject.data valueForKey:@"description"]];
+				[cell.textLabel setText:JSON_STRING_VALUE_OR_ELSE(placeData,@"description",@"")];
 				break;
 			}
 			case 6: // Details
@@ -883,8 +1084,99 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 				cell = [tableView dequeueReusableCellWithIdentifier:@"Details"];
 				if (cell == nil) {
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Details"] autorelease];
+					
+					UILabel* hoursLabel=[[[UILabel alloc] initWithFrame:CGRectMake(10, 5, 80, 20)] autorelease];
+					hoursLabel.font=[UIFont systemFontOfSize:12];
+					hoursLabel.textColor=[UIColor blueColor];
+					hoursLabel.textAlignment=UITextAlignmentRight;
+					[hoursLabel setText:@"hours"];
+
+					UILabel* priceLabel=[[[UILabel alloc] initWithFrame:CGRectMake(10, 25, 80, 20)] autorelease];
+					priceLabel.font=[UIFont systemFontOfSize:12];
+					priceLabel.textColor=[UIColor blueColor];
+					priceLabel.textAlignment=UITextAlignmentRight;
+					[priceLabel	setText:@"price"];
+
+					UILabel* kidFriendlyLabel=[[[UILabel alloc] initWithFrame:CGRectMake(10, 45, 80, 20)] autorelease];
+					kidFriendlyLabel.font=[UIFont systemFontOfSize:12];
+					kidFriendlyLabel.textColor=[UIColor blueColor];
+					kidFriendlyLabel.textAlignment=UITextAlignmentRight;
+					[kidFriendlyLabel setText:@"kid-friendly"];
+
+					UILabel* togoLabel=[[[UILabel alloc] initWithFrame:CGRectMake(10, 65, 80, 20)] autorelease];
+					togoLabel.font=[UIFont systemFontOfSize:12];
+					togoLabel.textColor=[UIColor blueColor];
+					togoLabel.textAlignment=UITextAlignmentRight;
+					[togoLabel setText:@"to go"];
+
+					UILabel* wifiLabel=[[[UILabel alloc] initWithFrame:CGRectMake(10, 85, 80, 20)] autorelease];
+					wifiLabel.font=[UIFont systemFontOfSize:12];
+					wifiLabel.textColor=[UIColor blueColor];
+					wifiLabel.textAlignment=UITextAlignmentRight;
+					[wifiLabel setText:@"wifi"];
+
+					UILabel* outdoorSeatingLabel=[[[UILabel alloc] initWithFrame:CGRectMake(10, 105, 80, 20)] autorelease];
+					outdoorSeatingLabel.font=[UIFont systemFontOfSize:12];
+					outdoorSeatingLabel.textColor=[UIColor blueColor];
+					outdoorSeatingLabel.textAlignment=UITextAlignmentRight;
+					[outdoorSeatingLabel setText:@"outdoor seating"];
+					
+					UILabel* hoursTextLabel=[[[UILabel alloc] initWithFrame:CGRectMake(100, 5, 200, 20)] autorelease];
+					hoursTextLabel.font=[UIFont boldSystemFontOfSize:12];
+					hoursTextLabel.tag=1;
+					
+					UILabel* priceTextLabel=[[[UILabel alloc] initWithFrame:CGRectMake(100, 25, 200, 20)] autorelease];
+					priceTextLabel.font=[UIFont boldSystemFontOfSize:12];
+					priceTextLabel.tag=2;
+
+					UILabel* kidFriendlyTextLabel=[[[UILabel alloc] initWithFrame:CGRectMake(100, 45, 200, 20)] autorelease];
+					kidFriendlyTextLabel.font=[UIFont boldSystemFontOfSize:12];
+					kidFriendlyTextLabel.tag=3;
+
+					UILabel* togoTextLabel=[[[UILabel alloc] initWithFrame:CGRectMake(100, 65, 200, 20)] autorelease];
+					togoTextLabel.font=[UIFont boldSystemFontOfSize:12];
+					togoTextLabel.tag=4;
+
+					UILabel* wifiTextLabel=[[[UILabel alloc] initWithFrame:CGRectMake(100, 85, 200, 20)] autorelease];
+					wifiTextLabel.font=[UIFont boldSystemFontOfSize:12];
+					wifiTextLabel.tag=5;
+
+					UILabel* outdoorSeatingTextLabel=[[[UILabel alloc] initWithFrame:CGRectMake(100, 105, 200, 20)] autorelease];
+					outdoorSeatingTextLabel.font=[UIFont boldSystemFontOfSize:12];
+					outdoorSeatingTextLabel.tag=6;
+
+					[cell.contentView addSubview:hoursLabel];
+					[cell.contentView addSubview:hoursTextLabel];
+					[cell.contentView addSubview:priceLabel];
+					[cell.contentView addSubview:priceTextLabel];
+					[cell.contentView addSubview:kidFriendlyLabel];
+					[cell.contentView addSubview:kidFriendlyTextLabel];
+					[cell.contentView addSubview:togoLabel];
+					[cell.contentView addSubview:togoTextLabel];
+					[cell.contentView addSubview:wifiLabel];
+					[cell.contentView addSubview:wifiTextLabel];
+					[cell.contentView addSubview:outdoorSeatingLabel];
+					[cell.contentView addSubview:outdoorSeatingTextLabel];
 				}
 				
+				[(UILabel*)[cell.contentView viewWithTag:1] setText:[[self.placeData objectForKey:@"hours"] objectForKey:@"open"]];
+
+				NSArray* dollars=[NSArray arrayWithObjects:@"",@"$",@"$$",@"$$$",@"$$$$",nil];
+				[(UILabel*)[cell.contentView viewWithTag:2] setText:[dollars objectAtIndex:[[[self.placeData objectForKey:@"restaurant"] objectForKey:@"price_range"] integerValue]]];
+				[(UILabel*)[cell.contentView viewWithTag:3] setText:[self.placeData objectForKey:@"kid_friendly"]?@"yes":@"no"];
+		
+				NSMutableArray* togoValues=[NSMutableArray arrayWithCapacity:3];
+				if ([[[self.placeData objectForKey:@"@attributes"] objectForKey:@"bottled_beer_to_go"] boolValue])
+					[togoValues addObject:@"bottles/cans"];
+				if ([[[self.placeData objectForKey:@"@attributes"] objectForKey:@"growlers_to_go"] boolValue])
+					[togoValues addObject:@"growlers"];
+				if ([[[self.placeData objectForKey:@"@attributes"] objectForKey:@"kegs_to_go"] boolValue])
+					[togoValues addObject:@"kegs"];
+				[(UILabel*)[cell.contentView viewWithTag:4] setText:[togoValues componentsJoinedByString:@", "]];
+
+				[(UILabel*)[cell.contentView viewWithTag:5] setText:[[self.placeData objectForKey:@"@attributes"] objectForKey:@"wifi"]?@"yes":@"no"];
+				[(UILabel*)[cell.contentView viewWithTag:6] setText:[[self.placeData objectForKey:@"restaurant"] objectForKey:@"outdoor_seating"]?@"yes":@"no"];
+
 				break;
 			}
 		}
@@ -965,7 +1257,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 					{
 						PlaceTypeTVC* ptvc=[[[PlaceTypeTVC alloc] init] autorelease];
 						ptvc.delegate=self;
-						ptvc.currentlySelectedType=[self.placeObject.data objectForKey:@"placetype"];
+						ptvc.currentlySelectedType=[self.placeData objectForKey:@"placetype"];
 						[self.navigationController pushViewController:ptvc animated:YES];
 						break;
 					}
@@ -978,7 +1270,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 			{
 				PlaceStyleTVC* pstvc=[[[PlaceStyleTVC alloc] init] autorelease];
 				pstvc.delegate=self;
-				pstvc.currentlySelectedStyle=[self.placeObject.data objectForKey:@"placestyle"];
+				pstvc.currentlySelectedStyle=[self.placeData objectForKey:@"placestyle"];
 				[self.navigationController pushViewController:pstvc animated:YES];
 				break;
 			}
@@ -989,13 +1281,15 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 					{
 						EditAddressVC* vc=[[[EditAddressVC alloc] init] autorelease];
 						vc.delegate=self;
-						vc.addressToEdit=[self.placeObject.data objectForKey:@"address"];
+						vc.addressToEdit=[self.placeData objectForKey:@"address"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
 					case 1: // Phone
 					{
-						PhoneNumberEditTableViewController* vc=[[[PhoneNumberEditTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+						PhoneNumberEditTableViewController* vc=[[[PhoneNumberEditTableViewController alloc] init] autorelease];
+						vc.delegate=self;
+						vc.phoneNumberToEdit=[self.placeData objectForKey:@"phone"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1003,7 +1297,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 					{
 						EditURIVC* vc=[[[EditURIVC alloc] init] autorelease];
 						vc.delegate=self;
-						vc.uriToEdit=[self.placeObject.data objectForKey:@"uri"];
+						vc.uriToEdit=[self.placeData objectForKey:@"uri"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1017,7 +1311,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 				EditTextVC* vc=[[[EditTextVC alloc] init] autorelease];
 				vc.tag=kTagEditTextOwnerDescription;
 				vc.delegate=self;
-				vc.textToEdit=[self.placeObject.data objectForKey:@"description"];
+				vc.textToEdit=JSON_STRING_VALUE_OR_ELSE(self.placeData,@"description",@"");
 				[self.navigationController pushViewController:vc animated:YES];
 				break;
 			}
@@ -1029,32 +1323,23 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 						EditTextVC* vc=[[[EditTextVC alloc] init] autorelease];
 						vc.tag=kTagEditTextHours;
 						vc.delegate=self;
-						vc.textToEdit=[self.placeObject.data objectForKey:@"hours"];
+						vc.textToEdit=JSON_STRING_VALUE_OR_ELSE([self.placeData objectForKey:@"restaurant"],@"hours",@"");
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
-					case 1: // Meals
-					{
-						EditTextVC* vc=[[[EditTextVC alloc] init] autorelease];
-						vc.tag=kTagEditTextMeals;
-						vc.delegate=self;
-						vc.textToEdit=[self.placeObject.data objectForKey:@"meals"];
-						[self.navigationController pushViewController:vc animated:YES];
-						break;
-					}
-					case 2: // Price
+					case 1: // Price
 					{
 						PlacePriceTVC* pptvc=[[[PlacePriceTVC alloc] init] autorelease];
 						pptvc.delegate=self;
-						pptvc.currentlySelectedPrice=(NSUInteger)[self.placeObject.data valueForKey:@"price"];
+						pptvc.currentlySelectedPrice=(NSUInteger)JSON_NUMBER_VALUE_OR_ELSE([self.placeData objectForKey:@"restaurant"],@"price_range",0);
 						[self.navigationController pushViewController:pptvc animated:YES];
 					}
 						break;
-					case 3: // Free WiFi
+					case 2: // Free WiFi
 						break;
-					case 4: // Outdoor seating
+					case 3: // Outdoor seating
 						break;
-					case 5: // Kid-friendly
+					case 4: // Kid-friendly
 						break;
 					default:
 						break;
@@ -1125,12 +1410,12 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 				switch (indexPath.row) {
 					case 0: // Address
 					{
-						NSMutableDictionary* addr=[placeObject.data valueForKey:@"address"];
+						NSMutableDictionary* addr=[placeData valueForKey:@"address"];
 						NSString* url=[[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@, %@ %@ %@",
-										[addr valueForKey:@"street"],
-										[addr valueForKey:@"city"],
-										[addr valueForKey:@"state"],
-										[addr valueForKey:@"zip"]] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+										JSON_STRING_VALUE_OR_ELSE(addr,@"street",@""),
+										JSON_STRING_VALUE_OR_ELSE(addr,@"city",@""),
+										JSON_STRING_VALUE_OR_ELSE(addr,@"state",@""),
+										JSON_STRING_VALUE_OR_ELSE(addr,@"zip",@"")] stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 						
 						DLog(@"Opening URL:%@",url);
 						[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:url ] autorelease]];
@@ -1138,7 +1423,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 					}
 					case 1: // Phone
 					{
-						NSString* s=[[[[placeObject.data valueForKey:@"phone"] stringByReplacingOccurrencesOfString:@" " withString:@""] 
+						NSString* s=[[[[placeData valueForKey:@"phone"] stringByReplacingOccurrencesOfString:@" " withString:@""] 
 									  stringByReplacingOccurrencesOfString:@"(" withString:@""] 
 									 stringByReplacingOccurrencesOfString:@")" withString:@""];
 						NSString* url=[NSString stringWithFormat:@"tel:%@",s];
@@ -1148,7 +1433,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 					}
 					case 2: // Web site
 					{
-						[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:[placeObject.data valueForKey:@"uri"]] autorelease]];
+						[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:[placeData valueForKey:@"uri"]] autorelease]];
 						break;
 					}
 					default:
@@ -1245,11 +1530,9 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 {
 	EditTextVC* vc=(EditTextVC*)sender;
 	if (vc.tag==kTagEditTextOwnerDescription)
-		[self.placeObject.data setObject:text forKey:@"description"];
+		[self.placeData setObject:text forKey:@"description"];
 	else if (vc.tag==kTagEditTextHours)
-		[self.placeObject.data setObject:text forKey:@"hours"];
-	else if (vc.tag==kTagEditTextMeals)
-		[self.placeObject.data setObject:text forKey:@"meals"];
+		[[self.placeData objectForKey:@"hours"] setObject:text forKey:@"open"];
 	
 	[self.navigationController popViewControllerAnimated:YES];
 }
@@ -1258,7 +1541,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 
 -(void)placeType:(PlaceTypeTVC*)placeType didSelectType:(NSString*)typeName
 {
-	[self.placeObject.data setObject:typeName forKey:@"placetype"];
+	[self.placeData setObject:typeName forKey:@"placetype"];
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -1267,8 +1550,8 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 
 -(void)placeStyleTVC:(id)placeStyleTVC didSelectStyle:(NSDictionary*)style
 {
-	DLog(@"Selected style:%@",[style objectForKey:@"name"]);
-	[self.placeObject.data setObject:[style objectForKey:@"name"] forKey:@"placestyle"];
+	DLog(@"Selected style:%@ (id=%@)",[style objectForKey:@"name"], [style objectForKey:@"id"]);
+	[self.placeData setObject:[style objectForKey:@"id"] forKey:@"placestyle"];
 	[self.navigationController popToViewController:self animated:YES];
 }
 
@@ -1276,7 +1559,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 
 -(void)placePriceTVC:(PlacePriceTVC*)tvc didSelectPrice:(NSUInteger)price
 {
-	[self.placeObject.data setValue:[NSNumber numberWithUnsignedInt:price] forKey:@"price"];
+	[[self.placeData objectForKey:@"restaurant"] setValue:[NSNumber numberWithUnsignedInt:price] forKey:@"price_range"];
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -1287,22 +1570,22 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 	UISwitch* switchControl=(UISwitch*)sender;
 	switch (switchControl.tag) {
 		case kTagSwitchControlFreeWiFi:
-			[self.placeObject.data setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"freewifi"];
+			[[self.placeData objectForKey:@"@attributes"] setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"wifi"];
 			break;
 		case kTagSwitchControlOutdoorSeating:
-			[self.placeObject.data setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"outdoorseating"];
+			[[self.placeData objectForKey:@"restaurant"] setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"outdoor_seating"];
 			break;
 		case kTagSwitchControlKidFriendly:
-			[self.placeObject.data setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"kidfriendly"];
+			[self.placeData setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"kid_friendly"];
 			break;
 		case kTagSwitchControlBottlesCans:
-			[[self.placeObject.data objectForKey:@"togo"] setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"bottlescans"];
+			[[self.placeData objectForKey:@"@attributes"] setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"bottled_beer_to_go"];
 			break;
 		case kTagSwitchControlGrowlers:
-			[[self.placeObject.data objectForKey:@"togo"] setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"growlers"];
+			[[self.placeData objectForKey:@"@attributes"] setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"growlers_to_go"];
 			break;
 		case kTagSwitchControlKegs:
-			[[self.placeObject.data objectForKey:@"togo"] setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"kegs"];
+			[[self.placeData objectForKey:@"@attributes"] setObject:[NSNumber numberWithBool:switchControl.on] forKey:@"kegs_to_go"];
 			break;
 		default:
 			break;
@@ -1313,6 +1596,7 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 
 -(void)editAddressVC:(EditAddressVC *)editAddressVC didEditAddress:(NSDictionary *)dict
 {
+	[self.placeData setObject:dict forKey:@"address"];
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -1320,7 +1604,20 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 
 -(void)editURIVC:(EditURIVC *)editURIVC didEditURI:(NSString *)uri
 {
-	[self.placeObject.data setObject:uri forKey:@"uri"];
+	[self.placeData setObject:uri forKey:@"uri"];
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark PhoneNumberEditVCDelegate methods
+
+-(void)editPhoneNumber:(PhoneNumberEditTableViewController*)editPhoneNumber didChangePhoneNumber:(NSString*)phoneNumber
+{
+	[self.placeData setObject:phoneNumber forKey:@"phone"];
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)editPhoneNumberdidCancelEdit:(PhoneNumberEditTableViewController*)editPhoneNumber
+{
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -1433,39 +1730,39 @@ void appendValuesToPostBodyString(NSMutableString* bodystr,NSMutableDictionary* 
 		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"place",nil]])
 		{
 			if ([elementName isEqualToString:@"name"])
-				[placeObject.data setObject:currentElemValue forKey:@"name"];
+				[placeData setObject:currentElemValue forKey:@"name"];
 			else if ([elementName isEqualToString:@"uri"])
-				[placeObject.data setObject:currentElemValue forKey:@"uri"];
+				[placeData setObject:currentElemValue forKey:@"uri"];
 			else if ([elementName isEqualToString:@"phone"])
-				[placeObject.data setObject:currentElemValue forKey:@"phone"];
+				[placeData setObject:currentElemValue forKey:@"phone"];
 		}
 		else if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"place",@"address",nil]])
 		{
 			if ([elementName isEqualToString:@"street"])
 			{
-				NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+				NSMutableDictionary* addr=[placeData objectForKey:@"address"];
 				[addr setObject:currentElemValue forKey:@"street"];
 			}
 			else if ([elementName isEqualToString:@"city"])
 			{
-				NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+				NSMutableDictionary* addr=[placeData objectForKey:@"address"];
 				[addr setObject:currentElemValue forKey:@"city"];
 			}
 			else if ([elementName isEqualToString:@"state"])
 			{
-				NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+				NSMutableDictionary* addr=[placeData objectForKey:@"address"];
 				[addr setObject:currentElemValue forKey:@"state"];
 			}
 			else if ([elementName isEqualToString:@"zip"])
 			{
-				NSMutableDictionary* addr=[placeObject.data objectForKey:@"address"];
+				NSMutableDictionary* addr=[placeData objectForKey:@"address"];
 				[addr setObject:currentElemValue forKey:@"zip"];
 			}
 		}
 		else if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
 		{
 			if ([elementName isEqualToString:@"rating"])
-				[placeObject.data setObject:currentElemValue forKey:@"user_rating"];
+				[placeData setObject:currentElemValue forKey:@"user_rating"];
 		}
 			
 		self.currentElemValue=nil;

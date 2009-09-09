@@ -9,7 +9,6 @@
 #import <CoreGraphics/CGGeometry.h>
 #import "BeerTableViewController.h"
 #import "ReviewsTableViewController.h"
-#import "PhoneNumberEditTableViewController.h"
 #import "RatingControl.h"
 #import "FullBeerReviewTVC.h"
 #import "StylesListTVC.h"

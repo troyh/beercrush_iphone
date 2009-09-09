@@ -8,34 +8,27 @@
 
 #import <UIKit/UIKit.h>
 
-typedef enum _BeerCrushEditableValueType {
-	kBeerCrushEditableValueTypeText,
-	kBeerCrushEditableValueTypeURI,
-	kBeerCrushEditableValueTypePhoneNumber,
-	kBeerCrushEditableValueTypeAddress,
-	kBeerCrushEditableValueTypeMultiText,
-	kBeerCrushEditableValueTypeNumber,
-	kBeerCrushEditableValueTypeChoice
-} BeerCrushEditableValueType;
+@protocol PhoneNumberEditVCDelegate;
 
 @interface PhoneNumberEditTableViewController : UITableViewController {
-	NSMutableDictionary* data;
-	NSObject* initialdata;
-	NSString* editableValueName;
-	BeerCrushEditableValueType editableValueType;
-	NSArray* editableChoices;
-	
-	NSMutableArray* editingControls;
+	NSString* phoneNumberToEdit;
+	UITextField* textField;
+	id<PhoneNumberEditVCDelegate> delegate;
 }
 
-@property (nonatomic,retain) NSMutableArray* editingControls;
-@property (nonatomic,retain) NSObject* initialdata;
-@property (nonatomic,retain) NSMutableDictionary* data;
-@property (nonatomic,retain) NSString* editableValueName;
-@property (nonatomic) BeerCrushEditableValueType editableValueType;
-@property (nonatomic,retain) NSArray* editableChoices;
+@property (nonatomic,retain) NSString* phoneNumberToEdit;
+@property (nonatomic,retain) UITextField* textField;
+@property (assign) id<PhoneNumberEditVCDelegate> delegate;
 
+- (id)init;
 - (void)saveChanges:(id)sender;
 - (void)cancelChanges:(id)sender;
+
+@end
+
+@protocol PhoneNumberEditVCDelegate
+
+-(void)editPhoneNumber:(PhoneNumberEditTableViewController*)editPhoneNumber didChangePhoneNumber:(NSString*)phoneNumber;
+-(void)editPhoneNumberdidCancelEdit:(PhoneNumberEditTableViewController*)editPhoneNumber;
 
 @end
