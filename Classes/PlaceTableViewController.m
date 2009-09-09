@@ -13,6 +13,8 @@
 #import "PhoneNumberEditTableViewController.h"
 #import "RatingControl.h"
 #import "JSON.h"
+#import "PhotoThumbnailControl.h"
+#import "PhotoViewer.h"
 
 @implementation PlaceTableViewController
 
@@ -591,7 +593,6 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 	return tableView.rowHeight;
 }
 
-
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -888,8 +889,13 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 					styleLabel.text=[self.placeData objectForKey:@"placestyle"];
 					styleLabel.tag=2;
 					
+					PhotoThumbnailControl* photo=[[[PhotoThumbnailControl alloc] initWithFrame:CGRectMake(0, 0, 75, 75)] autorelease];
+					photo.image=[UIImage imageNamed:@"restaurant.png"];
+					[photo addTarget:self action:@selector(photoClicked:) forControlEvents:UIControlEventTouchUpInside];
+
 					[cell.contentView addSubview:nameLabel];
 					[cell.contentView addSubview:styleLabel];
+					[cell.contentView addSubview:photo];
 					
 					UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
 					transparentBackground.backgroundColor=[UIColor clearColor];
@@ -1252,7 +1258,12 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 	}	
 }
 
-
+-(void)photoClicked:(id)sender
+{
+	NSArray* photoList=[NSArray arrayWithObjects:@"beer.png",@"brewery.png",@"bar.png",nil];
+	PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoList:photoList] autorelease];
+	[self.navigationController pushViewController:viewer animated:YES];
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
