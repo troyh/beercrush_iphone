@@ -29,6 +29,8 @@
 
 
 - (void)dealloc {
+	[self.image release];
+	
     [super dealloc];
 }
 

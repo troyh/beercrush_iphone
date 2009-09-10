@@ -68,7 +68,7 @@
 -(void)startApp;
 -(void)askUserForCredentials;
 -(BOOL)login;
--(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSString*)data returningData:(NSData**)responseData;
+-(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSObject*)data returningData:(NSData**)responseData;
 -(void)setOnBeerSelectedAction:(SEL)s target:(id)t;
 -(BOOL)onBeerSelected:(id)obj;
 -(NSDictionary*)getFlavorsDictionary;
@@ -122,6 +122,7 @@
 #define BEERCRUSH_API_URL_NEARBY_QUERY					@BEERCRUSH_API_URL_HOST"/api/nearby.fcgi?lat=%f&lon=%f&within=%d"
 #define BEERCRUSH_API_URL_POST_BEER_REVIEW				@BEERCRUSH_API_URL_HOST"/api/beer/review"
 #define BEERCRUSH_API_URL_POST_PLACE_REVIEW				@BEERCRUSH_API_URL_HOST"/api/place/review"
+#define BEERCRUSH_API_URL_UPLOAD_PLACE_IMAGE			@BEERCRUSH_API_URL_HOST"/api/place/photo?place_id=%@"
 
 @interface BeerObject : NSObject
 {

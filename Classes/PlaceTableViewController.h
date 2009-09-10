@@ -16,6 +16,7 @@
 #import "EditAddressVC.h"
 #import "EditURIVC.h"
 #import "PhoneNumberEditTableViewController.h"
+#import "PhotoViewer.h"
 
 @interface PlaceTableViewController : UITableViewController 
 	<UITableViewDataSource,
@@ -26,7 +27,8 @@
 	PlacePriceTVCDelegate,
 	EditAddressVCDelegate,
 	EditURIVCDelegate,
-	PhoneNumberEditVCDelegate> 
+	PhoneNumberEditVCDelegate,
+	PhotoViewerDelegate> 
 {
 	NSString* placeID;
 	NSMutableDictionary* placeData;

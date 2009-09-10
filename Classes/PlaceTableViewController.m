@@ -14,7 +14,6 @@
 #import "RatingControl.h"
 #import "JSON.h"
 #import "PhotoThumbnailControl.h"
-#import "PhotoViewer.h"
 
 @implementation PlaceTableViewController
 
@@ -890,9 +889,8 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 					styleLabel.tag=2;
 					
 					PhotoThumbnailControl* photo=[[[PhotoThumbnailControl alloc] initWithFrame:CGRectMake(0, 0, 75, 75)] autorelease];
-					photo.image=[UIImage imageNamed:@"restaurant.png"];
-					[photo addTarget:self action:@selector(photoClicked:) forControlEvents:UIControlEventTouchUpInside];
-
+					[photo addTarget:self action:@selector(photoThumbnailClicked:) forControlEvents:UIControlEventTouchUpInside];
+					
 					[cell.contentView addSubview:nameLabel];
 					[cell.contentView addSubview:styleLabel];
 					[cell.contentView addSubview:photo];
@@ -1258,12 +1256,15 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 	}	
 }
 
--(void)photoClicked:(id)sender
+-(void)photoThumbnailClicked:(id)sender
 {
 	NSArray* photoList=[NSArray arrayWithObjects:@"beer.png",@"brewery.png",@"bar.png",nil];
 	PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoList:photoList] autorelease];
+	viewer.delegate=self;
 	[self.navigationController pushViewController:viewer animated:YES];
 }
+
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -1641,6 +1642,27 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 -(void)editPhoneNumberdidCancelEdit:(PhoneNumberEditTableViewController*)editPhoneNumber
 {
 	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark PhotoViewerDelegate methods
+
+-(void)photoViewer:(PhotoViewer*)photoViewer didSelectPhotoToUpload:(UIImage*)photo
+{
+	NSData* imageData=UIImageJPEGRepresentation(photo, 1.0);
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_UPLOAD_PLACE_IMAGE,self.placeID]];
+	NSData* answer;
+	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:imageData returningData:&answer];
+	if ([response statusCode]==200)
+	{
+		DLog(@"Successfully uploaded photo");
+	}
+	else {
+		DLog(@"Failed to upload photo");
+		UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"Oops" message:@"BeerCrush didn't accept the photo for some reason. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert show];
+	}
+	
 }
 
 #pragma mark NSXMLParser delegate methods

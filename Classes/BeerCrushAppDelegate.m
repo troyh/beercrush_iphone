@@ -529,7 +529,7 @@
 }
 
 
--(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSString*)data returningData:(NSData**)responseData
+-(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSObject*)data returningData:(NSData**)responseData
 {
 	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:url 
 													cachePolicy:NSURLRequestUseProtocolCachePolicy
@@ -539,10 +539,42 @@
 	{
 		if (data)
 		{
-			DLog(@"POST data:%@",data);
-			NSData* body=[NSData dataWithBytes:[data UTF8String] length:[data length]];
-			[theRequest setHTTPBody:body];
-			[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+			if ([data isKindOfClass:[NSString class]])
+			{
+				NSString* stringData=(NSString*)data;
+				DLog(@"POST data:%@",data);
+				NSData* body=[NSData dataWithBytes:[stringData UTF8String] length:[stringData length]];
+				[theRequest setHTTPBody:body];
+				[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+			}
+			else if ([data isKindOfClass:[NSData class]])
+			{
+				NSData* dataData=(NSData*)data;
+				// The following code based on http://iphone.zcentric.com/?p=218
+				/*
+				 add some header info now
+				 we always need a boundary when we post a file
+				 also we need to set the content type
+				 
+				 You might want to generate a random boundary.. this is just the same 
+				 as my output from wireshark on a valid html post
+				 */
+				NSString *boundary = [NSString stringWithString:@"---------------------------14737809831466499882746641449"];
+				NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@",boundary];
+				[theRequest addValue:contentType forHTTPHeaderField: @"Content-Type"];
+				
+				/*
+				 now lets create the body of the post
+				 */
+				NSMutableData *body = [NSMutableData data];
+				[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];	
+				[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"photo\"; filename=\"photo.jpg\"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+				[body appendData:[[NSString stringWithString:@"Content-Type: application/octet-stream\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+				[body appendData:[NSData dataWithData:dataData]];
+				[body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+				// setting the body of the post to the reqeust
+				[theRequest setHTTPBody:body];
+			}
 		}
 	}
 	else if ([method isEqualToString:@"GET"])

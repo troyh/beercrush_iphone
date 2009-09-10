@@ -7,7 +7,7 @@
 //
 
 #import "PhotoViewer.h"
-
+#import "BeerCrushAppDelegate.h"
 
 @implementation PhotoViewer
 
@@ -15,6 +15,7 @@
 @synthesize imageList;
 @synthesize scrollView;
 @synthesize currentPhotoNumber;
+@synthesize delegate;
 
 -(id)initWithPhotoList:(NSArray*)photoList
 {
@@ -61,6 +62,8 @@
 //	UIPageControl* pageControl=[[[UIPageControl alloc] initWithFrame:CGRectMake(0, 0, 100, 40)] autorelease];
 //	pageControl.numberOfPages=[self.photoNamesList count];
 //	[self.view addSubview:pageControl];
+	
+	self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addPhotoButtonClicked:)];
 	
 	[self loadPhoto:0];
 }
@@ -128,6 +131,69 @@
 	[self.scrollView release];
 	
     [super dealloc];
+}
+
+-(void)addPhotoButtonClicked:(id)sender
+{
+	if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] ||
+		[UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+	{
+		// Ask the user what they want to do
+		UIActionSheet* actionSheet=[[[UIActionSheet alloc] initWithTitle:@"Add a Photo" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Choose Existing Photo",nil] autorelease];
+		
+		if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+			[actionSheet addButtonWithTitle:@"Take Photo"];
+		
+		[actionSheet showInView:self.view];
+	}
+	
+}
+
+#pragma mark UIActionSheetDelegate methods
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+	if (buttonIndex==actionSheet.cancelButtonIndex)
+	{
+	}
+	else
+	{
+		UIViewController* vc=[[[UIViewController alloc] init] autorelease];
+		UIImagePickerController* picker=[[[UIImagePickerController alloc] initWithRootViewController:vc] autorelease];
+		
+		if (actionSheet.numberOfButtons==3 && buttonIndex==2)
+		{ // Take a photo button
+			picker.sourceType=UIImagePickerControllerSourceTypeCamera;
+		}
+		else // Choose an existing photo button
+		{
+			picker.sourceType=UIImagePickerControllerSourceTypePhotoLibrary;
+		}
+		
+		picker.delegate=self;
+		[self.navigationController presentModalViewController:picker animated:YES];
+	}
+}
+
+#pragma mark UIImagePickerControllerDelegate methods
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+	// Get the photo info and upload it to the server
+	
+	NSObject* obj=[info objectForKey:@"UIImagePickerControllerOriginalImage"];
+	if ([obj isKindOfClass:[UIImage class]])
+	{
+		UIImage* image=(UIImage*)obj;
+		[self.delegate photoViewer:self didSelectPhotoToUpload:image];
+	}
+	
+	[picker.parentViewController dismissModalViewControllerAnimated:YES];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+	[picker.parentViewController dismissModalViewControllerAnimated:YES];
 }
 
 
