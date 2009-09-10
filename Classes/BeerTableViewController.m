@@ -560,12 +560,8 @@ static const int kTagStyleLabel=3;
 							[cell.contentView addSubview:styleLabel];
 							
 							// Put photo to the left
-							UIView* photoFrame=[[[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)] autorelease];
-							photoFrame.backgroundColor=[UIColor blackColor];
-							UIImageView* photo=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"beer.png"]] autorelease];
-							photo.frame=CGRectMake(1, 1, 73, 73);
-							[photoFrame addSubview:photo];
-							[cell.contentView addSubview:photoFrame];
+							PhotoThumbnailControl* photo=[[[PhotoThumbnailControl alloc] initWithFrame:CGRectMake(0, 0, 75, 75)] autorelease];
+							[photo addTarget:self action:@selector(photoThumbnailClicked:) forControlEvents:UIControlEventTouchUpInside];
 							[cell.contentView addSubview:photo];
 							
 							UIView* transparentBackground=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
@@ -1566,7 +1562,38 @@ static const int kTagStyleLabel=3;
 	return self.breweryID; // TODO: get the actual name of the brewery
 }
 
-// NSXMLParser delegate methods
+#pragma mark Action methods
+
+-(void)photoThumbnailClicked:(id)sender
+{
+	NSArray* photoList=[NSArray arrayWithObjects:@"beer.png",@"brewery.png",@"bar.png",nil];
+	PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoList:photoList] autorelease];
+	viewer.delegate=self;
+	[self.navigationController pushViewController:viewer animated:YES];
+}
+
+#pragma mark PhotoViewerDelegate methods
+
+-(void)photoViewer:(PhotoViewer*)photoViewer didSelectPhotoToUpload:(UIImage*)photo
+{
+	NSData* imageData=UIImageJPEGRepresentation(photo, 1.0);
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_UPLOAD_BEER_IMAGE,self.beerID]];
+	NSData* answer;
+	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:imageData returningData:&answer];
+	if ([response statusCode]==200)
+	{
+		DLog(@"Successfully uploaded photo");
+	}
+	else {
+		DLog(@"Failed to upload photo");
+		UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"Oops" message:@"BeerCrush didn't accept the photo for some reason. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert show];
+	}
+	
+}
+
+#pragma mark NSXMLParserDelegate methods
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {

@@ -123,6 +123,7 @@
 #define BEERCRUSH_API_URL_POST_BEER_REVIEW				@BEERCRUSH_API_URL_HOST"/api/beer/review"
 #define BEERCRUSH_API_URL_POST_PLACE_REVIEW				@BEERCRUSH_API_URL_HOST"/api/place/review"
 #define BEERCRUSH_API_URL_UPLOAD_PLACE_IMAGE			@BEERCRUSH_API_URL_HOST"/api/place/photo?place_id=%@"
+#define BEERCRUSH_API_URL_UPLOAD_BEER_IMAGE				@BEERCRUSH_API_URL_HOST"/api/beer/photo?beer_id=%@"
 
 @interface BeerObject : NSObject
 {

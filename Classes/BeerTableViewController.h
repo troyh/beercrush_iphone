@@ -14,10 +14,21 @@
 #import "ColorsTVC.h"
 #import "AvailabilityTVC.h"
 #import "EditTextVC.h"
+#import "PhotoThumbnailControl.h"
+#import "PhotoViewer.h"
 
 @protocol BeerTableViewControllerDelegate;
 
-@interface BeerTableViewController : UITableViewController <FullBeerReviewTVCDelegate,StylesListTVCDelegate,ColorsTVCDelegate,AvailabilityTVCDelegate,UITextViewDelegate,UITextFieldDelegate, EditTextVCDelegate> {
+@interface BeerTableViewController : UITableViewController 
+	<FullBeerReviewTVCDelegate,
+	StylesListTVCDelegate,
+	ColorsTVCDelegate,
+	AvailabilityTVCDelegate,
+	UITextViewDelegate,
+	UITextFieldDelegate, 
+	EditTextVCDelegate,
+	PhotoViewerDelegate> 
+{
 	NSString* beerID;
 	NSString* breweryID;
 	BeerObject* beerObj;
