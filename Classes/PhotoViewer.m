@@ -139,12 +139,28 @@
 		[UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
 	{
 		// Ask the user what they want to do
-		UIActionSheet* actionSheet=[[[UIActionSheet alloc] initWithTitle:@"Add a Photo" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Choose Existing Photo",nil] autorelease];
+		UIActionSheet* actionSheet;
 		
 		if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-			[actionSheet addButtonWithTitle:@"Take Photo"];
-		
-		[actionSheet showInView:self.view];
+		{
+			actionSheet=[[[UIActionSheet alloc] initWithTitle:@"Add a Photo" delegate:self 
+													cancelButtonTitle:@"Cancel" 
+													destructiveButtonTitle:nil 
+													otherButtonTitles:@"Choose Existing Photo",@"Take a Photo",nil] autorelease];
+		}
+		else 
+		{
+			actionSheet=[[[UIActionSheet alloc] initWithTitle:@"Add a Photo" delegate:self 
+													cancelButtonTitle:@"Cancel" 
+													destructiveButtonTitle:nil 
+													otherButtonTitles:@"Choose Existing Photo",nil] autorelease];
+			
+		}
+
+		if (self.tabBarController)
+			[actionSheet showInView:self.tabBarController.view];
+		else
+			[actionSheet showInView:self.view];
 	}
 	
 }
@@ -161,11 +177,11 @@
 		UIViewController* vc=[[[UIViewController alloc] init] autorelease];
 		UIImagePickerController* picker=[[[UIImagePickerController alloc] initWithRootViewController:vc] autorelease];
 		
-		if (actionSheet.numberOfButtons==3 && buttonIndex==2)
+		if (buttonIndex==1)
 		{ // Take a photo button
 			picker.sourceType=UIImagePickerControllerSourceTypeCamera;
 		}
-		else // Choose an existing photo button
+		else if (buttonIndex==2) // Choose an existing photo button
 		{
 			picker.sourceType=UIImagePickerControllerSourceTypePhotoLibrary;
 		}
