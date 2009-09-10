@@ -10,6 +10,7 @@
 #import "BeerCrushAppDelegate.h"
 #import "CountryListTVC.h"
 #import "EditTextVC.h"
+#import "PhotoViewer.h"
 
 @interface BreweryObject: NSObject
 {
@@ -22,7 +23,7 @@
 
 @end
 
-@interface BreweryTableViewController : UITableViewController <UITableViewDataSource,UITableViewDelegate,CountryListTVCDelegate,EditTextVCDelegate,UITextViewDelegate> {
+@interface BreweryTableViewController : UITableViewController <UITableViewDataSource,UITableViewDelegate,CountryListTVCDelegate,EditTextVCDelegate,UITextViewDelegate,PhotoViewerDelegate> {
 	NSString* breweryID;
 	BreweryObject* breweryObject;
 	NSDictionary* originalBreweryData;
