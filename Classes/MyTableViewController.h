@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "BeerCrushAppDelegate.h"
+#import "BreweryTableViewController.h"
+#import "BeerTableViewController.h"
+#import "PlaceTableViewController.h"
 
 typedef enum
 {
@@ -16,7 +19,12 @@ typedef enum
 	BeerCrushSearchTypePlaces = 4
 } BeerCrushSearchType;
 
-@interface MyTableViewController : UITableViewController <UISearchBarDelegate> {
+@interface MyTableViewController : UITableViewController 
+	<UISearchBarDelegate,
+	UIActionSheetDelegate,
+	BreweryVCDelegate,
+	PlaceVCDelegate>
+{
 	UISearchBar* searchBar;
 	NSInteger autoCompleteResultsCount;
 	NSData* autoCompleteResultsData;

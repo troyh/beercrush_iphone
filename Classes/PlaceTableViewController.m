@@ -25,6 +25,7 @@
 @synthesize overlay;
 @synthesize spinner;
 @synthesize xmlParserPath;
+@synthesize delegate;
 
 enum mytags {
 	kTagEditTextOwnerDescription=1,
@@ -222,7 +223,12 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 	{
 		[super setEditing:editing animated:animated];
 
-		self.title=@"Editing Place";
+		if (self.placeID)
+			self.title=@"Editing Place";
+		else
+			self.title=@"New Place";
+
+		[self.navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editingPlaceCancelButtonClicked:)] autorelease]];
 
 		[self.tableView beginUpdates];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
@@ -373,7 +379,6 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 		//		vf.origin.y=0;
 		//		self.view.frame=vf;
 		//		[self.view sizeToFit];
-		self.title=@"New Place";
 	}
 	else
 	{
@@ -1586,7 +1591,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark UISwitch action method
+#pragma mark Target Action methods
 
 -(void)toggleSwitchChanged:(id)sender
 {
@@ -1613,6 +1618,11 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 		default:
 			break;
 	}
+}
+
+-(void)editingPlaceCancelButtonClicked:(id)sender
+{
+	[self.delegate placeVCDidCancelEditing:self];
 }
 
 #pragma mark EditAddressVCDelegate methods

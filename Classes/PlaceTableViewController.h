@@ -18,6 +18,8 @@
 #import "PhoneNumberEditTableViewController.h"
 #import "PhotoViewer.h"
 
+@protocol PlaceVCDelegate;
+
 @interface PlaceTableViewController : UITableViewController 
 	<UITableViewDataSource,
 	UITableViewDelegate,
@@ -38,6 +40,7 @@
 	UIView* overlay;
 	UIActivityIndicatorView* spinner;
 	NSMutableArray* xmlParserPath;
+	id<PlaceVCDelegate> delegate;
 }
 
 @property (nonatomic,retain) NSString* placeID;
@@ -48,8 +51,15 @@
 @property (nonatomic, retain) UIView* overlay;
 @property (nonatomic, retain) UIActivityIndicatorView* spinner;
 @property (nonatomic, retain) NSMutableArray* xmlParserPath;
+@property (assign) id<PlaceVCDelegate> delegate;
 
 -(id) initWithPlaceID:(NSString*)place_id;
 //- (void)editPlace:(id)sender;
+
+@end
+
+@protocol PlaceVCDelegate
+
+-(void)placeVCDidCancelEditing:(PlaceTableViewController*)placeVC;
 
 @end

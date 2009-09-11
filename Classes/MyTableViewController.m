@@ -7,55 +7,6 @@
 //
 
 #import "MyTableViewController.h"
-#import "BreweryTableViewController.h"
-#import "BeerTableViewController.h"
-#import "PlaceTableViewController.h"
-
-
-//@interface SearchResultObject : NSObject
-//{
-//	NSString* title;
-//	NSString* desc;
-//	ResultType type;
-//	NSString* uri;
-//}
-//
-//@property (nonatomic, retain) NSString* title;
-//@property (nonatomic, retain) NSString* desc;
-//@property (nonatomic) ResultType type;
-//@property (nonatomic, retain) NSString* uri;
-//
-//-(id)initWithTitle:(NSString*)title desc:(NSString*)desc type:(ResultType)t uri:(NSString*)uri;
-//
-//@end
-//
-//@implementation SearchResultObject
-//
-//@synthesize title;
-//@synthesize desc;
-//@synthesize type;
-//@synthesize uri;
-//
-//-(id)initWithTitle:(NSString*)t desc:(NSString*)d type:(ResultType)n uri:(NSString*)u
-//{
-//	self.title=t;
-//	self.desc=d;
-//	self.type=n;
-//	self.uri=u;
-//	return self;
-//}
-//
-//-(BOOL)isEqualToString:(NSString*)s
-//{
-//	return NO;
-//}
-//
-//-(id)copyWithZone
-//{
-//	return self;
-//}
-//
-//@end
 
 @implementation MyTableViewController
 
@@ -308,58 +259,112 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	if (autoCompleteResultsCount==0)
+		return 1;
     return autoCompleteResultsCount;
 }
 
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+	UITableViewCell* cell=nil;
+	
+	if (autoCompleteResultsCount==0)
+	{ // Show the Add a [Brewery|Place] row
+		switch (indexPath.row) {
+			case 0:
+			{
+				static NSString *CellIdentifier = @"ZeroResultsCell";
+				
+				cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+				}
+				
+				[cell.textLabel setText:@"0 matches"];
+				if (self.searchTypes == (BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
+					[cell.detailTextLabel setText:@"Are we missing a beer or brewery? Help us improve."];
+				else if (self.searchTypes == BeerCrushSearchTypeBreweries)
+					[cell.detailTextLabel setText:@"Are we missing a brewery? Help us improve."];
+				else if (self.searchTypes == BeerCrushSearchTypeBeers)
+					[cell.detailTextLabel setText:@"Are we missing a beer? Help us improve."];
+				else if (self.searchTypes == BeerCrushSearchTypePlaces)
+					[cell.detailTextLabel setText:@"Are we missing a place? Help us improve."];
+
+				UIButton* addButton=[UIButton buttonWithType:UIButtonTypeContactAdd];
+				addButton.frame=CGRectMake(0, 0, 30, 30);
+				[addButton addTarget:self action:@selector(addBeerOrBreweryButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+				
+				cell.accessoryView=addButton;
+				
+				break;
+			}
+			case 1:
+			{
+				static NSString *CellIdentifier = @"AddOneCell";
+				
+				cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+				}
+				
+				[cell.textLabel setText:@"Add a Brewery"];
+				
+
+				break;
+			}
+			default:
+				break;
+		}
+	}
+	else 
+	{
+		static NSString *CellIdentifier = @"Cell";
+		
+		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+		if (cell == nil) {
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		}
     
-    static NSString *CellIdentifier = @"Cell";
-    
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    UITableViewCell *cell = nil;
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    // Set up the cell...
-	const char* p=(char*)[autoCompleteResultsData bytes];
-	NSUInteger n=0;
-	while (p && n<indexPath.row && n<autoCompleteResultsCount)
-	{	// Count the number of items
-		char* tab=strchr(p,'\0');
-		if (!tab)
-			p=nil; // Quit
-		else
-		{
-			const char* nl=strchr(tab+1, '\0');
-			if (!nl)
+		// Set up the cell...
+		const char* p=(char*)[autoCompleteResultsData bytes];
+		NSUInteger n=0;
+		while (p && n<indexPath.row && n<autoCompleteResultsCount)
+		{	// Count the number of items
+			char* tab=strchr(p,'\0');
+			if (!tab)
 				p=nil; // Quit
 			else
 			{
-				p=nl+1;
-				++n;
+				const char* nl=strchr(tab+1, '\0');
+				if (!nl)
+					p=nil; // Quit
+				else
+				{
+					p=nl+1;
+					++n;
+				}
 			}
 		}
-	}
-	if (p)
-	{
-		[cell.textLabel setText:[NSString stringWithCString:p encoding:NSASCIIStringEncoding]];
-		if (!strncmp(p+strlen(p)+1,"beer:",5))
-		{ // Beer
-			[cell.imageView initWithImage:[UIImage imageNamed:@"beer.png"]];
+		if (p)
+		{
+			[cell.textLabel setText:[NSString stringWithCString:p encoding:NSASCIIStringEncoding]];
+			if (!strncmp(p+strlen(p)+1,"beer:",5))
+			{ // Beer
+				[cell.imageView initWithImage:[UIImage imageNamed:@"beer.png"]];
+			}
+			else if (!strncmp(p+strlen(p)+1,"place:",6))
+			{ // Place
+				[cell.imageView initWithImage:[UIImage imageNamed:@"restaurant.png"]];
+			}
+			else if (!strncmp(p+strlen(p)+1,"brewery:",8))
+			{ // Brewery
+				[cell.imageView initWithImage:[UIImage imageNamed:@"brewery.png"]];
+			}
+			
+			cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 		}
-		else if (!strncmp(p+strlen(p)+1,"place:",6))
-		{ // Place
-			[cell.imageView initWithImage:[UIImage imageNamed:@"restaurant.png"]];
-		}
-		else if (!strncmp(p+strlen(p)+1,"brewery:",8))
-		{ // Brewery
-			[cell.imageView initWithImage:[UIImage imageNamed:@"brewery.png"]];
-		}
-		
-		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 	}
 	
     return cell;
@@ -529,6 +534,79 @@
     [super dealloc];
 }
 
+#pragma mark Events
+
+-(void)addBeerOrBreweryButtonClicked:(id)sender
+{
+	UIViewController* vc=[[[UIViewController alloc] initWithNibName:nil bundle:nil] autorelease];
+	UINavigationController* nc=[[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
+	
+	if (self.searchTypes & BeerCrushSearchTypeBreweries)
+	{
+		BreweryTableViewController* btvc=[[[BreweryTableViewController alloc] initWithBreweryID:nil] autorelease];
+		btvc.delegate=self;
+		[btvc setEditing:YES animated:NO];
+		[nc pushViewController:btvc animated:NO];
+	}
+	else if (self.searchTypes == BeerCrushSearchTypePlaces)
+	{
+		PlaceTableViewController* ptvc=[[[PlaceTableViewController alloc] initWithPlaceID:nil] autorelease];
+		ptvc.delegate=self;
+		[ptvc setEditing:YES animated:NO];
+		[nc pushViewController:ptvc animated:NO];
+	}
+	
+	[self.navigationController presentModalViewController:nc animated:YES];
+}
+
+//#pragma mark UIActionSheetDelegate methods
+//
+//- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+//{
+//	if (actionSheet.cancelButtonIndex==buttonIndex)
+//		return;
+//	
+//	UIViewController* vc=[[[UIViewController alloc] initWithNibName:nil bundle:nil] autorelease];
+//	UINavigationController* nc=[[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
+//	
+//	switch (buttonIndex) 
+//	{
+//		case 0: // Add a brewery
+//		{
+//			BreweryTableViewController* btvc=[[[BreweryTableViewController alloc] initWithBreweryID:nil] autorelease];
+//			btvc.delegate=self;
+//			[btvc setEditing:YES animated:NO];
+//			[nc pushViewController:btvc animated:NO];
+//			break;
+//		}
+//		case 1: // Add a beer
+//		{
+//			BeerTableViewController* btvc=[[[BeerTableViewController alloc] initWithBeerID:nil] autorelease];
+//			btvc.delegate=self;
+//			[btvc setEditing:YES animated:NO];
+//			[nc pushViewController:btvc animated:NO];
+//			break;
+//		}
+//		default:
+//			break;
+//	}
+//	
+//	[self.navigationController presentModalViewController:nc animated:YES];
+//}
+
+#pragma mark BreweryVCDelegate methods
+
+-(void)breweryVCDidCancelEditing:(BreweryTableViewController*)btvc
+{
+	[self.navigationController dismissModalViewControllerAnimated:YES];
+}
+
+#pragma mark PlaceVCDelegate methods
+
+-(void)placeVCDidCancelEditing:(PlaceTableViewController*)placeVC
+{
+	[self.navigationController dismissModalViewControllerAnimated:YES];
+}
 
 @end
 

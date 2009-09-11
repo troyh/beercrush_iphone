@@ -59,6 +59,7 @@
 @synthesize originalBreweryData;
 @synthesize currentElemValue;
 @synthesize xmlParserPath;
+@synthesize delegate;
 
 static const int kTagSwitchControlKegs=1;
 static const int kTagSwitchControlGrowlers=2;
@@ -70,29 +71,35 @@ static const int kTagTextViewHours=6;
 
 -(id) initWithBreweryID:(NSString*)brewery_id
 {
-	self.breweryID=brewery_id;
-	self.xmlParserPath=[NSMutableArray arrayWithCapacity:10];
-	self.currentElemValue=nil;
-	
-	self.title=@"Brewery";
-	
 	[super initWithStyle:UITableViewStyleGrouped];
-
-	breweryObject=[[BreweryObject alloc] init];
-
-	NSArray* parts=[self.breweryID componentsSeparatedByString:@":"];
-	if ([parts count]==2)
+	
+	if (brewery_id==nil)
 	{
-		// Retrieve XML doc from server
-		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC, [parts objectAtIndex:1] ]];
-		NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-		[parser setDelegate:self];
-		[parser parse];
-		[parser	release];
 	}
-	else
+	else 
 	{
-		// TODO: alert user of problem
+		self.breweryID=brewery_id;
+		self.xmlParserPath=[NSMutableArray arrayWithCapacity:10];
+		self.currentElemValue=nil;
+		
+		self.title=@"Brewery";
+		
+		breweryObject=[[BreweryObject alloc] init];
+
+		NSArray* parts=[self.breweryID componentsSeparatedByString:@":"];
+		if ([parts count]==2)
+		{
+			// Retrieve XML doc from server
+			NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC, [parts objectAtIndex:1] ]];
+			NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
+			[parser setDelegate:self];
+			[parser parse];
+			[parser	release];
+		}
+		else
+		{
+			// TODO: alert user of problem
+		}
 	}
 	
 	return self;
@@ -170,7 +177,12 @@ static const int kTagTextViewHours=6;
 		// Make a copy of the brewery object so we can determine which data changed so that we only send changes to the server
 		self.originalBreweryData=[[NSDictionary alloc] initWithDictionary:self.breweryObject.data copyItems:YES];
 		
-		self.title=@"Editing Brewery";
+		if (self.breweryID)
+			self.title=@"Editing Brewery";
+		else
+			self.title=@"New Brewery";
+
+		[self.navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editingBreweryCancelButtonClicked:)] autorelease]];
 
 		[self.tableView beginUpdates];
 		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
@@ -996,6 +1008,12 @@ static const int kTagTextViewHours=6;
 	viewer.delegate=self;
 	[self.navigationController pushViewController:viewer animated:YES];
 }
+
+-(void)editingBreweryCancelButtonClicked:(id)sender
+{
+	[self.delegate breweryVCDidCancelEditing:self];
+}
+
 
 #pragma mark PhotoViewerDelegate methods
 
