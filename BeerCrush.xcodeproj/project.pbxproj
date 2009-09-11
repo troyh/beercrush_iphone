@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0504ABD7105AEE75001FAEBC /* tab_beerreviews.png in Resources */ = {isa = PBXBuildFile; fileRef = 0504ABD2105AEE75001FAEBC /* tab_beerreviews.png */; };
+		0504ABD8105AEE75001FAEBC /* tab_beers.png in Resources */ = {isa = PBXBuildFile; fileRef = 0504ABD3105AEE75001FAEBC /* tab_beers.png */; };
+		0504ABD9105AEE75001FAEBC /* tab_nearby.png in Resources */ = {isa = PBXBuildFile; fileRef = 0504ABD4105AEE75001FAEBC /* tab_nearby.png */; };
+		0504ABDA105AEE75001FAEBC /* tab_places.png in Resources */ = {isa = PBXBuildFile; fileRef = 0504ABD5105AEE75001FAEBC /* tab_places.png */; };
+		0504ABDB105AEE75001FAEBC /* tab_wishlist.png in Resources */ = {isa = PBXBuildFile; fileRef = 0504ABD6105AEE75001FAEBC /* tab_wishlist.png */; };
+		0504AC51105B05F3001FAEBC /* EditLineVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0504AC50105B05F3001FAEBC /* EditLineVC.m */; };
 		051102A1100FDC8300610251 /* UserReviewsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 051102A0100FDC8300610251 /* UserReviewsTVC.m */; };
 		05165D0A10519C3D00D9C98D /* PlaceTypeTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05165D0910519C3D00D9C98D /* PlaceTypeTVC.m */; };
 		05165D0D10519C5300D9C98D /* PlaceStyleTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05165D0C10519C5300D9C98D /* PlaceStyleTVC.m */; };
@@ -73,6 +79,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0504ABD2105AEE75001FAEBC /* tab_beerreviews.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_beerreviews.png; sourceTree = "<group>"; };
+		0504ABD3105AEE75001FAEBC /* tab_beers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_beers.png; sourceTree = "<group>"; };
+		0504ABD4105AEE75001FAEBC /* tab_nearby.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_nearby.png; sourceTree = "<group>"; };
+		0504ABD5105AEE75001FAEBC /* tab_places.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_places.png; sourceTree = "<group>"; };
+		0504ABD6105AEE75001FAEBC /* tab_wishlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_wishlist.png; sourceTree = "<group>"; };
+		0504AC4F105B05F3001FAEBC /* EditLineVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditLineVC.h; sourceTree = "<group>"; };
+		0504AC50105B05F3001FAEBC /* EditLineVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditLineVC.m; sourceTree = "<group>"; };
 		0511029F100FDC8300610251 /* UserReviewsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserReviewsTVC.h; sourceTree = "<group>"; };
 		051102A0100FDC8300610251 /* UserReviewsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserReviewsTVC.m; sourceTree = "<group>"; };
 		05165D0810519C3D00D9C98D /* PlaceTypeTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceTypeTVC.h; sourceTree = "<group>"; };
@@ -220,6 +233,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0504AC4F105B05F3001FAEBC /* EditLineVC.h */,
+				0504AC50105B05F3001FAEBC /* EditLineVC.m */,
 				0516656510583A1B00D9C98D /* PhotoViewer.h */,
 				0516656610583A1B00D9C98D /* PhotoViewer.m */,
 				051665401058310D00D9C98D /* PhotoThumbnailControl.h */,
@@ -326,6 +341,11 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0504ABD2105AEE75001FAEBC /* tab_beerreviews.png */,
+				0504ABD3105AEE75001FAEBC /* tab_beers.png */,
+				0504ABD4105AEE75001FAEBC /* tab_nearby.png */,
+				0504ABD5105AEE75001FAEBC /* tab_places.png */,
+				0504ABD6105AEE75001FAEBC /* tab_wishlist.png */,
 				05451A0A10471E5900F9400B /* brewery.png */,
 				05451A0810471E4600F9400B /* beer.png */,
 				05451A0610471E3300F9400B /* restaurant.png */,
@@ -422,6 +442,11 @@
 				05451A0710471E3300F9400B /* restaurant.png in Resources */,
 				05451A0910471E4600F9400B /* beer.png in Resources */,
 				05451A0B10471E5900F9400B /* brewery.png in Resources */,
+				0504ABD7105AEE75001FAEBC /* tab_beerreviews.png in Resources */,
+				0504ABD8105AEE75001FAEBC /* tab_beers.png in Resources */,
+				0504ABD9105AEE75001FAEBC /* tab_nearby.png in Resources */,
+				0504ABDA105AEE75001FAEBC /* tab_places.png in Resources */,
+				0504ABDB105AEE75001FAEBC /* tab_wishlist.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,6 +498,7 @@
 				05165EBC1051D76500D9C98D /* EditURIVC.m in Sources */,
 				051665421058310D00D9C98D /* PhotoThumbnailControl.m in Sources */,
 				0516656710583A1B00D9C98D /* PhotoViewer.m in Sources */,
+				0504AC51105B05F3001FAEBC /* EditLineVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
