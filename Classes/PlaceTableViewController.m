@@ -35,7 +35,8 @@ enum mytags {
 	kTagSwitchControlKidFriendly,
 	kTagSwitchControlBottlesCans,
 	kTagSwitchControlGrowlers,
-	kTagSwitchControlKegs
+	kTagSwitchControlKegs,
+	kTagEditTextPlaceName
 };
 
 
@@ -113,17 +114,29 @@ void normalizePlaceData(NSMutableDictionary* placeData)
 	normalizeToString(placeData, @"placetype");
 	normalizeToString(placeData, @"uri");
 	normalizeToBoolean(placeData, @"kid_friendly");
+
+	if ([placeData objectForKey:@"hours"]==nil)
+		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"hours"];
 	normalizeToString([placeData objectForKey:@"hours"], @"open");
 	
+	if ([placeData objectForKey:@"restaurant"]==nil)
+		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"restaurant"];
+
 	normalizeToNumber([placeData objectForKey:@"restaurant"],@"price_range");
 	normalizeToBoolean([placeData objectForKey:@"restaurant"], @"outdoor_seating");
 	normalizeToString([placeData objectForKey:@"restaurant"],@"food_description");
 	
+	if ([placeData objectForKey:@"@attributes"]==nil)
+		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"@attributes"];
+
 	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"wifi");
 	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"bottled_beer_to_go");
 	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"growlers_to_go");
 	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"kegs_to_go");
-	
+
+	if ([placeData objectForKey:@"address"]==nil)
+		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:5] forKey:@"address"];
+
 	normalizeToString([placeData objectForKey:@"address"], @"street");
 	normalizeToString([placeData objectForKey:@"address"], @"city");
 	normalizeToString([placeData objectForKey:@"address"], @"state");
@@ -147,6 +160,7 @@ void normalizePlaceData(NSMutableDictionary* placeData)
 	[super initWithStyle:UITableViewStyleGrouped];
 
 	self.placeData=[[NSMutableDictionary alloc] initWithCapacity:10];
+	normalizePlaceData(self.placeData);
 	
 //	NSArray* parts=[self.placeID componentsSeparatedByString:@":"];
 //	
@@ -274,13 +288,26 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 			nil
 		];
 		
-		NSMutableArray* values=appendDifferentValuesToArray(keyNames,self.originalPlaceData,self.placeData);
-
 		BOOL endEditMode=YES;
+
+		if (self.placeID==nil)
+		{
+			if ([[self.placeData objectForKey:@"name"] length] == 0)
+			{
+				UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"Can't Save a New Place" message:@"The place must have a name" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+				[alert show];
+				
+				endEditMode=NO;
+			}
+		}
+
+		NSMutableArray* values=appendDifferentValuesToArray(keyNames,self.originalPlaceData,self.placeData);
 
 		if ([values count])
 		{
-			[values addObject:[NSString stringWithFormat:@"place_id=%@",self.placeID]];
+			// If we're editing an existing place (i.e., we have its ID), add place_id
+			if (self.placeID)
+				[values addObject:[NSString stringWithFormat:@"place_id=%@",self.placeID]];
 			
 			// Save data to server
 			NSString* bodystr=[values componentsJoinedByString:@"&"];
@@ -666,13 +693,15 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 						
 						NSDictionary* addr;
 						addr=[placeData objectForKey:@"address"];
-						
-						[cell.detailTextLabel setText:[NSString stringWithFormat:@"%@\n%@, %@ %@\n%@",
+
+						[cell.detailTextLabel setText:[NSString stringWithFormat:@"%@\n%@%@ %@ %@\n%@",
 													   [addr objectForKey:@"street"],
 													   [addr objectForKey:@"city"],
+													   ([[addr objectForKey:@"state"] length]?@",":@""),
 													   [addr objectForKey:@"state"],
 													   [addr objectForKey:@"zip"],
 													   [addr objectForKey:@"country"]]];
+
 						[cell.textLabel setText:@"address"];
 						break;
 					case 1: // Phone
@@ -1280,7 +1309,14 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 			{
 				switch (indexPath.row) {
 					case 0: // Place Name
+					{
+						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						vc.tag=kTagEditTextPlaceName;
+						vc.delegate=self;
+						vc.textToEdit=[self.placeData objectForKey:@"name"];
+						[self.navigationController pushViewController:vc animated:YES];
 						break;
+					}
 					case 1: // Place type
 					{
 						PlaceTypeTVC* ptvc=[[[PlaceTypeTVC alloc] init] autorelease];
@@ -1550,6 +1586,16 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	return NO;
+}
+
+#pragma mark EditLineVCDelegate methods
+
+-(void)editLineVC:(EditLineVC*)editLineVC didChangeText:(NSString*)text
+{
+	if (editLineVC.tag==kTagEditTextPlaceName)
+		[self.placeData setObject:text forKey:@"name"];
+	
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark EditTextVCDelegate methods

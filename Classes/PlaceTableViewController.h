@@ -17,6 +17,7 @@
 #import "EditURIVC.h"
 #import "PhoneNumberEditTableViewController.h"
 #import "PhotoViewer.h"
+#import "EditLineVC.h"
 
 @protocol PlaceVCDelegate;
 
@@ -30,7 +31,8 @@
 	EditAddressVCDelegate,
 	EditURIVCDelegate,
 	PhoneNumberEditVCDelegate,
-	PhotoViewerDelegate> 
+	PhotoViewerDelegate,
+	EditLineVCDelegate> 
 {
 	NSString* placeID;
 	NSMutableDictionary* placeData;
