@@ -654,12 +654,12 @@ static const int kTagTextViewHours=6;
 					cell.backgroundView=transparentBackground;
 					cell.backgroundColor=[UIColor clearColor];
 					
-					UILabel* nameLabel=[[UILabel alloc] initWithFrame:CGRectMake(80, 0, 200, 30)];
+					UILabel* nameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 0, 200, 30)] autorelease];
 					nameLabel.font=[UIFont boldSystemFontOfSize:20];
 					nameLabel.tag=1;
 					nameLabel.backgroundColor=[UIColor clearColor];
 					
-					PhotoThumbnailControl* photo=[[PhotoThumbnailControl alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
+					PhotoThumbnailControl* photo=[[[PhotoThumbnailControl alloc] initWithFrame:CGRectMake(0, 0, 75, 75)] autorelease];
 					[photo addTarget:self action:@selector(photoThumbnailClicked:) forControlEvents:UIControlEventTouchUpInside];
 					
 					[cell.contentView addSubview:nameLabel];
@@ -1012,7 +1012,7 @@ static const int kTagTextViewHours=6;
 	}
 	else {
 		DLog(@"Failed to upload photo");
-		UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"Oops" message:@"BeerCrush didn't accept the photo for some reason. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"Oops" message:@"BeerCrush didn't accept the photo for some reason. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
 		[alert show];
 	}
 	
