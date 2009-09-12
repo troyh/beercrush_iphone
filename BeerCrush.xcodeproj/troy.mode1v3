@@ -274,13 +274,13 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>64</integer>
+									<integer>66</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 3}, {203, 1409}}</string>
+							<string>{{0, 4}, {203, 1409}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -317,7 +317,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>PlaceTableViewController.m</string>
+								<string>BreweryTableViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -325,11 +325,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>PlaceTableViewController.m</string>
+										<string>BreweryTableViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>0504AC77105B0C5A001FAEBC</string>
+										<string>0504AD50105C0CD3001FAEBC</string>
 										<key>history</key>
 										<array>
 											<string>0577EA621002B62900A2468C</string>
@@ -384,15 +384,11 @@
 											<string>05165DFA1051BF1600D9C98D</string>
 											<string>05165E541051CAEE00D9C98D</string>
 											<string>05165E981051D0B100D9C98D</string>
-											<string>05165EEC1051DF5000D9C98D</string>
 											<string>05165FFD105308CB00D9C98D</string>
 											<string>051660F51055ADE000D9C98D</string>
-											<string>0516612B1055B85C00D9C98D</string>
 											<string>0516615D1055C7CA00D9C98D</string>
 											<string>0516615E1055C7CA00D9C98D</string>
 											<string>0516616B1055CA2200D9C98D</string>
-											<string>0516629E1056D46D00D9C98D</string>
-											<string>051662A81056D4D100D9C98D</string>
 											<string>059C030A105852CD00879532</string>
 											<string>059C0450105881EA00879532</string>
 											<string>059C04841059A6EB00879532</string>
@@ -400,12 +396,10 @@
 											<string>0504AB451059C8B8001FAEBC</string>
 											<string>0504AB461059C8B8001FAEBC</string>
 											<string>0504AB79105AC871001FAEBC</string>
-											<string>0504ABB8105AE63F001FAEBC</string>
 											<string>0504AC0B105AF47E001FAEBC</string>
 											<string>0504AC12105AF5B2001FAEBC</string>
-											<string>0504AC1C105AF664001FAEBC</string>
-											<string>0504AC70105B0C2C001FAEBC</string>
-											<string>0504AC76105B0C5A001FAEBC</string>
+											<string>0504AD44105C0C18001FAEBC</string>
+											<string>0504AD45105C0C18001FAEBC</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -601,7 +595,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>0504AC73105B0C2C001FAEBC</string>
+		<string>0504AD4F105C0CB5001FAEBC</string>
 		<string>0504AB521059C8B8001FAEBC</string>
 		<string>0504AB531059C8B8001FAEBC</string>
 		<string>1CD10A99069EF8BA00B06720</string>
@@ -631,7 +625,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>PlaceTableViewController.m</string>
+								<string>BeerTableViewController.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>

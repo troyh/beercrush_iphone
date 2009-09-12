@@ -790,6 +790,30 @@ static const int kTagTextViewHours=6;
 			{
 				switch (indexPath.row) 
 				{
+					case 0: // Address
+					{
+						EditAddressVC* vc=[[[EditAddressVC alloc] init] autorelease];
+						vc.addressToEdit=[self.breweryObject.data objectForKey:@"address"];
+						vc.delegate=self;
+						[self.navigationController pushViewController:vc animated:YES];
+						break;
+					}
+					case 1: // Phone
+					{
+						PhoneNumberEditTableViewController* vc=[[[PhoneNumberEditTableViewController alloc] init] autorelease];
+						vc.phoneNumberToEdit=[self.breweryObject.data objectForKey:@"phone"];
+						vc.delegate=self;
+						[self.navigationController pushViewController:vc animated:YES];
+						break;
+					}
+					case 2: // Web site
+					{
+						EditURIVC* vc=[[[EditURIVC alloc] init] autorelease];
+						vc.uriToEdit=[self.breweryObject.data objectForKey:@"uri"];
+						vc.delegate=self;
+						[self.navigationController pushViewController:vc animated:YES];
+						break;
+					}
 					case 3: // Pick Country
 					{
 						CountryListTVC* cltvc=[[[CountryListTVC alloc] init] autorelease];
@@ -1101,6 +1125,35 @@ static const int kTagTextViewHours=6;
 
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
 {
+}
+
+#pragma mark EditURIVCDelegate methods
+
+-(void)editURIVC:(EditURIVC *)editURIVC didEditURI:(NSString *)uri
+{
+	[self.breweryObject.data setObject:uri forKey:@"uri"];
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark EditAddressVCDelegate methods
+
+-(void)editAddressVC:(EditAddressVC *)editAddressVC didEditAddress:(NSDictionary *)dict
+{
+	[self.breweryObject.data setObject:dict forKey:@"address"];
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark EditPhoneNumberTVCDelegate methods
+
+-(void)editPhoneNumberdidCancelEdit:(PhoneNumberEditTableViewController *)editPhoneNumber
+{
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)editPhoneNumber:(PhoneNumberEditTableViewController *)editPhoneNumber didChangePhoneNumber:(NSString *)phoneNumber
+{
+	[self.breweryObject.data setObject:phoneNumber forKey:@"phone"];
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

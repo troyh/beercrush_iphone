@@ -11,6 +11,9 @@
 #import "CountryListTVC.h"
 #import "EditTextVC.h"
 #import "PhotoViewer.h"
+#import "EditURIVC.h"
+#import "EditAddressVC.h"
+#import "PhoneNumberEditTableViewController.h"
 
 @interface BreweryObject: NSObject
 {
@@ -25,7 +28,17 @@
 
 @protocol BreweryVCDelegate;
 
-@interface BreweryTableViewController : UITableViewController <UITableViewDataSource,UITableViewDelegate,CountryListTVCDelegate,EditTextVCDelegate,UITextViewDelegate,PhotoViewerDelegate> {
+@interface BreweryTableViewController : UITableViewController 
+	<UITableViewDataSource,
+	UITableViewDelegate,
+	CountryListTVCDelegate,
+	EditTextVCDelegate,
+	UITextViewDelegate,
+	PhotoViewerDelegate,
+	EditURIVCDelegate,
+	EditAddressVCDelegate,
+	PhoneNumberEditVCDelegate> 
+{
 	NSString* breweryID;
 	BreweryObject* breweryObject;
 	NSDictionary* originalBreweryData;
