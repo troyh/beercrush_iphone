@@ -32,6 +32,7 @@
 	NSMutableString* currentElemValue;
 	NSMutableArray* xmlParserPath;
 	id<BreweryVCDelegate> delegate;
+	BOOL editingWasCanceled;
 }
 
 @property (nonatomic,retain) NSString* breweryID;
@@ -40,8 +41,11 @@
 @property (nonatomic,retain) NSMutableString* currentElemValue;
 @property (nonatomic,retain) NSMutableArray* xmlParserPath;
 @property (assign) id<BreweryVCDelegate> delegate;
+@property (assign) BOOL editingWasCanceled;
 
 -(id) initWithBreweryID:(NSString*)brewery_id;
+-(void)startEditingMode;
+-(void)endEditingMode;
 
 @end
 
