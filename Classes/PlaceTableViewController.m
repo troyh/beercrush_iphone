@@ -41,70 +41,6 @@ enum mytags {
 
 
 
-void normalizeToString(NSMutableDictionary* dict,NSString* key)
-{
-	if ([dict objectForKey:key]==nil)
-	{
-		[dict setObject:@"" forKey:key];
-	}
-	else if ([[dict objectForKey:key] isKindOfClass:[NSString class]])
-	{
-		if ([dict objectForKey:key]==nil)
-			[dict setObject:@"" forKey:key];
-		else {
-			// Do nothing, it's already a valid string
-		}
-	}
-	else if ([[dict objectForKey:key] isKindOfClass:[NSArray class]])
-	{
-		NSArray* a=[dict objectForKey:key];
-		if ([a count])
-			[dict setObject:[NSString stringWithFormat:@"%@",[dict objectForKey:key]] forKey:key];
-		else
-			[dict setObject:@"" forKey:key];
-	}
-	else
-		[dict setObject:[NSString stringWithFormat:@"%@",[dict objectForKey:key]] forKey:key];
-}
-
-void normalizeToNumber(NSMutableDictionary* dict,NSString* key)
-{
-	if ([dict objectForKey:key]==nil)
-	{
-		[dict setObject:[NSNumber numberWithInt:0] forKey:key];
-	}
-	else if ([[dict objectForKey:key] isKindOfClass:[NSNumber class]])
-	{
-		// Do nothing, it's already a number
-	}
-	else if ([[dict objectForKey:key] isKindOfClass:[NSString class]])
-	{
-		[dict setObject:[NSNumber numberWithInt:[[dict objectForKey:key] intValue]] forKey:key];
-	}
-	else
-	{
-		[dict setObject:[NSNumber numberWithInt:0] forKey:key];
-	}
-}
-
-void normalizeToBoolean(NSMutableDictionary* dict,NSString* key)
-{
-	if ([dict objectForKey:key]==nil)
-	{
-		[dict setObject:[NSNumber numberWithInt:0] forKey:key];
-	}
-	else if ([[dict objectForKey:key] isKindOfClass:[NSString class]])
-	{
-		[dict setObject:[NSNumber numberWithInt:[[dict objectForKey:key] boolValue]?1:0] forKey:key];
-	}
-	else if ([[dict objectForKey:key] isKindOfClass:[NSNumber class]])
-	{
-		[dict setObject:[NSNumber numberWithInt:[[dict objectForKey:key] boolValue]?1:0] forKey:key];
-	}
-	else
-		[dict setObject:[NSNumber numberWithInt:0] forKey:key];
-}
-
 void normalizePlaceData(NSMutableDictionary* placeData)
 {
 	normalizeToString(placeData, @"name");
@@ -179,56 +115,6 @@ void normalizePlaceData(NSMutableDictionary* placeData)
 	[self.originalPlaceData release];
 	
 	[super dealloc];
-}
-
-NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* orig,NSDictionary* curr)
-{
-	NSMutableArray* values=[[[NSMutableArray alloc] init] autorelease];
-	for (NSString* keyName in keyNames)
-	{
-		NSDictionary* origDict=orig;
-		NSDictionary* currDict=curr;
-		
-		NSArray* parts=[keyName componentsSeparatedByString:@":"];
-		for (NSUInteger i=1;i < [parts count];++i)
-		{
-			origDict=[origDict objectForKey:[parts objectAtIndex:i-1]];
-			currDict=[currDict objectForKey:[parts objectAtIndex:i-1]];
-		}
-
-		NSObject* origObj=[origDict objectForKey:[parts objectAtIndex:[parts count]-1]];
-		NSObject* currObj=[currDict objectForKey:[parts objectAtIndex:[parts count]-1]];
-		
-		if ([origObj class] == [currObj class])
-		{
-			if ([origObj isKindOfClass:[NSString class]])
-			{
-				NSString* origString=(NSString*)origObj;
-				NSString* currString=(NSString*)currObj;
-				if ([origString isEqualToString:currString]==NO)
-				{
-					[values addObject:[NSString stringWithFormat:@"%@=%@",keyName,currString]];
-				}
-			}
-			else if ([origObj isKindOfClass:[NSNumber class]])
-			{
-				NSNumber* origNumber=(NSNumber*)origObj;
-				NSNumber* currNumber=(NSNumber*)currObj;
-				if ([origNumber intValue] != [currNumber intValue])
-				{
-					[values addObject:[NSString stringWithFormat:@"%@=%d",keyName,[currNumber intValue]]];
-				}
-			}
-			else {
-				// What to do?
-			}
-		}
-		else {
-			[values addObject:[NSString stringWithFormat:@"%@=%@",keyName,currObj]];
-		}
-	}
-	
-	return values;
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
@@ -350,6 +236,8 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:6] withRowAnimation:UITableViewRowAnimationFade];
 			[self.tableView endUpdates];
+			
+			[self.delegate placeVCDidCancelEditing:self];
 		}
 	}
 }
@@ -763,7 +651,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						NSArray* dollars=[NSArray arrayWithObjects:@"",@"$",@"$$",@"$$$",@"$$$$",nil];
-						NSUInteger n=[JSON_NUMBER_VALUE_OR_ELSE([placeData objectForKey:@"restaurant"],@"price_range",0) unsignedIntValue];
+						NSUInteger n=[[[placeData objectForKey:@"restaurant"] objectForKey:@"price_range"] unsignedIntValue];
 						[cell.detailTextLabel setText:[dollars objectAtIndex:n]];
 						[cell.textLabel setText:@"price"];
 						break;
@@ -1395,7 +1283,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 					{
 						PlacePriceTVC* pptvc=[[[PlacePriceTVC alloc] init] autorelease];
 						pptvc.delegate=self;
-						pptvc.currentlySelectedPrice=(NSUInteger)JSON_NUMBER_VALUE_OR_ELSE([self.placeData objectForKey:@"restaurant"],@"price_range",0);
+						pptvc.currentlySelectedPrice=[[[self.placeData objectForKey:@"restaurant"] objectForKey:@"price_range"] unsignedIntValue];
 						[self.navigationController pushViewController:pptvc animated:YES];
 					}
 						break;

@@ -596,12 +596,22 @@
 
 #pragma mark BreweryVCDelegate methods
 
+-(void)breweryVCDidFinishEditing:(BreweryTableViewController*)btvc
+{
+	[self.navigationController dismissModalViewControllerAnimated:YES];
+}
+
 -(void)breweryVCDidCancelEditing:(BreweryTableViewController*)btvc
 {
 	[self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark PlaceVCDelegate methods
+
+-(void)placeVCDidFinishEditing:(PlaceTableViewController*)placeVC
+{
+	[self.navigationController dismissModalViewControllerAnimated:YES];
+}
 
 -(void)placeVCDidCancelEditing:(PlaceTableViewController*)placeVC
 {

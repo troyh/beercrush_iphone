@@ -12,6 +12,7 @@
 #import "EditTextVC.h"
 #import "PhotoViewer.h"
 #import "EditURIVC.h"
+#import "EditLineVC.h"
 #import "EditAddressVC.h"
 #import "PhoneNumberEditTableViewController.h"
 
@@ -36,6 +37,7 @@
 	UITextViewDelegate,
 	PhotoViewerDelegate,
 	EditURIVCDelegate,
+	EditLineVCDelegate,
 	EditAddressVCDelegate,
 	PhoneNumberEditVCDelegate> 
 {
@@ -64,6 +66,7 @@
 
 @protocol BreweryVCDelegate
 
+-(void)breweryVCDidFinishEditing:(BreweryTableViewController*)btvc;
 -(void)breweryVCDidCancelEditing:(BreweryTableViewController*)btvc;
 
 @end

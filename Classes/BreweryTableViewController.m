@@ -13,6 +13,31 @@
 #import "RatingControl.h"
 #import "PhotoThumbnailControl.h"
 
+void normalizeBreweryData(NSMutableDictionary* data)
+{
+	normalizeToString(data, @"name");
+	normalizeToString(data, @"description");
+	normalizeToString(data, @"phone");
+	normalizeToString(data, @"uri");
+	normalizeToString(data, @"tourinfo");
+	normalizeToString(data, @"tasting");
+	normalizeToString(data, @"hours");
+	
+	if ([data objectForKey:@"togo"]==nil)
+		[data setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"togo"];
+	normalizeToBoolean([data objectForKey:@"togo"], @"bottled_beer");
+	normalizeToBoolean([data objectForKey:@"togo"], @"growlers");
+	normalizeToBoolean([data objectForKey:@"togo"], @"kegs");
+	
+	if ([data objectForKey:@"address"]==nil)
+		[data setObject:[NSMutableDictionary dictionaryWithCapacity:5] forKey:@"address"];
+	normalizeToString([data objectForKey:@"address"], @"street");
+	normalizeToString([data objectForKey:@"address"], @"city");
+	normalizeToString([data objectForKey:@"address"], @"state");
+	normalizeToString([data objectForKey:@"address"], @"zip");
+	normalizeToString([data objectForKey:@"address"], @"country");
+}
+
 @implementation BreweryObject
 
 @synthesize data;
@@ -22,22 +47,22 @@
 	self.data=[[NSMutableDictionary alloc] initWithCapacity:10];
 	
 	// Init address data to empty strings (so we don't see '(null)' pop up anywhere)
-	NSMutableDictionary* addr=[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease];
-	[addr setObject:@"" forKey:@"street"];
-	[addr setObject:@"" forKey:@"city"];
-	[addr setObject:@"" forKey:@"state"];
-	[addr setObject:@"" forKey:@"zip"];
-	[addr setObject:@"" forKey:@"country"];
-	[self.data setObject:addr forKey:@"address"];
-
-	// Init with blank values for these
-	[self.data setObject:@"" forKey:@"uri"];
-	[self.data setObject:@"" forKey:@"phone"];
-	[self.data setObject:@"" forKey:@"tourinfo"];
-	[self.data setObject:@"" forKey:@"tasting"];
-	[self.data setObject:@"" forKey:@"hours"];
-	
-	[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:3] autorelease] forKey:@"togo"];
+//	NSMutableDictionary* addr=[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease];
+//	[addr setObject:@"" forKey:@"street"];
+//	[addr setObject:@"" forKey:@"city"];
+//	[addr setObject:@"" forKey:@"state"];
+//	[addr setObject:@"" forKey:@"zip"];
+//	[addr setObject:@"" forKey:@"country"];
+//	[self.data setObject:addr forKey:@"address"];
+//
+//	// Init with blank values for these
+//	[self.data setObject:@"" forKey:@"uri"];
+//	[self.data setObject:@"" forKey:@"phone"];
+//	[self.data setObject:@"" forKey:@"tourinfo"];
+//	[self.data setObject:@"" forKey:@"tasting"];
+//	[self.data setObject:@"" forKey:@"hours"];
+//	
+//	[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:3] autorelease] forKey:@"togo"];
 
 	return self;
 }
@@ -73,6 +98,8 @@ static const int kTagTextViewHours=6;
 -(id) initWithBreweryID:(NSString*)brewery_id
 {
 	[super initWithStyle:UITableViewStyleGrouped];
+
+	breweryObject=[[BreweryObject alloc] init];
 	
 	if (brewery_id==nil)
 	{
@@ -85,8 +112,6 @@ static const int kTagTextViewHours=6;
 		
 		self.title=@"Brewery";
 		
-		breweryObject=[[BreweryObject alloc] init];
-
 		NSArray* parts=[self.breweryID componentsSeparatedByString:@":"];
 		if ([parts count]==2)
 		{
@@ -102,6 +127,8 @@ static const int kTagTextViewHours=6;
 			// TODO: alert user of problem
 		}
 	}
+	
+	normalizeBreweryData(self.breweryObject.data);
 	
 	return self;
 }
@@ -197,48 +224,34 @@ static const int kTagTextViewHours=6;
 		}
 		else
 		{
-			// Save data to server
-			NSMutableArray* values=[NSMutableArray arrayWithCapacity:10];
-			// Add in changed fields to the POST data
-			if ([[[self.originalBreweryData objectForKey:@"address"] objectForKey:@"street"] isEqualToString:[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"street"]]==NO)
-				[values addObject:[NSString stringWithFormat:@"address:street=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"street"]]];
-			if ([[[self.originalBreweryData objectForKey:@"address"] objectForKey:@"city"] isEqualToString:[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"city"]]==NO)
-				[values addObject:[NSString stringWithFormat:@"address:city=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"city"]]];
-			if ([[[self.originalBreweryData objectForKey:@"address"] objectForKey:@"state"] isEqualToString:[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"state"]]==NO)
-				[values addObject:[NSString stringWithFormat:@"&address:state=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"state"]]];
-			if ([[[self.originalBreweryData objectForKey:@"address"] objectForKey:@"zip"] isEqualToString:[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"zip"]]==NO)
-				[values addObject:[NSString stringWithFormat:@"&address:zip=%@",[[self.breweryObject.data objectForKey:@"address"] objectForKey:@"zip"]]];
-			if ([[self.originalBreweryData objectForKey:@"name"] isEqualToString:[self.breweryObject.data objectForKey:@"name"]]==NO)
-				[values addObject:[NSString stringWithFormat:@"&name=%@",[self.breweryObject.data objectForKey:@"name"]]];
-			if ([[self.originalBreweryData objectForKey:@"phone"] isEqualToString:[self.breweryObject.data objectForKey:@"phone"]]==NO)
-				[values addObject:[NSString stringWithFormat:@"&phone=%@",[self.breweryObject.data objectForKey:@"phone"]]];
-			if ([[self.originalBreweryData objectForKey:@"uri"] isEqualToString:[self.breweryObject.data objectForKey:@"uri"]]==NO)
-				[values addObject:[NSString stringWithFormat:@"&uri=%@",[self.breweryObject.data objectForKey:@"uri"]]];
-			if ([[self.originalBreweryData objectForKey:@"tourinfo"] isEqualToString:[self.breweryObject.data objectForKey:@"tourinfo"]]==NO)
-				[values addObject:[NSString stringWithFormat:@"&tourinfo=%@",[self.breweryObject.data objectForKey:@"tourinfo"]]];
-			if ([[self.originalBreweryData objectForKey:@"tasting"] isEqualToString:[self.breweryObject.data objectForKey:@"tasting"]]==NO)
-				[values addObject:[NSString stringWithFormat:@"&tasting=%@",[self.breweryObject.data objectForKey:@"tasting"]]];
-			if ([[self.originalBreweryData objectForKey:@"hours"] isEqualToString:[self.breweryObject.data objectForKey:@"hours"]]==NO)
-				[values addObject:[NSString stringWithFormat:@"&hours=%@",[self.breweryObject.data objectForKey:@"hours"]]];
+			NSArray* keyNames=[NSArray arrayWithObjects:
+							   @"name",
+							   @"phone",
+							   @"uri",
+							   @"description",
+							   @"tourinfo",
+							   @"tasting",
+							   @"hours",
+							   @"togo:bottles",
+							   @"togo:growlers",
+							   @"togo:kegs",
+							   @"address:street",
+							   @"address:city",
+							   @"address:state",
+							   @"address:zip",
+							   @"address:country",
+							   nil
+							   ];
 			
-			NSDictionary* old=[self.originalBreweryData objectForKey:@"togo"];
-			NSDictionary* new=[self.breweryObject.data objectForKey:@"togo"];
-			if ([old isEqualToDictionary:new]==NO) // If they are not the same, change it
-			{
-				NSMutableArray* togovalues=[[[NSMutableArray alloc] initWithCapacity:3] autorelease];
-				if ([[self.breweryObject.data objectForKey:@"togo"] objectForKey:@"kegs"])
-					[togovalues addObject:@"kegs"];
-				if ([[self.breweryObject.data objectForKey:@"togo"] objectForKey:@"growlers"])
-					[togovalues addObject:@"growlers"];
-				if ([[self.breweryObject.data objectForKey:@"togo"] objectForKey:@"bottles"])
-					[togovalues addObject:@"bottles"];
-				[values addObject:[NSString stringWithFormat:@"togo=%@",[togovalues componentsJoinedByString:@" "]]];
-			}
-			 
+			// Save data to server
+			NSMutableArray* values=appendDifferentValuesToArray(keyNames,self.originalBreweryData,self.breweryObject.data);
+
 			if ([values count])
 			{
-				NSMutableString* bodystr=[[[NSMutableString alloc] initWithFormat:@"brewery_id=%@&",self.breweryID] autorelease];
-				[bodystr appendString:[values componentsJoinedByString:@"&"]];
+				if (self.breweryID)
+					[values addObject:[NSString stringWithFormat:@"brewery_id=%@&",self.breweryID]];
+				
+				NSString* bodystr=[values componentsJoinedByString:@"&"];
 
 				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 				NSData* answer;
@@ -251,12 +264,17 @@ static const int kTagTextViewHours=6;
 					[parser parse];
 					[parser release];
 					
-					[self endEditingMode];
 					[super setEditing:editing animated:animated];
+					[self endEditingMode];
+					
+					// Tell the delegate
+					[self.delegate breweryVCDidFinishEditing:self];
 				}
 				else
 				{
 					// Nope, we're staying in Edit mode
+					UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"Oops" message:@"Brewery could not be saved" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+					[alert show];
 				}
 			}
 		}
@@ -286,7 +304,7 @@ static const int kTagTextViewHours=6;
 
 -(void)endEditingMode
 {
-	self.editing=NO;
+//	self.editing=NO;
 	self.title=@"Brewery";
 	
 	[self.tableView beginUpdates];
@@ -447,22 +465,8 @@ static const int kTagTextViewHours=6;
 				cell = [tableView dequeueReusableCellWithIdentifier:@"EditNameCell"];
 				if (cell == nil) {
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EditNameCell"] autorelease];
-
-					UITextField* textField=[[[UITextField alloc] initWithFrame:CGRectMake(15, 10, 290, 30)] autorelease];
-					textField.font=[UIFont boldSystemFontOfSize:20];
-					textField.tag=1;
-					textField.placeholder=@"Name";
-//					textField.autoresizingMask=UIViewAutoresizingFlexibleLeftMargin|
-//												UIViewAutoresizingFlexibleWidth|
-//												UIViewAutoresizingFlexibleRightMargin|
-//												UIViewAutoresizingFlexibleHeight|
-//												UIViewAutoresizingFlexibleTopMargin|
-//												UIViewAutoresizingFlexibleBottomMargin;
-//					[textField sizeToFit];
-					[cell addSubview:textField];
 				}
-				UITextField* textField=(UITextField*)[cell viewWithTag:1];
-				[textField setText:[self.breweryObject.data objectForKey:@"name"]];
+				[cell.textLabel setText:[self.breweryObject.data objectForKey:@"name"]];
 				break;
 			}
 			case 1: // Address, phone & URI
@@ -604,21 +608,21 @@ static const int kTagTextViewHours=6;
 					{
 						[cell.textLabel setText:@"Kegs"];
 						UISwitch* sc=(UISwitch*)[cell viewWithTag:kTagSwitchControlKegs];
-						[sc setOn:[[self.breweryObject.data objectForKey:@"togo"] objectForKey:@"kegs"]?YES:NO animated:NO];
+						[sc setOn:[[[self.breweryObject.data objectForKey:@"togo"] objectForKey:@"kegs"] boolValue]?YES:NO animated:NO];
 						break;
 					}
 					case 1:
 					{
 						[cell.textLabel setText:@"Growlers"];
 						UISwitch* sc=(UISwitch*)[cell viewWithTag:kTagSwitchControlGrowlers];
-						[sc setOn:[[self.breweryObject.data objectForKey:@"togo"] objectForKey:@"growlers"]?YES:NO animated:NO];
+						[sc setOn:[[[self.breweryObject.data objectForKey:@"togo"] objectForKey:@"growlers"] boolValue]?YES:NO animated:NO];
 						break;
 					}
 					case 2:
 					{
 						[cell.textLabel setText:@"Bottles/cans"];
 						UISwitch* sc=(UISwitch*)[cell viewWithTag:kTagSwitchControlBottles];
-						[sc setOn:[[self.breweryObject.data objectForKey:@"togo"] objectForKey:@"bottles"]?YES:NO animated:NO];
+						[sc setOn:[[[self.breweryObject.data objectForKey:@"togo"] objectForKey:@"bottles"] boolValue]?YES:NO animated:NO];
 						break;
 					}
 					default:
@@ -784,8 +788,14 @@ static const int kTagTextViewHours=6;
 	if (self.editing)
 	{
 		switch (indexPath.section) {
-			case 0:
+			case 0: // Brewery name
+			{
+				EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+				vc.textToEdit=[self.breweryObject.data objectForKey:@"name"];
+				vc.delegate=self;
+				[self.navigationController pushViewController:vc animated:YES];
 				break;
+			}
 			case 1:
 			{
 				switch (indexPath.row) 
@@ -1015,7 +1025,7 @@ static const int kTagTextViewHours=6;
 	if (self.delegate)
 		[self.delegate breweryVCDidCancelEditing:self];
 	else {
-		[self endEditingMode];
+		self.editing=NO;
 		[self.tableView reloadData];
 	}
 }
@@ -1125,6 +1135,14 @@ static const int kTagTextViewHours=6;
 
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
 {
+}
+
+#pragma mark EditLineVCDelegate methods
+
+-(void)editLineVC:(EditLineVC*)editLineVC didChangeText:(NSString*)text
+{
+	[self.breweryObject.data setObject:text forKey:@"name"];
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark EditURIVCDelegate methods

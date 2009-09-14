@@ -62,6 +62,7 @@
 
 @protocol PlaceVCDelegate
 
+-(void)placeVCDidFinishEditing:(PlaceTableViewController*)placeVC;
 -(void)placeVCDidCancelEditing:(PlaceTableViewController*)placeVC;
 
 @end

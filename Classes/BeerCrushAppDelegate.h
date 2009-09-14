@@ -25,8 +25,15 @@
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 
 
-#define JSON_NUMBER_VALUE_OR_ELSE(d,k,e) ([[d objectForKey:k] isKindOfClass:[NSNumber class]]?[d valueForKey:k]:[NSNumber numberWithInt:e])
-#define JSON_STRING_VALUE_OR_ELSE(d,k,e) ([[d objectForKey:k] isKindOfClass:[NSString class]]?[d valueForKey:k]:e)
+//#define JSON_NUMBER_VALUE_OR_ELSE(d,k,e) ([[d objectForKey:k] isKindOfClass:[NSNumber class]]?[d valueForKey:k]:[NSNumber numberWithInt:e])
+//#define JSON_STRING_VALUE_OR_ELSE(d,k,e) ([[d objectForKey:k] isKindOfClass:[NSString class]]?[d valueForKey:k]:e)
+
+
+void normalizeToString(NSMutableDictionary* dict,NSString* key);
+void normalizeToNumber(NSMutableDictionary* dict,NSString* key);
+void normalizeToBoolean(NSMutableDictionary* dict,NSString* key);
+NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* orig,NSDictionary* curr);
+
 
 @interface BeerCrushAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UINavigationControllerDelegate> {
     UIWindow *window;
