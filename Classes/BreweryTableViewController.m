@@ -12,6 +12,7 @@
 #import "BeerListTableViewController.h"
 #import "RatingControl.h"
 #import "PhotoThumbnailControl.h"
+#import "JSON.h"
 
 void normalizeBreweryData(NSMutableDictionary* data)
 {
@@ -45,25 +46,6 @@ void normalizeBreweryData(NSMutableDictionary* data)
 -(id)init
 {
 	self.data=[[NSMutableDictionary alloc] initWithCapacity:10];
-	
-	// Init address data to empty strings (so we don't see '(null)' pop up anywhere)
-//	NSMutableDictionary* addr=[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease];
-//	[addr setObject:@"" forKey:@"street"];
-//	[addr setObject:@"" forKey:@"city"];
-//	[addr setObject:@"" forKey:@"state"];
-//	[addr setObject:@"" forKey:@"zip"];
-//	[addr setObject:@"" forKey:@"country"];
-//	[self.data setObject:addr forKey:@"address"];
-//
-//	// Init with blank values for these
-//	[self.data setObject:@"" forKey:@"uri"];
-//	[self.data setObject:@"" forKey:@"phone"];
-//	[self.data setObject:@"" forKey:@"tourinfo"];
-//	[self.data setObject:@"" forKey:@"tasting"];
-//	[self.data setObject:@"" forKey:@"hours"];
-//	
-//	[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:3] autorelease] forKey:@"togo"];
-
 	return self;
 }
 
@@ -87,12 +69,15 @@ void normalizeBreweryData(NSMutableDictionary* data)
 @synthesize delegate;
 @synthesize editingWasCanceled;
 
-static const int kTagSwitchControlKegs=1;
-static const int kTagSwitchControlGrowlers=2;
-static const int kTagSwitchControlBottles=3;
-static const int kTagTextViewTasting=4;
-static const int kTagTextViewTourInfo=5;
-static const int kTagTextViewHours=6;
+enum TAGS {
+	kTagSwitchControlKegs=1,
+	kTagSwitchControlGrowlers,
+	kTagSwitchControlBottles,
+	kTagEditTextDescription,
+	kTagEditTextTasting,
+	kTagEditTextTourInfo,
+	kTagEditTextHours
+};
 
 
 -(id) initWithBreweryID:(NSString*)brewery_id
@@ -115,12 +100,16 @@ static const int kTagTextViewHours=6;
 		NSArray* parts=[self.breweryID componentsSeparatedByString:@":"];
 		if ([parts count]==2)
 		{
-			// Retrieve XML doc from server
-			NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC, [parts objectAtIndex:1] ]];
-			NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-			[parser setDelegate:self];
-			[parser parse];
-			[parser	release];
+			// Retrieve JSON doc from server
+			NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC_JSON, [parts objectAtIndex:1] ]];
+			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			NSData* answer;
+			NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+			if ([response statusCode]==200)
+			{
+				NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
+				self.breweryObject.data=[s JSONValue];
+			}
 		}
 		else
 		{
@@ -246,10 +235,15 @@ static const int kTagTextViewHours=6;
 			// Save data to server
 			NSMutableArray* values=appendDifferentValuesToArray(keyNames,self.originalBreweryData,self.breweryObject.data);
 
-			if ([values count])
+			if ([values count]==0)
+			{
+				[super setEditing:editing animated:animated];
+				[self endEditingMode];
+			}
+			else
 			{
 				if (self.breweryID)
-					[values addObject:[NSString stringWithFormat:@"brewery_id=%@&",self.breweryID]];
+					[values addObject:[NSString stringWithFormat:@"brewery_id=%@",self.breweryID]];
 				
 				NSString* bodystr=[values componentsJoinedByString:@"&"];
 
@@ -258,11 +252,9 @@ static const int kTagTextViewHours=6;
 				NSHTTPURLResponse* response=[appDelegate sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BREWERY_DOC] usingMethod:@"POST" withData:bodystr returningData:&answer];
 				if ([response statusCode]==200)
 				{
-					// Parse the XML response, which is the new brewery doc
-					NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
-					[parser setDelegate:self];
-					[parser parse];
-					[parser release];
+					// Parse the JSON response, which is the new brewery doc
+					NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
+					self.breweryObject.data=[s JSONValue];
 					
 					[super setEditing:editing animated:animated];
 					[self endEditingMode];
@@ -278,6 +270,7 @@ static const int kTagTextViewHours=6;
 				}
 			}
 		}
+		[self.navigationItem setLeftBarButtonItem:nil];
 	}
 }
 
@@ -535,47 +528,25 @@ static const int kTagTextViewHours=6;
 				cell = [tableView dequeueReusableCellWithIdentifier:@"EditDetails"];
 				if (cell == nil) {
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"EditDetails"] autorelease];
-					
-					UITextView* textView=[[[UITextView alloc] initWithFrame:CGRectMake(80, 5, 210, 70)] autorelease];
-					switch (indexPath.row) {
-						case 0:
-							textView.tag=kTagTextViewTasting;
-							break;
-						case 1:
-							textView.tag=kTagTextViewTourInfo;
-							break;
-						case 2:
-							textView.tag=kTagTextViewHours;
-							break;
-						default:
-							break;
-					}
-					textView.delegate=self;
-					textView.font=[UIFont systemFontOfSize:15];
-					[textView sizeToFit];
-					[cell.contentView addSubview:textView];
 				}
 				
 				switch (indexPath.row) {
 					case 0:
 					{
 						[cell.textLabel setText:@"tasting"];
-						UITextView* tv=(UITextView*)[cell.contentView viewWithTag:kTagTextViewTasting];
-						[tv setText:[self.breweryObject.data objectForKey:@"tasting"]];
+						[cell.detailTextLabel setText:[self.breweryObject.data objectForKey:@"tasting"]];
 						break;
 					}
 					case 1:
 					{
 						[cell.textLabel setText:@"tour info"];
-						UITextView* tv=(UITextView*)[cell.contentView viewWithTag:kTagTextViewTourInfo];
-						[tv setText:[self.breweryObject.data objectForKey:@"tourinfo"]];
+						[cell.detailTextLabel setText:[self.breweryObject.data objectForKey:@"tourinfo"]];
 						break;
 					}
 					case 2:
 					{
 						[cell.textLabel setText:@"hours"];
-						UITextView* tv=(UITextView*)[cell.contentView viewWithTag:kTagTextViewHours];
-						[tv setText:[self.breweryObject.data objectForKey:@"hours"]];
+						[cell.detailTextLabel setText:[self.breweryObject.data objectForKey:@"hours"]];
 						break;
 					}
 					default:
@@ -759,7 +730,7 @@ static const int kTagTextViewHours=6;
 				{
 					case 0:
 						[cell.textLabel setText:@"tastings"];
-						[cell.detailTextLabel setText:[self.breweryObject.data objectForKey:@"tastings"]];
+						[cell.detailTextLabel setText:[self.breweryObject.data objectForKey:@"tasting"]];
 						break;
 					case 1:
 						[cell.textLabel setText:@"tour info"];
@@ -770,9 +741,20 @@ static const int kTagTextViewHours=6;
 						[cell.detailTextLabel setText:[self.breweryObject.data objectForKey:@"hours"]];
 						break;
 					case 3:
+					{
 						[cell.textLabel setText:@"to go"];
-//						[cell.detailTextLabel setText:[self.breweryObject.data objectForKey:@"togo"]];
+						
+						NSMutableArray* values=[NSMutableArray arrayWithCapacity:3];
+						if ([[[self.breweryObject.data objectForKey:@"togo"] objectForKey:@"bottles"] boolValue]) 
+							[values addObject:@"Bottles"];
+						if ([[[self.breweryObject.data objectForKey:@"togo"] objectForKey:@"growlers"] boolValue]) 
+							[values addObject:@"Growlers"];
+						if ([[[self.breweryObject.data objectForKey:@"togo"] objectForKey:@"kegs"] boolValue]) 
+							[values addObject:@"Kegs"];
+						
+						[cell.detailTextLabel setText:[values componentsJoinedByString:@", "]];
 						break;
+					}
 				}
 				break;
 			}
@@ -838,8 +820,44 @@ static const int kTagTextViewHours=6;
 			{
 				EditTextVC* editText=[[[EditTextVC alloc] init] autorelease];
 				editText.delegate=self;
+				editText.tag=kTagEditTextDescription;
 				editText.textToEdit=[self.breweryObject.data objectForKey:@"description"];
 				[self.navigationController pushViewController:editText animated:YES];
+				break;
+			}
+			case 3:
+			{
+				switch (indexPath.row) {
+					case 0:
+					{
+						EditTextVC* editText=[[[EditTextVC alloc] init] autorelease];
+						editText.delegate=self;
+						editText.tag=kTagEditTextTasting;
+						editText.textToEdit=[self.breweryObject.data objectForKey:@"tasting"];
+						[self.navigationController pushViewController:editText animated:YES];
+						break;
+					}
+					case 1:
+					{
+						EditTextVC* editText=[[[EditTextVC alloc] init] autorelease];
+						editText.delegate=self;
+						editText.tag=kTagEditTextTourInfo;
+						editText.textToEdit=[self.breweryObject.data objectForKey:@"tourinfo"];
+						[self.navigationController pushViewController:editText animated:YES];
+						break;
+					}
+					case 2:
+					{
+						EditTextVC* editText=[[[EditTextVC alloc] init] autorelease];
+						editText.delegate=self;
+						editText.tag=kTagEditTextHours;
+						editText.textToEdit=[self.breweryObject.data objectForKey:@"hours"];
+						[self.navigationController pushViewController:editText animated:YES];
+						break;
+					}
+					default:
+						break;
+				}
 				break;
 			}
 		}
@@ -980,23 +998,27 @@ static const int kTagTextViewHours=6;
 
 }
 
-#pragma mark UITextViewDelegate methods
-
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
-	if (textView.tag==kTagTextViewTasting)
-		[self.breweryObject.data setObject:textView.text forKey:@"tasting"];
-	else if (textView.tag==kTagTextViewTourInfo)
-		[self.breweryObject.data setObject:textView.text forKey:@"tourinfo"];
-	else if (textView.tag==kTagTextViewHours)
-		[self.breweryObject.data setObject:textView.text forKey:@"hours"];
-}
-
 #pragma mark EditTextVCDelegate methods
 
 -(void)editTextVC:(id)sender didChangeText:(NSString*)text
 {
-	[self.breweryObject.data setObject:text forKey:@"description"];
+	EditTextVC* vc=(EditTextVC*)sender;
+	switch (vc.tag) {
+		case kTagEditTextDescription:
+			[self.breweryObject.data setObject:text forKey:@"description"];
+			break;
+		case kTagEditTextTasting:
+			[self.breweryObject.data setObject:text forKey:@"tasting"];
+			break;
+		case kTagEditTextTourInfo:
+			[self.breweryObject.data setObject:text forKey:@"tourinfo"];
+			break;
+		case kTagEditTextHours:
+			[self.breweryObject.data setObject:text forKey:@"hours"];
+			break;
+		default:
+			break;
+	}
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -1050,91 +1072,6 @@ static const int kTagTextViewHours=6;
 		[alert show];
 	}
 	
-}
-
-
-// NSXMLParser delegate methods
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser
-{
-	// Clear any old data
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	[self.xmlParserPath removeAllObjects];
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	[self.xmlParserPath removeAllObjects];
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	// Add the element to the xmlParserPath
-	[self.xmlParserPath addObject:elementName];
-	
-	if ([elementName isEqualToString:@"name"] ||
-	    [elementName isEqualToString:@"street"] ||
-	    [elementName isEqualToString:@"city"] ||
-	    [elementName isEqualToString:@"state"] ||
-	    [elementName isEqualToString:@"zip"] ||
-	    [elementName isEqualToString:@"country"] ||
-	    [elementName isEqualToString:@"phone"] ||
-	    [elementName isEqualToString:@"uri"]
-	)
-	{
-		[self.currentElemValue release];
-		self.currentElemValue=[NSMutableString string];
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	// Pop the element name off the XML parser path array
-	[self.xmlParserPath removeLastObject];
-	
-	if (self.currentElemValue)
-	{
-		if ([elementName isEqualToString:@"name"])
-		{
-			// Is it the //brewery/name or the //brewery/meta/beerlist/item/name element?
-			NSArray* tmp=[NSArray arrayWithObjects:@"brewery",nil];
-			if ([self.xmlParserPath isEqualToArray:tmp])
-				[breweryObject.data setObject:currentElemValue forKey:@"name"];
-		}
-		else if ([elementName isEqualToString:@"street"])
-			[[breweryObject.data objectForKey:@"address"] setObject:currentElemValue forKey:@"street"];
-		else if ([elementName isEqualToString:@"city"])
-			[[breweryObject.data objectForKey:@"address"] setObject:currentElemValue forKey:@"city"];
-		else if ([elementName isEqualToString:@"state"])
-			[[breweryObject.data objectForKey:@"address"] setObject:currentElemValue forKey:@"state"];
-		else if ([elementName isEqualToString:@"zip"])
-			[[breweryObject.data objectForKey:@"address"] setObject:currentElemValue forKey:@"zip"];
-		else if ([elementName isEqualToString:@"phone"])
-			[breweryObject.data setObject:currentElemValue forKey:@"phone"];
-		else if ([elementName isEqualToString:@"uri"])
-			[breweryObject.data setObject:currentElemValue forKey:@"uri"];
-		
-		self.currentElemValue=nil;
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	if (self.currentElemValue)
-	{
-		[self.currentElemValue appendString:string];
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
 }
 
 #pragma mark EditLineVCDelegate methods

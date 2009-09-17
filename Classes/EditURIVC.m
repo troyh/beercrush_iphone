@@ -42,6 +42,7 @@
 	uriTextField=[[UITextField alloc] initWithFrame:CGRectMake(5, 5, 290, 30)];
 	uriTextField.keyboardType=UIKeyboardTypeURL;
 	uriTextField.textAlignment=UITextAlignmentCenter;
+	uriTextField.autocorrectionType=UITextAutocorrectionTypeNo;
 	uriTextField.font=[UIFont systemFontOfSize:17];
 	uriTextField.text=self.uriToEdit;
 }
