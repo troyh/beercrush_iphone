@@ -45,9 +45,18 @@ const int kButtonWidth=80;
 const int kButtonHeight=40;
 const int kDescriptionCellDefaultRowHeight=80;
 
-static const int kTagBeerNameLabel=1;
-static const int kTagDescriptionLabel=2;
-static const int kTagStyleLabel=3;
+enum TAGS {
+ kTagEditTextName=1,
+ kTagEditTextABV,
+ kTagEditTextIBU,
+ kTagEditTextOG,
+ kTagEditTextFG,
+ kTagEditTextGrains,
+ kTagEditTextHops,
+ kTagBeerNameLabel,
+ kTagDescriptionLabel,
+ kTagStyleLabel
+};
 
 -(id) initWithBeerID:(NSString*)beer_id
 {
@@ -516,19 +525,7 @@ static const int kTagStyleLabel=3;
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section0CellEditing"] autorelease];
 							[cell.textLabel setText:@"Name"];
 							cell.selectionStyle=UITableViewCellSelectionStyleNone;
-							self.beerNameTextField=[[UITextField alloc] initWithFrame:CGRectMake(80, 10, 200, 30)];
-							self.beerNameTextField.font=[UIFont boldSystemFontOfSize:20];
-							self.beerNameTextField.textAlignment=UITextAlignmentLeft;
-							
-							self.beerNameTextField.autocorrectionType=UITextAutocorrectionTypeNo;
-							self.beerNameTextField.autocapitalizationType=UITextAutocapitalizationTypeWords;
-							self.beerNameTextField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-							self.beerNameTextField.returnKeyType=UIReturnKeyNext;
-							self.beerNameTextField.enablesReturnKeyAutomatically=YES;
-							self.beerNameTextField.delegate=self;
-
-							[cell.contentView addSubview:self.beerNameTextField];
-							self.beerNameTextField.text=[self.beerObj.data objectForKey:@"name"];
+							[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"name"]];
 						}
 					}
 					else
@@ -874,18 +871,9 @@ static const int kTagStyleLabel=3;
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row2Editing"] autorelease];
 						
 						[cell.textLabel setText:@"ABV"];
-						[cell.detailTextLabel setText:nil];
-						
-						if (abvTextField==nil)
-						{
-							abvTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 50, 30)];
-							abvTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"abv"];
-							abvTextField.font=[UIFont boldSystemFontOfSize:16];
-							abvTextField.keyboardType=UIKeyboardTypeNumberPad;
-						}
-						
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"abv"]];
+
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell addSubview:abvTextField];
 						break;
 					}
 					case 3:
@@ -895,18 +883,9 @@ static const int kTagStyleLabel=3;
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row3Editing"] autorelease];
 						
 						[cell.textLabel setText:@"IBUs"];
-						[cell.detailTextLabel setText:nil];
-						
-						if (ibuTextField==nil)
-						{
-							ibuTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 50, 30)];
-							ibuTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"];
-							ibuTextField.font=[UIFont boldSystemFontOfSize:16];
-							ibuTextField.keyboardType=UIKeyboardTypeNumberPad;
-						}
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell addSubview:ibuTextField];
 						break;
 					}
 					case 4:
@@ -916,19 +895,9 @@ static const int kTagStyleLabel=3;
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row4Editing"] autorelease];
 						
 						[cell.textLabel setText:@"OG"];
-						[cell.detailTextLabel setText:nil];
-						
-						if (ogTextField==nil)
-						{
-							ogTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 50, 30)];
-							ogTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"og"];
-							ogTextField.font=[UIFont boldSystemFontOfSize:16];
-							ogTextField.keyboardType=UIKeyboardTypeNumberPad;
-							[ogTextField addTarget:self action:@selector(ogTextFieldChanged) forControlEvents:UIControlEventEditingChanged];
-						}
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"og"]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell addSubview:ogTextField];
 						break;
 					}
 					case 5:
@@ -938,19 +907,9 @@ static const int kTagStyleLabel=3;
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row5Editing"] autorelease];
 						
 						[cell.textLabel setText:@"FG"];
-						[cell.detailTextLabel setText:nil];
-						
-						if (fgTextField==nil)
-						{
-							fgTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 50, 30)];
-							fgTextField.text=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"fg"];
-							fgTextField.font=[UIFont boldSystemFontOfSize:16];
-							fgTextField.keyboardType=UIKeyboardTypeNumberPad;
-							[fgTextField addTarget:self action:@selector(fgTextFieldChanged) forControlEvents:UIControlEventEditingChanged];
-						}
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"fg"]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell addSubview:fgTextField];
 						break;
 					}
 					case 6:
@@ -960,18 +919,9 @@ static const int kTagStyleLabel=3;
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row6Editing"] autorelease];
 						
 						[cell.textLabel setText:@"Grains"];
-						[cell.detailTextLabel setText:nil];
-						
-						if (grainsTextField==nil)
-						{
-							grainsTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 150, 30)];
-							grainsTextField.text=[self.beerObj.data objectForKey:@"grains"];
-							grainsTextField.font=[UIFont boldSystemFontOfSize:16];
-							grainsTextField.keyboardType=UIKeyboardTypeDefault;
-						}
+						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"grains"]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell addSubview:grainsTextField];
 						break;
 					}
 					case 7:
@@ -980,18 +930,9 @@ static const int kTagStyleLabel=3;
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row7Editing"] autorelease];
 						
 						[cell.textLabel setText:@"Hops"];
-						[cell.detailTextLabel setText:nil];
-						
-						if (hopsTextField==nil)
-						{
-							hopsTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 150, 30)];
-							hopsTextField.text=[self.beerObj.data objectForKey:@"hops"];
-							hopsTextField.font=[UIFont boldSystemFontOfSize:16];
-							hopsTextField.keyboardType=UIKeyboardTypeDefault;
-						}
-						
+						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"hops"]];
+
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-						[cell addSubview:hopsTextField];
 						break;
 					case 8:
 						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row8Editing"];
@@ -1255,8 +1196,13 @@ static const int kTagStyleLabel=3;
 			{
 				switch (indexPath.row) {
 					case 0:
-						[self.beerNameTextField becomeFirstResponder];
+					{
+						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						vc.delegate=self;
+						vc.textToEdit=[self.beerObj.data objectForKey:@"name"];
+						[self.navigationController pushViewController:vc animated:YES];
 						break;
+					}
 					case 1: // Style
 					{
 						StylesListTVC* tvc=[[[StylesListTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
@@ -1305,23 +1251,53 @@ static const int kTagStyleLabel=3;
 						break;
 					}
 					case 2: // ABV edit field
-						[self.abvTextField becomeFirstResponder];
+					{
+						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						vc.delegate=self;
+						vc.textToEdit=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"abv"];
+						[self.navigationController pushViewController:vc animated:YES];
 						break;
+					}
 					case 3: // IBUs
-						[self.ibuTextField becomeFirstResponder];
+					{
+						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						vc.delegate=self;
+						vc.textToEdit=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"];
+						[self.navigationController pushViewController:vc animated:YES];
 						break;
+					}
 					case 4: // OG
-						[self.ogTextField becomeFirstResponder];
+					{
+						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						vc.delegate=self;
+						vc.textToEdit=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"og"];
+						[self.navigationController pushViewController:vc animated:YES];
 						break;
+					}
 					case 5: // FG
-						[self.fgTextField becomeFirstResponder];
+					{
+						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						vc.delegate=self;
+						vc.textToEdit=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"fg"];
+						[self.navigationController pushViewController:vc animated:YES];
 						break;
+					}
 					case 6: // Grains
-						[self.grainsTextField becomeFirstResponder];
+					{
+						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						vc.delegate=self;
+						vc.textToEdit=[self.beerObj.data objectForKey:@"grains"];
+						[self.navigationController pushViewController:vc animated:YES];
 						break;
+					}
 					case 7: // Hops
-						[self.hopsTextField becomeFirstResponder];
+					{
+						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						vc.delegate=self;
+						vc.textToEdit=[self.beerObj.data objectForKey:@"hops"];
+						[self.navigationController pushViewController:vc animated:YES];
 						break;
+					}
 					case 8: // Misc Ingredients
 						break;
 					case 9: // Calories/12oz
@@ -1591,6 +1567,37 @@ static const int kTagStyleLabel=3;
 		[alert show];
 	}
 	
+}
+
+#pragma mark EditLineVCDelegate methods
+
+-(void)editLineVC:(EditLineVC*)editLineVC didChangeText:(NSString*)text
+{
+	switch (editLineVC.tag) {
+		case kTagEditTextName:
+			[self.beerObj.data setObject:text forKey:@"name"];
+			break;
+		case kTagEditTextABV:
+			[[self.beerObj.data objectForKey:@"attribs"] setObject:text forKey:@"abv"];
+			break;
+		case kTagEditTextIBU:
+			[[self.beerObj.data objectForKey:@"attribs"] setObject:text forKey:@"ibu"];
+			break;
+		case kTagEditTextOG:
+			[[self.beerObj.data objectForKey:@"attribs"] setObject:text forKey:@"og"];
+			break;
+		case kTagEditTextFG:
+			[[self.beerObj.data objectForKey:@"attribs"] setObject:text forKey:@"fg"];
+			break;
+		case kTagEditTextGrains:
+			[self.beerObj.data setObject:text forKey:@"grains"];
+			break;
+		case kTagEditTextHops:
+			[self.beerObj.data setObject:text forKey:@"hops"];
+			break;
+		default:
+			break;
+	}
 }
 
 #pragma mark NSXMLParserDelegate methods

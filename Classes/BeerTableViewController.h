@@ -16,6 +16,7 @@
 #import "EditTextVC.h"
 #import "PhotoThumbnailControl.h"
 #import "PhotoViewer.h"
+#import "EditLineVC.h"
 
 @protocol BeerTableViewControllerDelegate;
 
@@ -27,7 +28,8 @@
 	UITextViewDelegate,
 	UITextFieldDelegate, 
 	EditTextVCDelegate,
-	PhotoViewerDelegate> 
+	PhotoViewerDelegate,
+	EditLineVCDelegate> 
 {
 	NSString* beerID;
 	NSString* breweryID;
