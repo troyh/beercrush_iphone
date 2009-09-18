@@ -112,18 +112,11 @@ enum TAGS {
     return self;
 }
 */
-
+/*
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-	if (self.beerID!=nil)
-	{
-		self.navigationItem.rightBarButtonItem = self.editButtonItem;
-		self.editButtonItem.target=self;
-		self.editButtonItem.action=@selector(editButtonClicked);
-	}
 }
-
+*/
 -(void)editButtonClicked
 {
 	if (self.editing)
@@ -248,6 +241,10 @@ enum TAGS {
 	}
 	else if ([self.beerObj.data count]<2) // Do we need to get the beer data? TODO: should just ask for it and it would be cached in AppDelegate
 	{
+		self.navigationItem.rightBarButtonItem = self.editButtonItem;
+		self.editButtonItem.target=self;
+		self.editButtonItem.action=@selector(editButtonClicked);
+
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 
 		// Separate the brewery ID and the beer ID from the beerID
@@ -329,28 +326,18 @@ enum TAGS {
 		self.navigationController.navigationBar.topItem.leftBarButtonItem=nil;
 
 		[self.tableView beginUpdates];
-//		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
-//												[NSIndexPath indexPathForRow:0 inSection:3],
-//												[NSIndexPath indexPathForRow:1 inSection:3],
-//												nil] 
-//			withRowAnimation:UITableViewRowAnimationFade];
-
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
-//		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
-
 		
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-//		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
-//		[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:
-//												[NSIndexPath indexPathForRow:1 inSection:0],
-//												nil]
-//							  withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView endUpdates];
+
+		// Put Cancel button up
+		self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(didCancelBeerEdits:)] autorelease];
 	}
 	else
 	{
@@ -358,17 +345,17 @@ enum TAGS {
 
 		[self.tableView beginUpdates];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-//		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
-//		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
-//		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView insertSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView endUpdates];
+
+		// Remove Cancel button
+		self.navigationItem.leftBarButtonItem=nil;
 	}
 }
 
@@ -1888,12 +1875,24 @@ enum TAGS {
 {
 }
 
-// AvailabilityTVCDelegate methods
+#pragma mark AvailabilityTVCDelegate methods
 
 -(void)availabilityTVC:(AvailabilityTVC*)tvc didSelectAvailability:(NSString*)s
 {
 	[self.beerObj.data setObject:s forKey:@"availability"];
 	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark Action Target methods
+
+-(void)didCancelBeerEdits:(id)sender
+{
+	if (self.delegate)
+		[self.delegate didCancelBeerEdits];
+	else {
+		[self setEditing:NO animated:YES];
+	}
+
 }
 
 @end
