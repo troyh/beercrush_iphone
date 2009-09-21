@@ -70,6 +70,7 @@
 			}
 		}
 		DLog(@"%d results",[self.resultsList count]);
+		[self.tableView reloadData];
 	}
 	else
 	{
@@ -94,6 +95,7 @@
 	
 	NSURL* url=[NSURL URLWithString:[[NSString stringWithFormat:BEERCRUSH_API_URL_SEARCH_QUERY, qs, dataset ] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	NSData* answer;
+	
 	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
 	
 	if ([response statusCode]==200)
@@ -107,6 +109,8 @@
 	{
 		//		[appDelegate alertUser:@"Search failed"];
 	}
+	[self.tableView reloadData];
+
 }
 
 - (id)initWithStyle:(UITableViewStyle)style {
@@ -247,7 +251,11 @@
 	if (searchText.length)
 	{
 		[bar setShowsCancelButton:NO animated:YES];
-		[self autocomplete:searchText];
+
+		NSInvocationOperation* op=[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(autocomplete:) object:searchText];
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[appDelegate.sharedOperationQueue addOperation:op];
+		[op release];
 	}
 	else
 	{
@@ -255,7 +263,6 @@
 
 		[bar setShowsCancelButton:YES animated:YES];
 	}
-	[self.tableView reloadData];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)bar
@@ -263,9 +270,11 @@
 	if (bar.text.length)
 	{
 		[bar endEditing:YES];
-		
-		[self query:bar.text];
-		[self.tableView reloadData];
+	
+		NSInvocationOperation* op=[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(query:) object:bar.text];
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[appDelegate.sharedOperationQueue addOperation:op];
+		[op release];
 	}
 }
 

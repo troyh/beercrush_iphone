@@ -170,6 +170,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 
 @implementation BeerCrushAppDelegate
 
+@synthesize sharedOperationQueue;
 @synthesize window;
 @synthesize loginVC;
 @synthesize tabBarController;
@@ -191,6 +192,8 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
     
+	// Create the sharedOperationQueue to use for async operations
+	self.sharedOperationQueue=[[NSOperationQueue alloc] init];
 	loginVC=nil;
 	
 	// If we don't know the username/password for the user, give them the login screen
@@ -551,6 +554,8 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 
 - (void)dealloc {
 //	[nav release];
+	[sharedOperationQueue release];
+	
     [tabBarController release];
     [window release];
 	[flavorsDictionary release];

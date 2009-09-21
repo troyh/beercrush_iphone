@@ -281,6 +281,11 @@ enum TAGS {
 				}
 			}
 		}
+		else {
+			// TODO: alert the user
+			DLog(@"Response status code=%d",[response statusCode]);
+		}
+
 	}
 	
 	[self.tableView reloadData]; // Reload data because we may come back from an editing view controller

@@ -42,6 +42,8 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 	SEL onBeerSelectedAction;
 	id onBeerSelectedTarget;
 	
+	NSOperationQueue* sharedOperationQueue;
+	
 	NSMutableData* xmlPostResponse;
 
 	NSMutableArray* xmlParserPath;
@@ -59,6 +61,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) LoginVC* loginVC;
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
+@property (nonatomic, retain) NSOperationQueue* sharedOperationQueue;
 @property (nonatomic, retain) NSMutableData* xmlPostResponse;
 @property(nonatomic) SEL onBeerSelectedAction;
 @property(nonatomic,assign) id onBeerSelectedTarget;
