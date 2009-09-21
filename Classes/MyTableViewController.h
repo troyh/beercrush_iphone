@@ -26,16 +26,15 @@ typedef enum
 	PlaceVCDelegate>
 {
 	UISearchBar* searchBar;
-	NSInteger autoCompleteResultsCount;
-	NSData* autoCompleteResultsData;
+	NSMutableArray* resultsList;
 	int searchTypes;
 }
 
 @property (nonatomic,retain) UISearchBar* searchBar;
-@property (nonatomic) NSInteger autoCompleteResultsCount;
-@property (nonatomic, retain) NSData* autoCompleteResultsData;
+@property (nonatomic, retain) NSMutableArray* resultsList;
 @property (nonatomic, assign) int searchTypes;
 
+-(void)autocomplete:(NSString*)qs;
 -(void)query:(NSString*)qs;
 
 @end

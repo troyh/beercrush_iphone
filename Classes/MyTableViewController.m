@@ -7,18 +7,20 @@
 //
 
 #import "MyTableViewController.h"
+#import "JSON.h"
 
 @implementation MyTableViewController
 
 @synthesize searchBar;
-@synthesize autoCompleteResultsData;
-@synthesize autoCompleteResultsCount;
+@synthesize resultsList;
 @synthesize searchTypes;
 
--(void)query:(NSString*)qs 
+-(void)autocomplete:(NSString*)qs 
 {
-	self.autoCompleteResultsCount=0;
-	self.autoCompleteResultsData=nil;
+	if (self.resultsList==nil)
+		self.resultsList=[[NSMutableArray alloc] initWithCapacity:10];
+	else
+		[self.resultsList removeAllObjects];
 	
 	// Send the query off to the server
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
@@ -36,11 +38,10 @@
 	NSURL* url=[NSURL URLWithString:[[NSString stringWithFormat:BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY, qs, dataset ] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	NSData* answer;
 	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-	self.autoCompleteResultsData=answer;
 	
 	if ([response statusCode]==200)
 	{
-		char* p=(char*)[self.autoCompleteResultsData bytes];
+		char* p=(char*)[answer bytes];
 		while (p)
 		{	// Count the number of items
 			char* tab=strchr(p,'\t');
@@ -55,16 +56,56 @@
 				else
 				{
 					*nl='\0';
+					
+					if (p && tab)
+					{
+						NSMutableDictionary* result=[NSMutableDictionary dictionaryWithCapacity:2];
+						[result setObject:[NSString stringWithCString:p encoding:NSUTF8StringEncoding] forKey:@"name"];
+						[result setObject:[NSString stringWithCString:tab+1 encoding:NSUTF8StringEncoding] forKey:@"id"];
+						[self.resultsList addObject:result];
+					}
+					
 					p=nl+1;
-					++self.autoCompleteResultsCount;
 				}
 			}
 		}
-		DLog(@"%d results",self.autoCompleteResultsCount);
+		DLog(@"%d results",[self.resultsList count]);
 	}
 	else
 	{
 //		[appDelegate alertUser:@"Search failed"];
+	}
+}
+
+-(void)query:(NSString*)qs 
+{
+	// Send the query off to the server
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	
+	const char* dataset="";
+	if (self.searchTypes == (BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
+		dataset="beersandbreweries";
+	else if (self.searchTypes == BeerCrushSearchTypeBreweries)
+		dataset="breweries";
+	else if (self.searchTypes == BeerCrushSearchTypeBeers)
+		dataset="beers";
+	else if (self.searchTypes == BeerCrushSearchTypePlaces)
+		dataset="places";
+	
+	NSURL* url=[NSURL URLWithString:[[NSString stringWithFormat:BEERCRUSH_API_URL_SEARCH_QUERY, qs, dataset ] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	NSData* answer;
+	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+	
+	if ([response statusCode]==200)
+	{
+		NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
+		NSDictionary* results=[s JSONValue];
+		self.resultsList=[[results objectForKey:@"response"] objectForKey:@"docs"];
+		DLog(@"Results:%@",results);
+	}
+	else
+	{
+		//		[appDelegate alertUser:@"Search failed"];
 	}
 }
 
@@ -206,12 +247,12 @@
 	if (searchText.length)
 	{
 		[bar setShowsCancelButton:NO animated:YES];
-		[self query:searchText];
+		[self autocomplete:searchText];
 	}
 	else
 	{
-		self.autoCompleteResultsData=nil;
-		self.autoCompleteResultsCount=0;
+		[self.resultsList removeAllObjects];
+
 		[bar setShowsCancelButton:YES animated:YES];
 	}
 	[self.tableView reloadData];
@@ -243,8 +284,9 @@
 {
 	[bar endEditing:YES];
     bar.text = @"";
-	self.autoCompleteResultsData=nil;
-	self.autoCompleteResultsCount=0;
+	
+	[self.resultsList removeAllObjects];
+
 	[bar setShowsCancelButton:NO animated:YES];
 	[self.tableView reloadData];
 }
@@ -259,9 +301,7 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (autoCompleteResultsCount==0)
-		return 1;
-    return autoCompleteResultsCount;
+    return [self.resultsList count];
 }
 
 
@@ -270,7 +310,7 @@
 
 	UITableViewCell* cell=nil;
 	
-	if (autoCompleteResultsCount==0)
+	if ([self.resultsList count]==0)
 	{ // Show the Add a [Brewery|Place] row
 		switch (indexPath.row) {
 			case 0:
@@ -328,43 +368,24 @@
 		}
     
 		// Set up the cell...
-		const char* p=(char*)[autoCompleteResultsData bytes];
-		NSUInteger n=0;
-		while (p && n<indexPath.row && n<autoCompleteResultsCount)
-		{	// Count the number of items
-			char* tab=strchr(p,'\0');
-			if (!tab)
-				p=nil; // Quit
-			else
-			{
-				const char* nl=strchr(tab+1, '\0');
-				if (!nl)
-					p=nil; // Quit
-				else
-				{
-					p=nl+1;
-					++n;
-				}
-			}
+
+		[cell.textLabel setText:[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"name"]];
+		NSString* idstr=[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
+		if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
+		{ // Beer
+			[cell.imageView initWithImage:[UIImage imageNamed:@"beer.png"]];
 		}
-		if (p)
-		{
-			[cell.textLabel setText:[NSString stringWithCString:p encoding:NSASCIIStringEncoding]];
-			if (!strncmp(p+strlen(p)+1,"beer:",5))
-			{ // Beer
-				[cell.imageView initWithImage:[UIImage imageNamed:@"beer.png"]];
-			}
-			else if (!strncmp(p+strlen(p)+1,"place:",6))
-			{ // Place
-				[cell.imageView initWithImage:[UIImage imageNamed:@"restaurant.png"]];
-			}
-			else if (!strncmp(p+strlen(p)+1,"brewery:",8))
-			{ // Brewery
-				[cell.imageView initWithImage:[UIImage imageNamed:@"brewery.png"]];
-			}
-			
-			cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+		else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
+		{ // Place
+			[cell.imageView initWithImage:[UIImage imageNamed:@"restaurant.png"]];
 		}
+		else if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
+		{ // Brewery
+			[cell.imageView initWithImage:[UIImage imageNamed:@"brewery.png"]];
+		}
+		
+		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+
 	}
 	
     return cell;
@@ -380,107 +401,32 @@
 
 	self.searchBar.hidden=YES;
 	[searchBar endEditing:YES];
+
+	NSString* idstr=[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
 	
-	const char* p=(char*)[autoCompleteResultsData bytes];
-	NSUInteger n=0;
-	while (p && n<indexPath.row && n<autoCompleteResultsCount)
-	{	// Count the number of items
-		char* tab=strchr(p,'\0');
-		if (!tab)
-			p=nil; // Quit
-		else
-		{
-			const char* nl=strchr(tab+1, '\0');
-			if (!nl)
-				p=nil; // Quit
-			else
-			{
-				p=nl+1;
-				++n;
-			}
-		}
-	}
-	if (p)
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		
+	if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
 	{
-		ResultType t=Brewer;
-		const char* idp=p+strlen(p)+1;
-		if (!strncmp(idp,"beer:",5))
-			t=Beer;
-		else if (!strncmp(idp,"brewery:",8))
-			t=Brewer;
-		else if (!strncmp(idp, "place:", 6))
-			t=Place;
+		BreweryTableViewController* btvc=[[[BreweryTableViewController alloc] initWithBreweryID:idstr] autorelease];
+		[self.navigationController pushViewController: btvc animated:YES];
 		
-		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		
-		if (t == Brewer)
-		{
-			BreweryTableViewController* btvc=[[BreweryTableViewController alloc] initWithBreweryID:[NSString stringWithCString:idp encoding:NSUTF8StringEncoding]];
-			[self.navigationController pushViewController: btvc animated:YES];
-			[btvc release];
-			
-			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[NSString stringWithCString:idp encoding:NSUTF8StringEncoding]];
-		}
-		else if (t == Beer)
-		{
-			BeerTableViewController* btvc=[[BeerTableViewController alloc] initWithBeerID: [NSString stringWithCString:idp encoding:NSUTF8StringEncoding]];
-			[self.navigationController pushViewController:btvc animated:YES];
-			[btvc release];
-
-			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[NSString stringWithCString:idp encoding:NSUTF8StringEncoding]];
-		}
-		else if (t == Place)
-		{
-			PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID: [NSString stringWithCString:idp encoding:NSUTF8StringEncoding]];
-			[self.navigationController pushViewController: btvc animated:YES];
-			[btvc release];
-
-			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[NSString stringWithCString:idp encoding:NSUTF8StringEncoding]];
-		}
+		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
 	}
-		
-//	ResultType t=[[searchResultsList_type objectAtIndex:indexPath.row] intValue];
-	
-	
-//	UIViewController *anotherViewController = [[UIViewController alloc] initWithNibName:nil bundle:nil];
-//
-//	// Make the background view
-//	UIView* backgroundView=[[UIView alloc] initWithFrame: app.keyWindow.frame];
-//	backgroundView.backgroundColor=[UIColor groupTableViewBackgroundColor];
-//	anotherViewController.title=@"Beer";
-//	[anotherViewController.view addSubview:backgroundView];
-//
-//	
-//	[appdel.nav pushViewController:anotherViewController animated:YES];
-//	[anotherViewController release];
+	else if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
+	{
+		BeerTableViewController* btvc=[[[BeerTableViewController alloc] initWithBeerID:idstr] autorelease];
+		[self.navigationController pushViewController:btvc animated:YES];
 
-//	CGRect f;
-//	// Make the title
-//	f=CGRectZero;
-//	f.origin.y=0;
-//	f.origin.x=100;
-//	f.size.width=app.keyWindow.frame.size.width-100-10;
-//	f.size.height=80;
-//	UILabel* title=[[UILabel alloc] initWithFrame:f];
-////	title.adjustsFontSizeToFitWidth=YES;
-//	title.font=[UIFont boldSystemFontOfSize:20];
-//	title.minimumFontSize=2.0;
-//	title.numberOfLines=3;
-//	title.text=[searchResultsList_title objectAtIndex:indexPath.row];
-//
-//	// Make the Description label view
-//	f=CGRectZero;
-//	f.origin.y=100;
-//	f.origin.x=10;
-//	f.size.width=app.keyWindow.frame.size.width-10-10;
-//	f.size.height=200;
-//	UILabel* desc=[[UILabel alloc] initWithFrame:f];
-//	desc.numberOfLines=10;
-//	desc.text=[searchResultsList_desc objectAtIndex: indexPath.row];
-//
-//
-//	[anotherViewController.view addSubview:title];
-//	[anotherViewController.view addSubview:desc];
+		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
+	}
+	else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
+	{
+		PlaceTableViewController* btvc=[[[PlaceTableViewController alloc] initWithPlaceID:idstr] autorelease];
+		[self.navigationController pushViewController: btvc animated:YES];
+
+		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
+	}
 	
 }
 
@@ -527,7 +473,7 @@
 
 - (void)dealloc {
 	[searchBar release];
-	[autoCompleteResultsData release];
+	[self.resultsList release];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
