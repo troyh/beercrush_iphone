@@ -24,10 +24,11 @@
 // ALog always displays output regardless of the DEBUG setting  
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 
-
-//#define JSON_NUMBER_VALUE_OR_ELSE(d,k,e) ([[d objectForKey:k] isKindOfClass:[NSNumber class]]?[d valueForKey:k]:[NSNumber numberWithInt:e])
-//#define JSON_STRING_VALUE_OR_ELSE(d,k,e) ([[d objectForKey:k] isKindOfClass:[NSString class]]?[d valueForKey:k]:e)
-
+@interface UIProgressHUD : NSObject 
+- (UIProgressHUD *) initWithWindow: (UIView*)aWindow; 
+- (void) show: (BOOL)aShow; 
+- (void) setText: (NSString*)aText; 
+@end
 
 void normalizeToString(NSMutableDictionary* dict,NSString* key);
 void normalizeToNumber(NSMutableDictionary* dict,NSString* key);
@@ -44,6 +45,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
     UITabBarController *tabBarController;
 	SEL onBeerSelectedAction;
 	id onBeerSelectedTarget;
+	UIProgressHUD* activityHUD;
 	
 	NSOperationQueue* sharedOperationQueue;
 	
@@ -68,6 +70,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 @property (nonatomic, retain) NSMutableData* xmlPostResponse;
 @property(nonatomic) SEL onBeerSelectedAction;
 @property(nonatomic,assign) id onBeerSelectedTarget;
+@property (nonatomic, retain) UIProgressHUD* activityHUD;
 @property (nonatomic, retain) NSMutableArray* xmlParserPath;
 @property (nonatomic, retain) NSMutableString* currentElemValue;
 @property (nonatomic, retain) NSMutableString* currentElemID;
@@ -97,6 +100,9 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 -(NSObject*)nextNavigationStateToRestore;
 -(BOOL)pushNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem withData:(NSObject*)data;
 -(void)popNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem;
+-(void)dismissActivityHUD;
+-(void)presentActivityHUD:(NSString*)hudText;
+-(void)performAsyncOperationWithTarget:(id)target selector:(SEL)sel object:(id)object withActivityHUD:(BOOL)withActivityHUD andActivityHUDText:(NSString*)hudText;
 
 -(NSString*)breweryNameFromBeerID:(NSString*)beer_id;
 

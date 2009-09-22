@@ -208,6 +208,7 @@ void normalizeBeerData(NSMutableDictionary* beerData)
 
 @implementation BeerCrushAppDelegate
 
+@synthesize activityHUD;
 @synthesize sharedOperationQueue;
 @synthesize window;
 @synthesize loginVC;
@@ -592,6 +593,7 @@ void normalizeBeerData(NSMutableDictionary* beerData)
 
 - (void)dealloc {
 //	[nav release];
+	[self.activityHUD release];
 	[sharedOperationQueue release];
 	
     [tabBarController release];
@@ -1031,6 +1033,28 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		return YES;
 	}
 	return NO;
+}
+
+-(void)dismissActivityHUD
+{ 
+	[self.activityHUD show:NO];
+	self.activityHUD=nil;
+} 
+
+-(void)presentActivityHUD:(NSString*)hudText
+{ 
+	// UIProgressHUD is undocumented by Apple. If you get screwed, try this instead: http://www.bukovinski.com/2009/04/08/mbprogresshud-for-iphone/
+	self.activityHUD = [[UIProgressHUD alloc] initWithWindow:self.window];
+	[self.activityHUD setText:(hudText?NSLocalizedString(hudText,hudText):@"")]; 
+	[self.activityHUD show:YES]; 
+}
+
+-(void)performAsyncOperationWithTarget:(id)target selector:(SEL)sel object:(id)object withActivityHUD:(BOOL)withActivityHUD andActivityHUDText:(NSString*)hudText
+{
+	if (withActivityHUD)
+		[self presentActivityHUD:hudText];
+	NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:target selector:sel object:object] autorelease];
+	[self.sharedOperationQueue addOperation:op];
 }
 
 
