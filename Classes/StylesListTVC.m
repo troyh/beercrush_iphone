@@ -12,7 +12,7 @@
 @implementation StylesListTVC
 
 @synthesize stylesDictionary;
-@synthesize selectedStyleID;
+@synthesize selectedStyleIDs;
 @synthesize delegate;
 
 - (id)initWithStyle:(UITableViewStyle)style {
@@ -120,7 +120,7 @@
 	NSString* styleID=[[[self.stylesDictionary objectForKey:@"list"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 	[cell.textLabel setText:[[self.stylesDictionary objectForKey:@"names"] objectForKey:styleID]];
 	
-	if ([styleID isEqualToString:self.selectedStyleID])
+	if ([self.selectedStyleIDs containsObject:styleID])
 		cell.accessoryType=UITableViewCellAccessoryCheckmark;
 	else
 		cell.accessoryType=UITableViewCellAccessoryNone;
@@ -135,7 +135,10 @@
 	// [self.navigationController pushViewController:anotherViewController];
 	// [anotherViewController release];
 	
-	[delegate stylesTVC:self didSelectStyle:[[[self.stylesDictionary objectForKey:@"list"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+	// For now, we only support selecting one style, so we'll remove any already set and replace them with the one the user just selected
+	[self.selectedStyleIDs removeAllObjects];
+	[self.selectedStyleIDs addObject:[[[self.stylesDictionary objectForKey:@"list"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+	[delegate stylesTVC:self didSelectStyle:self.selectedStyleIDs];
 }
 
 

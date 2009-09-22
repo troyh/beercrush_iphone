@@ -12,19 +12,19 @@
 
 @interface StylesListTVC : UITableViewController {
 	NSDictionary* stylesDictionary;
-	NSString* selectedStyleID;
+	NSMutableArray* selectedStyleIDs;
 	id<StylesListTVCDelegate> delegate;
 }
 
 @property (nonatomic,retain) NSDictionary* stylesDictionary;
-@property (nonatomic,retain) NSString* selectedStyleID;
+@property (nonatomic,retain) NSMutableArray* selectedStyleIDs;
 @property (assign) id<StylesListTVCDelegate> delegate;
 
 @end
 
 @protocol StylesListTVCDelegate
 
--(void)stylesTVC:(StylesListTVC*)tvc didSelectStyle:(NSString*)styleid;
+-(void)stylesTVC:(StylesListTVC*)tvc didSelectStyle:(NSArray*)styleids;
 
 @end
 

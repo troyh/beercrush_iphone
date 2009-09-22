@@ -94,6 +94,18 @@ void normalizeToBoolean(NSMutableDictionary* dict,NSString* key)
 		[dict setObject:[NSNumber numberWithInt:0] forKey:key];
 }
 
+void normalizeToArray(NSMutableDictionary* data, NSString* key, NSUInteger n)
+{
+	if ([data objectForKey:key]==nil)
+		[data setObject:[NSMutableArray arrayWithCapacity:n] forKey:key];
+}
+
+void normalizeToDictionary(NSMutableDictionary* data, NSString* key, NSUInteger n)
+{
+	if ([data objectForKey:key]==nil)
+		[data setObject:[NSMutableDictionary dictionaryWithCapacity:n] forKey:key];
+}
+
 NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* orig,NSDictionary* curr)
 {
 	NSMutableArray* values=[[[NSMutableArray alloc] init] autorelease];
@@ -132,6 +144,15 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 					[values addObject:[NSString stringWithFormat:@"%@=%d",keyName,[currNumber intValue]]];
 				}
 			}
+			else if ([origObj isKindOfClass:[NSArray class]])
+			{
+				NSArray* origArr=(NSArray*)origObj;
+				NSArray* currArr=(NSArray*)currObj;
+				if ([origArr isEqualToArray:currArr]==NO)
+				{
+					[values addObject:[NSString stringWithFormat:@"%@=%@",keyName,[currArr componentsJoinedByString:@" "]]];
+				}
+			}
 			else {
 				// What to do?
 			}
@@ -144,6 +165,23 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 	return values;
 }
 
+void normalizeBeerData(NSMutableDictionary* beerData)
+{
+	normalizeToString(beerData, @"name");
+	normalizeToString(beerData, @"description");
+	normalizeToString(beerData, @"grains");
+	normalizeToString(beerData, @"hops");
+	normalizeToString(beerData, @"availability");
+	
+	normalizeToArray(beerData, @"styles", 3);
+	normalizeToDictionary(beerData, @"@attributes", 5);
+	
+	normalizeToString([beerData objectForKey:@"@attributes"], @"abv");
+	normalizeToString([beerData objectForKey:@"@attributes"], @"ibu");
+	normalizeToString([beerData objectForKey:@"@attributes"], @"og");
+	normalizeToString([beerData objectForKey:@"@attributes"], @"fg");
+	normalizeToString([beerData objectForKey:@"@attributes"], @"srm");
+}
 
 
 @implementation BeerObject
@@ -612,7 +650,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 	NSError* error;
 
 	[UIApplication sharedApplication].networkActivityIndicatorVisible=YES;
-	[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+	NSData* respdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
 	[UIApplication sharedApplication].networkActivityIndicatorVisible=NO;
 
 	DLog(@"status code=%d",[response statusCode]);
@@ -620,6 +658,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 	{
 		DLog(@"Login successful");
 		// We don't care about any response document, we just want the cookies to be stored (automatically)
+		DLog(@"Response data:%.*s", [respdata length], [respdata bytes]);
 		return YES;
 	} else {
 		DLog(@"Login failed.");
@@ -628,25 +667,18 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 
 }
 
--(NSString*)breweryNameFromBeerID:(NSString*)beer_id
+-(NSHTTPURLResponse*)sendJSONRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSObject*)data returningJSON:(NSMutableDictionary**)jsonResponse
 {
-	NSArray* parts=[beer_id componentsSeparatedByString:@":"];
-
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC_JSON,[parts objectAtIndex:1]]];
-
 	NSData* answer;
-	NSHTTPURLResponse* response=[self sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+	NSHTTPURLResponse* response=[self sendRequest:url usingMethod:method withData:data returningData:&answer];
 	if ([response statusCode]==200)
 	{
 		NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
-		id json=[s JSONValue];
-		// TODO: cache this data so that we aren't doing an HTTP request too often
-		return [json objectForKey:@"name"];
+		if (jsonResponse)
+			*jsonResponse=[s JSONValue];
 	}
-	
-	return @"";
+	return response;
 }
-
 
 -(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSObject*)data returningData:(NSData**)responseData
 {
@@ -905,6 +937,83 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
 		return [self sendRequest:url usingMethod:@"POST" withData:bodystr returningData:answer];
 	}
+	return nil;
+}
+
+-(NSMutableDictionary*)getBeerDoc:(NSString*)beerID
+{
+	// TODO: support caching
+	
+	// Separate the brewery ID and the beer ID from the beerID
+	NSArray* idparts=[beerID componentsSeparatedByString:@":"];
+	
+	// Retrieve JSON doc for this beer
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_DOC, [idparts objectAtIndex:1], [idparts objectAtIndex:2] ]];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
+		normalizeBeerData(answer);
+		[answer retain];
+		return answer;
+	}
+	else {
+		// TODO: alert the user
+		DLog(@"Response status code=%d",[response statusCode]);
+	}
+
+	return nil;
+}
+
+-(NSMutableDictionary*)getReviewsOfBeer:(NSString*)beerID byUserID:(NSString*)userID
+{
+	// TODO: support caching
+
+	// Separate the brewery ID and the beer ID from the beerID
+	NSArray* idparts=[beerID componentsSeparatedByString:@":"];
+
+	// Retrieve user's review for this beer
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_REVIEW_DOC, 
+							  [idparts objectAtIndex:1], 
+							  [idparts objectAtIndex:2], 
+							  userID]];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
+		[answer retain];
+		return answer;
+	}
+	else {
+		// TODO: alert the user
+		DLog(@"Response status code=%d",[response statusCode]);
+	}
+	return nil;
+}
+
+-(NSString*)breweryNameFromBeerID:(NSString*)beer_id
+{
+	NSArray* parts=[beer_id componentsSeparatedByString:@":"];
+	NSMutableDictionary* doc=[self getBreweryDoc:[parts objectAtIndex:1]];
+	NSObject* s=[doc objectForKey:@"name"];
+	if (s && [s isKindOfClass:[NSString class]])
+		return (NSString*)s;
+	return @"";
+}
+
+-(NSMutableDictionary*)getBreweryDoc:(NSString*)breweryID
+{
+	// TODO: support caching
+	NSArray* parts=[breweryID componentsSeparatedByString:@":"];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC_JSON,[parts lastObject]]];
+	NSData* answer;
+	NSHTTPURLResponse* response=[self sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+	if ([response statusCode]==200)
+	{
+		NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
+		return [s JSONValue];
+	}
+	
 	return nil;
 }
 

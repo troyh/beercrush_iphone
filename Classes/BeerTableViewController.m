@@ -15,6 +15,7 @@
 #import "StyleVC.h"
 #import "ColorsTVC.h"
 #import "AvailabilityTVC.h"
+#import "JSON.h"
 
 @implementation BeerTableViewController
 
@@ -46,16 +47,29 @@ const int kButtonHeight=40;
 const int kDescriptionCellDefaultRowHeight=80;
 
 enum TAGS {
- kTagEditTextName=1,
- kTagEditTextABV,
- kTagEditTextIBU,
- kTagEditTextOG,
- kTagEditTextFG,
- kTagEditTextGrains,
- kTagEditTextHops,
- kTagBeerNameLabel,
- kTagDescriptionLabel,
- kTagStyleLabel
+	kTagEditTextName=1,
+	kTagEditTextABV,
+	kTagEditTextIBU,
+	kTagEditTextOG,
+	kTagEditTextFG,
+	kTagEditTextGrains,
+	kTagEditTextHops,
+	kTagBeerNameLabel,
+	kTagBreweryNameLabel,
+	kTagDescriptionLabel,
+	kTagStyleLabel,
+	kTagDetailsAvailability,
+	kTagDetailsColor,
+	kTagDetailsColorSwatch,
+	kTagDetailsABV,
+	kTagDetailsIBU,
+	kTagDetailsOG,
+	kTagDetailsFG,
+	kTagDetailsGrains,
+	kTagDetailsHops,
+	kTagDetailsYeast,
+	kTagDetailsOtherIngs,
+	kTagDetailsSizes
 };
 
 -(id) initWithBeerID:(NSString*)beer_id
@@ -117,89 +131,14 @@ enum TAGS {
     [super viewDidLoad];
 }
 */
+
 -(void)editButtonClicked
 {
 	if (self.editing)
-	{
-		// Save data to server
-		NSString* bodystr=nil;
-		NSMutableArray* values=[NSMutableArray arrayWithCapacity:10];
-		
-		if (self.beerNameTextField.text && [[self.beerObj.data objectForKey:@"name"] isEqualToString:self.beerNameTextField.text]==NO)
-			[values addObject:[NSString stringWithFormat:@"name=%@",self.beerNameTextField.text]];
-		if ([[self.beerObj.data objectForKey:@"description"] isEqualToString:[self.originalBeerData objectForKey:@"description"]]==NO)
-			[values addObject:[NSString stringWithFormat:@"description=%@",[self.beerObj.data objectForKey:@"description"]]];
-		if (self.abvTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"abv"] isEqualToString:self.abvTextField.text]==NO)
-			[values addObject:[NSString stringWithFormat:@"abv=%@",self.abvTextField.text]];
-		if (self.ibuTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"] isEqualToString:self.ibuTextField.text]==NO)
-			[values addObject:[NSString stringWithFormat:@"ibu=%@",self.ibuTextField.text]];
-		if (self.ogTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"og"] isEqualToString:self.ogTextField.text]==NO)
-			[values addObject:[NSString stringWithFormat:@"og=%@",self.ogTextField.text]];
-		if (self.fgTextField.text && [[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"fg"] isEqualToString:self.fgTextField.text]==NO)
-			[values addObject:[NSString stringWithFormat:@"fg=%@",self.fgTextField.text]];
-		if (self.grainsTextField.text && [[self.beerObj.data objectForKey:@"grains"] isEqualToString:self.grainsTextField.text]==NO)
-			[values addObject:[NSString stringWithFormat:@"grains=%@",self.grainsTextField.text]];
-		if (self.hopsTextField.text && [[self.beerObj.data objectForKey:@"hops"] isEqualToString:self.hopsTextField.text]==NO)
-			[values addObject:[NSString stringWithFormat:@"hops=%@",self.hopsTextField.text]];
-		if ([[self.beerObj.data objectForKey:@"availability"] isEqualToString:[self.originalBeerData objectForKey:@"availability"]]==NO)
-			[values addObject:[NSString stringWithFormat:@"availability=%@",[self.beerObj.data objectForKey:@"availability"]]];
-		if ([[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"] && [[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]!=[[self.originalBeerData objectForKey:@"attribs"] objectForKey:@"srm"])
-			[values addObject:[NSString stringWithFormat:@"srm=%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]];
-		if ([[self.beerObj.data objectForKey:@"style"] isEqualToString:[self.originalBeerData objectForKey:@"style"]]==NO)
-			[values addObject:[NSString stringWithFormat:@"bjcp_style_id=%@",[self.beerObj.data objectForKey:@"style"]]];
-		
-		if ([values count]) // Only send request if there is something that is changing
-		{
-			if (self.beerID) // Editing an existing beer
-			{
-				[values addObject:[NSString stringWithFormat:@"beer_id=%@",self.beerID]];
-			}
-			else if (self.breweryID) // Adding a new beer
-			{
-				[values addObject:[NSString stringWithFormat:@"brewery_id=%@",self.breweryID]];
-			}
-			else
-			{
-				NSException* x=[NSException exceptionWithName:@"" reason:@"Either a beer ID or a brewery ID is required to save beers" userInfo:nil];
-				[x raise];
-			}
-			
-			bodystr=[values componentsJoinedByString:@"&"];
-			DLog(@"POST data:%@",bodystr);
-			
-			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-			NSData* answer;
-			NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC];
-			NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
-			if ([response statusCode]==200)
-			{
-				// Parse the XML response, which is the new beer doc
-				NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
-				[parser setDelegate:self];
-				if ([parser parse]==YES)
-				{
-					[self.dataTableView removeFromSuperview];
-					self.dataTableView=nil; // Causes it to be recreated in cellForRowAtIndexPath, which causes the updated data to appear
-					
-					[self setEditing:NO animated:YES];
-					[self.tableView reloadData];
-
-					[self.delegate didSaveBeerEdits];
-				}
-				else
-				{
-					// TODO: alert the user that it failed and/or give a chance to retry
-					UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"XML Error" message:@"Unable to read XML result" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
-					[alert show];
-				}
-			}
-			else
-			{
-				// TODO: alert the user that it failed and/or give a chance to retry
-				UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"HTTP Error" message:[NSString stringWithFormat:@"Status code %d",[response statusCode]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
-				[alert show];
-			}
-		}
+	{   // Editing is ending (or trying to end), send data to server
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(saveEdits:) object:nil] autorelease];
+		[appDelegate.sharedOperationQueue addOperation:op];
 	}
 	else
 	{
@@ -245,49 +184,17 @@ enum TAGS {
 		self.editButtonItem.target=self;
 		self.editButtonItem.action=@selector(editButtonClicked);
 
+		NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(getBeerInfo:) object:self.beerID] autorelease];
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-
-		// Separate the brewery ID and the beer ID from the beerID
-		NSArray* idparts=[self.beerID componentsSeparatedByString:@":"];
-
-		// Retrieve XML doc for this beer
-		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_DOC, [idparts objectAtIndex:1], [idparts objectAtIndex:2] ]];
-		NSData* answer;
-		NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-		if ([response statusCode]==200)
-		{
-			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
-			[parser setDelegate:self];
-			[parser parse];
-			[parser release];
-			
-			// Retrieve user's review for this beer
-			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_REVIEW_DOC, 
-									  [idparts objectAtIndex:1], 
-									  [idparts objectAtIndex:2], 
-									  [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
-			response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-			if ([response statusCode]==200)
-			{
-				// The user has a review for this beer
-				parser=[[NSXMLParser alloc] initWithData:answer];
-				[parser setDelegate:self];
-				[parser parse];
-				[parser release];
-
-				if (userReviewData && [userReviewData count])
-				{
-					DLog(@"User rating:%@", [self.userReviewData objectForKey:@"rating"]);
-				}
-			}
-		}
-		else {
-			// TODO: alert the user
-			DLog(@"Response status code=%d",[response statusCode]);
-		}
-
+		[appDelegate.sharedOperationQueue addOperation:op];
 	}
-	
+}
+
+-(void)getBeerInfo:(NSString*)aBeerID
+{
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	self.beerObj.data=[appDelegate getBeerDoc:aBeerID];
+	self.userReviewData=[appDelegate getReviewsOfBeer:aBeerID byUserID:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]];
 	[self.tableView reloadData]; // Reload data because we may come back from an editing view controller
 }
 
@@ -530,9 +437,9 @@ enum TAGS {
 
 							UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 0, 200, 20)] autorelease];
 							breweryNameLabel.backgroundColor=[UIColor clearColor];
+							breweryNameLabel.tag=kTagBreweryNameLabel;
 							breweryNameLabel.font=[UIFont boldSystemFontOfSize:12];
 							breweryNameLabel.textColor=[UIColor grayColor];
-							[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"brewery_id"]]];
 							[cell.contentView addSubview:breweryNameLabel];
 							
 							UILabel* beerNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 15, 200, 30)] autorelease];
@@ -561,28 +468,28 @@ enum TAGS {
 						UILabel* beerNameLabel=(UILabel*)[cell viewWithTag:kTagBeerNameLabel];
 						[beerNameLabel setText:[beerObj.data objectForKey:@"name"]];
 
+						UILabel* breweryNameLabel=(UILabel*)[cell viewWithTag:kTagBreweryNameLabel];
+						[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"brewery_id"]]];
+
 						UILabel* styleLabel=(UILabel*)[cell viewWithTag:kTagStyleLabel];
 						NSDictionary* stylesDict=[appDelegate getStylesDictionary];
-						[styleLabel setText:[[stylesDict objectForKey:@"names"] objectForKey:[beerObj.data objectForKey:@"style"]]];
-						
+						NSArray* styles=[beerObj.data objectForKey:@"styles"];
+						[styleLabel setText:[[stylesDict objectForKey:@"names"] objectForKey:[styles objectAtIndex:0]]]; // Take just the 1st
 					}
 					break;
 				case 1:
-					if (self.editing)
+				{
+					cell = [tableView dequeueReusableCellWithIdentifier:@"Section0Row1Cell"];
+					if (cell == nil)
 					{
-						cell = [tableView dequeueReusableCellWithIdentifier:@"Section0Row1CellEditing"];
-						if (cell == nil)
-						{
-							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section0Row1CellEditing"] autorelease];
-							[cell.textLabel setText:@"Style"];
-						}
-						NSDictionary* stylesDict=[appDelegate getStylesDictionary];
-						[cell.detailTextLabel setText:[[stylesDict objectForKey:@"names"] objectForKey:[beerObj.data objectForKey:@"style"]]];
+						cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section0Row1Cell"] autorelease];
+						[cell.textLabel setText:@"Style"];
 					}
-					else 
-					{
-					}
+					NSDictionary* stylesDict=[appDelegate getStylesDictionary];
+					NSArray* style=[beerObj.data objectForKey:@"styles"];
+					[cell.detailTextLabel setText:[[stylesDict objectForKey:@"names"] objectForKey:[style objectAtIndex:0]]]; // Take just the 1st
 					break;
+				}
 				default:
 					break;
 			}
@@ -852,7 +759,7 @@ enum TAGS {
 						
 						NSDictionary* colorsDict=[appDelegate getColorsDictionary];
 						[cell.textLabel setText:@"Color"];
-						[cell.detailTextLabel setText:[[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"]]] objectForKey:@"name" ]];
+						[cell.detailTextLabel setText:[[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"srm"]]] objectForKey:@"name" ]];
 						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						break;
 					}
@@ -863,7 +770,7 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row2Editing"] autorelease];
 						
 						[cell.textLabel setText:@"ABV"];
-						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"abv"]];
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"abv"]];
 
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
@@ -875,7 +782,7 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row3Editing"] autorelease];
 						
 						[cell.textLabel setText:@"IBUs"];
-						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"]];
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"ibu"]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
@@ -887,7 +794,7 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row4Editing"] autorelease];
 						
 						[cell.textLabel setText:@"OG"];
-						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"og"]];
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"og"]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
@@ -899,7 +806,7 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row5Editing"] autorelease];
 						
 						[cell.textLabel setText:@"FG"];
-						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"fg"]];
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"fg"]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
@@ -1019,18 +926,18 @@ enum TAGS {
 
 				UIColor* stdBlueColor=cell.textLabel.textColor;
 				
-				static struct { NSString* name; NSString* propname; BOOL inattribs; } fields[]={
-					{@"Availability",@"availability",NO},
-					{@"Color",@"srm",YES},
-					{@"ABV",@"abv",YES},
-					{@"IBUs",@"ibu",YES},
-					{@"OG",@"og",YES},
-					{@"FG",@"fg",YES},
-					{@"Grains",@"grains",NO},
-					{@"Hops",@"hops",NO},
-					{@"Yeast",@"yeast",NO},
-					{@"Misc Ingredients",@"otherings",NO},
-					{@"Sizes",@"sizes",NO}
+				static struct { NSString* name; int tag; } fields[]={
+					{@"Availability",kTagDetailsAvailability},
+					{@"Color",kTagDetailsColor},
+					{@"ABV",kTagDetailsABV},
+					{@"IBUs",kTagDetailsIBU},
+					{@"OG",kTagDetailsOG},
+					{@"FG",kTagDetailsFG},
+					{@"Grains",kTagDetailsGrains},
+					{@"Hops",kTagDetailsHops},
+					{@"Yeast",kTagDetailsYeast},
+					{@"Misc Ingredients",kTagDetailsOtherIngs},
+					{@"Sizes",kTagDetailsSizes}
 				};
 				
 				if (self.dataTableView==nil)
@@ -1039,6 +946,7 @@ enum TAGS {
 					
 					for (int i=0;i<(sizeof(fields)/sizeof(fields[0]));++i)
 					{
+						// Make left label
 						UILabel* label=[[[UILabel alloc] initWithFrame:CGRectMake(0, i*20-1, dataTableView.frame.size.width*1/3-5, 20)] autorelease];
 						[label setFont:[UIFont systemFontOfSize:[UIFont smallSystemFontSize]]];
 						[label setTextColor:stdBlueColor];
@@ -1046,40 +954,72 @@ enum TAGS {
 						label.textAlignment=UITextAlignmentRight;
 						[dataTableView addSubview:label];
 						
+						// Make right label
 						label=[[[UILabel alloc] initWithFrame:CGRectMake(dataTableView.frame.size.width*1/3, i*20, dataTableView.frame.size.width*2/3, 20)] autorelease];
 						[label setFont:[UIFont boldSystemFontOfSize:14]];
-						if (fields[i].inattribs)
-						{
-							if ([fields[i].propname isEqualToString:@"srm"]) 
-							{ // Treat SRM (Color) specially
-								CGRect newFrame=label.frame;
-								newFrame.origin.x+=25; // Move it over so that the color swatch can be seen
-								newFrame.size.width-=25; // Make it narrower too
-								label.frame=newFrame;
-								BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-								NSDictionary* colorsDict=[appDelegate getColorsDictionary];
-								NSString* srmval=[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]];
-								NSDictionary* colorInfo=[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:srmval];
-								[label setText:[colorInfo objectForKey:@"name"]];
-								
-								// Add a color swatch
-								UIView* colorSwatch=[[[UIView alloc] initWithFrame:CGRectMake(dataTableView.frame.size.width*1/3, i*20, 20, 20)] autorelease];
-								NSArray* rgbValues=[[colorInfo objectForKey:@"@attributes"] objectForKey:@"rgb"];
-								colorSwatch.backgroundColor=[UIColor colorWithRed:[[rgbValues objectAtIndex:0] integerValue]/255.0 
-																		green:[[rgbValues objectAtIndex:1] integerValue]/255.0 
-																		blue:[[rgbValues objectAtIndex:2] integerValue]/255.0 
-																		alpha:1.0];
-								[dataTableView addSubview:colorSwatch];
-							}
-							else
-								[label setText:[[self.beerObj.data objectForKey:@"attribs"] objectForKey:fields[i].propname]];
+						label.tag=fields[i].tag;
+
+						if (fields[i].tag==kTagDetailsColor)
+						{ // Treat SRM (Color) specially
+							CGRect newFrame=label.frame;
+							newFrame.origin.x+=25; // Move it over so that the color swatch can be seen
+							newFrame.size.width-=25; // Make it narrower too
+							label.frame=newFrame;
+							
+							// Add a color swatch
+							UIView* colorSwatch=[[[UIView alloc] initWithFrame:CGRectMake(dataTableView.frame.size.width*1/3, i*20, 20, 20)] autorelease];
+							colorSwatch.tag=kTagDetailsColorSwatch;
+							[dataTableView addSubview:colorSwatch];
 						}
-						else
-							[label setText:[self.beerObj.data objectForKey:fields[i].propname]];
+
 						[dataTableView addSubview:label];
 					}
 					[cell addSubview:dataTableView];
 				}
+
+				UILabel* label=(UILabel*)[dataTableView viewWithTag:kTagDetailsAvailability];
+				[label setText:[self.beerObj.data objectForKey:@"availability"]];
+
+				label=(UILabel*)[cell viewWithTag:kTagDetailsColor];
+				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+				NSDictionary* colorsDict=[appDelegate getColorsDictionary];
+				NSString* srmval=[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"srm"]];
+				NSDictionary* colorInfo=[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:srmval];
+				[label setText:[colorInfo objectForKey:@"name"]];
+
+				NSArray* rgbValues=[[colorInfo objectForKey:@"@attributes"] objectForKey:@"rgb"];
+				UIView* swatch=[cell viewWithTag:kTagDetailsColorSwatch];
+				swatch.backgroundColor=[UIColor colorWithRed:[[rgbValues objectAtIndex:0] integerValue]/255.0 
+															green:[[rgbValues objectAtIndex:1] integerValue]/255.0 
+															 blue:[[rgbValues objectAtIndex:2] integerValue]/255.0 
+															alpha:1.0];
+
+				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsABV];
+				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"abv"]];
+
+				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsIBU];
+				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"ibu"]];
+
+				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsOG];
+				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"og"]];
+
+				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsFG];
+				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"fg"]];
+
+				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsGrains];
+				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"grains"]];
+
+				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsHops];
+				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"hops"]];
+
+				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsYeast];
+				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"yeast"]];
+
+				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsOtherIngs];
+				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"otherings"]];
+
+				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsSizes];
+				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"sizes"]];
 
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 			}
@@ -1161,21 +1101,14 @@ enum TAGS {
 	RatingControl* ctl=(RatingControl*)sender;
 	NSInteger rating=ctl.currentRating;
 	
+	NSMutableDictionary* reviewDoc=[[[NSMutableDictionary alloc] initWithCapacity:3] autorelease];
+	[reviewDoc setObject:[NSNumber numberWithInt:rating] forKey:@"rating"];
+	[reviewDoc setObject:beerID forKey:@"beer_id"];
+	
 	// Send the review to the site
-	
-	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
-	NSString* bodystr=[[[NSString alloc] initWithFormat:@"rating=%u&beer_id=%@", rating, beerID] autorelease];
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:nil];
-	
-	if ([response statusCode]==200) {
-		[self.userReviewData setObject:[NSString stringWithFormat:@"%d",rating] forKey:@"rating"];
-		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:self.userReviewData] autorelease];
-		fbrtvc.delegate=self;
-		[self.navigationController pushViewController:fbrtvc animated:YES];
-	} else {
-		// TODO: inform the user that the download could not be made
-	}	
+	NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(sendBeerReview:) object:reviewDoc] autorelease];
+	[appDelegate.sharedOperationQueue addOperation:op];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -1199,7 +1132,7 @@ enum TAGS {
 					{
 						StylesListTVC* tvc=[[[StylesListTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
 						tvc.delegate=self;
-						tvc.selectedStyleID=[self.beerObj.data objectForKey:@"style"];
+						tvc.selectedStyleIDs=[self.beerObj.data objectForKey:@"styles"];
 						[self.navigationController pushViewController:tvc animated:YES];
 						break;
 					}
@@ -1238,7 +1171,7 @@ enum TAGS {
 					{
 						ColorsTVC* ctvc=[[[ColorsTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
 						ctvc.delegate=self;
-						ctvc.selectedColorSRM=[[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"srm"] integerValue];
+						ctvc.selectedColorSRM=[[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"srm"] integerValue];
 						[self.navigationController pushViewController:ctvc animated:YES];
 						break;
 					}
@@ -1246,7 +1179,7 @@ enum TAGS {
 					{
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
-						vc.textToEdit=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"abv"];
+						vc.textToEdit=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"abv"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1254,7 +1187,7 @@ enum TAGS {
 					{
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
-						vc.textToEdit=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"ibu"];
+						vc.textToEdit=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"ibu"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1262,7 +1195,7 @@ enum TAGS {
 					{
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
-						vc.textToEdit=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"og"];
+						vc.textToEdit=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"og"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1270,7 +1203,7 @@ enum TAGS {
 					{
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
-						vc.textToEdit=[[self.beerObj.data objectForKey:@"attribs"] objectForKey:@"fg"];
+						vc.textToEdit=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"fg"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1354,16 +1287,6 @@ enum TAGS {
 			}
 			case 3:
 			{
-//				switch (indexPath.row) {
-//					case 1: // Beer style
-//					{
-//						StyleVC* svc=[[[StyleVC alloc] initWithStyleID:[self.beerObj.data objectForKey:@"style"]] autorelease];
-//						[self.navigationController pushViewController:svc animated:YES];
-//						break;
-//					}
-//					default:
-//						break;
-//				}
 				break;
 			}
 			case 4:
@@ -1379,25 +1302,12 @@ enum TAGS {
 			case 5:
 			{
 				// Add beerID to wish list
-				NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_WISHLIST_DOC];
-				NSString* bodystr=[NSString stringWithFormat:@"add_item=%@",self.beerID];
-				
 				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-				NSData* answer;
-				NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
-				
+				NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(addToWishList) object:self.beerID] autorelease];
+				[appDelegate.sharedOperationQueue addOperation:op];
+
 				UITableViewCell* cell=[self.tableView cellForRowAtIndexPath:indexPath];
 				[cell setSelected:NO animated:YES];
-				
-				if ([response statusCode]==200)
-				{
-					// TODO: signify somehow that it worked
-					// TODO: store new wishlist locally (the returned doc)
-				}
-				else
-				{
-					// TODO: tell the user it didn't work
-				}
 				break;
 			}
 			default:
@@ -1494,14 +1404,16 @@ enum TAGS {
 
 -(void)colorsTVC:(ColorsTVC*)tvc didSelectColor:(NSUInteger)srm
 {
-	[[self.beerObj.data objectForKey:@"attribs"] setObject:[NSNumber numberWithUnsignedInt:srm] forKey:@"srm"];
+	[[self.beerObj.data objectForKey:@"@attributes"] setObject:[NSNumber numberWithUnsignedInt:srm] forKey:@"srm"];
+	[self.tableView reloadData];
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 // StylesListTVCDelegate methods
--(void)stylesTVC:(StylesListTVC*)tvc didSelectStyle:(NSString*)styleid
+-(void)stylesTVC:(StylesListTVC*)tvc didSelectStyle:(NSArray*)styleids
 {
-	[self.beerObj.data setObject:styleid forKey:@"style"];
+	[self.beerObj.data setObject:styleids forKey:@"styles"];
+	[self.tableView reloadData];
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -1570,16 +1482,16 @@ enum TAGS {
 			[self.beerObj.data setObject:text forKey:@"name"];
 			break;
 		case kTagEditTextABV:
-			[[self.beerObj.data objectForKey:@"attribs"] setObject:text forKey:@"abv"];
+			[[self.beerObj.data objectForKey:@"@attributes"] setObject:text forKey:@"abv"];
 			break;
 		case kTagEditTextIBU:
-			[[self.beerObj.data objectForKey:@"attribs"] setObject:text forKey:@"ibu"];
+			[[self.beerObj.data objectForKey:@"@attributes"] setObject:text forKey:@"ibu"];
 			break;
 		case kTagEditTextOG:
-			[[self.beerObj.data objectForKey:@"attribs"] setObject:text forKey:@"og"];
+			[[self.beerObj.data objectForKey:@"@attributes"] setObject:text forKey:@"og"];
 			break;
 		case kTagEditTextFG:
-			[[self.beerObj.data objectForKey:@"attribs"] setObject:text forKey:@"fg"];
+			[[self.beerObj.data objectForKey:@"@attributes"] setObject:text forKey:@"fg"];
 			break;
 		case kTagEditTextGrains:
 			[self.beerObj.data setObject:text forKey:@"grains"];
@@ -1592,292 +1504,113 @@ enum TAGS {
 	}
 }
 
-#pragma mark NSXMLParserDelegate methods
+#pragma mark Async operations
 
-- (void)parserDidStartDocument:(NSXMLParser *)parser
+-(void)sendBeerReview:(NSDictionary*)reviewDoc
 {
-	// Clear any old data
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
+	// TODO: put up spinning animation
+	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
+	NSString* bodystr=[[[NSString alloc] initWithFormat:@"rating=%@&beer_id=%@", [reviewDoc objectForKey:@"rating"], [reviewDoc objectForKey:@"beer_id"]] autorelease];
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:bodystr returningJSON:&answer];
+	// TODO: take down spinning animation
+	if ([response statusCode]==200) {
+		self.userReviewData=answer;
+		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:self.userReviewData] autorelease];
+		fbrtvc.delegate=self;
+		[self.navigationController pushViewController:fbrtvc animated:YES];
+	} else {
+		// TODO: inform the user that the download could not be made
+	}	
+}
+
+-(void)saveEdits:(id)nothing
+{
+	// Save data to server
+	NSArray* keyNames=[NSArray arrayWithObjects:
+					   @"name",
+					   @"description",
+					   @"@attributes:abv",
+					   @"@attributes:ibu",
+					   @"@attributes:og",
+					   @"@attributes:fg",
+					   @"@attributes:srm",
+					   @"grains",
+					   @"hops",
+					   @"availability",
+					   @"styles",
+					   nil
+					   ];
 	
-	xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5];
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-	xmlParserPath=nil;
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	if ([elementName isEqualToString:@"review"])
-	{
-		if ([xmlParserPath count]==0)
-		{
-			userReviewData=[[NSMutableDictionary alloc] initWithCapacity:10];
-		}
-	}
-	else if ([elementName isEqualToString:@"beer_id"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-		}
-	}
-	else if ([elementName isEqualToString:@"rating"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:5];
-		}
-	}
-	else if ([elementName isEqualToString:@"body"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:5];
-		}
-	}
-	else if ([elementName isEqualToString:@"balance"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:5];
-		}
-	}
-	else if ([elementName isEqualToString:@"aftertaste"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:5];
-		}
-	}
-	else if ([elementName isEqualToString:@"comments"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
-		}
-	}
-	else if ([elementName isEqualToString:@"item"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",@"flavors",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:32];
-		}
-		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",@"styles",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-		}
-	}
-	else if ([elementName isEqualToString:@"beer"])
-	{
-		if ([xmlParserPath count]==0)
-		{
-			[beerObj.data setObject:attributeDict forKey:@"attribs"];
-		}
-	}
-	else if ([elementName isEqualToString:@"name"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-		}
-	}
-	else if ([elementName isEqualToString:@"description"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
-		}
-	}
-	else if ([elementName isEqualToString:@"availability"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-		}
-	}
-	else if ([elementName isEqualToString:@"grains"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-		}
-	}
-	else if ([elementName isEqualToString:@"hops"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-		}
-	}
-	else if ([elementName isEqualToString:@"yeast"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-		}
-	}
-	else if ([elementName isEqualToString:@"otherings"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-		}
-	}
+	NSMutableArray* values=appendDifferentValuesToArray(keyNames,self.originalBeerData,self.beerObj.data);
 	
-	[xmlParserPath addObject:elementName];
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	[xmlParserPath removeLastObject];
-
-	if (self.currentElemValue)
+	if ([values count]) // Only send request if there is something that is changing
 	{
-		if ([elementName isEqualToString:@"beer_id"])
+		if (self.beerID) // Editing an existing beer
 		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-			{
-				[userReviewData setObject:currentElemValue forKey:@"beer_id"];
-			}
+			[values addObject:[NSString stringWithFormat:@"beer_id=%@",self.beerID]];
 		}
-		else if ([elementName isEqualToString:@"rating"])
+		else if (self.breweryID) // Adding a new beer
 		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-			{
-				[userReviewData setObject:currentElemValue forKey:@"rating"];
-			}
+			[values addObject:[NSString stringWithFormat:@"brewery_id=%@",self.breweryID]];
 		}
-		else if ([elementName isEqualToString:@"body"])
+		else
 		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-			{
-				[userReviewData setObject:currentElemValue forKey:@"body"];
-			}
-		}
-		else if ([elementName isEqualToString:@"balance"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-			{
-				[userReviewData setObject:currentElemValue forKey:@"balance"];
-			}
-		}
-		else if ([elementName isEqualToString:@"aftertaste"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-			{
-				[userReviewData setObject:currentElemValue forKey:@"aftertaste"];
-			}
-		}
-		else if ([elementName isEqualToString:@"comments"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-			{
-				[userReviewData setObject:currentElemValue forKey:@"comments"];
-			}
-		}
-		else if ([elementName isEqualToString:@"item"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",@"flavors",nil]])
-			{
-				NSMutableArray* flavors=[userReviewData objectForKey:@"flavors"];
-				if (flavors==nil)
-				{
-					flavors=[NSMutableArray arrayWithObjects:currentElemValue,nil];
-					[userReviewData setObject:flavors forKey:@"flavors"];
-				}
-				else
-					[flavors addObject:currentElemValue];
-			}
-			else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",@"styles",nil]])
-			{
-				if ([[beerObj.data objectForKey:@"style"] length] == 0) // Only take the 1st style
-					[beerObj.data setObject:currentElemValue forKey:@"style"];
-			}
-		}
-		else if ([elementName isEqualToString:@"name"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-			{
-				[beerObj.data setObject:currentElemValue forKey:@"name"];
-			}
-		}
-		else if ([elementName isEqualToString:@"description"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-			{
-				[beerObj.data setObject:currentElemValue forKey:@"description"];
-			}
-		}
-		else if ([elementName isEqualToString:@"availability"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-			{
-				[beerObj.data setObject:currentElemValue forKey:@"availability"];
-			}
-		}
-		else if ([elementName isEqualToString:@"grains"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-			{
-				[beerObj.data setObject:currentElemValue forKey:@"grains"];
-			}
-		}
-		else if ([elementName isEqualToString:@"hops"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-			{
-				[beerObj.data setObject:currentElemValue forKey:@"hops"];
-			}
-		}
-		else if ([elementName isEqualToString:@"yeast"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-			{
-				[beerObj.data setObject:currentElemValue forKey:@"yeast"];
-			}
-		}
-		else if ([elementName isEqualToString:@"otherings"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"beer",nil]])
-			{
-				[beerObj.data setObject:currentElemValue forKey:@"otherings"];
-			}
+			NSException* x=[NSException exceptionWithName:@"" reason:@"Either a beer ID or a brewery ID is required to save beers" userInfo:nil];
+			[x raise];
 		}
 		
-		[self.currentElemValue release];
-		self.currentElemValue=nil;
+		NSString* bodystr=[values componentsJoinedByString:@"&"];
+		DLog(@"POST data:%@",bodystr);
+		
+		NSMutableDictionary* answer;
+		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC];
+		// TODO: put up a view that covers entire screen with spinning animation
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:bodystr returningJSON:&answer];
+		// TODO: remove spinning animation
+		if ([response statusCode]==200)
+		{
+			self.beerObj.data=answer;
+			normalizeBeerData(self.beerObj.data);
+			
+			[self.dataTableView removeFromSuperview];
+			self.dataTableView=nil; // Causes it to be recreated in cellForRowAtIndexPath, which causes the updated data to appear
+			
+			[self setEditing:NO animated:YES];
+			[self.tableView reloadData];
+			
+			[self.delegate didSaveBeerEdits];
+		}
+		else
+		{
+			// TODO: alert the user that it failed and/or give a chance to retry
+			UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"HTTP Error" message:[NSString stringWithFormat:@"Status code %d",[response statusCode]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+			[alert show];
+		}
 	}
+	
 }
 
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
+-(void)addToWishList:(id)aBeerID
 {
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	[self.currentElemValue appendString:string];
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
+	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_WISHLIST_DOC];
+	NSString* bodystr=[NSString stringWithFormat:@"add_item=%@",aBeerID];
+	
+	NSData* answer;
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
+	if ([response statusCode]==200)
+	{
+		// TODO: signify somehow that it worked
+		// TODO: store new wishlist locally (the returned doc)
+	}
+	else
+	{
+		// TODO: tell the user it didn't work
+	}
+	
 }
 
 #pragma mark AvailabilityTVCDelegate methods
@@ -1885,6 +1618,7 @@ enum TAGS {
 -(void)availabilityTVC:(AvailabilityTVC*)tvc didSelectAvailability:(NSString*)s
 {
 	[self.beerObj.data setObject:s forKey:@"availability"];
+	[self.tableView reloadData];
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
