@@ -137,8 +137,7 @@ enum TAGS {
 	if (self.editing)
 	{   // Editing is ending (or trying to end), send data to server
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(saveEdits:) object:nil] autorelease];
-		[appDelegate.sharedOperationQueue addOperation:op];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(saveEdits:) object:nil withActivityHUD:YES andActivityHUDText:@"Saving"];
 	}
 	else
 	{
@@ -184,9 +183,8 @@ enum TAGS {
 		self.editButtonItem.target=self;
 		self.editButtonItem.action=@selector(editButtonClicked);
 
-		NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(getBeerInfo:) object:self.beerID] autorelease];
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate.sharedOperationQueue addOperation:op];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerInfo:) object:self.beerID withActivityHUD:YES andActivityHUDText:@"Getting Beer Info"];
 	}
 }
 
@@ -196,6 +194,8 @@ enum TAGS {
 	self.beerObj.data=[appDelegate getBeerDoc:aBeerID];
 	self.userReviewData=[appDelegate getReviewsOfBeer:aBeerID byUserID:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]];
 	[self.tableView reloadData]; // Reload data because we may come back from an editing view controller
+	
+	[appDelegate dismissActivityHUD];
 }
 
 /*
@@ -1107,8 +1107,7 @@ enum TAGS {
 	
 	// Send the review to the site
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(sendBeerReview:) object:reviewDoc] autorelease];
-	[appDelegate.sharedOperationQueue addOperation:op];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendBeerReview:) object:reviewDoc withActivityHUD:YES andActivityHUDText:@"Sending Review"];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -1303,8 +1302,7 @@ enum TAGS {
 			{
 				// Add beerID to wish list
 				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-				NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(addToWishList) object:self.beerID] autorelease];
-				[appDelegate.sharedOperationQueue addOperation:op];
+				[appDelegate performAsyncOperationWithTarget:self selector:@selector(addToWishList:) object:self.beerID withActivityHUD:YES andActivityHUDText:@"Adding to Wish List"];
 
 				UITableViewCell* cell=[self.tableView cellForRowAtIndexPath:indexPath];
 				[cell setSelected:NO animated:YES];
@@ -1457,8 +1455,7 @@ enum TAGS {
 -(void)photoViewer:(PhotoViewer*)photoViewer didSelectPhotoToUpload:(UIImage*)photo
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(uploadPhoto:) object:photo] autorelease];
-	[appDelegate.sharedOperationQueue addOperation:op];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(uploadPhoto:) object:photo withActivityHUD:YES andActivityHUDText:@"Uploading Photo"];
 }
 
 #pragma mark EditLineVCDelegate methods
@@ -1496,13 +1493,13 @@ enum TAGS {
 
 -(void)sendBeerReview:(NSDictionary*)reviewDoc
 {
-	// TODO: put up spinning animation
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+
 	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];
 	NSString* bodystr=[[[NSString alloc] initWithFormat:@"rating=%@&beer_id=%@", [reviewDoc objectForKey:@"rating"], [reviewDoc objectForKey:@"beer_id"]] autorelease];
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSMutableDictionary* answer;
 	NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:bodystr returningJSON:&answer];
-	// TODO: take down spinning animation
+
 	if ([response statusCode]==200) {
 		self.userReviewData=answer;
 		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:self.userReviewData] autorelease];
@@ -1511,10 +1508,14 @@ enum TAGS {
 	} else {
 		// TODO: inform the user that the download could not be made
 	}	
+	
+	[appDelegate dismissActivityHUD];
 }
 
 -(void)saveEdits:(id)nothing
 {
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+
 	// Save data to server
 	NSArray* keyNames=[NSArray arrayWithObjects:
 					   @"name",
@@ -1555,7 +1556,6 @@ enum TAGS {
 		NSMutableDictionary* answer;
 		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC];
 		// TODO: put up a view that covers entire screen with spinning animation
-		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 		NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:bodystr returningJSON:&answer];
 		// TODO: remove spinning animation
 		if ([response statusCode]==200)
@@ -1579,6 +1579,7 @@ enum TAGS {
 		}
 	}
 	
+	[appDelegate dismissActivityHUD];
 }
 
 -(void)addToWishList:(id)aBeerID
@@ -1599,6 +1600,7 @@ enum TAGS {
 		// TODO: tell the user it didn't work
 	}
 	
+	[appDelegate dismissActivityHUD];
 }
 
 -(void)uploadPhoto:(id)photoImage
@@ -1617,6 +1619,8 @@ enum TAGS {
 		UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"Oops" message:@"BeerCrush didn't accept the photo for some reason. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
 		[alert show];
 	}
+
+	[appDelegate dismissActivityHUD];
 }
 
 
