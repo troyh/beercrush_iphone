@@ -1456,21 +1456,9 @@ enum TAGS {
 
 -(void)photoViewer:(PhotoViewer*)photoViewer didSelectPhotoToUpload:(UIImage*)photo
 {
-	NSData* imageData=UIImageJPEGRepresentation(photo, 1.0);
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_UPLOAD_BEER_IMAGE,self.beerID]];
-	NSData* answer;
-	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:imageData returningData:&answer];
-	if ([response statusCode]==200)
-	{
-		DLog(@"Successfully uploaded photo");
-	}
-	else {
-		DLog(@"Failed to upload photo");
-		UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"Oops" message:@"BeerCrush didn't accept the photo for some reason. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
-		[alert show];
-	}
-	
+	NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(uploadPhoto:) object:photo] autorelease];
+	[appDelegate.sharedOperationQueue addOperation:op];
 }
 
 #pragma mark EditLineVCDelegate methods
@@ -1612,6 +1600,25 @@ enum TAGS {
 	}
 	
 }
+
+-(void)uploadPhoto:(id)photoImage
+{
+	NSData* imageData=UIImageJPEGRepresentation(photoImage, 1.0);
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_UPLOAD_BEER_IMAGE,self.beerID]];
+	NSData* answer;
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:imageData returningData:&answer];
+	if ([response statusCode]==200)
+	{
+		DLog(@"Successfully uploaded photo");
+	}
+	else {
+		DLog(@"Failed to upload photo");
+		UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"Oops" message:@"BeerCrush didn't accept the photo for some reason. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+		[alert show];
+	}
+}
+
 
 #pragma mark AvailabilityTVCDelegate methods
 
