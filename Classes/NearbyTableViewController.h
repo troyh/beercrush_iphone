@@ -17,29 +17,12 @@
 	NSMutableDictionary* data;
 	NSMutableDictionary* editeddata;
 	CLLocationDistance distanceAway;
-//	NSString* name;
-//	CLLocation* loc;
-//	NSString* street;
-//	NSString* city;
-//	NSString* state;
-//	NSString* zip;
-//	NSString* phone;
-//	NSString* uri;
-	
 }
 
 @property (nonatomic,retain) NSString* place_id;
 @property (nonatomic,retain) NSMutableDictionary* data;
 @property (nonatomic,retain) NSMutableDictionary* editeddata;
 @property (nonatomic) CLLocationDistance distanceAway;
-//@property (nonatomic,retain) NSString* name;
-//@property (nonatomic,retain) CLLocation* loc;
-//@property (nonatomic,retain) NSString* street;
-//@property (nonatomic,retain) NSString* city;
-//@property (nonatomic,retain) NSString* state;
-//@property (nonatomic,retain) NSString* zip;
-//@property (nonatomic,retain) NSString* phone;
-//@property (nonatomic,retain) NSString* uri;
 
 -(id)init;
 -(NSInteger)compareLocation:(id)other;
@@ -49,13 +32,11 @@
 
 @interface NearbyTableViewController : UITableViewController<CLLocationManagerDelegate> {
 	CLLocation* myLocation;
-	PlaceObject* placeObject;
 	NSMutableArray* places;
 	CLLocationManager* locationManager;
 }
 
 @property (nonatomic, retain) CLLocation* myLocation;
-@property (nonatomic, retain) PlaceObject* placeObject;
 @property (nonatomic, retain) NSMutableArray* places;
 @property (nonatomic, retain) CLLocationManager* locationManager;
 @end

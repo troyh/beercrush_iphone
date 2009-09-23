@@ -84,7 +84,6 @@
 @implementation NearbyTableViewController
 
 @synthesize myLocation;
-@synthesize placeObject;
 @synthesize places;
 @synthesize locationManager;
 
@@ -128,13 +127,15 @@ const NSInteger kViewTagDistance=2;
 	}
 	
 	self.title=@"Nearby";
+	
+	self.places=[[NSMutableArray alloc] initWithCapacity:100];
 
     [super viewWillAppear:animated];
 }
 
 -(void)refreshNearby:(id)sender
 {
-	[places removeAllObjects];
+	[self.places removeAllObjects];
 	[self.tableView reloadData];
 	[self.locationManager startUpdatingLocation];
 }
@@ -209,7 +210,7 @@ const NSInteger kViewTagDistance=2;
 	PlaceObject* p=[places objectAtIndex:indexPath.row];
 
 	UILabel* namelabel=(UILabel*)[cell.contentView viewWithTag:kViewTagName];
-	[namelabel setText:[p.data valueForKey:@"name"]];
+	[namelabel setText:[p.data objectForKey:@"name"]];
 	
 	UILabel* distlabel=(UILabel*)[cell.contentView viewWithTag:kViewTagDistance];
 	[distlabel setText:[NSString stringWithFormat:@"%0.1f mi",(p.distanceAway/1000*0.62137119)]]; // Convert meters to miles
@@ -297,7 +298,6 @@ const NSInteger kViewTagDistance=2;
 
 - (void)dealloc {
 	[myLocation release];
-	[placeObject release];
 	[places release];
 	[locationManager release];
     [super dealloc];
@@ -346,8 +346,27 @@ const NSInteger kViewTagDistance=2;
 	NSHTTPURLResponse* response=[delegate sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&data];
 	if ([response statusCode]==200)
 	{
-		self.places=[data objectForKey:@"places"];
+		for (NSDictionary* place in [data objectForKey:@"places"])
+		{
+			// Create a PlaceObject
+			PlaceObject* placeObject=[[[PlaceObject alloc] init] autorelease];
+			
+			[placeObject.data setObject:[place objectForKey:@"name"] forKey:@"name"];
+			
+			CLLocation* loc=[[[CLLocation alloc] initWithLatitude:[[place valueForKey:@"latitude"] doubleValue] longitude:[[place valueForKey:@"longitude"] doubleValue]] autorelease];
+			[placeObject.data setObject:loc forKey:@"loc"];
+			placeObject.place_id=[place valueForKey:@"id"];
+			
+			placeObject.distanceAway=[loc getDistanceFrom:myLocation];
+			[self.places addObject:placeObject];
+		}
+		
+		[self.places sortUsingSelector:@selector(compareLocation:)];
+
+		[self.tableView reloadData];
 	}
+	
+	[delegate dismissActivityHUD];
 }
 
 
