@@ -51,48 +51,15 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-	// Separate the parts of the reviewedDocID to determine what kind of doc it is
-	NSArray* idparts=[self.reviewedDocID componentsSeparatedByString:@":"];
-	
-	NSURL* url=nil;
-	if ([[idparts objectAtIndex:0] isEqualToString:@"beer"])
-	{	// Retrieve XML doc for this beer
-		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC, 
-								  [idparts objectAtIndex:1],
-								  [idparts objectAtIndex:2],
-								  0]];
-	}
-	else if ([[idparts objectAtIndex:0] isEqualToString:@"brewery"])
-	{ // Retrieve XML doc for this brewery
-		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_BREWERY_REVIEWS_DOC, 
-								  [idparts objectAtIndex:1],
-								  0]];
-	}
-	else if ([[idparts objectAtIndex:0] isEqualToString:@"place"]) 
-	{ // Retrieve XML doc for this place
-		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_PLACE_REVIEWS_DOC, 
-								  [idparts objectAtIndex:1],
-								  0]];
-	}
-	
-	if (url)
-	{
-		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		NSData* answer;
-		NSHTTPURLResponse* response=[del sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-		if ([response statusCode]==200)
-		{
-			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
-			[parser setDelegate:self];
-			BOOL retval=[parser parse];
-			
-			if (retval==NO)
-			{
-				// TODO: handle this error
-			}
-		}
-	}
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getReviews:) object:self.reviewedDocID withActivityHUD:YES andActivityHUDText:@"Getting Reviews"];
+}
 
+-(void)getReviews:(NSString*)docid
+{
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate getReviewsForDocID:docid];
+	[appDelegate dismissActivityHUD];
 }
 
 /*
@@ -264,118 +231,6 @@
 	return nil;
 }
 
-		
-// NSXMLParser delegate methods
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser
-{
-	// Clear any old data
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	[self.xmlParserPath removeAllObjects];
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	[self.xmlParserPath removeAllObjects];
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	/*
-	 Sample reviews doc:
-	<reviews total="1" start="0" count="1" seqnum="0" seqmax="0">
-		<review>
-			<type>review</type>
-			<timestamp>1249427886</timestamp>
-			<user_id>troyh</user_id>
-			<place_id>place:Elliot-Bay-Brewhouse-and-Pub-Burien-Washington</place_id>
-			<rating>4</rating>
-		</review>
-	</reviews>
-	 */
-	
-	if ([elementName isEqualToString:@"reviews"])
-	{
-		if ([self.xmlParserPath count]==0)
-		{
-			self.totalReviews=[[attributeDict objectForKey:@"total"] integerValue];
-		}
-	}
-	else if ([elementName isEqualToString:@"review"])
-	{
-		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",nil]])
-		{
-			// Add a new review dictionary object to the list of reviews
-			[self.reviewsList addObject:[NSMutableDictionary dictionaryWithCapacity:3]]; // 3 matches the number of elements we know we're going to add
-		}
-	}
-	else if (
-		[elementName isEqualToString:@"timestamp"] ||
-	    [elementName isEqualToString:@"user_id"] ||
-		[elementName isEqualToString:@"beer_id"] ||
-	    [elementName isEqualToString:@"rating"]
-		)
-	{
-		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",nil]])
-		{
-			currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-		}
-	}
-	else if ([elementName isEqualToString:@"name"])
-	{
-		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"beer",nil]])
-			currentElemValue=[[NSMutableString alloc] initWithCapacity:128];
-	}
-
-	// Add the element to the xmlParserPath
-	[self.xmlParserPath addObject:elementName];
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	// Pop the element name off the XML parser path array
-	[self.xmlParserPath removeLastObject];
-	
-	if (self.currentElemValue) // If we care about capturing this data
-	{
-		// Is it the element under //beer_reviews/beer_review?
-		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",nil]])
-		{
-			if ([elementName isEqualToString:@"timestamp"])
-				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"timestamp"];
-			else if ([elementName isEqualToString:@"user_id"])
-				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"user_id"];
-			else if ([elementName isEqualToString:@"beer_id"])
-				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"beer_id"];
-			else if ([elementName isEqualToString:@"rating"])
-				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"rating"];
-		}
-		else if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"beer",nil]])
-		{
-			if ([elementName isEqualToString:@"name"])
-				[[self.reviewsList lastObject] setObject:currentElemValue forKey:@"name"];
-		}
-		
-		self.currentElemValue=nil;
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	[self.currentElemValue appendString:string];
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
-}
-		
 
 @end
 

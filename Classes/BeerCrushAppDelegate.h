@@ -38,6 +38,7 @@ void normalizeToDictionary(NSMutableDictionary* data, NSString* key, NSUInteger 
 void normalizeBeerData(NSMutableDictionary* beerData);
 void normalizePlaceData(NSMutableDictionary* placeData);
 void normalizePlaceReviewData(NSMutableDictionary* placeReviewData);
+void normalizeBreweryData(NSMutableDictionary* data);
 NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* orig,NSDictionary* curr);
 
 
@@ -51,11 +52,6 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 	
 	NSOperationQueue* sharedOperationQueue;
 	
-	NSMutableData* xmlPostResponse;
-
-	NSMutableArray* xmlParserPath;
-	NSMutableString* currentElemValue;
-	NSMutableString* currentElemID;
 	NSMutableDictionary* flavorsDictionary;
 	NSMutableDictionary* stylesDictionary;
 	NSMutableDictionary* colorsDictionary;
@@ -69,13 +65,9 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 @property (nonatomic, retain) LoginVC* loginVC;
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 @property (nonatomic, retain) NSOperationQueue* sharedOperationQueue;
-@property (nonatomic, retain) NSMutableData* xmlPostResponse;
 @property(nonatomic) SEL onBeerSelectedAction;
 @property(nonatomic,assign) id onBeerSelectedTarget;
 @property (nonatomic, retain) UIProgressHUD* activityHUD;
-@property (nonatomic, retain) NSMutableArray* xmlParserPath;
-@property (nonatomic, retain) NSMutableString* currentElemValue;
-@property (nonatomic, retain) NSMutableString* currentElemID;
 @property (nonatomic, retain) NSMutableDictionary* flavorsDictionary;
 @property (nonatomic, retain) NSMutableDictionary* stylesDictionary;
 @property (nonatomic, retain) NSMutableDictionary* colorsDictionary;
@@ -100,6 +92,10 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 -(NSMutableDictionary*)getBreweryDoc:(NSString*)breweryID;
 -(NSMutableDictionary*)getPlaceDoc:(NSString*)placeID;
 -(NSMutableDictionary*)getPlaceReviews:(NSString*)placeID byUser:(NSString*)user_id;
+-(NSMutableDictionary*)getReviewsForDocID:(NSString*)docid;
+-(NSMutableDictionary*)getBeerReviewsByUser:(NSString*)userID seqNum:(NSUInteger)seqNum;
+-(NSMutableDictionary*)getBreweriesList;
+
 -(BOOL)restoringNavigationStateAutomatically;
 -(NSObject*)nextNavigationStateToRestore;
 -(BOOL)pushNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem withData:(NSObject*)data;
@@ -127,24 +123,23 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 #define BEERCRUSH_API_URL_EDIT_PLACE_DOC				@BEERCRUSH_API_URL_HOST"/api/place/edit"
 #define BEERCRUSH_API_URL_EDIT_MENU_DOC					@BEERCRUSH_API_URL_HOST"/api/menu/edit"
 #define BEERCRUSH_API_URL_EDIT_WISHLIST_DOC				@BEERCRUSH_API_URL_HOST"/api/wishlist/edit"
-#define BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC		@BEERCRUSH_API_URL_HOST"/xml/review/beer/%@/%@/_all.%d.xml"
-#define BEERCRUSH_API_URL_GET_ALL_BREWERIES_DOC			@BEERCRUSH_API_URL_HOST"/xml/breweries.xml"
-#define BEERCRUSH_API_URL_GET_ALL_BREWERY_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/xml/review/brewery/%@/_all.%d.xml"
-#define BEERCRUSH_API_URL_GET_ALL_PLACE_REVIEWS_DOC		@BEERCRUSH_API_URL_HOST"/xml/review/place/%@/_all.%d.xml"
+#define BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC		@BEERCRUSH_API_URL_HOST"/json/review/beer/%@/%@/_all.%d"
+#define BEERCRUSH_API_URL_GET_ALL_BREWERIES_DOC			@BEERCRUSH_API_URL_HOST"/json/breweries"
+#define BEERCRUSH_API_URL_GET_ALL_PLACE_REVIEWS_DOC		@BEERCRUSH_API_URL_HOST"/json/review/place/%@/_all.%d"
 #define BEERCRUSH_API_URL_GET_BEER_DOC					@BEERCRUSH_API_URL_HOST"/json/beer/%@/%@"
 #define BEERCRUSH_API_URL_GET_BEER_REVIEW_DOC			@BEERCRUSH_API_URL_HOST"/json/review/beer/%@/%@/%@"
-#define BEERCRUSH_API_URL_GET_BREWERY_DOC				@BEERCRUSH_API_URL_HOST"/xml/brewery/%@"
+#define BEERCRUSH_API_URL_GET_BREWERY_BEERLIST			@BEERCRUSH_API_URL_HOST"/json/brewery/%@/beerlist"
 #define BEERCRUSH_API_URL_GET_BREWERY_DOC_JSON			@BEERCRUSH_API_URL_HOST"/json/brewery/%@"
 #define BEERCRUSH_API_URL_GET_COLORSLIST				@BEERCRUSH_API_URL_HOST"/json/beercolors"
-#define BEERCRUSH_API_URL_GET_FLAVORS_DOC				@BEERCRUSH_API_URL_HOST"/xml/flavors"
-#define BEERCRUSH_API_URL_GET_MENU_DOC					@BEERCRUSH_API_URL_HOST"/xml/menu/%@/%@"
+#define BEERCRUSH_API_URL_GET_FLAVORS_DOC				@BEERCRUSH_API_URL_HOST"/json/flavors"
+#define BEERCRUSH_API_URL_GET_MENU_DOC					@BEERCRUSH_API_URL_HOST"/json/menu/%@/%@"
 #define BEERCRUSH_API_URL_GET_PLACE_DOC					@BEERCRUSH_API_URL_HOST"/json/place/%@"
 #define BEERCRUSH_API_URL_GET_PLACE_REVIEW_DOC			@BEERCRUSH_API_URL_HOST"/json/review/place/%@/%@"
 #define BEERCRUSH_API_URI_GET_PLACE_STYLES				@BEERCRUSH_API_URL_HOST"/json/restaurantcategories"
-#define BEERCRUSH_API_URL_GET_STYLESLIST				@BEERCRUSH_API_URL_HOST"/xml/styles"
-#define BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC		@BEERCRUSH_API_URL_HOST"/xml/user/%@/reviews/beer.%d.xml"
-#define BEERCRUSH_API_URL_GET_USER_PLACE_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/xml/user/%@/reviews/place.%d.xml"
-#define BEERCRUSH_API_URL_GET_USER_WISHLIST_DOC			@BEERCRUSH_API_URL_HOST"/xml/user/%@/wishlist"
+#define BEERCRUSH_API_URL_GET_STYLESLIST				@BEERCRUSH_API_URL_HOST"/json/styles"
+#define BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC		@BEERCRUSH_API_URL_HOST"/json/user/%@/reviews/beer.%d"
+#define BEERCRUSH_API_URL_GET_USER_PLACE_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/json/user/%@/reviews/place.%d"
+#define BEERCRUSH_API_URL_GET_USER_WISHLIST_DOC			@BEERCRUSH_API_URL_HOST"/json/user/%@/wishlist"
 #define BEERCRUSH_API_URL_LOGIN							@BEERCRUSH_API_URL_HOST"/api/login"
 #define BEERCRUSH_API_URL_NEARBY_QUERY					@BEERCRUSH_API_URL_HOST"/api/nearby.fcgi?lat=%f&lon=%f&within=%d"
 #define BEERCRUSH_API_URL_POST_BEER_REVIEW				@BEERCRUSH_API_URL_HOST"/api/beer/review"

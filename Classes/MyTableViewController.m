@@ -252,10 +252,8 @@
 	{
 		[bar setShowsCancelButton:NO animated:YES];
 
-		NSInvocationOperation* op=[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(autocomplete:) object:searchText];
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate.sharedOperationQueue addOperation:op];
-		[op release];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(autocomplete:) object:searchText withActivityHUD:NO andActivityHUDText:nil];
 	}
 	else
 	{
@@ -271,10 +269,8 @@
 	{
 		[bar endEditing:YES];
 	
-		NSInvocationOperation* op=[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(query:) object:bar.text];
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate.sharedOperationQueue addOperation:op];
-		[op release];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(query:) object:bar.text withActivityHUD:YES andActivityHUDText:@"Searching"];
 	}
 }
 

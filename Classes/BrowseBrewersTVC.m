@@ -56,19 +56,18 @@
 	
 	breweryList=[[NSMutableArray alloc] init];
 	
-	// Get list of breweries from the server
-	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_GET_ALL_BREWERIES_DOC];
-	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-	[parser setDelegate:self];
-	BOOL retval=[parser parse];
-	[parser release];
-	
-	if (retval==YES)
-	{
-	}
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBreweriesList:) object:nil withActivityHUD:YES andActivityHUDText:@"Getting Brewery List"];
 
 	[super viewWillAppear:animated];
+}
+
+-(void)getBreweriesList:(id)nothing
+{
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate getBreweriesList];
 	
+	[appDelegate dismissActivityHUD];
 }
 
 /*
@@ -215,115 +214,6 @@
     [super dealloc];
 	
 	[breweryList release];
-}
-
-/********************************
- * NSXMLParser delegate methods
- ********************************/
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser
-{
-	// Clear any old data
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	if (xmlParserPath)
-		[self.xmlParserPath removeAllObjects];
-	else
-		xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5];
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-//	[self.xmlParserPath release];
-	self.xmlParserPath=nil;
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	if ([elementName isEqualToString:@"name"])
-	{
-		// Is it the /breweries/group/brewery/name?
-		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"breweries",@"group",@"brewery",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[NSMutableString string];
-		}
-	}
-	else if ([elementName isEqualToString:@"group"])
-	{
-		// Is it the /breweries/group?
-		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"breweries",nil]])
-		{
-			// Add group title to array of brewery groups
-			[breweryGroups addObject:[attributeDict objectForKey:@"title"]];
-			// Create a new group of breweries
-			currentGroup=[NSMutableArray arrayWithCapacity:5];
-			[breweryList addObject:currentGroup];
-		}
-	}
-	else if ([elementName isEqualToString:@"brewery"])
-	{
-		// Is it the /breweries/group/brewery?
-		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"breweries",@"group",nil]])
-		{
-			// Create a new brewery dictionary
-			currentBrewery=[NSMutableDictionary dictionaryWithCapacity:2];
-			[currentGroup addObject:currentBrewery];
-			[currentBrewery setObject:[attributeDict objectForKey:@"id"] forKey:@"id"];
-		}
-	}
-	else if ([elementName isEqualToString:@"breweries"])
-	{
-		// Is it the /breweries?
-		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:nil]])
-		{
-			if (breweryGroups)
-				[breweryGroups release]; // Free the last one, if there is one
-			// Create a new brewery groups array
-			breweryGroups=[[NSMutableArray alloc] initWithCapacity:27]; // 27=26 letters of alphabet plus one for numbered names
-		}
-	}
-	
-	// Add the element to the xmlParserPath
-	[self.xmlParserPath addObject:elementName];
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	// Pop the element name off the XML parser path array
-	[self.xmlParserPath removeLastObject];
-	
-	if (self.currentElemValue)
-	{
-		if ([elementName isEqualToString:@"name"])
-		{
-			// Is it the /breweries/group/brewery/name?
-			if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"breweries",@"group",@"brewery",nil]])
-			{
-				[currentBrewery setObject:currentElemValue forKey:@"name"];
-			}
-		}
-
-		self.currentElemValue=nil;
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	if (self.currentElemValue)
-	{
-		[self.currentElemValue appendString:string];
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
 }
 
 @end

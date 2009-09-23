@@ -84,7 +84,6 @@
 @implementation NearbyTableViewController
 
 @synthesize myLocation;
-@synthesize currentElemValue;
 @synthesize placeObject;
 @synthesize places;
 @synthesize locationManager;
@@ -297,7 +296,6 @@ const NSInteger kViewTagDistance=2;
 
 
 - (void)dealloc {
-	[currentElemValue release];
 	[myLocation release];
 	[placeObject release];
 	[places release];
@@ -329,16 +327,9 @@ const NSInteger kViewTagDistance=2;
 	// Ask server for nearby places
 	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_NEARBY_QUERY, myLocation.coordinate.latitude, myLocation.coordinate.longitude, 10]];
 	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSData* data;
-	NSHTTPURLResponse* answer=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&data];
-	if ([answer statusCode]==200)
-	{
-		NSXMLParser* parser=[[NSXMLParser alloc] initWithData:data];
-		[parser setDelegate:self];
-		[parser parse];
-	}
+	[delegate performAsyncOperationWithTarget:self selector:@selector(getNearbyResults:) object:url withActivityHUD:YES andActivityHUDText:@"Updating"];
 }
-		  
+
 // Called when there is an error getting the location
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
@@ -346,83 +337,20 @@ const NSInteger kViewTagDistance=2;
 	[manager stopUpdatingLocation];
 }
 	
+#pragma mark Async operations
 
-// NSXMLParser delegate methods
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser
+-(void)getNearbyResults:(NSURL*)url
 {
-	// Clear any old data
-//	if (self.currentElemValue)
-//		[self.currentElemValue release];
-	self.currentElemValue=nil;
-//	if (self.places)
-//		[self.places release];
-	self.places=nil;
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-	// Sort the places
-	[self.places sortUsingSelector:@selector(compareLocation:)];
-	[self.tableView reloadData];
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	if ([elementName isEqualToString:@"places"])
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSMutableDictionary* data;
+	NSHTTPURLResponse* response=[delegate sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&data];
+	if ([response statusCode]==200)
 	{
-		self.places=[NSMutableArray arrayWithCapacity: [[attributeDict valueForKey:@"count"] intValue]];
-	}
-	else if ([elementName isEqualToString:@"place"])
-	{
-		placeObject=[[PlaceObject alloc] init];
-		CLLocation* loc=[[[CLLocation alloc] initWithLatitude:[[attributeDict valueForKey:@"latitude"] doubleValue] longitude:[[attributeDict valueForKey:@"longitude"] doubleValue]] autorelease];
-		[placeObject.data setObject:loc forKey:@"loc"];
-		placeObject.place_id=[attributeDict valueForKey:@"id"];
-	}
-	else if ([elementName isEqualToString:@"name"])
-	{
-		self.currentElemValue=[NSMutableString string];
+		self.places=[data objectForKey:@"places"];
 	}
 }
 
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	if ([elementName isEqualToString:@"place"])
-	{
-		// TODO: store object
-		//	DLog(@"MyLocation Lat:%f Lon:%f",myLocation.coordinate.latitude,myLocation.coordinate.longitude);
-		CLLocation* pl=[placeObject.data valueForKey:@"loc"];
-		//	DLog(@"PlaceLoctn Lat:%f Lon:%f",pl.coordinate.latitude,pl.coordinate.longitude);
-		placeObject.distanceAway=[pl getDistanceFrom:myLocation];
-		
-		[places addObject:placeObject];
-	}
-	
-	if (self.currentElemValue)
-	{
-		if ([elementName isEqualToString:@"name"])
-			[placeObject.data setObject:currentElemValue forKey:@"name"];
 
-		self.currentElemValue=nil;
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	if (self.currentElemValue)
-	{
-		[self.currentElemValue appendString:string];
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
-}
 
 
 @end

@@ -13,19 +13,14 @@
 @implementation UserReviewsTVC
 
 @synthesize reviewsList;
-@synthesize xmlParserPath;
-@synthesize currentElemValue;
 @synthesize totalReviews;
 @synthesize seqNext;
 @synthesize seqMax;
-@synthesize retrievedReviewsCount;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:style]) {
 		self.title=@"My Reviews";
-		self.currentElemValue=nil;
-		self.xmlParserPath=nil;
 		self.reviewsList=[[NSMutableArray alloc] initWithCapacity:10];
     }
     return self;
@@ -37,11 +32,14 @@
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-	[self retrieveReviews:0]; // Get the first batch
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:0] withActivityHUD:YES andActivityHUDText:@"Getting Reviews"];
 }
 
 -(void)retrieveReviews:(NSUInteger)seqnum
 {
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+
 	// Fetch list of user's beer reviews from the server
 	NSString* user_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
 	if (user_id==nil)
@@ -50,27 +48,35 @@
 	}
 	else
 	{
-		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		NSData* answer=nil;
-		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC, user_id, seqnum]];
-		NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-		if ([response statusCode]==200)
+		NSUInteger origcnt=[self.reviewsList count];
+		
+		NSMutableDictionary* reviews=[delegate getBeerReviewsByUser:user_id seqNum:seqnum];
+		[self.reviewsList addObjectsFromArray:[reviews objectForKey:@"reviews"]];
+		self.totalReviews=[[reviews objectForKey:@"total"] integerValue];
+		self.seqNext=[[reviews objectForKey:@"seqnum"] integerValue]+1;
+		self.seqMax=[[reviews objectForKey:@"seqmax"] integerValue];
+		
+		if (seqnum>0)
 		{
-			NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
-			[parser setDelegate:self];
-			BOOL parse_ok=[parser parse];
-			if (parse_ok==NO)
+			// Insert more rows
+			[self.tableView beginUpdates];
+			
+			NSUInteger n=[[reviews objectForKey:@"reviews"] count];
+			NSMutableArray* indexPaths=[NSMutableArray arrayWithCapacity:n];
+			for (int i=0;i<n;++i)
 			{
-				NSError* err=[parser parserError];
-				UIAlertView* vw=[[UIAlertView alloc] initWithTitle:@"Oops" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-				[vw show];
-				[vw release];
+				[indexPaths addObject:[NSIndexPath indexPathForRow:origcnt+i inSection:0]];
 			}
-			[parser release];
+			[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+			if ([self.reviewsList count]>=self.totalReviews) // We have no more reviews to load?
+				[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:origcnt inSection:0],nil] withRowAnimation:UITableViewRowAnimationNone];
+			
+			[self.tableView endUpdates];
 		}
 	}
+	
+	[delegate dismissActivityHUD];
 }
-
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -237,24 +243,10 @@
 	{
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
 		
-		NSUInteger origcnt=[self.reviewsList count];
 		// Query the server for the next set of reviews
 		// TODO: put spinner in accessoryview so the user knows network stuff is going on
-		[self retrieveReviews:self.seqNext];
-
-		// Insert more rows
-		[self.tableView beginUpdates];
-		
-		NSMutableArray* indexPaths=[NSMutableArray arrayWithCapacity:self.retrievedReviewsCount];
-		for (int i=0;i<self.retrievedReviewsCount;++i)
-		{
-			[indexPaths addObject:[NSIndexPath indexPathForRow:origcnt+i inSection:0]];
-		}
-		[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-		if ([self.reviewsList count]>=self.totalReviews) // We have no more reviews to load?
-			[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:origcnt inSection:0],nil] withRowAnimation:UITableViewRowAnimationNone];
-		
-		[self.tableView endUpdates];
+		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:self.seqNext] withActivityHUD:YES andActivityHUDText:@"Getting Reviews"];
 	}
 }
 
@@ -299,161 +291,8 @@
 
 
 - (void)dealloc {
-	[self.currentElemValue release];
-	[self.xmlParserPath release];
 	[self.reviewsList release];
     [super dealloc];
-}
-
-
-// NSXMLParser delegate methods
-
-//
-// Sample Beer Review element:
-//
-//<review>
-//	<type>beer_review</type>
-//	<timestamp>1247524623</timestamp>
-//	<user_id>troyh</user_id>
-//	<beer_id>Dogfish-Head-Craft-Brewery-Milton:Indian-Brown-Ale</beer_id>
-//	<rating>5</rating>
-//</review>
-
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser
-{
-	// Clear any old data
-//	[self.xmlParserPath release];
-	self.xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5];
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-//	[self.xmlParserPath release];
-	self.xmlParserPath=nil;
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	if ([elementName isEqualToString:@"reviews"])
-	{
-		if ([self.xmlParserPath count]==0) // At the root / of the XML tree
-		{
-			self.totalReviews=[[attributeDict objectForKey:@"total"] integerValue];
-			self.seqNext=[[attributeDict objectForKey:@"seqnum"] integerValue]+1;
-			self.seqMax=[[attributeDict objectForKey:@"seqmax"] integerValue];
-			self.retrievedReviewsCount=[[attributeDict objectForKey:@"count"] integerValue];
-			DLog(@"totalReviews=%d",totalReviews);
-			DLog(@"seqNext=%d",seqNext);
-			DLog(@"seqMax=%d",seqMax);
-		}
-	}
-	else if ([elementName isEqualToString:@"review"])
-	{
-		if ([self.xmlParserPath count]==1 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",nil]])
-		{
-			// Create a new review item in the reviewsList array
-			[self.reviewsList addObject:[NSMutableDictionary dictionaryWithCapacity:5]];
-		}
-	}
-	else if ([elementName isEqualToString:@"type"] ||
-			[elementName isEqualToString:@"timestamp"] ||
-			[elementName isEqualToString:@"beer_id"] ||
-			[elementName isEqualToString:@"rating"] ||
-			 [elementName isEqualToString:@"aftertaste"] ||
-			 [elementName isEqualToString:@"balance"] ||
-			 [elementName isEqualToString:@"comments"] ||
-			[elementName isEqualToString:@"body"])
-	{
-		if ([self.xmlParserPath count]==2 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",nil]])
-		{ // XPath is /reviews/review (i.e., it's a beer review
-			// Init the string to hold the value of this element
-			self.currentElemValue=[[NSMutableString string] retain];
-		}
-	}
-	else if ([elementName isEqualToString:@"item"])
-	{ // XPath is /reviews/review/flavors
-		if ([self.xmlParserPath count]==3 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"flavors",nil]])
-			self.currentElemValue=[[NSMutableString string] retain];
-	}
-	else if ([elementName isEqualToString:@"name"])
-	{ // XPath is /reviews/review/beer
-		if ([self.xmlParserPath count]==3 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"beer",nil]])
-			self.currentElemValue=[[NSMutableString string] retain];
-	}
-
-	[self.xmlParserPath addObject:elementName];
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	[self.xmlParserPath removeLastObject];
-	
-	if (self.currentElemValue)
-	{
-		if ([elementName isEqualToString:@"type"] ||
-			[elementName isEqualToString:@"timestamp"] ||
-			[elementName isEqualToString:@"beer_id"] ||
-			[elementName isEqualToString:@"rating"] ||
-			[elementName isEqualToString:@"aftertaste"] ||
-			[elementName isEqualToString:@"balance"] ||
-			[elementName isEqualToString:@"comments"] ||
-			[elementName isEqualToString:@"body"])
-		{
-			if ([self.xmlParserPath count]==2 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",nil]])
-			{ // Is a Beer Review
-				NSMutableDictionary* review=[self.reviewsList lastObject];
-				[review setObject:self.currentElemValue forKey:elementName];
-			}
-		}
-		else if ([elementName isEqualToString:@"item"])
-		{ // XPath is /reviews/review/flavors
-			if ([self.xmlParserPath count]==3 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"flavors",nil]])
-			{
-				NSMutableDictionary* review=[self.reviewsList lastObject];
-				NSMutableArray* flavors=[review objectForKey:@"flavors"];
-				if (flavors==nil)
-				{ // Create an array to store the flavors
-					flavors=[NSMutableArray arrayWithCapacity:10];
-					[review setObject:flavors forKey:@"flavors"];
-				}
-				[flavors addObject:currentElemValue];
-			}
-		}
-		else if ([elementName isEqualToString:@"name"])
-		{
-			if ([self.xmlParserPath count]==3 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"beer",nil]])
-			{
-				NSMutableDictionary* review=[self.reviewsList lastObject];
-				[review setObject:self.currentElemValue forKey:@"beer_name"];
-			}
-			else if ([self.xmlParserPath count]==4 && [self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"reviews",@"review",@"beer",@"brewery",nil]])
-			{
-				NSMutableDictionary* review=[self.reviewsList lastObject];
-				[review setObject:self.currentElemValue forKey:@"brewery_name"];
-			}
-		}
-			
-		[self.currentElemValue release];
-		self.currentElemValue=nil;
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	[self.currentElemValue appendString:string];
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
 }
 
 @end

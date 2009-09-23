@@ -227,6 +227,30 @@ void normalizePlaceReviewData(NSMutableDictionary* placeReviewData)
 	// TODO: implement this
 }
 
+void normalizeBreweryData(NSMutableDictionary* data)
+{
+	normalizeToString(data, @"name");
+	normalizeToString(data, @"description");
+	normalizeToString(data, @"phone");
+	normalizeToString(data, @"uri");
+	normalizeToString(data, @"tourinfo");
+	normalizeToString(data, @"tasting");
+	normalizeToString(data, @"hours");
+	
+	if ([data objectForKey:@"togo"]==nil)
+		[data setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"togo"];
+	normalizeToBoolean([data objectForKey:@"togo"], @"bottled_beer");
+	normalizeToBoolean([data objectForKey:@"togo"], @"growlers");
+	normalizeToBoolean([data objectForKey:@"togo"], @"kegs");
+	
+	if ([data objectForKey:@"address"]==nil)
+		[data setObject:[NSMutableDictionary dictionaryWithCapacity:5] forKey:@"address"];
+	normalizeToString([data objectForKey:@"address"], @"street");
+	normalizeToString([data objectForKey:@"address"], @"city");
+	normalizeToString([data objectForKey:@"address"], @"state");
+	normalizeToString([data objectForKey:@"address"], @"zip");
+	normalizeToString([data objectForKey:@"address"], @"country");
+}
 
 
 @implementation BeerObject
@@ -258,15 +282,8 @@ void normalizePlaceReviewData(NSMutableDictionary* placeReviewData)
 @synthesize window;
 @synthesize loginVC;
 @synthesize tabBarController;
-//@synthesize nav;
-//@synthesize mySearchBar;
-//@synthesize app;
-@synthesize xmlPostResponse;
 @synthesize onBeerSelectedAction;
 @synthesize onBeerSelectedTarget;
-@synthesize xmlParserPath;
-@synthesize currentElemValue;
-@synthesize currentElemID;
 @synthesize flavorsDictionary;
 @synthesize stylesDictionary;
 @synthesize colorsDictionary;
@@ -646,10 +663,6 @@ void normalizePlaceReviewData(NSMutableDictionary* placeReviewData)
 	[flavorsDictionary release];
 
 	[loginVC release];
-	[xmlPostResponse release];
-	[xmlParserPath release];
-	[currentElemValue release];
-	[currentElemID release];
 	[restoringNavState release];
 	
     [super dealloc];
@@ -692,7 +705,6 @@ void normalizePlaceReviewData(NSMutableDictionary* placeReviewData)
 	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
 	
 	// create the connection with the request and start loading the data
-//	NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
 	NSHTTPURLResponse* response;
 	NSError* error;
 
@@ -835,7 +847,7 @@ void normalizePlaceReviewData(NSMutableDictionary* placeReviewData)
 	if (flavorsDictionary==nil)
 	{
 		NSArray* paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
-		NSString* filename=[[paths objectAtIndex:0] stringByAppendingString:@"/flavors.dict"];
+		NSString* filename=[[paths objectAtIndex:0] stringByAppendingString:@"/flavors.plist"];
 		
 		flavorsDictionary=[[NSMutableDictionary alloc] initWithContentsOfFile:filename];
 		if (flavorsDictionary==nil)
@@ -845,14 +857,11 @@ void normalizePlaceReviewData(NSMutableDictionary* placeReviewData)
 			// Download the Flavors & Aromas doc from server
 			BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 			NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_GET_FLAVORS_DOC];
-			NSData* answer;
-			NSHTTPURLResponse* response=[del sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+			NSMutableDictionary* answer;
+			NSHTTPURLResponse* response=[del sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
 			if ([response statusCode]==200)
 			{
-				NSXMLParser* parser=[[[NSXMLParser alloc] initWithData:answer] autorelease];
-				[parser setDelegate:self];
-				[parser parse];
-				
+				self.flavorsDictionary=answer;
 				[flavorsDictionary writeToFile:filename atomically:YES];
 			}
 			else
@@ -877,13 +886,11 @@ void normalizePlaceReviewData(NSMutableDictionary* placeReviewData)
 		[self.stylesDictionary setObject:[[[NSMutableDictionary alloc] initWithCapacity:32] autorelease] forKey:@"names"];
 
 		// Get styles list from server
-		NSData* answer;
-		NSHTTPURLResponse* response=[self sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_GET_STYLESLIST] usingMethod:@"GET" withData:nil returningData:&answer];
+		NSMutableDictionary* answer;
+		NSHTTPURLResponse* response=[self sendJSONRequest:[NSURL URLWithString:BEERCRUSH_API_URL_GET_STYLESLIST] usingMethod:@"GET" withData:nil returningJSON:&answer];
 		if ([response statusCode]==200)
 		{
-			NSXMLParser* parser=[[[NSXMLParser alloc] initWithData:answer] autorelease];
-			parser.delegate=self;
-			[parser parse];
+			self.stylesDictionary=answer;
 		}
 		else
 		{
@@ -1038,6 +1045,18 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	return nil;
 }
 
+-(NSMutableDictionary*)getBeerReviewsByUser:(NSString*)userID seqNum:(NSUInteger)seqNum
+{
+	NSMutableDictionary* answer=nil;
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC, userID, seqNum]];
+	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
+		return answer;
+	}
+	return nil;
+}
+
 -(NSString*)breweryNameFromBeerID:(NSString*)beer_id
 {
 	NSArray* parts=[beer_id componentsSeparatedByString:@":"];
@@ -1053,12 +1072,12 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	// TODO: support caching
 	NSArray* parts=[breweryID componentsSeparatedByString:@":"];
 	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC_JSON,[parts lastObject]]];
-	NSData* answer;
-	NSHTTPURLResponse* response=[self sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
 	if ([response statusCode]==200)
 	{
-		NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
-		return [s JSONValue];
+		normalizeBreweryData(answer);
+		return answer;
 	}
 	
 	return nil;
@@ -1091,6 +1110,52 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	if ([response statusCode]==200)
 	{
 		normalizePlaceReviewData(answer);
+		return answer;
+	}
+	return nil;
+}
+
+-(NSMutableDictionary*)getReviewsForDocID:(NSString*)docid
+{
+	// Separate the parts of the reviewedDocID to determine what kind of doc it is
+	NSArray* idparts=[docid componentsSeparatedByString:@":"];
+	
+	NSURL* url=nil;
+	if ([[idparts objectAtIndex:0] isEqualToString:@"beer"])
+	{	// Retrieve XML doc for this beer
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_BEER_REVIEWS_DOC, 
+								  [idparts objectAtIndex:1],
+								  [idparts objectAtIndex:2],
+								  0]];
+	}
+	else if ([[idparts objectAtIndex:0] isEqualToString:@"place"]) 
+	{ // Retrieve XML doc for this place
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_ALL_PLACE_REVIEWS_DOC, 
+								  [idparts objectAtIndex:1],
+								  0]];
+	}
+	
+	if (url)
+	{
+		NSMutableDictionary* answer;
+		NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+		if ([response statusCode]==200)
+		{
+			return answer;
+		}
+	}
+	
+	return nil;
+}
+
+-(NSMutableDictionary*)getBreweriesList
+{
+	// Get list of breweries from the server
+	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_GET_ALL_BREWERIES_DOC];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
 		return answer;
 	}
 	return nil;
@@ -1136,37 +1201,37 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 
 
 // NSURLConnection delegate methods
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    // this method is called when the server has determined that it
-    // has enough information to create the NSURLResponse
-	
-    // it can be called multiple times, for example in the case of a
-    // redirect, so each time we reset the data.
-    // receivedData is declared as a method instance elsewhere
-	
-	NSHTTPURLResponse* httprsp=(NSHTTPURLResponse*)response;
-	NSInteger n=httprsp.statusCode;
-	
-	if (n!=200)
-	{
-		DLog(@"Headers:");
-		NSDictionary* hdrdict=[httprsp allHeaderFields];
-		NSArray* headers=[hdrdict allKeys];
-		for (NSUInteger i=0;i<[headers count];++i)
-		{
-			DLog(@"%@:%@",[headers objectAtIndex:i],[hdrdict objectForKey:[headers objectAtIndex:i]]);
-		}
-		// TODO: alert the user that the login failed
-		UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"Login Failed" message:@"Check username and password in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-		[alert release];
+//
+//- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+//{
+//    // this method is called when the server has determined that it
+//    // has enough information to create the NSURLResponse
+//	
+//    // it can be called multiple times, for example in the case of a
+//    // redirect, so each time we reset the data.
+//    // receivedData is declared as a method instance elsewhere
+//	
+//	NSHTTPURLResponse* httprsp=(NSHTTPURLResponse*)response;
+//	NSInteger n=httprsp.statusCode;
+//	
+//	if (n!=200)
+//	{
+//		DLog(@"Headers:");
+//		NSDictionary* hdrdict=[httprsp allHeaderFields];
+//		NSArray* headers=[hdrdict allKeys];
+//		for (NSUInteger i=0;i<[headers count];++i)
+//		{
+//			DLog(@"%@:%@",[headers objectAtIndex:i],[hdrdict objectForKey:[headers objectAtIndex:i]]);
+//		}
+//		// TODO: alert the user that the login failed
+//		UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"Login Failed" message:@"Check username and password in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//		[alert show];
+//		[alert release];
 //		DLog(@"Login failed.");
-	}
-	else
-	{
-		DLog(@"Login successful.");
+//	}
+//	else
+//	{
+//		DLog(@"Login successful.");
 //		NSArray* cookies=[NSHTTPCookie cookiesWithResponseHeaderFields:httprsp.allHeaderFields forURL:@""];
 //		// Look through cookies and find userid and usrkey
 //		for (int i=0; i < [cookies count]; ++i) {
@@ -1180,231 +1245,40 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 //				usrkey=c.value;
 //			}
 //		}
-	}
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    // append the new data to the receivedData
-    // receivedData is declared as a method instance elsewhere
-    [xmlPostResponse appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    // release the connection, and the data object
-    [connection release];
-	
-    // receivedData is declared as a method instance elsewhere
-	
-    // inform the user
-    DLog(@"Login failed! Error - %@ %@",
-          [error localizedDescription],
-          [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
-	
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-
-{
-    // do something with the data
-    // receivedData is declared as a method instance elsewhere
+//	}
+//}
+//
+//- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+//{
+//    // append the new data to the receivedData
+//    // receivedData is declared as a method instance elsewhere
+//}
+//
+//- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+//{
+//    // release the connection, and the data object
+//    [connection release];
+//	
+//    // receivedData is declared as a method instance elsewhere
+//	
+//    // inform the user
+//    DLog(@"Login failed! Error - %@ %@",
+//          [error localizedDescription],
+//          [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
+//	
+//}
+//
+//- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+//
+//{
+//    // do something with the data
+//    // receivedData is declared as a method instance elsewhere
 //    DLog(@"Succeeded! Received %d bytes of data",[reviewPostResponse length]);
-	DLog(@"Login response:%s",(char*)[xmlPostResponse mutableBytes]);
-	
-    // release the connection, and the data object
-    [connection release];
+//	
+//    // release the connection, and the data object
+//    [connection release];
 //    [reviewPostResponse release];
-}
-
-/*
- 
- Sample styles doc:
- 
- <styles>
- <style num="1">
- <name>Light Lager</name>
- <style num="1A">
- <name>Light American Lager</name>
- </style>
- <style num="1B">
- <name>Standard American Lager</name>
- </style>
- <style num="1C">
- <name>Premium American Lager</name>
- </style>
- <style num="1D">
- <name>Munich Helles</name>
- </style>
- <style num="1E">
- <name>Dortmunder Export</name>
- </style>
- </style>
- <style num="2">
- <name>Pilsner</name>
- <style num="2A">
- <name>German Pilsner</name>
- </style>
- <style num="2B">
- <name>Boehmian Pilsner</name>
- </style>
- <style num="2C">
- <name>Classic American Pilsner</name>
- </style>
- </style>
- <style num="3">
- <name>European Amber Lager</name>
- <style num="3A">
- <name>Vienna Lager</name>
- </style>
- <style num="3B">
- <name>Oktoberfest/Maerzen</name>
- </style>
- </style>
- </styles>
- 
- */
-
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser
-{
-	// Clear any old data
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	self.currentElemID=nil;
-	xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5]; // This also releases a previous xmlParserPath
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	self.currentElemID=nil;
-	xmlParserPath=nil;
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	if ([elementName isEqualToString:@"title"])
-	{
-		// Is it the /flavors/group/title element?
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",nil]])
-		{
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-		}
-	}
-	else if ([elementName isEqualToString:@"flavor"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",@"flavors",nil]]) // Is it the /flavors/group/flavors/flavor element?
-		{
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-			self.currentElemID=[[attributeDict objectForKey:@"id"] copy];
-		}
-	}
-	else if ([elementName isEqualToString:@"style"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",nil]])
-		{
-			[[self.stylesDictionary objectForKey:@"list"] addObject:[NSMutableArray arrayWithCapacity:5]];
-			//			[self.stylesList addObject:[attributeDict objectForKey:@"num"]];
-		}
-		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",nil]])
-		{
-			[[[self.stylesDictionary objectForKey:@"list"] lastObject] addObject:[attributeDict objectForKey:@"num"]];
-		}
-	}
-	else if ([elementName isEqualToString:@"name"])
-	{
-		if ([[xmlParserPath lastObject] isEqualToString:@"style"])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:64];
-		}
-		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"colors",@"color",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:16];
-		}
-	}
-	else if ([elementName isEqualToString:@"color"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"colors",nil]])
-		{
-			[[self.colorsDictionary objectForKey:@"nums"] addObject:[attributeDict objectForKey:@"srm"]];
-		}
-	}
-	
-	[xmlParserPath addObject:elementName];
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	[xmlParserPath removeLastObject];
-	
-	if (self.currentElemValue)
-	{
-		if ([elementName isEqualToString:@"title"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",nil]]) // Is it the /flavors/group/title element?
-			{
-				if ([flavorsDictionary objectForKey:@"titles"]==nil)
-					[flavorsDictionary setObject:[NSMutableArray arrayWithCapacity:24] forKey:@"titles"];
-				[[flavorsDictionary objectForKey:@"titles"] addObject:currentElemValue];
-				
-				// Add an array in groups for this title
-				if ([flavorsDictionary objectForKey:@"groups"]==nil)
-					[flavorsDictionary setObject:[NSMutableArray arrayWithCapacity:24] forKey:@"groups"];
-				[[flavorsDictionary objectForKey:@"groups"] addObject:[[[NSMutableArray alloc] initWithCapacity:10] autorelease]];
-			}
-		}
-		else if ([elementName isEqualToString:@"flavor"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"flavors",@"group",@"flavors",nil]]) // Is it the /flavors/group/flavors/flavor element?
-			{
-				if ([flavorsDictionary objectForKey:@"byid"]==nil)
-					[flavorsDictionary setObject:[NSMutableDictionary dictionaryWithCapacity:128] forKey:@"byid"];
-				[[flavorsDictionary objectForKey:@"byid"] setObject:currentElemValue forKey:currentElemID];
-
-				[[[flavorsDictionary objectForKey:@"groups"] lastObject] addObject:currentElemID];
-			}
-		}
-		else if ([elementName isEqualToString:@"style"])
-		{
-		}
-		else if ([elementName isEqualToString:@"name"])
-		{
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",nil]])
-			{
-				[[self.stylesDictionary objectForKey:@"names"] setObject:self.currentElemValue forKey:[NSString stringWithFormat:@"%d",[[self.stylesDictionary objectForKey:@"list"] count]]];
-			}
-			else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"styles",@"style",@"style",nil]])
-			{
-				[[self.stylesDictionary objectForKey:@"names"] setObject:self.currentElemValue forKey:[[[self.stylesDictionary objectForKey:@"list"] lastObject] lastObject]];
-			}
-			else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"colors",@"color",nil]])
-			{
-				[[self.colorsDictionary objectForKey:@"list"] setObject:self.currentElemValue forKey:[[self.colorsDictionary objectForKey:@"nums"] lastObject]];
-			}
-		}
-		
-		self.currentElemValue=nil;
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	[self.currentElemValue appendString:string];
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
-}
-
-
+//}
 
 @end
 

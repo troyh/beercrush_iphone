@@ -175,26 +175,8 @@ static const NSInteger kTagBeerNameLabel=2;
 
 -(void)addBeerToMenu:(NSString*)beerID
 {
-	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_MENU_DOC];
-	NSString* postdata=[[NSString alloc] initWithFormat:
-			 @"place_id=%@&"
-			 "add_item=%@",
-			 self.placeID,
-			 beerID];
 	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSData* answer=nil;
-	[delegate sendRequest:url usingMethod:@"POST" withData:postdata returningData:&answer];
-
-	if (answer)
-	{  // Parse the XML doc
-		NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
-		[parser setDelegate:self];
-		[parser parse];
-		
-		[answer release];
-	}
-	
-	[postdata release];
+	[delegate performAsyncOperationWithTarget:self selector:@selector(postBeerToMenu:) object:beerID withActivityHUD:YES andActivityHUDText:@""];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -225,7 +207,7 @@ static const NSInteger kTagBeerNameLabel=2;
 		if (breweryID)
 		{	// Get brewery doc, it includes the beer list
 			NSArray* idparts=[breweryID componentsSeparatedByString:@":"];
-			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC, [idparts objectAtIndex:1]]];
+			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_BEERLIST, [idparts objectAtIndex:1]]];
 			
 		}
 		else if (placeID)
@@ -243,19 +225,11 @@ static const NSInteger kTagBeerNameLabel=2;
 		{
 			[beerList removeAllObjects];
 			BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-			NSData* answer;
-			NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-			if ([response statusCode]==200)
-			{
-				NSXMLParser* parser=[[NSXMLParser alloc] initWithData:answer];
-				[parser setDelegate:self];
-				[parser parse];
-				[parser release];
-			}
-			[self.tableView reloadData];
+			[delegate performAsyncOperationWithTarget:self selector:@selector(getBeerList:) object:url withActivityHUD:YES andActivityHUDText:@"Getting Beer List"];
 		}
 	}
 }
+
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -354,6 +328,53 @@ static const NSInteger kTagBeerNameLabel=2;
 	}
 }
 
+#pragma mark Async operations
+
+-(void)getBeerList:(NSURL*)url
+{
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
+		self.beerList=[answer objectForKey:@"items"];
+	}
+	else {
+		[self.beerList removeAllObjects];
+	}
+
+	[self.tableView reloadData];
+	
+	[appDelegate dismissActivityHUD];
+}
+
+-(void)postBeerToMenu:(NSString*)beerID
+{
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_MENU_DOC];
+	NSString* postdata=[[NSString alloc] initWithFormat:
+						@"place_id=%@&"
+						"add_item=%@",
+						self.placeID,
+						beerID];
+	NSMutableDictionary* answer=nil;
+	[delegate sendJSONRequest:url usingMethod:@"POST" withData:postdata returningJSON:&answer];
+	if (answer)
+	{
+		self.beerList=[answer objectForKey:@"items"];
+	}
+	else 
+	{
+		[self.beerList removeAllObjects];
+	}
+
+	[postdata release];
+	
+	[delegate dismissActivityHUD];
+}
+
+
+
 
 /*
 // Override to support conditional editing of the table view.
@@ -393,258 +414,6 @@ static const NSInteger kTagBeerNameLabel=2;
     return YES;
 }
 */
-
-
-
-// NSXMLParser delegate methods
-
-// Sample brewery doc:
-//<?xml version="1.0"?>
-//<brewery id="brewery:Dogfish-Head-Craft-Brewery-Milton">
-//	<_id>brewery:Dogfish-Head-Craft-Brewery-Milton</_id>
-//	<_rev>575642880</_rev>
-//	<type>brewery</type>
-//	<timestamp>1249416198</timestamp>
-//	<name>Dogfish Head Craft Brewery</name>
-//	<address>
-//		<street>6 Cannery Village Center</street>
-//		<city>Milton</city>
-//		<state>DE</state>
-//		<zip>19968-1328</zip>
-//		<latitude>38.771568</latitude>
-//		<longitude>-75.311975</longitude>
-//		<country>US</country>
-//	</address>
-//	<phone>(302) 684-1000</phone>
-//	<meta>
-//		<_id>meta:brewery:Dogfish-Head-Craft-Brewery-Milton</_id>
-//		<_rev>1269004365</_rev>
-//		<beerlist>
-//			<item id="beer:Dogfish-Head-Craft-Brewery-Milton:120-Minute-IPA">
-//				<name>120 Minute IPA</name>
-//				<description>Too extreme to be called beer? Brewed to a colossal 45-degree plato, boiled for a full 2 hours while being continuously hopped with high-alpha American hops, then dry-hopped daily in the fermenter for a month &amp; aged for another month on whole-leaf hops!!! Our 120 Minute I.P.A. is by far the biggest I.P.A. ever brewed! At 20% abv and 120 ibus you can see why we call this beer THE HOLY GRAIL for hopheads!</description>
-//			</item>
-//			<item id="beer:Dogfish-Head-Craft-Brewery-Milton:60-Minute-IPA">
-//				<name>60 Minute IPA</name>
-//				<description>Our flagship beer. A session India Pale Ale brewed with Warrior, Amarillo &amp; 'Mystery Hop X.' A lot of citrusy hop character. THE session beer for beer geeks like us!</description>
-//			</item>
-//			<item id="beer:Dogfish-Head-Craft-Brewery-Milton:90-Minute-IPA">
-//				<name>90 Minute IPA</name>
-//				<description>Esquire Magazine calls our 90 Minute .I..PA., "perhaps the best I.P.A. in America."" An Imperial I.P.A. brewed to be savored from a snifter. A big beer with a great malt backbone that stands up to the extreme hopping rate. This beer is an excellent candidate for use with Randall The Enamel Animal!</description>
-//			</item>
-//		</beerlist>
-//		<type>brewery_meta</type>
-//	</meta>
-//</brewery>
-
-//
-// Sample menu doc:
-//
-//<?xml version="1.0"?>
-//<menu>
-//	<type>menu</type>
-//	<meta>
-//		<timestamp>1250019784</timestamp>
-//		<mtime>1250022007</mtime>
-//	</meta>
-//	<items>
-//		<item type="beer" id="beer:Dogfish-Head-Craft-Brewery-Milton:90-Minute-IPA" ontap="yes" inbottle="no" oncask="no" price="0">
-//			<name>90 Minute IPA</name>
-//		</item>
-//		<item type="beer" id="beer:Dogfish-Head-Craft-Brewery-Milton:Aprilhop" ontap="yes" inbottle="no" oncask="no" price="0">
-//			<name>Aprilhop</name>
-//		</item>
-//		<item type="beer" id="beer:Dogfish-Head-Craft-Brewery-Milton:Black-Blue" ontap="yes" inbottle="no" oncask="no" price="0">
-//			<name>Black &amp; Blue</name>
-//		</item>
-//		<item type="beer" id="beer:Dogfish-Head-Craft-Brewery-Milton:Chicory-Stout" ontap="yes" inbottle="no" oncask="no" price="0">
-//			<name>Chicory Stout</name>
-//		</item>
-//		<item type="beer" id="beer:Dogfish-Head-Craft-Brewery-Milton:Chateau-Jiahu" ontap="yes" inbottle="no" oncask="no" price="0">
-//			<name>Chateau Jiahu</name>
-//		</item>
-//	</items>
-//</menu>
-//
-// Sample wishlist doc:
-//
-//<wishlist id="wishlist:troyh" rev="824165725">
-//	<type>wishlist</type>
-//	<meta>
-//		<timestamp>1250120366</timestamp>
-//		<mtime>1250123226</mtime>
-//	</meta>
-//	<items>
-//		<item>
-//			<type>item</type>
-//			<meta>
-//				<timestamp>1250122973</timestamp>
-//				<mtime>1250123226</mtime>
-//			</meta>
-//			<item_id>beer:Dogfish-Head-Craft-Brewery-Milton:120-Minute-IPA</item_id>
-//			<name>120 Minute IPA</name>
-//		</item>
-//	</items>
-//</wishlist>
-
-
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser
-{
-	// Clear any old data
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	
-	[self.currentElemAttribs release];
-	self.currentElemAttribs=nil;
-	
-	xmlParserPath=[[NSMutableArray alloc] initWithCapacity:5]; // This also releases a previous xmlParserPath
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	
-	[self.currentElemAttribs release];
-	self.currentElemAttribs=nil;
-	
-	xmlParserPath=nil; // This also releases a previous xmlParserPath
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	if ([elementName isEqualToString:@"brewery"])
-	{
-	}
-	else if ([elementName isEqualToString:@"beerlist"])
-	{
-	}
-	else if ([elementName isEqualToString:@"item"])
-	{
-		// Is it the /brewery/meta/beerlist/item element?
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"brewery",@"meta",@"beerlist",nil]])
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=nil;
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
-
-			[self.currentElemAttribs release];
-			self.currentElemAttribs=[[NSMutableDictionary alloc] initWithCapacity:10];
-			[self.currentElemAttribs addEntriesFromDictionary:attributeDict];
-		}
-		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"menu",@"items",nil]]) // Is it the /menu/items/item element?
-		{
-			[self.currentElemAttribs release];
-			self.currentElemAttribs=[[NSMutableDictionary alloc] initWithCapacity:10];
-			[self.currentElemAttribs addEntriesFromDictionary:attributeDict];
-		}
-		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"wishlist",@"items",nil]]) // Is it the /wishlist/items/item element?
-		{
-			// Create a new BeerObject in the beerList
-			BeerObject* beer=[[BeerObject alloc] init];
-			[beerList addObject:beer];
-			[beer release];
-		}
-	}
-	else if ([elementName isEqualToString:@"name"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"menu",@"items",@"item",nil]]) // Is it the /menu/items/item/name element?
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=nil;
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
-		}
-		else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"wishlist",@"items",@"item",nil]]) // Is it the /wishlist/items/item/name element?
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=nil;
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
-		}
-	}
-	else if ([elementName isEqualToString:@"item_id"])
-	{
-		if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"wishlist",@"items",@"item",nil]]) // Is it the /wishlist/items/item/name element?
-		{
-			[self.currentElemValue release];
-			self.currentElemValue=nil;
-			self.currentElemValue=[[NSMutableString alloc] initWithCapacity:256];
-		}
-	}
-	
-	[xmlParserPath addObject:elementName];
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	[xmlParserPath removeLastObject];
-
-	if (self.currentElemValue || currentElemAttribs)
-	{
-		if ([elementName isEqualToString:@"name"])
-		{
-			// Is it the /brewery/meta/beerlist/item/name element?
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"brewery",@"meta",@"beerlist",@"item",nil]])
-			{
-				BeerObject* beer=[[BeerObject alloc] init];
-				[beer.data setObject:self.currentElemValue forKey:@"name"];
-				[beer.data setObject:[[[currentElemAttribs objectForKey:@"id"] copy] autorelease] forKey:@"id"];
-				
-				[beerList addObject:beer];
-				[beer release];
-			}
-			else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"menu",@"items",@"item",nil]]) // Is it the /menu/items/item/name element?
-			{
-				BeerObject* beer=[[BeerObject alloc] init];
-				[beer.data setObject:currentElemValue forKey:@"name"];
-				[beer.data setObject:[[[currentElemAttribs objectForKey:@"id"] copy] autorelease] forKey:@"id"];
-				
-				[beerList addObject:beer];
-				[beer release];
-			}
-			// Is it the /wishlist/items/item/name element?
-			else if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"wishlist",@"items",@"item",nil]])
-			{
-				// Get the last BeerObject in beerList, that's our current beer
-				BeerObject* beer=[beerList lastObject];
-				[beer.data setObject:currentElemValue forKey:@"name"];
-			}
-		}
-		else if ([elementName isEqualToString:@"item_id"])
-		{
-			// Is it the /wishlist/items/item/item_id element?
-			if ([xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"wishlist",@"items",@"item",nil]])
-			{
-				// Get the last BeerObject in beerList, that's our current beer
-				BeerObject* beer=[beerList lastObject];
-				[beer.data setObject:currentElemValue forKey:@"id"];
-			}
-		}
-		
-		[self.currentElemValue release];
-		self.currentElemValue=nil;
-		[self.currentElemAttribs release];
-		self.currentElemAttribs=nil;
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	if (self.currentElemValue)
-	{
-		[self.currentElemValue appendString:string];
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
-}
-
-
 
 @end
 

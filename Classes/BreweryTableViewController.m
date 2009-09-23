@@ -14,30 +14,6 @@
 #import "PhotoThumbnailControl.h"
 #import "JSON.h"
 
-void normalizeBreweryData(NSMutableDictionary* data)
-{
-	normalizeToString(data, @"name");
-	normalizeToString(data, @"description");
-	normalizeToString(data, @"phone");
-	normalizeToString(data, @"uri");
-	normalizeToString(data, @"tourinfo");
-	normalizeToString(data, @"tasting");
-	normalizeToString(data, @"hours");
-	
-	if ([data objectForKey:@"togo"]==nil)
-		[data setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"togo"];
-	normalizeToBoolean([data objectForKey:@"togo"], @"bottled_beer");
-	normalizeToBoolean([data objectForKey:@"togo"], @"growlers");
-	normalizeToBoolean([data objectForKey:@"togo"], @"kegs");
-	
-	if ([data objectForKey:@"address"]==nil)
-		[data setObject:[NSMutableDictionary dictionaryWithCapacity:5] forKey:@"address"];
-	normalizeToString([data objectForKey:@"address"], @"street");
-	normalizeToString([data objectForKey:@"address"], @"city");
-	normalizeToString([data objectForKey:@"address"], @"state");
-	normalizeToString([data objectForKey:@"address"], @"zip");
-	normalizeToString([data objectForKey:@"address"], @"country");
-}
 
 @implementation BreweryObject
 
@@ -101,15 +77,8 @@ enum TAGS {
 		if ([parts count]==2)
 		{
 			// Retrieve JSON doc from server
-			NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC_JSON, [parts objectAtIndex:1] ]];
 			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-			NSData* answer;
-			NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-			if ([response statusCode]==200)
-			{
-				NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
-				self.breweryObject.data=[s JSONValue];
-			}
+			self.breweryObject.data=[appDelegate getBreweryDoc:self.breweryID];
 		}
 		else
 		{
@@ -210,6 +179,7 @@ enum TAGS {
 		if (self.editingWasCanceled)
 		{
 			[super setEditing:editing animated:animated];
+			[self.navigationItem setLeftBarButtonItem:nil];
 		}
 		else
 		{
@@ -248,29 +218,9 @@ enum TAGS {
 				NSString* bodystr=[values componentsJoinedByString:@"&"];
 
 				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-				NSData* answer;
-				NSHTTPURLResponse* response=[appDelegate sendRequest:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BREWERY_DOC] usingMethod:@"POST" withData:bodystr returningData:&answer];
-				if ([response statusCode]==200)
-				{
-					// Parse the JSON response, which is the new brewery doc
-					NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
-					self.breweryObject.data=[s JSONValue];
-					
-					[super setEditing:editing animated:animated];
-					[self endEditingMode];
-					
-					// Tell the delegate
-					[self.delegate breweryVCDidFinishEditing:self];
-				}
-				else
-				{
-					// Nope, we're staying in Edit mode
-					UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"Oops" message:@"Brewery could not be saved" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
-					[alert show];
-				}
+				[appDelegate performAsyncOperationWithTarget:self selector:@selector(saveEdits:) object:bodystr withActivityHUD:YES andActivityHUDText:@"Saving"];
 			}
 		}
-		[self.navigationItem setLeftBarButtonItem:nil];
 	}
 }
 
@@ -1109,6 +1059,33 @@ enum TAGS {
 {
 	[self.breweryObject.data setObject:phoneNumber forKey:@"phone"];
 	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark Async operations
+
+-(void)saveEdits:(NSString*)bodystring
+{
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[appDelegate sendJSONRequest:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BREWERY_DOC] usingMethod:@"POST" withData:bodystring returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
+		self.breweryObject.data=answer;
+		normalizeBreweryData(self.breweryObject.data);
+		
+		[super setEditing:self.editing animated:YES];
+		[self endEditingMode];
+		[self.navigationItem setLeftBarButtonItem:nil];
+		
+		// Tell the delegate
+		[self.delegate breweryVCDidFinishEditing:self];
+	}
+	else
+	{
+		// Nope, we're staying in Edit mode
+		UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"Oops" message:@"Brewery could not be saved" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+		[alert show];
+	}
 }
 
 @end

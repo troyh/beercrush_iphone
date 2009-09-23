@@ -48,7 +48,6 @@
 
 
 @interface NearbyTableViewController : UITableViewController<CLLocationManagerDelegate> {
-	NSMutableString* currentElemValue;
 	CLLocation* myLocation;
 	PlaceObject* placeObject;
 	NSMutableArray* places;
@@ -56,7 +55,6 @@
 }
 
 @property (nonatomic, retain) CLLocation* myLocation;
-@property (nonatomic, retain) NSMutableString* currentElemValue;
 @property (nonatomic, retain) PlaceObject* placeObject;
 @property (nonatomic, retain) NSMutableArray* places;
 @property (nonatomic, retain) CLLocationManager* locationManager;
