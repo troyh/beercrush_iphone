@@ -37,22 +37,14 @@
 	NSString* placeID;
 	NSMutableDictionary* placeData;
 	NSDictionary* originalPlaceData;
-	NSMutableString* currentElemValue;
-	NSMutableData* xmlPostResponse;
-	UIView* overlay;
-	UIActivityIndicatorView* spinner;
-	NSMutableArray* xmlParserPath;
+	NSMutableDictionary* userReviewData;
 	id<PlaceVCDelegate> delegate;
 }
 
 @property (nonatomic,retain) NSString* placeID;
 @property (nonatomic, retain) NSMutableDictionary* placeData;
 @property (nonatomic,retain) NSDictionary* originalPlaceData;
-@property (nonatomic,retain) NSMutableString* currentElemValue;
-@property (nonatomic,retain) NSMutableData* xmlPostResponse;
-@property (nonatomic, retain) UIView* overlay;
-@property (nonatomic, retain) UIActivityIndicatorView* spinner;
-@property (nonatomic, retain) NSMutableArray* xmlParserPath;
+@property (nonatomic,retain) NSMutableDictionary* userReviewData;
 @property (assign) id<PlaceVCDelegate> delegate;
 
 -(id) initWithPlaceID:(NSString*)place_id;

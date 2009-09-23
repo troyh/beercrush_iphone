@@ -20,12 +20,8 @@
 @synthesize placeID;
 @synthesize placeData;
 @synthesize originalPlaceData;
-@synthesize currentElemValue;
-@synthesize xmlPostResponse;
-@synthesize overlay;
-@synthesize spinner;
-@synthesize xmlParserPath;
 @synthesize delegate;
+@synthesize userReviewData;
 
 enum mytags {
 	kTagEditTextOwnerDescription=1,
@@ -40,56 +36,9 @@ enum mytags {
 };
 
 
-
-void normalizePlaceData(NSMutableDictionary* placeData)
-{
-	normalizeToString(placeData, @"name");
-	normalizeToString(placeData, @"description");
-	normalizeToString(placeData, @"phone");
-	normalizeToString(placeData, @"placestyle");
-	normalizeToString(placeData, @"placetype");
-	normalizeToString(placeData, @"uri");
-	normalizeToBoolean(placeData, @"kid_friendly");
-
-	if ([placeData objectForKey:@"hours"]==nil)
-		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"hours"];
-	normalizeToString([placeData objectForKey:@"hours"], @"open");
-	
-	if ([placeData objectForKey:@"restaurant"]==nil)
-		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"restaurant"];
-
-	normalizeToNumber([placeData objectForKey:@"restaurant"],@"price_range");
-	normalizeToBoolean([placeData objectForKey:@"restaurant"], @"outdoor_seating");
-	normalizeToString([placeData objectForKey:@"restaurant"],@"food_description");
-	
-	if ([placeData objectForKey:@"@attributes"]==nil)
-		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"@attributes"];
-
-	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"wifi");
-	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"bottled_beer_to_go");
-	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"growlers_to_go");
-	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"kegs_to_go");
-
-	if ([placeData objectForKey:@"address"]==nil)
-		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:5] forKey:@"address"];
-
-	normalizeToString([placeData objectForKey:@"address"], @"street");
-	normalizeToString([placeData objectForKey:@"address"], @"city");
-	normalizeToString([placeData objectForKey:@"address"], @"state");
-	normalizeToString([placeData objectForKey:@"address"], @"zip");
-	normalizeToString([placeData objectForKey:@"address"], @"country");
-}
-
-
-
 -(id) initWithPlaceID:(NSString*)place_id
 {
 	self.placeID=place_id;
-	self.overlay=nil;
-	self.spinner=nil;
-	self.xmlPostResponse=nil;
-	self.currentElemValue=nil;
-	self.xmlParserPath=[NSMutableArray arrayWithCapacity:10];
 	
 	self.title=@"Place";
 	
@@ -97,14 +46,6 @@ void normalizePlaceData(NSMutableDictionary* placeData)
 
 	self.placeData=[[NSMutableDictionary alloc] initWithCapacity:10];
 	normalizePlaceData(self.placeData);
-	
-//	NSArray* parts=[self.placeID componentsSeparatedByString:@":"];
-//	
-//	// Retrieve XML doc from server
-//	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_DOC, [parts objectAtIndex:1]]];
-//	NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-//	[parser setDelegate:self];
-//	[parser parse];
 	
 	return self;
 }
@@ -302,36 +243,10 @@ void normalizePlaceData(NSMutableDictionary* placeData)
 		}
 		else
 		{
-			// Separate the 2 parts of the place ID
-			NSArray* idparts=[self.placeID componentsSeparatedByString:@":"];
-
 			// Retrieve JSON doc for this place
-			NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_DOC, [idparts objectAtIndex:1]]];
 			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-			NSData* answer;
-			NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-			if ([response statusCode]==200)
-			{
-				NSString* json=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
-				self.placeData=[json JSONValue];
-				
-				normalizePlaceData(self.placeData);
-				
-				// Retrieve user's review for this place (if any)
-				url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_REVIEW_DOC, 
-										  [idparts objectAtIndex:1], 
-										  [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]];
-				NSXMLParser* parser=[[NSXMLParser alloc] initWithContentsOfURL:url];
-				[parser setDelegate:self];
-				BOOL retval=[parser parse];
-				[parser release];
-				
-				if (retval==YES)
-				{
-					// The user has a review for this place
-					DLog(@"User rating:%@", [self.placeData objectForKey:@"user_rating"]);
-				}
-			}
+			self.placeData=[appDelegate getPlaceDoc:self.placeID];
+			self.userReviewData=[appDelegate getPlaceReviews:self.placeID byUser:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]];
 		}
 	}
 	
@@ -1124,58 +1039,12 @@ void normalizePlaceData(NSMutableDictionary* placeData)
 
 -(void)ratingButtonTapped:(id)sender event:(id)event
 {
-	//	[self.view addSubview:spinner];
-	//	CGRect frame=CGRectMake(0.0, 0.0, 100.0, 100.0);
-	CGRect frame=self.view.frame;
-	
-	if (self.overlay==nil)
-	{
-		self.overlay=[[UIView alloc] initWithFrame:frame];
-		self.overlay.backgroundColor=[UIColor blackColor];
-		self.overlay.alpha=0.7;
-	}
-	
-	if (self.spinner==nil)
-	{
-		//	UIActivityIndicatorView* spinner=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-		self.spinner=[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0, 0.0, 25.0, 25.0)];
-		self.spinner.activityIndicatorViewStyle=UIActivityIndicatorViewStyleWhite;
-		self.spinner.center=self.overlay.center;
-		[self.overlay addSubview:self.spinner];
-		[self.spinner release];
-	}
-	
-	[self.spinner startAnimating];
-	self.spinner.hidden=NO;
-	[self.view addSubview:self.overlay];
-	[self.overlay release];
-	
 	RatingControl* ctl=(RatingControl*)sender;
 	NSInteger rating=ctl.currentRating;
 	
 	// Send the review to the site
-	
-	NSString* bodystr=[[[NSString alloc] initWithFormat:@"rating=%u&place_id=%@", rating, placeID] autorelease];
-	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
-	
-	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_POST_PLACE_REVIEW]
-															cachePolicy:NSURLRequestUseProtocolCachePolicy
-														timeoutInterval:30.0];
-	[theRequest setHTTPMethod:@"POST"];
-	[theRequest setHTTPBody:body];
-	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
-	
-	// create the connection with the request and start loading the data
-	NSURLConnection *theConnection=[[[NSURLConnection alloc] initWithRequest:theRequest delegate:self] autorelease];
-	
-	if (theConnection) {
-		// Create the NSMutableData that will hold
-		// the received data
-		// receivedData is declared as a method instance elsewhere
-		xmlPostResponse=[[NSMutableData data] retain];
-	} else {
-		// TODO: inform the user that the download could not be made
-	}	
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendReview:) object:[NSNumber numberWithInt:rating] withActivityHUD:YES andActivityHUDText:@"Sending Review"];
 }
 
 -(void)photoThumbnailClicked:(id)sender
@@ -1609,240 +1478,23 @@ void normalizePlaceData(NSMutableDictionary* placeData)
 	
 }
 
-#pragma mark NSXMLParser delegate methods
+#pragma mark Async operations
 
-- (void)parserDidStartDocument:(NSXMLParser *)parser
+-(void)sendReview:(NSNumber*)rating
 {
-	// Clear any old data
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	[self.xmlParserPath removeAllObjects];
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser
-{
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	[self.xmlParserPath removeAllObjects];
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
-{
-	/*
-	 Sample Review:
-	 
-	<review>
-	<type>review</type>
-	<timestamp>1249427886</timestamp>
-	<user_id>troyh</user_id>
-	<place_id>place:Elliot-Bay-Brewhouse-and-Pub-Burien-Washington</place_id>
-	<rating>4</rating>
-	</review>
-
-	 Sample Place:
-	<place id="place:Elliot-Bay-Brewhouse-and-Pub-Burien-Washington" in_operation="yes" specializes_in_beer="yes" tied="no" bottled_beer_to_go="no" growlers_to_go="no" kegs_to_go="no" brew_on_premises="no" taps="" casks="" bottles="" wheelchair_accessible="" music="" wifi="">
-	<_id>place:Elliot-Bay-Brewhouse-and-Pub-Burien-Washington</_id>
-	<_rev>3183007484</_rev>
-	<type>place</type>
-	<timestamp>1249415199</timestamp>
-	<name>Elliot Bay Brewhouse &amp; Pub</name>
-	<description/>
-	<phone/>
-	<uri/>
-	<established/>
-	<address>
-    <street/>
-    <city>Burien</city>
-    <state>Washington</state>
-    <zip/>
-    <country>United States</country>
-    <neighborhood/>
-	</address>
-	<hours>
-    <open/>
-    <tour/>
-    <tasting/>
-	</hours>
-	<tour_info/>
-	<restaurant reservations="" alcohol="" accepts_credit_cards="" good_for_groups="" outdoor_seating="" smoking="">
-    <food_description/>
-    <menu_uri/>
-    <price_range/>
-    <attire/>
-    <waiter_service>
-	</waiter_service>
-	</restaurant>
-	<parking/>
-	<kid_friendly/>
-	</place>
-	 */
-	
-	if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"place",nil]])
+	NSString* bodystr=[[[NSString alloc] initWithFormat:@"rating=%@&place_id=%@", rating, self.placeID] autorelease];
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_PLACE_REVIEW];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:bodystr returningJSON:&answer];
+	if ([response statusCode]==200)
 	{
-		if ([elementName isEqualToString:@"name"] ||
-			[elementName isEqualToString:@"uri"] ||
-			[elementName isEqualToString:@"phone"])
-			self.currentElemValue=[NSMutableString string];
-	}
-	else if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"place",@"address",nil]])
-	{
-		if ([elementName isEqualToString:@"street"] ||
-			[elementName isEqualToString:@"city"] ||
-			[elementName isEqualToString:@"state"] ||
-			[elementName isEqualToString:@"zip"] ||
-			[elementName isEqualToString:@"country"])
-		{
-			self.currentElemValue=[NSMutableString string];
-		}
-	}
-	else if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-	{
-		if ([elementName isEqualToString:@"rating"])
-		{
-			self.currentElemValue=[NSMutableString string];
-		}
+		self.userReviewData=answer;
+		normalizePlaceReviewData(self.userReviewData);
 	}
 	
-	// Add the element to the xmlParserPath
-	[self.xmlParserPath addObject:elementName];
-	
+	[appDelegate dismissActivityHUD];
 }
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	// Pop the element name off the XML parser path array
-	[self.xmlParserPath removeLastObject];
-	
-	if (self.currentElemValue)
-	{
-		if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"place",nil]])
-		{
-			if ([elementName isEqualToString:@"name"])
-				[placeData setObject:currentElemValue forKey:@"name"];
-			else if ([elementName isEqualToString:@"uri"])
-				[placeData setObject:currentElemValue forKey:@"uri"];
-			else if ([elementName isEqualToString:@"phone"])
-				[placeData setObject:currentElemValue forKey:@"phone"];
-		}
-		else if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"place",@"address",nil]])
-		{
-			if ([elementName isEqualToString:@"street"])
-			{
-				NSMutableDictionary* addr=[placeData objectForKey:@"address"];
-				[addr setObject:currentElemValue forKey:@"street"];
-			}
-			else if ([elementName isEqualToString:@"city"])
-			{
-				NSMutableDictionary* addr=[placeData objectForKey:@"address"];
-				[addr setObject:currentElemValue forKey:@"city"];
-			}
-			else if ([elementName isEqualToString:@"state"])
-			{
-				NSMutableDictionary* addr=[placeData objectForKey:@"address"];
-				[addr setObject:currentElemValue forKey:@"state"];
-			}
-			else if ([elementName isEqualToString:@"zip"])
-			{
-				NSMutableDictionary* addr=[placeData objectForKey:@"address"];
-				[addr setObject:currentElemValue forKey:@"zip"];
-			}
-		}
-		else if ([self.xmlParserPath isEqualToArray:[NSArray arrayWithObjects:@"review",nil]])
-		{
-			if ([elementName isEqualToString:@"rating"])
-				[placeData setObject:currentElemValue forKey:@"user_rating"];
-		}
-			
-		self.currentElemValue=nil;
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-}
-
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	if (self.currentElemValue)
-	{
-		[self.currentElemValue appendString:string];
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
-{
-}
-
-// NSURLConnection delegate methods
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    // this method is called when the server has determined that it
-    // has enough information to create the NSURLResponse
-	
-    // it can be called multiple times, for example in the case of a
-    // redirect, so each time we reset the data.
-    // receivedData is declared as a method instance elsewhere
-    [xmlPostResponse setLength:0];
-	
-	NSHTTPURLResponse* httprsp=(NSHTTPURLResponse*)response;
-	NSInteger n=httprsp.statusCode;
-	
-	if (n==401)
-	{
-		DLog(@"Need to login...");
-		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate login];
-		// TODO: once logged in, re-try the HTTP request
-	}
-	else
-		DLog(@"Status code:%u",n);
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    // append the new data to the receivedData
-    // receivedData is declared as a method instance elsewhere
-    [xmlPostResponse appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    // release the connection, and the data object
-    [connection release];
-	
-    // receivedData is declared as a method instance elsewhere
-    [xmlPostResponse release];
-	
-    // inform the user
-    DLog(@"Connection failed! Error - %@ %@",
-          [error localizedDescription],
-          [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
-	
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-
-{
-    // do something with the data
-    // receivedData is declared as a method instance elsewhere
-    DLog(@"PlaceTableViewController:connectionDidFinishLoading Succeeded! Received %d bytes of data",[xmlPostResponse length]);
-	DLog(@"Response doc:%s",(char*)[xmlPostResponse mutableBytes]);
-	
-    // release the connection, and the data object
-    [connection release];
-    [xmlPostResponse release];
-	xmlPostResponse=nil;
-
-	if (self.spinner!=nil)
-		[self.spinner stopAnimating];
-	if (self.overlay!=nil)
-		[self.overlay removeFromSuperview];
-	self.spinner=nil;
-	self.overlay=nil;
-	
-}
-
 
 @end
 

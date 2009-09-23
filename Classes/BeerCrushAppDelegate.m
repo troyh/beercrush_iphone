@@ -183,6 +183,51 @@ void normalizeBeerData(NSMutableDictionary* beerData)
 	normalizeToString([beerData objectForKey:@"@attributes"], @"srm");
 }
 
+void normalizePlaceData(NSMutableDictionary* placeData)
+{
+	normalizeToString(placeData, @"name");
+	normalizeToString(placeData, @"description");
+	normalizeToString(placeData, @"phone");
+	normalizeToString(placeData, @"placestyle");
+	normalizeToString(placeData, @"placetype");
+	normalizeToString(placeData, @"uri");
+	normalizeToBoolean(placeData, @"kid_friendly");
+	
+	if ([placeData objectForKey:@"hours"]==nil)
+		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"hours"];
+	normalizeToString([placeData objectForKey:@"hours"], @"open");
+	
+	if ([placeData objectForKey:@"restaurant"]==nil)
+		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"restaurant"];
+	
+	normalizeToNumber([placeData objectForKey:@"restaurant"],@"price_range");
+	normalizeToBoolean([placeData objectForKey:@"restaurant"], @"outdoor_seating");
+	normalizeToString([placeData objectForKey:@"restaurant"],@"food_description");
+	
+	if ([placeData objectForKey:@"@attributes"]==nil)
+		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"@attributes"];
+	
+	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"wifi");
+	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"bottled_beer_to_go");
+	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"growlers_to_go");
+	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"kegs_to_go");
+	
+	if ([placeData objectForKey:@"address"]==nil)
+		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:5] forKey:@"address"];
+	
+	normalizeToString([placeData objectForKey:@"address"], @"street");
+	normalizeToString([placeData objectForKey:@"address"], @"city");
+	normalizeToString([placeData objectForKey:@"address"], @"state");
+	normalizeToString([placeData objectForKey:@"address"], @"zip");
+	normalizeToString([placeData objectForKey:@"address"], @"country");
+}
+
+void normalizePlaceReviewData(NSMutableDictionary* placeReviewData)
+{
+	// TODO: implement this
+}
+
+
 
 @implementation BeerObject
 
@@ -1016,6 +1061,38 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		return [s JSONValue];
 	}
 	
+	return nil;
+}
+
+-(NSMutableDictionary*)getPlaceDoc:(NSString*)placeID
+{
+	// Separate the 2 parts of the place ID
+	NSArray* idparts=[placeID componentsSeparatedByString:@":"];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_DOC, [idparts objectAtIndex:1]]];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
+		normalizePlaceData(answer);
+		return answer;
+	}
+	return nil;
+}
+
+-(NSMutableDictionary*)getPlaceReviews:(NSString*)placeID byUser:(NSString*)user_id
+{
+	// Separate the 2 parts of the place ID
+	NSArray* idparts=[placeID componentsSeparatedByString:@":"];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_REVIEW_DOC, 
+							  [idparts objectAtIndex:1], 
+							  user_id]];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
+		normalizePlaceReviewData(answer);
+		return answer;
+	}
 	return nil;
 }
 
