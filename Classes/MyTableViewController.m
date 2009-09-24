@@ -136,6 +136,8 @@
 	else if (self.searchTypes==BeerCrushSearchTypePlaces)
 		self.searchBar.placeholder=@"Pubs, restaurants, bars, stores, etc.";
 	
+	self.searchBar.autocorrectionType=UITextAutocorrectionTypeNo;
+	
 	self.searchBar.delegate=self;
 	[self.searchBar sizeToFit];
 	[self.navigationController.navigationBar addSubview:self.searchBar];
