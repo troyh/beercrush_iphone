@@ -111,6 +111,9 @@ const NSInteger kViewTagDistance=2;
 - (void)viewWillAppear:(BOOL)animated {
 	if (myLocation==nil || [myLocation.timestamp timeIntervalSinceNow] > 60)
 	{
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[appDelegate presentActivityHUD:@"Updating Location"];
+		
 		// Get location
 		//	CLLocationManager* locman=[[[CLLocationManager alloc] init] autorelease];
 		self.locationManager=[[CLLocationManager alloc] init];
@@ -127,8 +130,6 @@ const NSInteger kViewTagDistance=2;
 	}
 	
 	self.title=@"Nearby";
-	
-	self.places=[[NSMutableArray alloc] initWithCapacity:100];
 
     [super viewWillAppear:animated];
 }
@@ -318,6 +319,8 @@ const NSInteger kViewTagDistance=2;
 //		[manager stopUpdatingLocation];
 //	}
 	[manager stopUpdatingLocation]; // Just do it once, the user can ask to do it again
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate dismissActivityHUD];
 	
 	if (myLocation)
 		[myLocation release];
@@ -326,8 +329,7 @@ const NSInteger kViewTagDistance=2;
 	
 	// Ask server for nearby places
 	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_NEARBY_QUERY, myLocation.coordinate.latitude, myLocation.coordinate.longitude, 10]];
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[delegate performAsyncOperationWithTarget:self selector:@selector(getNearbyResults:) object:url withActivityHUD:YES andActivityHUDText:@"Updating"];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getNearbyResults:) object:url withActivityHUD:YES andActivityHUDText:@"Updating"];
 }
 
 // Called when there is an error getting the location
@@ -346,6 +348,9 @@ const NSInteger kViewTagDistance=2;
 	NSHTTPURLResponse* response=[delegate sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&data];
 	if ([response statusCode]==200)
 	{
+		if (self.places==nil)
+			self.places=[[NSMutableArray alloc] initWithCapacity:100];
+
 		for (NSDictionary* place in [data objectForKey:@"places"])
 		{
 			// Create a PlaceObject

@@ -245,8 +245,7 @@ enum mytags {
 		{
 			// Retrieve JSON doc for this place
 			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-			self.placeData=[appDelegate getPlaceDoc:self.placeID];
-			self.userReviewData=[appDelegate getPlaceReviews:self.placeID byUser:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]];
+			[appDelegate performAsyncOperationWithTarget:self selector:@selector(getPlaceDoc:) object:self.placeID withActivityHUD:YES andActivityHUDText:@"Getting Place Info"];
 		}
 	}
 	
@@ -1479,6 +1478,24 @@ enum mytags {
 }
 
 #pragma mark Async operations
+
+-(void)getPlaceDoc:(NSString*)aPlaceID
+{
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	self.placeData=[appDelegate getPlaceDoc:aPlaceID];
+	[self.tableView reloadData];
+	[appDelegate dismissActivityHUD];
+	
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getUserReviewDoc:) object:self.placeID withActivityHUD:YES andActivityHUDText:@"Getting Place Info"];
+}
+
+-(void)getUserReviewDoc:(NSString*)aPlaceID
+{
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	self.userReviewData=[appDelegate getPlaceReviews:aPlaceID byUser:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]];
+	[self.tableView reloadData];
+	[appDelegate dismissActivityHUD];
+}
 
 -(void)sendReview:(NSNumber*)rating
 {
