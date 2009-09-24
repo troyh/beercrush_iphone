@@ -300,30 +300,30 @@ static const NSInteger kTagBeerNameLabel=2;
     }
     
     // Set up the cell...
-	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
+	NSDictionary* beer=[beerList objectAtIndex:indexPath.row];
 	UILabel* beerNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBeerNameLabel];
-	[beerNameLabel setText:[beer.data objectForKey:@"name"]];
+	[beerNameLabel setText:[beer objectForKey:@"name"]];
 
 	cell.imageView.image=[UIImage imageNamed:@"beer.png"];
 	
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	
 	UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
-	[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[beer.data objectForKey:@"id"]]];
+	[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[beer objectForKey:@"item_id"]]];
 
     return cell;
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	BeerObject* beer=[beerList objectAtIndex:indexPath.row];
+	NSDictionary* beer=[beerList objectAtIndex:indexPath.row];
 	
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	if ([appDelegate onBeerSelected:[beer.data valueForKey:@"id"]]==NO)
+	if ([appDelegate onBeerSelected:[beer valueForKey:@"item_id"]]==NO)
 	{
-		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[beer.data valueForKey:@"id"]]; // Saves the new nav state
+		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[beer valueForKey:@"item_id"]]; // Saves the new nav state
 		
-		BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:[beer.data valueForKey:@"id"]] autorelease];
+		BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:[beer valueForKey:@"item_id"]] autorelease];
 		[self.navigationController pushViewController:vc animated:YES];
 	}
 }

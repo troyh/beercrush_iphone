@@ -78,13 +78,13 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[self.stylesDictionary objectForKey:@"list"] count];
+    return [[self.stylesDictionary objectForKey:@"styles"] count];
 }
 
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[[self.stylesDictionary objectForKey:@"list"] objectAtIndex:section] count];
+    return [[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:section] objectForKey:@"styles"] count];
 }
 
 //- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
@@ -103,7 +103,7 @@
 //
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-	return [[self.stylesDictionary objectForKey:@"names"] objectForKey:[NSString stringWithFormat:@"%d",section+1]];
+	return [[[self.stylesDictionary objectForKey:@"names"] objectForKey:[NSString stringWithFormat:@"%d",section+1]] objectForKey:@"name"];
 }
 
 // Customize the appearance of table view cells.
@@ -117,8 +117,8 @@
     }
     
     // Set up the cell...
-	NSString* styleID=[[[self.stylesDictionary objectForKey:@"list"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-	[cell.textLabel setText:[[self.stylesDictionary objectForKey:@"names"] objectForKey:styleID]];
+	NSString* styleID=[[[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.section] objectForKey:@"styles"] objectAtIndex:indexPath.row] objectForKey:@"id"];
+	[cell.textLabel setText:[[[self.stylesDictionary objectForKey:@"names"] objectForKey:styleID] objectForKey:@"name"]];
 	
 	if ([self.selectedStyleIDs containsObject:styleID])
 		cell.accessoryType=UITableViewCellAccessoryCheckmark;
@@ -137,7 +137,7 @@
 	
 	// For now, we only support selecting one style, so we'll remove any already set and replace them with the one the user just selected
 	[self.selectedStyleIDs removeAllObjects];
-	[self.selectedStyleIDs addObject:[[[self.stylesDictionary objectForKey:@"list"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+	[self.selectedStyleIDs addObject:[[[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.section] objectForKey:@"styles"] objectAtIndex:indexPath.row] objectForKey:@"id"]];
 	[delegate stylesTVC:self didSelectStyle:self.selectedStyleIDs];
 }
 

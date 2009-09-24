@@ -474,7 +474,7 @@ enum TAGS {
 						UILabel* styleLabel=(UILabel*)[cell viewWithTag:kTagStyleLabel];
 						NSDictionary* stylesDict=[appDelegate getStylesDictionary];
 						NSArray* styles=[beerObj.data objectForKey:@"styles"];
-						[styleLabel setText:[[stylesDict objectForKey:@"names"] objectForKey:[styles objectAtIndex:0]]]; // Take just the 1st
+						[styleLabel setText:[[[stylesDict objectForKey:@"names"] objectForKey:[styles objectAtIndex:0]] objectForKey:@"name"]]; // Take just the 1st
 					}
 					break;
 				case 1:
@@ -487,7 +487,7 @@ enum TAGS {
 					}
 					NSDictionary* stylesDict=[appDelegate getStylesDictionary];
 					NSArray* style=[beerObj.data objectForKey:@"styles"];
-					[cell.detailTextLabel setText:[[stylesDict objectForKey:@"names"] objectForKey:[style objectAtIndex:0]]]; // Take just the 1st
+					[cell.detailTextLabel setText:[[[stylesDict objectForKey:@"names"] objectForKey:[style objectAtIndex:0]] objectForKey:@"name"]]; // Take just the 1st
 					break;
 				}
 				default:

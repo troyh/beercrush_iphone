@@ -93,7 +93,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 -(NSMutableDictionary*)getPlaceDoc:(NSString*)placeID;
 -(NSMutableDictionary*)getPlaceReviews:(NSString*)placeID byUser:(NSString*)user_id;
 -(NSMutableDictionary*)getReviewsForDocID:(NSString*)docid;
--(NSMutableDictionary*)getBeerReviewsByUser:(NSString*)userID seqNum:(NSUInteger)seqNum;
+-(NSMutableDictionary*)getBeerReviewsByUser:(NSString*)userID seqNum:(NSNumber*)seqNum;
 -(NSMutableDictionary*)getBreweriesList;
 
 -(BOOL)restoringNavigationStateAutomatically;
@@ -137,7 +137,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 #define BEERCRUSH_API_URL_GET_PLACE_REVIEW_DOC			@BEERCRUSH_API_URL_HOST"/json/review/place/%@/%@"
 #define BEERCRUSH_API_URI_GET_PLACE_STYLES				@BEERCRUSH_API_URL_HOST"/json/restaurantcategories"
 #define BEERCRUSH_API_URL_GET_STYLESLIST				@BEERCRUSH_API_URL_HOST"/json/styles"
-#define BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC		@BEERCRUSH_API_URL_HOST"/json/user/%@/reviews/beer.%d"
+#define BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC		@BEERCRUSH_API_URL_HOST"/json/user/%@/reviews/beer.%@"
 #define BEERCRUSH_API_URL_GET_USER_PLACE_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/json/user/%@/reviews/place.%d"
 #define BEERCRUSH_API_URL_GET_USER_WISHLIST_DOC			@BEERCRUSH_API_URL_HOST"/json/user/%@/wishlist"
 #define BEERCRUSH_API_URL_LOGIN							@BEERCRUSH_API_URL_HOST"/api/login"

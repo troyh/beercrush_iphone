@@ -163,7 +163,8 @@
 	{
 		NSMutableArray* flavornames=[NSMutableArray arrayWithCapacity:10];
 		for (NSUInteger i=0; i<[flavors count]; ++i) {
-			[flavornames addObject:[flavorsdict objectForKey:[flavors objectAtIndex:i]]];
+			NSString* title=[[flavorsdict objectForKey:[flavors objectAtIndex:i]] objectForKey:@"title"];
+			[flavornames addObject:title];
 		}
 	
 		return [flavornames componentsJoinedByString:@", "];

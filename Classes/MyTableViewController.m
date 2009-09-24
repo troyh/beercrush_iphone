@@ -110,6 +110,8 @@
 		//		[appDelegate alertUser:@"Search failed"];
 	}
 	[self.tableView reloadData];
+	
+	[appDelegate dismissActivityHUD];
 
 }
 
@@ -306,6 +308,7 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	DLog(@"numberOfRowsInSection=%d",[self.resultsList count]);
     return [self.resultsList count];
 }
 
@@ -313,7 +316,17 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-	UITableViewCell* cell=nil;
+	static NSString *CellIdentifier = @"Cell";
+	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	if (cell == nil) {
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+	}
+
+	/* 
+	 Because the requests to the server are done asynchronously, we could return a different value
+	 from numberOfRowsInSection than we now have in self.resultsList. We may not have a row to return if the resultsList is 
+	 smaller than what the iPhone thinks it should be. So we *always* return a cell, even if it's empty.
+	 */
 	
 	if ([self.resultsList count]==0)
 	{ // Show the Add a [Brewery|Place] row
@@ -365,15 +378,6 @@
 	}
 	else 
 	{
-		static NSString *CellIdentifier = @"Cell";
-		
-		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-		if (cell == nil) {
-			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-		}
-    
-		// Set up the cell...
-
 		[cell.textLabel setText:[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"name"]];
 		NSString* idstr=[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
 		if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
@@ -390,49 +394,45 @@
 		}
 		
 		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-
 	}
 	
     return cell;
 }
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
+{
+	if (indexPath.row < [self.resultsList count])
+	{
+		self.searchBar.hidden=YES;
+		[searchBar endEditing:YES];
 
-//	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-//	appDelegate.mySearchBar.hidden=YES;
-//	appDelegate.nav.navigationBarHidden=NO;
-
-	self.searchBar.hidden=YES;
-	[searchBar endEditing:YES];
-
-	NSString* idstr=[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
-	
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSString* idstr=[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
 		
-	if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
-	{
-		BreweryTableViewController* btvc=[[[BreweryTableViewController alloc] initWithBreweryID:idstr] autorelease];
-		[self.navigationController pushViewController: btvc animated:YES];
-		
-		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
-	}
-	else if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
-	{
-		BeerTableViewController* btvc=[[[BeerTableViewController alloc] initWithBeerID:idstr] autorelease];
-		[self.navigationController pushViewController:btvc animated:YES];
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			
+		if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
+		{
+			BreweryTableViewController* btvc=[[[BreweryTableViewController alloc] initWithBreweryID:idstr] autorelease];
+			[self.navigationController pushViewController: btvc animated:YES];
+			
+			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
+		}
+		else if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
+		{
+			BeerTableViewController* btvc=[[[BeerTableViewController alloc] initWithBeerID:idstr] autorelease];
+			[self.navigationController pushViewController:btvc animated:YES];
 
-		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
-	}
-	else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
-	{
-		PlaceTableViewController* btvc=[[[PlaceTableViewController alloc] initWithPlaceID:idstr] autorelease];
-		[self.navigationController pushViewController: btvc animated:YES];
+			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
+		}
+		else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
+		{
+			PlaceTableViewController* btvc=[[[PlaceTableViewController alloc] initWithPlaceID:idstr] autorelease];
+			[self.navigationController pushViewController: btvc animated:YES];
 
-		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
+			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
+		}
 	}
-	
 }
 
 

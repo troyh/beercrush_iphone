@@ -849,7 +849,8 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		NSArray* paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
 		NSString* filename=[[paths objectAtIndex:0] stringByAppendingString:@"/flavors.plist"];
 		
-		flavorsDictionary=[[NSMutableDictionary alloc] initWithContentsOfFile:filename];
+		flavorsDictionary=nil;
+//		flavorsDictionary=[[NSMutableDictionary alloc] initWithContentsOfFile:filename]; TODO: re-enable this when we're ready to cache data
 		if (flavorsDictionary==nil)
 		{
 			flavorsDictionary=[[NSMutableDictionary alloc] initWithCapacity:128];
@@ -862,6 +863,18 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			if ([response statusCode]==200)
 			{
 				self.flavorsDictionary=answer;
+				// Make flavors byid dictionary
+				NSMutableDictionary* byidDict=[[[NSMutableDictionary alloc] initWithCapacity:[[self.flavorsDictionary objectForKey:@"flavors"] count]] autorelease];
+				[self.flavorsDictionary setObject:byidDict forKey:@"byid"];
+				for (NSDictionary* flavor in [self.flavorsDictionary objectForKey:@"flavors"])
+				{
+					NSArray* subflavors=[flavor objectForKey:@"flavors"];
+					for (NSDictionary* subflavor in subflavors)
+					{
+						[byidDict setObject:subflavor forKey:[subflavor objectForKey:@"id"]];
+					}
+				}
+				
 				[flavorsDictionary writeToFile:filename atomically:YES];
 			}
 			else
@@ -874,23 +887,32 @@ void normalizeBreweryData(NSMutableDictionary* data)
 	return flavorsDictionary;
 }
 
+void recursivelyGetBeerStyleIDs(NSArray* fromArray, NSMutableDictionary* toDict)
+{
+	if (fromArray==nil)
+		return;
+	
+	for (NSDictionary* styleInfo in fromArray)
+	{
+		[toDict setObject:styleInfo forKey:[styleInfo objectForKey:@"id"]];
+		recursivelyGetBeerStyleIDs([styleInfo objectForKey:@"styles"],toDict);
+	}
+}
+
 -(NSDictionary*)getStylesDictionary
 {
 	// TODO: If the file is older than 7 days and we have good network connectivity (WiFi), ask the server for a newer version using If-Modified-Since
 
 	if (stylesDictionary==nil)
 	{
-		stylesDictionary=[[NSMutableDictionary alloc] initWithCapacity:2];
-
-		[self.stylesDictionary setObject:[[[NSMutableArray alloc] initWithCapacity:32] autorelease] forKey:@"list"];
-		[self.stylesDictionary setObject:[[[NSMutableDictionary alloc] initWithCapacity:32] autorelease] forKey:@"names"];
-
 		// Get styles list from server
 		NSMutableDictionary* answer;
 		NSHTTPURLResponse* response=[self sendJSONRequest:[NSURL URLWithString:BEERCRUSH_API_URL_GET_STYLESLIST] usingMethod:@"GET" withData:nil returningJSON:&answer];
 		if ([response statusCode]==200)
 		{
 			self.stylesDictionary=answer;
+			[self.stylesDictionary setObject:[[[NSMutableDictionary alloc] initWithCapacity:32] autorelease] forKey:@"names"];
+			recursivelyGetBeerStyleIDs([self.stylesDictionary objectForKey:@"styles"], [self.stylesDictionary objectForKey:@"names"]);
 		}
 		else
 		{
@@ -1045,7 +1067,7 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	return nil;
 }
 
--(NSMutableDictionary*)getBeerReviewsByUser:(NSString*)userID seqNum:(NSUInteger)seqNum
+-(NSMutableDictionary*)getBeerReviewsByUser:(NSString*)userID seqNum:(NSNumber*)seqNum
 {
 	NSMutableDictionary* answer=nil;
 	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC, userID, seqNum]];
@@ -1180,13 +1202,15 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 -(void)dismissActivityHUD
 { 
 	[self.activityHUD show:NO];
+	[self.activityHUD release];
 	self.activityHUD=nil;
 } 
 
 -(void)presentActivityHUD:(NSString*)hudText
 { 
 	// UIProgressHUD is undocumented by Apple. If you get screwed, try this instead: http://www.bukovinski.com/2009/04/08/mbprogresshud-for-iphone/
-	self.activityHUD = [[UIProgressHUD alloc] initWithWindow:self.window];
+	if (self.activityHUD==nil)
+		self.activityHUD = [[UIProgressHUD alloc] initWithWindow:self.tabBarController.selectedViewController.view];
 	[self.activityHUD setText:(hudText?NSLocalizedString(hudText,hudText):@"")]; 
 	[self.activityHUD show:YES]; 
 }

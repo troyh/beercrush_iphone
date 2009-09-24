@@ -36,7 +36,7 @@
 	[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:0] withActivityHUD:YES andActivityHUDText:@"Getting Reviews"];
 }
 
--(void)retrieveReviews:(NSUInteger)seqnum
+-(void)retrieveReviews:(NSNumber*)seqnum
 {
 	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 
@@ -56,7 +56,7 @@
 		self.seqNext=[[reviews objectForKey:@"seqnum"] integerValue]+1;
 		self.seqMax=[[reviews objectForKey:@"seqmax"] integerValue];
 		
-		if (seqnum>0)
+		if ([seqnum unsignedIntValue]>0)
 		{
 			// Insert more rows
 			[self.tableView beginUpdates];
@@ -73,6 +73,8 @@
 			
 			[self.tableView endUpdates];
 		}
+		
+		[self.tableView reloadData];
 	}
 	
 	[delegate dismissActivityHUD];
@@ -183,15 +185,13 @@
 
 	static NSString *CellIdentifier = @"URTVCCell";
 	
-	UITableViewCell* cell=nil;
+	UITableViewCell* cell=[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	if (cell == nil) {
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+	}
 	
 	if (indexPath.row<[self.reviewsList count])
 	{
-		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-		if (cell == nil) {
-			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
-		}
-		
 		// Set up the cell...
 		NSMutableDictionary* review=[self.reviewsList objectAtIndex:indexPath.row];
 		NSString* s=[review objectForKey:@"beer_name"];
