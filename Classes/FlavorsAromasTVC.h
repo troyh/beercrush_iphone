@@ -28,5 +28,7 @@
 @property (nonatomic, retain) NSDictionary* flavorsDictionary;
 @property (assign) id<FlavorsAromasTVCDelegate> delegate;
 
+-(id)initWithFlavorSet:(NSDictionary*)flavorsDict;
+
 @end
 

@@ -14,10 +14,17 @@
 @synthesize flavorsDictionary;
 @synthesize delegate;
 
-- (id)initWithStyle:(UITableViewStyle)style {
+- (id)initWithFlavorSet:(NSDictionary*)flavorsDict {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:UITableViewStylePlain]) { // Ignores style argument
 		self.title=@"Flavors & Aromas";
+		if (flavorsDict==nil)
+		{
+			BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			self.flavorsDictionary=[del getFlavorsDictionary];
+		}
+		else
+			self.flavorsDictionary=flavorsDict;
     }
     return self;
 }
@@ -27,9 +34,6 @@
 
 	// Put Done button on NavBar
 	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)] autorelease];
-
-	BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	flavorsDictionary=[del getFlavorsDictionary];
 }
 
 -(void)doneButtonClicked
@@ -83,13 +87,13 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[flavorsDictionary objectForKey:@"titles"] count];
+	return 1;
 }
 
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [[[flavorsDictionary objectForKey:@"groups"] objectAtIndex:section] count];
+	return [[self.flavorsDictionary objectForKey:@"flavors"] count];
 }
 
 
@@ -104,8 +108,8 @@
     }
     
     // Set up the cell...
-	NSString* flavorid=[[[flavorsDictionary objectForKey:@"groups"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-	[cell.textLabel setText:[[flavorsDictionary objectForKey:@"byid"] objectForKey:flavorid]];
+	NSString* flavorid=[[[flavorsDictionary objectForKey:@"flavors"] objectAtIndex:indexPath.row] objectForKey:@"id"];
+	[cell.textLabel setText:[[[flavorsDictionary objectForKey:@"flavors"] objectAtIndex:indexPath.row] objectForKey:@"title"]];
 	
 	// Turn on checkmark, if it's selected in the user's review
 	NSArray* flavors=[delegate getCurrentFlavors];
@@ -118,37 +122,50 @@
     return cell;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-	return [[flavorsDictionary objectForKey:@"titles"] objectAtIndex:section];
-}
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//	return [[flavorsDictionary objectForKey:@"titles"] objectAtIndex:section];
+//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-	// Put a checkmark on the row
-	UITableViewCell* cell=[tableView cellForRowAtIndexPath:indexPath];
-	if (cell.accessoryType==UITableViewCellAccessoryCheckmark) // Currently selected
-	{
-		cell.accessoryType=UITableViewCellAccessoryNone;
-
-		// Call delegate's didUnselectFlavor method
-		if ([self.delegate respondsToSelector:@selector(didUnselectFlavor:)])
-		{
-			// Send the ID
-			[delegate performSelector:@selector(didUnselectFlavor:) withObject:[[[flavorsDictionary objectForKey:@"groups"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
-		}
-	}
-	else
-	{
-		cell.accessoryType=UITableViewCellAccessoryCheckmark;
+	NSArray* flavors=[flavorsDictionary objectForKey:@"flavors"];
 	
-		// Call delegate's didSelectFlavor method
-		if ([self.delegate respondsToSelector:@selector(didSelectFlavor:)])
+	if ([[flavors objectAtIndex:indexPath.row] objectForKey:@"flavors"]==nil)
+	{
+		// Put a checkmark on the row
+		UITableViewCell* cell=[tableView cellForRowAtIndexPath:indexPath];
+		if (cell.accessoryType==UITableViewCellAccessoryCheckmark) // Currently selected
 		{
-			// Send the ID
-			[delegate performSelector:@selector(didSelectFlavor:) withObject:[[[flavorsDictionary objectForKey:@"groups"] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+			cell.accessoryType=UITableViewCellAccessoryNone;
+
+			// Call delegate's didUnselectFlavor method
+			if ([self.delegate respondsToSelector:@selector(didUnselectFlavor:)])
+			{
+				// Send the ID
+				[delegate performSelector:@selector(didUnselectFlavor:) withObject:[[flavors objectAtIndex:indexPath.row] objectForKey:@"id"]];
+			}
+		}
+		else
+		{
+			cell.accessoryType=UITableViewCellAccessoryCheckmark;
+		
+			// Call delegate's didSelectFlavor method
+			if ([self.delegate respondsToSelector:@selector(didSelectFlavor:)])
+			{
+				// Send the ID
+				[delegate performSelector:@selector(didSelectFlavor:) withObject:[[flavors objectAtIndex:indexPath.row] objectForKey:@"id"]];
+			}
 		}
 	}
+	else 
+	{
+		// Navigate to another level
+		FlavorsAromasTVC* fatvc=[[FlavorsAromasTVC alloc] initWithFlavorSet:[flavors objectAtIndex:indexPath.row]];
+		fatvc.delegate=self.delegate;
+		[self.navigationController pushViewController:fatvc animated:YES];
+	}
+
 }
 
 

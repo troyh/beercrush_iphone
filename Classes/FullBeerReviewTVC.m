@@ -150,7 +150,7 @@
 	// Populate Flavors & Aromas text field with the text names for the flavor ids in the review's flavors array
 	[self.flavorsLabel setText:[self getFlavorsCellText]];
 	
-	[self.navigationController popViewControllerAnimated:YES];
+	[self.navigationController popToViewController:self animated:YES];
 }
 
 -(NSString*)getFlavorsCellText
@@ -498,7 +498,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section==3 && indexPath.row==0) // Selected the Flavors & Aromas cell
 	{
-		FlavorsAromasTVC* fatvc=[[[FlavorsAromasTVC alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
+		FlavorsAromasTVC* fatvc=[[[FlavorsAromasTVC alloc] initWithFlavorSet:nil] autorelease];
 		fatvc.delegate=self;
 		[self.navigationController pushViewController:fatvc animated:YES];
 	}
