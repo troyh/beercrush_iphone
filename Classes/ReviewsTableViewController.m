@@ -52,7 +52,7 @@
     [super viewWillAppear:animated];
 
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getReviews:) object:self.reviewedDocID withActivityHUD:YES andActivityHUDText:@"Getting Reviews"];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getReviews:) object:self.reviewedDocID withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingReviews", @"Getting Reviews")];
 }
 
 -(void)getReviews:(NSString*)docid

@@ -225,7 +225,7 @@ static const NSInteger kTagBeerNameLabel=2;
 		{
 			[beerList removeAllObjects];
 			BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-			[delegate performAsyncOperationWithTarget:self selector:@selector(getBeerList:) object:url withActivityHUD:YES andActivityHUDText:@"Getting Beer List"];
+			[delegate performAsyncOperationWithTarget:self selector:@selector(getBeerList:) object:url withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieveing beer list from server")];
 		}
 	}
 }

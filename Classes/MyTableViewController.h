@@ -28,11 +28,13 @@ typedef enum
 	UISearchBar* searchBar;
 	NSMutableArray* resultsList;
 	int searchTypes;
+	BOOL performedSearchQuery;
 }
 
 @property (nonatomic,retain) UISearchBar* searchBar;
 @property (nonatomic, retain) NSMutableArray* resultsList;
 @property (nonatomic, assign) int searchTypes;
+@property (nonatomic, assign) BOOL performedSearchQuery;
 
 -(void)autocomplete:(NSString*)qs;
 -(void)query:(NSString*)qs;

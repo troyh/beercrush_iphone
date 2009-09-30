@@ -33,7 +33,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:0] withActivityHUD:YES andActivityHUDText:@"Getting Reviews"];
+	[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:0] withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingReviews",@"Getting Reviews")];
 }
 
 -(void)retrieveReviews:(NSNumber*)seqnum
@@ -246,7 +246,7 @@
 		// Query the server for the next set of reviews
 		// TODO: put spinner in accessoryview so the user knows network stuff is going on
 		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:self.seqNext] withActivityHUD:YES andActivityHUDText:@"Getting Reviews"];
+		[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:self.seqNext] withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingReviews",@"Getting Reviews")];
 	}
 }
 

@@ -57,7 +57,7 @@
 	breweryList=[[NSMutableArray alloc] init];
 	
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBreweriesList:) object:nil withActivityHUD:YES andActivityHUDText:@"Getting Brewery List"];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBreweriesList:) object:nil withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingBrewery",@"Getting Brewery List")];
 
 	[super viewWillAppear:animated];
 }

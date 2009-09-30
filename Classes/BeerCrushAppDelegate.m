@@ -1235,7 +1235,7 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	// UIProgressHUD is undocumented by Apple. If you get screwed, try this instead: http://www.bukovinski.com/2009/04/08/mbprogresshud-for-iphone/
 	if (self.activityHUD==nil)
 		self.activityHUD = [[UIProgressHUD alloc] initWithWindow:self.tabBarController.selectedViewController.view];
-	[self.activityHUD setText:(hudText?NSLocalizedString(hudText,hudText):@"")]; 
+	[self.activityHUD setText:hudText]; 
 	[self.activityHUD show:YES]; 
 }
 

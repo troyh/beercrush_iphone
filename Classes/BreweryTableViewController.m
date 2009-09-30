@@ -218,7 +218,7 @@ enum TAGS {
 				NSString* bodystr=[values componentsJoinedByString:@"&"];
 
 				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-				[appDelegate performAsyncOperationWithTarget:self selector:@selector(saveEdits:) object:bodystr withActivityHUD:YES andActivityHUDText:@"Saving"];
+				[appDelegate performAsyncOperationWithTarget:self selector:@selector(saveEdits:) object:bodystr withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:Saving",@"Saving")];
 			}
 		}
 	}

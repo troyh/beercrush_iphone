@@ -329,7 +329,7 @@ const NSInteger kViewTagDistance=2;
 	
 	// Ask server for nearby places
 	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_NEARBY_QUERY, myLocation.coordinate.latitude, myLocation.coordinate.longitude, 10]];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getNearbyResults:) object:url withActivityHUD:YES andActivityHUDText:@"Updating"];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getNearbyResults:) object:url withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:Updating",@"Updating")];
 }
 
 // Called when there is an error getting the location

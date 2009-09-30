@@ -14,9 +14,12 @@
 @synthesize searchBar;
 @synthesize resultsList;
 @synthesize searchTypes;
+@synthesize performedSearchQuery;
 
 -(void)autocomplete:(NSString*)qs 
 {
+	self.performedSearchQuery=NO;
+	
 	if (self.resultsList==nil)
 		self.resultsList=[[NSMutableArray alloc] initWithCapacity:10];
 	else
@@ -70,7 +73,7 @@
 			}
 		}
 		DLog(@"%d results",[self.resultsList count]);
-		[self.tableView reloadData];
+		[self performSelectorOnMainThread:@selector(myReloadData) withObject:nil waitUntilDone:NO];
 	}
 	else
 	{
@@ -78,8 +81,15 @@
 	}
 }
 
+-(void)myReloadData
+{
+	[self.tableView reloadData];
+}
+
 -(void)query:(NSString*)qs 
 {
+	self.performedSearchQuery=YES;
+	
 	// Send the query off to the server
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	
@@ -109,7 +119,7 @@
 	{
 		//		[appDelegate alertUser:@"Search failed"];
 	}
-	[self.tableView reloadData];
+	[self performSelectorOnMainThread:@selector(myReloadData) withObject:nil waitUntilDone:NO];
 	
 	[appDelegate dismissActivityHUD];
 
@@ -274,7 +284,7 @@
 		[bar endEditing:YES];
 	
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate performAsyncOperationWithTarget:self selector:@selector(query:) object:bar.text withActivityHUD:YES andActivityHUDText:@"Searching"];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(query:) object:bar.text withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:Searching",@"Searching")];
 	}
 }
 
@@ -310,8 +320,16 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	DLog(@"numberOfRowsInSection=%d",[self.resultsList count]);
-    return [self.resultsList count];
+	if (self.performedSearchQuery)  // It's a real query
+	{
+		DLog(@"numberOfRowsInSection=%d",[self.resultsList count]+1);
+		return [self.resultsList count]+1;
+	}
+	else
+	{
+		DLog(@"numberOfRowsInSection=%d",[self.resultsList count]);
+		return [self.resultsList count];
+	}
 }
 
 
@@ -330,53 +348,28 @@
 	 smaller than what the iPhone thinks it should be. So we *always* return a cell, even if it's empty.
 	 */
 	
-	if ([self.resultsList count]==0)
+	if ((indexPath.row >= [self.resultsList count]) && self.performedSearchQuery)
 	{ // Show the Add a [Brewery|Place] row
-		switch (indexPath.row) {
-			case 0:
-			{
-				static NSString *CellIdentifier = @"ZeroResultsCell";
-				
-				cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-				if (cell == nil) {
-					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-				}
-				
-				[cell.textLabel setText:@"0 matches"];
-				if (self.searchTypes == (BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
-					[cell.detailTextLabel setText:@"Are we missing a beer or brewery? Help us improve."];
-				else if (self.searchTypes == BeerCrushSearchTypeBreweries)
-					[cell.detailTextLabel setText:@"Are we missing a brewery? Help us improve."];
-				else if (self.searchTypes == BeerCrushSearchTypeBeers)
-					[cell.detailTextLabel setText:@"Are we missing a beer? Help us improve."];
-				else if (self.searchTypes == BeerCrushSearchTypePlaces)
-					[cell.detailTextLabel setText:@"Are we missing a place? Help us improve."];
-
-				UIButton* addButton=[UIButton buttonWithType:UIButtonTypeContactAdd];
-				addButton.frame=CGRectMake(0, 0, 30, 30);
-				[addButton addTarget:self action:@selector(addBeerOrBreweryButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-				
-				cell.accessoryView=addButton;
-				
-				break;
-			}
-			case 1:
-			{
-				static NSString *CellIdentifier = @"AddOneCell";
-				
-				cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-				if (cell == nil) {
-					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-				}
-				
-				[cell.textLabel setText:@"Add a Brewery"];
-				
-
-				break;
-			}
-			default:
-				break;
+		static NSString *CellIdentifier = @"AddNewItemCell";
+		
+		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+		if (cell == nil) {
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
 		}
+		
+		if (self.searchTypes == BeerCrushSearchTypePlaces)
+			[cell.textLabel setText:NSLocalizedString(@"Missing Place?",@"Missing place? Add it.")];
+		else
+		{
+			[cell.textLabel setText:NSLocalizedString(@"Missing Brewery?",@"Missing brewery? Add it.")];
+			[cell.detailTextLabel setText:NSLocalizedString(@"Missing Brewery? Subtitle",@"(add beers on the brewery's beer list page)")];
+		}
+
+		UIButton* addButton=[UIButton buttonWithType:UIButtonTypeContactAdd];
+		addButton.frame=CGRectMake(0, 0, 30, 30);
+		[addButton addTarget:self action:@selector(addBeerOrBreweryButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+		
+		cell.accessoryView=addButton;
 	}
 	else 
 	{
@@ -434,6 +427,9 @@
 
 			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
 		}
+	}
+	else if (self.performedSearchQuery) // User selected the "Add new item" row
+	{
 	}
 }
 

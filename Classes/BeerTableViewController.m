@@ -137,7 +137,7 @@ enum TAGS {
 	if (self.editing)
 	{   // Editing is ending (or trying to end), send data to server
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate performAsyncOperationWithTarget:self selector:@selector(saveEdits:) object:nil withActivityHUD:YES andActivityHUDText:@"Saving"];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(saveEdits:) object:nil withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:Saving",@"Saving")];
 	}
 	else
 	{
@@ -184,7 +184,7 @@ enum TAGS {
 		self.editButtonItem.action=@selector(editButtonClicked);
 
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerInfo:) object:self.beerID withActivityHUD:YES andActivityHUDText:@"Getting Beer Info"];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerInfo:) object:self.beerID withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingBeerInfo",@"Getting Beer Info")];
 	}
 }
 
@@ -1107,7 +1107,7 @@ enum TAGS {
 	
 	// Send the review to the site
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendBeerReview:) object:reviewDoc withActivityHUD:YES andActivityHUDText:@"Sending Review"];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendBeerReview:) object:reviewDoc withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:SendingReview",@"Sending Review to server")];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -1302,7 +1302,7 @@ enum TAGS {
 			{
 				// Add beerID to wish list
 				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-				[appDelegate performAsyncOperationWithTarget:self selector:@selector(addToWishList:) object:self.beerID withActivityHUD:YES andActivityHUDText:@"Adding to Wish List"];
+				[appDelegate performAsyncOperationWithTarget:self selector:@selector(addToWishList:) object:self.beerID withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:AddToWishList",@"Adding to Wish List")];
 
 				UITableViewCell* cell=[self.tableView cellForRowAtIndexPath:indexPath];
 				[cell setSelected:NO animated:YES];
@@ -1455,7 +1455,7 @@ enum TAGS {
 -(void)photoViewer:(PhotoViewer*)photoViewer didSelectPhotoToUpload:(UIImage*)photo
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(uploadPhoto:) object:photo withActivityHUD:YES andActivityHUDText:@"Uploading Photo"];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(uploadPhoto:) object:photo withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:UploadingPhoto",@"Uploading Photo")];
 }
 
 #pragma mark EditLineVCDelegate methods
