@@ -378,6 +378,20 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		}
 	 }
 	 */
+
+	// This determines the default order that the tabs appear
+	int tabOrder[]={
+		kTabBarItemTagBeers,
+		kTabBarItemTagPlaces,
+		kTabBarItemTagNearby,
+		kTabBarItemTagWishList,
+		kTabBarItemTagMyBeerReviews,
+		kTabBarItemTagMyPlaces,
+		kTabBarItemTagProfile,
+		kTabBarItemTagBuddies,
+		kTabBarItemTagRecommended,
+		kTabBarItemTagBookmarks
+	};
 	
 	self.restoringNavState=[[NSUserDefaults standardUserDefaults] objectForKey:@"appstate"];
 	if (self.restoringNavState)
@@ -392,22 +406,23 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				[previousNavStacks addObject:[NSMutableArray arrayWithCapacity:5]];
 			}
 		}
+		
+		NSArray* customTabOrder=[self.restoringNavState objectForKey:@"taborder"];
+		if (customTabOrder)
+		{
+			int i=0;
+			for (NSNumber* n in customTabOrder)
+			{
+				tabOrder[i++]=[n integerValue];
+			}
+		}
+		else // Use default tab order
+		{
+			// Do nothing, just use it as set above
+		}
 	}
 	
-	// This determines the default order that the tabs appear
-	int tabOrder[]={
-		kTabBarItemTagBeers,
-		kTabBarItemTagPlaces,
-		kTabBarItemTagNearby,
-		kTabBarItemTagWishList,
-		kTabBarItemTagMyBeerReviews,
-		kTabBarItemTagMyPlaces,
-		kTabBarItemTagProfile,
-		kTabBarItemTagBuddies,
-		kTabBarItemTagRecommended,
-		kTabBarItemTagBookmarks
-	};
-
+	
 	// Create a new appstate dictionary to store the app's state as it runs
 	self.appState=[[NSMutableDictionary alloc] init];
 	NSMutableArray* stacks=[NSMutableArray arrayWithCapacity:(sizeof(tabOrder)/sizeof(tabOrder[0]))];
@@ -521,6 +536,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 	}
 	
 	tabBarController.viewControllers=tabBarControllers;
+	tabBarController.delegate=self;
 	
 	if (self.restoringNavState)
 	{
@@ -544,11 +560,19 @@ void normalizeBreweryData(NSMutableDictionary* data)
 }
 */
 
-/*
-// Optional UITabBarControllerDelegate method
 - (void)tabBarController:(UITabBarController *)tabBarController didEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed {
+	if (changed)
+	{
+		NSMutableArray* newTabOrder=[NSMutableArray arrayWithCapacity:10];
+		for (UIViewController* vc in viewControllers)
+		{
+			[newTabOrder addObject:[NSNumber numberWithInt:vc.tabBarItem.tag]];
+		}
+		// Save it in appState
+		[self.appState setObject:newTabOrder forKey:@"taborder"];
+	}
 }
-*/
+
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
