@@ -11,33 +11,19 @@
 #import "BreweryTableViewController.h"
 #import "BeerTableViewController.h"
 #import "PlaceTableViewController.h"
-
-typedef enum
-{
-	BeerCrushSearchTypeBeers = 1,
-	BeerCrushSearchTypeBreweries = 2,
-	BeerCrushSearchTypePlaces = 4
-} BeerCrushSearchType;
+#import "LogoVC.h"
+#import "SearchVC.h"
 
 @interface MyTableViewController : UITableViewController 
-	<UISearchBarDelegate,
-	UIActionSheetDelegate,
-	BreweryVCDelegate,
-	PlaceVCDelegate>
 {
-	UISearchBar* searchBar;
+	BeerCrushSearchType searchTypes;
 	NSMutableArray* resultsList;
-	int searchTypes;
 	BOOL performedSearchQuery;
 }
 
-@property (nonatomic,retain) UISearchBar* searchBar;
 @property (nonatomic, retain) NSMutableArray* resultsList;
-@property (nonatomic, assign) int searchTypes;
 @property (nonatomic, assign) BOOL performedSearchQuery;
-
--(void)autocomplete:(NSString*)qs;
--(void)query:(NSString*)qs;
+@property (nonatomic, assign) BeerCrushSearchType searchTypes;
 
 @end
 

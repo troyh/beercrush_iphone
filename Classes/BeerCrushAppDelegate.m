@@ -19,6 +19,7 @@
 #import "BookmarksTVC.h"
 #import "PlacesTVC.h"
 #import "JSON.h"
+#import "SearchVC.h"
 
 // Unique numbers to identify the tabs (they are not necessarily in this order)
 #define kTabBarItemTagBeers 1
@@ -326,6 +327,14 @@ void normalizeBreweryData(NSMutableDictionary* data)
 	{
 		loginVC=nil; // releases it too
 	}
+	
+//	UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//	button.frame = CGRectMake(290, 400, 20, 20);
+//	[button.titleLabel setFont:[UIFont fontWithName:@"Georgia-BoldItalic" size:14]];
+//	[button setTitle:@"i" forState:UIControlStateNormal];
+//	[button addTarget:self action:@selector(showAboutUs) forControlEvents:UIControlEventTouchUpInside];
+//
+//	[self.window addSubview:button];
 
 //	tabBarController.viewControllers=[NSArray arrayWithObjects:
 //									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
@@ -442,9 +451,9 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Beers" image:[UIImage imageNamed:@"tab_beers.png"] tag:kTabBarItemTagBeers] autorelease];
-				MyTableViewController* tvc=[[[MyTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
-				tvc.searchTypes=BeerCrushSearchTypeBeers|BeerCrushSearchTypeBreweries; // Search both beers and breweries
-				[nc pushViewController:tvc animated:NO];
+				SearchVC* svc=[[[SearchVC alloc] init] autorelease];
+				svc.searchTypes=BeerCrushSearchTypeBeers|BeerCrushSearchTypeBreweries; // Search both beers and breweries
+				[nc pushViewController:svc animated:NO];
 				break;
 			}
 			case kTabBarItemTagPlaces:
@@ -452,9 +461,9 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Places" image:[UIImage imageNamed:@"tab_places.png"] tag:kTabBarItemTagPlaces] autorelease];
-				MyTableViewController* tvc=[[[MyTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
-				tvc.searchTypes=BeerCrushSearchTypePlaces; // Search only Places
-				[nc pushViewController:tvc animated:NO];
+				SearchVC* svc=[[[SearchVC alloc] init] autorelease];
+				svc.searchTypes=BeerCrushSearchTypePlaces; // Search only Places
+				[nc pushViewController:svc animated:NO];
 				break;
 			}
 			case kTabBarItemTagNearby:
@@ -1246,87 +1255,6 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:target selector:sel object:object] autorelease];
 	[self.sharedOperationQueue addOperation:op];
 }
-
-
-// NSURLConnection delegate methods
-//
-//- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-//{
-//    // this method is called when the server has determined that it
-//    // has enough information to create the NSURLResponse
-//	
-//    // it can be called multiple times, for example in the case of a
-//    // redirect, so each time we reset the data.
-//    // receivedData is declared as a method instance elsewhere
-//	
-//	NSHTTPURLResponse* httprsp=(NSHTTPURLResponse*)response;
-//	NSInteger n=httprsp.statusCode;
-//	
-//	if (n!=200)
-//	{
-//		DLog(@"Headers:");
-//		NSDictionary* hdrdict=[httprsp allHeaderFields];
-//		NSArray* headers=[hdrdict allKeys];
-//		for (NSUInteger i=0;i<[headers count];++i)
-//		{
-//			DLog(@"%@:%@",[headers objectAtIndex:i],[hdrdict objectForKey:[headers objectAtIndex:i]]);
-//		}
-//		// TODO: alert the user that the login failed
-//		UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"Login Failed" message:@"Check username and password in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//		[alert show];
-//		[alert release];
-//		DLog(@"Login failed.");
-//	}
-//	else
-//	{
-//		DLog(@"Login successful.");
-//		NSArray* cookies=[NSHTTPCookie cookiesWithResponseHeaderFields:httprsp.allHeaderFields forURL:@""];
-//		// Look through cookies and find userid and usrkey
-//		for (int i=0; i < [cookies count]; ++i) {
-//			NSHTTPCookie* c=[cookies objectAtIndex:i];
-//			if ([c.name isEqualToString:@"userid"])
-//			{
-//				userid=c.value;
-//			}
-//			else if ([c.name isEqualToString:@"usrkey"])
-//			{
-//				usrkey=c.value;
-//			}
-//		}
-//	}
-//}
-//
-//- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-//{
-//    // append the new data to the receivedData
-//    // receivedData is declared as a method instance elsewhere
-//}
-//
-//- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-//{
-//    // release the connection, and the data object
-//    [connection release];
-//	
-//    // receivedData is declared as a method instance elsewhere
-//	
-//    // inform the user
-//    DLog(@"Login failed! Error - %@ %@",
-//          [error localizedDescription],
-//          [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
-//	
-//}
-//
-//- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-//
-//{
-//    // do something with the data
-//    // receivedData is declared as a method instance elsewhere
-//    DLog(@"Succeeded! Received %d bytes of data",[reviewPostResponse length]);
-//	
-//    // release the connection, and the data object
-//    [connection release];
-//    [reviewPostResponse release];
-//}
 
 @end
 
