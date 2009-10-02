@@ -21,6 +21,12 @@
 		05165EBC1051D76500D9C98D /* EditURIVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05165EBB1051D76500D9C98D /* EditURIVC.m */; };
 		051665421058310D00D9C98D /* PhotoThumbnailControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 051665411058310D00D9C98D /* PhotoThumbnailControl.m */; };
 		0516656710583A1B00D9C98D /* PhotoViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0516656610583A1B00D9C98D /* PhotoViewer.m */; };
+		051BBD9F10753EE8004376D9 /* LogoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 051BBD9D10753EE8004376D9 /* LogoVC.m */; };
+		051BBDA010753EE8004376D9 /* LogoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 051BBD9E10753EE8004376D9 /* LogoVC.xib */; };
+		051BBE951075539B004376D9 /* SearchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 051BBE941075539B004376D9 /* SearchVC.m */; };
+		051BBF7210756785004376D9 /* AutoCompleteTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 051BBF7110756785004376D9 /* AutoCompleteTVC.m */; };
+		051BC1331075A09B004376D9 /* LogoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 051BC1321075A09B004376D9 /* LogoView.xib */; };
+		051BC1371075A0B9004376D9 /* LogoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 051BC1361075A0B9004376D9 /* LogoView.m */; };
 		053653960F703F99000389C1 /* PhoneNumberEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */; };
 		05451382104346EF00F9400B /* ColorsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05451381104346EF00F9400B /* ColorsTVC.m */; };
 		0545144710435A4900F9400B /* AvailabilityTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0545144610435A4900F9400B /* AvailabilityTVC.m */; };
@@ -63,6 +69,9 @@
 		05B7DB5E103F42700021EEDA /* StylesListTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B7DB5D103F42700021EEDA /* StylesListTVC.m */; };
 		05B7DB7B103F45A70021EEDA /* StyleVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B7DB7A103F45A70021EEDA /* StyleVC.m */; };
 		05C0D47B10740500004D485E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 05C0D47A10740500004D485E /* Localizable.strings */; };
+		05C0D4E1107413A6004D485E /* AboutUsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C0D4DF107413A6004D485E /* AboutUsVC.m */; };
+		05C0D4E2107413A6004D485E /* AboutUsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05C0D4E0107413A6004D485E /* AboutUsVC.xib */; };
+		05C0D56E10742E35004D485E /* LogoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05C0D56D10742E35004D485E /* LogoView.xib */; };
 		05C6364D0F55C03C00B1C78A /* BreweryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */; };
 		05C636500F55C1CE00B1C78A /* BeerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */; };
 		05C637900F56018100B1C78A /* ReviewsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */; };
@@ -105,6 +114,16 @@
 		051665411058310D00D9C98D /* PhotoThumbnailControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoThumbnailControl.m; sourceTree = "<group>"; };
 		0516656510583A1B00D9C98D /* PhotoViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewer.h; sourceTree = "<group>"; };
 		0516656610583A1B00D9C98D /* PhotoViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewer.m; sourceTree = "<group>"; };
+		051BBD9C10753EE8004376D9 /* LogoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogoVC.h; sourceTree = "<group>"; };
+		051BBD9D10753EE8004376D9 /* LogoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogoVC.m; sourceTree = "<group>"; };
+		051BBD9E10753EE8004376D9 /* LogoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogoVC.xib; sourceTree = "<group>"; };
+		051BBE931075539B004376D9 /* SearchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchVC.h; sourceTree = "<group>"; };
+		051BBE941075539B004376D9 /* SearchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchVC.m; sourceTree = "<group>"; };
+		051BBF7010756785004376D9 /* AutoCompleteTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoCompleteTVC.h; sourceTree = "<group>"; };
+		051BBF7110756785004376D9 /* AutoCompleteTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoCompleteTVC.m; sourceTree = "<group>"; };
+		051BC1321075A09B004376D9 /* LogoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogoView.xib; sourceTree = "<group>"; };
+		051BC1351075A0B9004376D9 /* LogoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogoView.h; sourceTree = "<group>"; };
+		051BC1361075A0B9004376D9 /* LogoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogoView.m; sourceTree = "<group>"; };
 		053653940F703F99000389C1 /* PhoneNumberEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneNumberEditTableViewController.h; sourceTree = "<group>"; };
 		053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneNumberEditTableViewController.m; sourceTree = "<group>"; };
 		05451380104346EF00F9400B /* ColorsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsTVC.h; sourceTree = "<group>"; };
@@ -171,6 +190,10 @@
 		05B7DB79103F45A70021EEDA /* StyleVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleVC.h; sourceTree = "<group>"; };
 		05B7DB7A103F45A70021EEDA /* StyleVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleVC.m; sourceTree = "<group>"; };
 		05C0D478107404F6004D485E /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		05C0D4DE107413A6004D485E /* AboutUsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutUsVC.h; sourceTree = "<group>"; };
+		05C0D4DF107413A6004D485E /* AboutUsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutUsVC.m; sourceTree = "<group>"; };
+		05C0D4E0107413A6004D485E /* AboutUsVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutUsVC.xib; sourceTree = "<group>"; };
+		05C0D56D10742E35004D485E /* LogoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogoView.xib; sourceTree = "<group>"; };
 		05C6364B0F55C03C00B1C78A /* BreweryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreweryTableViewController.h; sourceTree = "<group>"; };
 		05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BreweryTableViewController.m; sourceTree = "<group>"; };
 		05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeerTableViewController.h; sourceTree = "<group>"; };
@@ -239,6 +262,12 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				05C0D4DE107413A6004D485E /* AboutUsVC.h */,
+				05C0D4DF107413A6004D485E /* AboutUsVC.m */,
+				05C0D4E0107413A6004D485E /* AboutUsVC.xib */,
+				051BBD9C10753EE8004376D9 /* LogoVC.h */,
+				051BBD9D10753EE8004376D9 /* LogoVC.m */,
+				051BBD9E10753EE8004376D9 /* LogoVC.xib */,
 				0504AC4F105B05F3001FAEBC /* EditLineVC.h */,
 				0504AC50105B05F3001FAEBC /* EditLineVC.m */,
 				0516656510583A1B00D9C98D /* PhotoViewer.h */,
@@ -310,6 +339,13 @@
 				051102A0100FDC8300610251 /* UserReviewsTVC.m */,
 				05B7DB79103F45A70021EEDA /* StyleVC.h */,
 				05B7DB7A103F45A70021EEDA /* StyleVC.m */,
+				051BBE931075539B004376D9 /* SearchVC.h */,
+				051BBE941075539B004376D9 /* SearchVC.m */,
+				051BBF7010756785004376D9 /* AutoCompleteTVC.h */,
+				051BBF7110756785004376D9 /* AutoCompleteTVC.m */,
+				051BC1321075A09B004376D9 /* LogoView.xib */,
+				051BC1351075A0B9004376D9 /* LogoView.h */,
+				051BC1361075A0B9004376D9 /* LogoView.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -373,6 +409,7 @@
 				8D1107310486CEB800E47090 /* Info.plist */,
 				05944DBC0F72E2BB0043D34C /* MainWindow.xib */,
 				05944DC40F72E7C30043D34C /* BeerCrush.png */,
+				05C0D56D10742E35004D485E /* LogoView.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -466,6 +503,10 @@
 				05DA328F106408290015EBFD /* logo.png in Resources */,
 				05DA329610640DAE0015EBFD /* Icon.png in Resources */,
 				05C0D47B10740500004D485E /* Localizable.strings in Resources */,
+				05C0D4E2107413A6004D485E /* AboutUsVC.xib in Resources */,
+				05C0D56E10742E35004D485E /* LogoView.xib in Resources */,
+				051BBDA010753EE8004376D9 /* LogoVC.xib in Resources */,
+				051BC1331075A09B004376D9 /* LogoView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,6 +559,11 @@
 				051665421058310D00D9C98D /* PhotoThumbnailControl.m in Sources */,
 				0516656710583A1B00D9C98D /* PhotoViewer.m in Sources */,
 				0504AC51105B05F3001FAEBC /* EditLineVC.m in Sources */,
+				05C0D4E1107413A6004D485E /* AboutUsVC.m in Sources */,
+				051BBD9F10753EE8004376D9 /* LogoVC.m in Sources */,
+				051BBE951075539B004376D9 /* SearchVC.m in Sources */,
+				051BBF7210756785004376D9 /* AutoCompleteTVC.m in Sources */,
+				051BC1371075A0B9004376D9 /* LogoView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
