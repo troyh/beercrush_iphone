@@ -15,11 +15,14 @@
 @synthesize selectedStyleIDs;
 @synthesize delegate;
 
-- (id)initWithStyle:(UITableViewStyle)style {
+- (id)initWithStyleID:(NSDictionary*)styles {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-    if (self = [super initWithStyle:style]) {
+    if (self = [super initWithStyle:UITableViewStylePlain]) {
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		self.stylesDictionary=[appDelegate getStylesDictionary];
+		if (styles==nil)
+			self.stylesDictionary=[appDelegate getStylesDictionary];
+		else
+			self.stylesDictionary=styles;
     }
     return self;
 }
@@ -78,13 +81,13 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[self.stylesDictionary objectForKey:@"styles"] count];
+	return 1;
 }
 
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:section] objectForKey:@"styles"] count];
+    return [[self.stylesDictionary objectForKey:@"styles"] count];
 }
 
 //- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
@@ -101,44 +104,58 @@
 //	return index*5;
 //}
 //
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-	return [[[self.stylesDictionary objectForKey:@"names"] objectForKey:[NSString stringWithFormat:@"%d",section+1]] objectForKey:@"name"];
-}
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//	return [[[self.stylesDictionary objectForKey:@"names"] objectForKey:[NSString stringWithFormat:@"%d",section+1]] objectForKey:@"name"];
+//}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    // Set up the cell...
-	NSString* styleID=[[[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.section] objectForKey:@"styles"] objectAtIndex:indexPath.row] objectForKey:@"id"];
-	[cell.textLabel setText:[[[self.stylesDictionary objectForKey:@"names"] objectForKey:styleID] objectForKey:@"name"]];
+
+	static NSString *CellIdentifier = @"Cell";
 	
-	if ([self.selectedStyleIDs containsObject:styleID])
-		cell.accessoryType=UITableViewCellAccessoryCheckmark;
-	else
-		cell.accessoryType=UITableViewCellAccessoryNone;
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	if (cell == nil) {
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+	}
+
+    if (indexPath.row < [[self.stylesDictionary objectForKey:@"styles"] count])
+	{
+		NSString* name=[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.row] objectForKey:@"name"];
+		[cell.textLabel setText:name];
+		
+		NSString* styleID=[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.row] objectForKey:@"id"];
+		if ([self.selectedStyleIDs containsObject:styleID])
+			cell.accessoryType=UITableViewCellAccessoryCheckmark;
+		else
+			cell.accessoryType=UITableViewCellAccessoryNone;
+	}
 	
     return cell;
 }
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	// AnotherViewController *anotherViewController = [[AnotherViewController alloc] initWithNibName:@"AnotherView" bundle:nil];
-	// [self.navigationController pushViewController:anotherViewController];
-	// [anotherViewController release];
-	
-	// For now, we only support selecting one style, so we'll remove any already set and replace them with the one the user just selected
-	[self.selectedStyleIDs removeAllObjects];
-	[self.selectedStyleIDs addObject:[[[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.section] objectForKey:@"styles"] objectAtIndex:indexPath.row] objectForKey:@"id"]];
-	[delegate stylesTVC:self didSelectStyle:self.selectedStyleIDs];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
+{
+	if (indexPath.row < [[self.stylesDictionary objectForKey:@"styles"] count])
+	{
+		NSArray* substyles=[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.row] objectForKey:@"styles"];
+		if (substyles && [substyles isKindOfClass:[NSArray class]])
+		{
+			// Navigate to the next level of styles
+			StylesListTVC* vc=[[[StylesListTVC alloc] initWithStyleID:[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.row]] autorelease];
+			vc.selectedStyleIDs=self.selectedStyleIDs;
+			vc.delegate=self.delegate;
+			[self.navigationController pushViewController:vc animated:YES];
+		}
+		else 
+		{
+			// For now, we only support selecting one style, so we'll remove any already set and replace them with the one the user just selected
+			[self.selectedStyleIDs removeAllObjects];
+			[self.selectedStyleIDs addObject:[self.stylesDictionary objectForKey:@"id"]];
+			[delegate stylesTVC:self didSelectStyle:self.selectedStyleIDs];
+		}
+	}
 }
 
 

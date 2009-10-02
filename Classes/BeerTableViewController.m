@@ -1150,7 +1150,7 @@ enum TAGS {
 					}
 					case 1: // Style
 					{
-						StylesListTVC* tvc=[[[StylesListTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
+						StylesListTVC* tvc=[[[StylesListTVC alloc] initWithStyleID:nil] autorelease];
 						tvc.delegate=self;
 						tvc.selectedStyleIDs=[self.beerObj.data objectForKey:@"styles"];
 						[self.navigationController pushViewController:tvc animated:YES];
@@ -1440,7 +1440,7 @@ enum TAGS {
 {
 	[self.beerObj.data setObject:styleids forKey:@"styles"];
 	[self.tableView reloadData];
-	[self.navigationController popViewControllerAnimated:YES];
+	[self.navigationController popToViewController:self animated:YES];
 }
 
 // FullBeerReviewTVCDelegate methods
