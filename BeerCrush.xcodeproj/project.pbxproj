@@ -24,9 +24,6 @@
 		051BBD9F10753EE8004376D9 /* LogoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 051BBD9D10753EE8004376D9 /* LogoVC.m */; };
 		051BBDA010753EE8004376D9 /* LogoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 051BBD9E10753EE8004376D9 /* LogoVC.xib */; };
 		051BBE951075539B004376D9 /* SearchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 051BBE941075539B004376D9 /* SearchVC.m */; };
-		051BBF7210756785004376D9 /* AutoCompleteTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 051BBF7110756785004376D9 /* AutoCompleteTVC.m */; };
-		051BC1331075A09B004376D9 /* LogoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 051BC1321075A09B004376D9 /* LogoView.xib */; };
-		051BC1371075A0B9004376D9 /* LogoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 051BC1361075A0B9004376D9 /* LogoView.m */; };
 		053653960F703F99000389C1 /* PhoneNumberEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */; };
 		05451382104346EF00F9400B /* ColorsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05451381104346EF00F9400B /* ColorsTVC.m */; };
 		0545144710435A4900F9400B /* AvailabilityTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0545144610435A4900F9400B /* AvailabilityTVC.m */; };
@@ -119,11 +116,6 @@
 		051BBD9E10753EE8004376D9 /* LogoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogoVC.xib; sourceTree = "<group>"; };
 		051BBE931075539B004376D9 /* SearchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchVC.h; sourceTree = "<group>"; };
 		051BBE941075539B004376D9 /* SearchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchVC.m; sourceTree = "<group>"; };
-		051BBF7010756785004376D9 /* AutoCompleteTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoCompleteTVC.h; sourceTree = "<group>"; };
-		051BBF7110756785004376D9 /* AutoCompleteTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoCompleteTVC.m; sourceTree = "<group>"; };
-		051BC1321075A09B004376D9 /* LogoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogoView.xib; sourceTree = "<group>"; };
-		051BC1351075A0B9004376D9 /* LogoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogoView.h; sourceTree = "<group>"; };
-		051BC1361075A0B9004376D9 /* LogoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogoView.m; sourceTree = "<group>"; };
 		053653940F703F99000389C1 /* PhoneNumberEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneNumberEditTableViewController.h; sourceTree = "<group>"; };
 		053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneNumberEditTableViewController.m; sourceTree = "<group>"; };
 		05451380104346EF00F9400B /* ColorsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsTVC.h; sourceTree = "<group>"; };
@@ -341,11 +333,6 @@
 				05B7DB7A103F45A70021EEDA /* StyleVC.m */,
 				051BBE931075539B004376D9 /* SearchVC.h */,
 				051BBE941075539B004376D9 /* SearchVC.m */,
-				051BBF7010756785004376D9 /* AutoCompleteTVC.h */,
-				051BBF7110756785004376D9 /* AutoCompleteTVC.m */,
-				051BC1321075A09B004376D9 /* LogoView.xib */,
-				051BC1351075A0B9004376D9 /* LogoView.h */,
-				051BC1361075A0B9004376D9 /* LogoView.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -506,7 +493,6 @@
 				05C0D4E2107413A6004D485E /* AboutUsVC.xib in Resources */,
 				05C0D56E10742E35004D485E /* LogoView.xib in Resources */,
 				051BBDA010753EE8004376D9 /* LogoVC.xib in Resources */,
-				051BC1331075A09B004376D9 /* LogoView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -562,8 +548,6 @@
 				05C0D4E1107413A6004D485E /* AboutUsVC.m in Sources */,
 				051BBD9F10753EE8004376D9 /* LogoVC.m in Sources */,
 				051BBE951075539B004376D9 /* SearchVC.m in Sources */,
-				051BBF7210756785004376D9 /* AutoCompleteTVC.m in Sources */,
-				051BC1371075A0B9004376D9 /* LogoView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

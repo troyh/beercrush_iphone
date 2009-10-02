@@ -1047,7 +1047,7 @@
 	};
 	051BBD9D10753EE8004376D9 /* LogoVC.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1096, 1390}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1096, 1367}}";
 			sepNavSelRange = "{1104, 0}";
 			sepNavVisRange = "{0, 1626}";
 		};
@@ -2598,6 +2598,12 @@
 		vrLoc = 5675;
 	};
 	051BBF7010756785004376D9 /* AutoCompleteTVC.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = AutoCompleteTVC.h;
+		path = /Users/troy/Documents/BeerCrush/Classes/AutoCompleteTVC.h;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1096, 1342}}";
 			sepNavSelRange = "{376, 0}";
@@ -2605,6 +2611,12 @@
 		};
 	};
 	051BBF7110756785004376D9 /* AutoCompleteTVC.m */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.objc;
+		name = AutoCompleteTVC.m;
+		path = /Users/troy/Documents/BeerCrush/Classes/AutoCompleteTVC.m;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1096, 3107}}";
 			sepNavSelRange = "{2399, 4896}";
@@ -4152,6 +4164,12 @@
 		vrLoc = 0;
 	};
 	051BC1351075A0B9004376D9 /* LogoView.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = LogoView.h;
+		path = /Users/troy/Documents/BeerCrush/Classes/LogoView.h;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1096, 1342}}";
 			sepNavSelRange = "{0, 0}";
@@ -4159,6 +4177,12 @@
 		};
 	};
 	051BC1361075A0B9004376D9 /* LogoView.m */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.objc;
+		name = LogoView.m;
+		path = /Users/troy/Documents/BeerCrush/Classes/LogoView.m;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1096, 1342}}";
 			sepNavSelRange = "{359, 0}";
