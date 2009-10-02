@@ -10,7 +10,6 @@
 #import "PlaceTableViewController.h"
 #import "BreweryTableViewController.h"
 #import "BeerTableViewController.h"
-#import "AutoCompleteTVC.h"
 #import "LogoVC.h"
 
 typedef enum
@@ -28,7 +27,6 @@ typedef enum
 	UITableViewDataSource>
 {
 	LogoVC* logoView;
-	AutoCompleteTVC* autoCompleteTVC;
 	BeerCrushSearchType searchTypes;
 	UISearchBar* searchBar;
 	NSMutableArray* resultsList;
@@ -37,7 +35,6 @@ typedef enum
 }
 
 @property (nonatomic, retain) NSMutableArray* resultsList;
-@property (nonatomic, retain) AutoCompleteTVC* autoCompleteTVC;
 @property (nonatomic,retain) UISearchBar* searchBar;
 @property (nonatomic, retain) LogoVC* logoView;
 @property (nonatomic, assign) BeerCrushSearchType searchTypes;

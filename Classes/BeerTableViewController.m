@@ -9,6 +9,7 @@
 #import <CoreGraphics/CGGeometry.h>
 #import "BeerTableViewController.h"
 #import "ReviewsTableViewController.h"
+#import "BeerListTableViewController.h"
 #import "RatingControl.h"
 #import "FullBeerReviewTVC.h"
 #import "StylesListTVC.h"
@@ -274,7 +275,7 @@ enum TAGS {
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.editing?3:6;
+    return self.editing?3:7;
 }
 
 //-(void)editBeerCancelButtonClicked
@@ -302,6 +303,9 @@ enum TAGS {
 			return self.editing?0:1;
 			break;
 		case 5:
+			return self.editing?0:1;
+			break;
+		case 6:
 			return self.editing?0:1;
 			break;
 		default:
@@ -471,10 +475,17 @@ enum TAGS {
 						UILabel* breweryNameLabel=(UILabel*)[cell viewWithTag:kTagBreweryNameLabel];
 						[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"brewery_id"]]];
 
-						UILabel* styleLabel=(UILabel*)[cell viewWithTag:kTagStyleLabel];
-						NSDictionary* stylesDict=[appDelegate getStylesDictionary];
 						NSArray* styles=[beerObj.data objectForKey:@"styles"];
-						[styleLabel setText:[[[stylesDict objectForKey:@"names"] objectForKey:[styles objectAtIndex:0]] objectForKey:@"name"]]; // Take just the 1st
+						if (styles && [styles isKindOfClass:[NSArray class]] && [styles count])
+						{
+							NSDictionary* stylesDict=[appDelegate getStylesDictionary];
+							NSString* s=[[[stylesDict objectForKey:@"names"] objectForKey:[styles objectAtIndex:0]] objectForKey:@"name"];
+							if (s)
+							{
+								UILabel* styleLabel=(UILabel*)[cell viewWithTag:kTagStyleLabel];
+								[styleLabel setText:s]; // Take just the 1st
+							}
+						}
 					}
 					break;
 				case 1:
@@ -487,7 +498,8 @@ enum TAGS {
 					}
 					NSDictionary* stylesDict=[appDelegate getStylesDictionary];
 					NSArray* style=[beerObj.data objectForKey:@"styles"];
-					[cell.detailTextLabel setText:[[[stylesDict objectForKey:@"names"] objectForKey:[style objectAtIndex:0]] objectForKey:@"name"]]; // Take just the 1st
+					if (style)
+						[cell.detailTextLabel setText:[[[stylesDict objectForKey:@"names"] objectForKey:[style objectAtIndex:0]] objectForKey:@"name"]]; // Take just the 1st
 					break;
 				}
 				default:
@@ -1039,6 +1051,13 @@ enum TAGS {
 			[cell.textLabel setText:@"Add to Wishlist"];
 			cell.textLabel.textAlignment=UITextAlignmentCenter;
 			break;
+		case 6:
+			cell = [tableView dequeueReusableCellWithIdentifier:@"Section6Cell"];
+			if (cell == nil)
+				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section6Cell"] autorelease];
+			[cell.textLabel setText:@"More from this Brewer"];
+			cell.textLabel.textAlignment=UITextAlignmentCenter;
+			break;
 		default:
 			break;
 	}
@@ -1306,6 +1325,13 @@ enum TAGS {
 
 				UITableViewCell* cell=[self.tableView cellForRowAtIndexPath:indexPath];
 				[cell setSelected:NO animated:YES];
+				break;
+			}
+			case 6: // More from this brewer
+			{
+				NSString* brewery_id=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"brewery_id"];
+				BeerListTableViewController* beerlistVC=[[[BeerListTableViewController alloc] initWithBreweryID:brewery_id] autorelease];
+				[self.navigationController pushViewController:beerlistVC animated:YES];
 				break;
 			}
 			default:

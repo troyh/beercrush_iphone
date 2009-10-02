@@ -14,7 +14,6 @@
 @implementation SearchVC
 
 @synthesize logoView;
-@synthesize autoCompleteTVC;
 @synthesize searchTypes;
 @synthesize resultsList;
 @synthesize searchBar;
@@ -276,12 +275,9 @@
 
 -(void)keyboardWillHide:(NSNotification*)notification
 {
-	if (self.autoCompleteTVC)
-	{
-		// Resize the tableview back to normal
-		[self.autoCompleteTVC.tableView setContentInset:UIEdgeInsetsZero];
-		[self.autoCompleteTVC.tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
-	}
+//		// Resize the tableview back to normal
+//		[self.autoCompleteTVC.tableView setContentInset:UIEdgeInsetsZero];
+//		[self.autoCompleteTVC.tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
 }
 
 #pragma mark UISearchBarDelegate methods

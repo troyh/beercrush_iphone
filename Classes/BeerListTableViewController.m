@@ -16,9 +16,6 @@
 @synthesize placeID;
 @synthesize wishlistID;
 // TODO: just use one ID string above and use an enum to signify the type of ID it is
-@synthesize currentElemValue;
-@synthesize	currentElemAttribs;
-@synthesize xmlParserPath;
 @synthesize beerList;
 @synthesize btvc;
 @synthesize setRightBarButtonItem;
@@ -49,9 +46,6 @@ static const NSInteger kTagBeerNameLabel=2;
 		self.title=@"Wish List";
 	}
 	
-	self.currentElemAttribs=nil;
-	self.currentElemValue=nil;
-	self.xmlParserPath=nil;
 	self.beerList=nil;
 	
 	
@@ -65,9 +59,6 @@ static const NSInteger kTagBeerNameLabel=2;
 //	DLog(@"currentElemAttribs retainCount=%d",[self.currentElemAttribs retainCount]);
 	[self.breweryID release];
 	[self.beerList release];
-	[self.currentElemValue release];
-	self.currentElemValue=nil;
-	[self.currentElemAttribs release];
 	
     [super dealloc];
 }
@@ -319,12 +310,16 @@ static const NSInteger kTagBeerNameLabel=2;
 	NSDictionary* beer=[beerList objectAtIndex:indexPath.row];
 	
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	if ([appDelegate onBeerSelected:[beer valueForKey:@"item_id"]]==NO)
+	NSString* beer_id=[[beer objectForKey:@"@attributes"] objectForKey:@"id"];
+	if (beer_id)
 	{
-		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:[beer valueForKey:@"item_id"]]; // Saves the new nav state
-		
-		BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:[beer valueForKey:@"item_id"]] autorelease];
-		[self.navigationController pushViewController:vc animated:YES];
+		if ([appDelegate onBeerSelected:beer_id]==NO)
+		{
+			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:beer_id]; // Saves the new nav state
+			
+			BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:beer_id] autorelease];
+			[self.navigationController pushViewController:vc animated:YES];
+		}
 	}
 }
 
@@ -337,7 +332,7 @@ static const NSInteger kTagBeerNameLabel=2;
 	NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
 	if ([response statusCode]==200)
 	{
-		self.beerList=[answer objectForKey:@"items"];
+		self.beerList=[answer objectForKey:@"beers"];
 	}
 	else {
 		[self.beerList removeAllObjects];

@@ -634,20 +634,23 @@ void normalizeBreweryData(NSMutableDictionary* data)
 
 -(BOOL)pushNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem withData:(NSObject*)data
 {
-	NSUInteger idx=0;
-	for (UIViewController* vc in self.tabBarController.viewControllers)
+	if (data)
 	{
-		if (vc.tabBarItem.tag==tabBarItem.tag)
-		{	// Found it
-			NSMutableArray* stacks=[self.appState objectForKey:@"navstacks"];
-			if (idx < [stacks count])
-			{
-				[[stacks objectAtIndex:idx] addObject:data];
-				return YES;
+		NSUInteger idx=0;
+		for (UIViewController* vc in self.tabBarController.viewControllers)
+		{
+			if (vc.tabBarItem.tag==tabBarItem.tag)
+			{	// Found it
+				NSMutableArray* stacks=[self.appState objectForKey:@"navstacks"];
+				if (idx < [stacks count])
+				{
+					[[stacks objectAtIndex:idx] addObject:data];
+					return YES;
+				}
+				break;
 			}
-			break;
+			++idx;
 		}
-		++idx;
 	}
 
 	return NO;

@@ -15,9 +15,6 @@
 	NSString* wishlistID;
 	
 	NSMutableArray* beerList;
-	NSMutableString* currentElemValue;
-	NSMutableDictionary* currentElemAttribs;
-	NSMutableArray* xmlParserPath;
 	BeerTableViewController* btvc;
 	BOOL setRightBarButtonItem;
 }
@@ -26,9 +23,6 @@
 @property (nonatomic,retain) NSString* placeID;
 @property (nonatomic,retain) NSString* wishlistID;
 @property (nonatomic,retain) NSMutableArray* beerList;
-@property (nonatomic,retain) NSMutableString* currentElemValue;
-@property (nonatomic,retain) NSMutableDictionary* currentElemAttribs;
-@property (nonatomic,retain) NSMutableArray* xmlParserPath;
 @property (nonatomic,retain) BeerTableViewController* btvc;
 @property (nonatomic,assign) BOOL setRightBarButtonItem;
 
