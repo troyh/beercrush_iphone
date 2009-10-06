@@ -161,7 +161,7 @@
 	else 
 	{
 		// Navigate to another level
-		FlavorsAromasTVC* fatvc=[[FlavorsAromasTVC alloc] initWithFlavorSet:[flavors objectAtIndex:indexPath.row]];
+		FlavorsAromasTVC* fatvc=[[[FlavorsAromasTVC alloc] initWithFlavorSet:[flavors objectAtIndex:indexPath.row]] autorelease];
 		fatvc.delegate=self.delegate;
 		[self.navigationController pushViewController:fatvc animated:YES];
 	}

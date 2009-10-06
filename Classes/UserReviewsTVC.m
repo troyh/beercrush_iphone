@@ -6,9 +6,7 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "BeerCrushAppDelegate.h"
 #import "UserReviewsTVC.h"
-#import "FullBeerReviewTVC.h"
 
 @implementation UserReviewsTVC
 
@@ -26,15 +24,14 @@
     return self;
 }
 
-
+/*
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:0] withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingReviews",@"Getting Reviews")];
 }
+*/
 
 -(void)retrieveReviews:(NSNumber*)seqnum
 {
@@ -103,6 +100,9 @@
 	else
 	{ // Pop an item off the appstate navstack
 		[appDelegate popNavigationStateForTabBarItem:self.tabBarItem];
+
+		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:0] withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingReviews",@"Getting Reviews")];
 	}
 }
 
@@ -194,7 +194,7 @@
 	{
 		// Set up the cell...
 		NSMutableDictionary* review=[self.reviewsList objectAtIndex:indexPath.row];
-		NSString* s=[review objectForKey:@"beer_name"];
+		NSString* s=[[review objectForKey:@"beer"] objectForKey:@"name"];
 		if (s==nil)
 			[cell.textLabel setText:@"???"];
 		else
@@ -212,7 +212,7 @@
 							   nil];
 			
 			// Set up the cell...
-			[cell.detailTextLabel setText:[starsfmt objectAtIndex:[[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"rating"] integerValue]]];
+			[cell.detailTextLabel setText:[starsfmt objectAtIndex:[[review objectForKey:@"rating"] integerValue]]];
 		}
 	}
 	else

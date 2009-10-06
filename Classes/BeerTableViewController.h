@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "RatingControl.h"
 #import "BeerCrushAppDelegate.h"
-#import "FullBeerReviewTVC.h"
 #import "StylesListTVC.h"
 #import "ColorsTVC.h"
 #import "AvailabilityTVC.h"
@@ -17,6 +17,7 @@
 #import "PhotoThumbnailControl.h"
 #import "PhotoViewer.h"
 #import "EditLineVC.h"
+#import "FullBeerReviewTVC.h"
 
 @protocol BeerTableViewControllerDelegate;
 

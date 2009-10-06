@@ -333,14 +333,21 @@ static const NSInteger kTagBeerNameLabel=2;
 	if ([response statusCode]==200)
 	{
 		self.beerList=[answer objectForKey:@"beers"];
+		if (self.beerList==nil)
+			self.beerList=[answer objectForKey:@"items"];
 	}
 	else {
 		[self.beerList removeAllObjects];
 	}
 
-	[self.tableView reloadData];
+	[self performSelectorOnMainThread:@selector(myReloadData:) withObject:self.tableView waitUntilDone:NO];
 	
 	[appDelegate dismissActivityHUD];
+}
+
+-(void)myReloadData:(UITableView*)tv
+{
+	[tv reloadData];
 }
 
 -(void)postBeerToMenu:(NSString*)beerID

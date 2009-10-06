@@ -10,15 +10,23 @@
 
 @protocol EditLineVCDelegate;
 
+typedef enum {
+	EditLineVCTextTypeDefault=1,
+	EditLineVCTextTypeCurrency,
+	EditLineVCTextTypeInteger
+} EditLineVCTextType;
+
 
 @interface EditLineVC : UITableViewController {
 	NSUInteger tag;
+	EditLineVCTextType textType;
 	NSString* textToEdit;
 	UITextField* textField;
 	id<EditLineVCDelegate> delegate;
 }
 
 @property (assign) NSUInteger tag;
+@property (nonatomic,assign) EditLineVCTextType textType;
 @property (nonatomic,retain) NSString* textToEdit;
 @property (nonatomic,retain) UITextField* textField;
 @property (assign) id<EditLineVCDelegate> delegate;

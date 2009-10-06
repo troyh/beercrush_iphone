@@ -1044,6 +1044,26 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		if (flavors)
 			[values addObject:[NSString stringWithFormat:@"flavors=%@",[flavors componentsJoinedByString:@" "]]];
 		
+		// Add Purchase Place
+		NSString* s=[userReview objectForKey:@"purchase_place"];
+		if (s && [s length])
+			[values addObject:[NSString stringWithFormat:@"purchase_place_id=%@",s]];
+
+		// Add Purchase Price
+		NSNumber* n=[userReview objectForKey:@"purchase_price"];
+		if (n)
+			[values addObject:[NSString stringWithFormat:@"purchase_price=%@",n]];
+
+		// Add Purchase Date
+		s=[userReview objectForKey:@"date_drank"];
+		if (s && [s length])
+			[values addObject:[NSString stringWithFormat:@"date_drank=%@",s]];
+		
+		// Add Poured From
+		s=[userReview objectForKey:@"poured_from"];
+		if (s && [s length])
+			[values addObject:[NSString stringWithFormat:@"poured_from=%@",s]];
+
 		NSString* bodystr=[values componentsJoinedByString:@"&"];
 		
 		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_POST_BEER_REVIEW];

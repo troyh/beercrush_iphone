@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "PlaceTableViewController.h"
 #import "BreweryTableViewController.h"
-#import "BeerTableViewController.h"
 #import "LogoVC.h"
 
 typedef enum
@@ -18,6 +17,8 @@ typedef enum
 	BeerCrushSearchTypeBreweries = 2,
 	BeerCrushSearchTypePlaces = 4
 } BeerCrushSearchType;
+
+@protocol SearchVCDelegate;
 
 @interface SearchVC : UIViewController 
 	<UISearchBarDelegate,
@@ -28,6 +29,7 @@ typedef enum
 {
 	LogoVC* logoView;
 	BeerCrushSearchType searchTypes;
+	id<SearchVCDelegate> delegate;
 	UISearchBar* searchBar;
 	NSMutableArray* resultsList;
 	BOOL performedSearchQuery;
@@ -38,10 +40,17 @@ typedef enum
 @property (nonatomic,retain) UISearchBar* searchBar;
 @property (nonatomic, retain) LogoVC* logoView;
 @property (nonatomic, assign) BeerCrushSearchType searchTypes;
+@property (nonatomic, assign) id<SearchVCDelegate> delegate;
 @property (nonatomic, assign) BOOL performedSearchQuery;
 @property (nonatomic, assign) UIEdgeInsets insets;
 
 -(void)autocomplete:(NSString*)qs;
 -(void)query:(NSString*)qs;
+
+@end
+
+@protocol SearchVCDelegate
+
+-(BOOL)searchVC:(SearchVC*)searchVC didSelectSearchResult:(NSString*)id_string;
 
 @end

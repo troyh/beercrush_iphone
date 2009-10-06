@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BeerCrushAppDelegate.h"
+#import "SearchVC.h"
 #import "RatingControl.h"
 #import "FlavorsAromasTVC.h"
+#import "DatePickerVC.h"
+#import "PouredFromVC.h"
 
 @protocol FullBeerReviewTVCDelegate
 
@@ -19,7 +21,7 @@
 
 @end
 
-@interface FullBeerReviewTVC : UITableViewController <FlavorsAromasTVCDelegate> {
+@interface FullBeerReviewTVC : UITableViewController <FlavorsAromasTVCDelegate,DatePickerVCDelegate,PouredFromVCDelegate,SearchVCDelegate,EditLineVCDelegate> {
 	NSMutableDictionary* userReview;
 	
 	RatingControl* ratingControl;
@@ -43,6 +45,5 @@
 
 -(id)initWithReviewObject:(NSDictionary*)review;
 -(NSString*)getFlavorsCellText;
--(UIView*)view:(UIView*)view findSubviewOfClass:(Class)class;
 
 @end

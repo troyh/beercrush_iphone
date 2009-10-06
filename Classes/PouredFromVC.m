@@ -1,27 +1,21 @@
 //
-//  EditLineVC.m
+//  PouredFromVC.m
 //  BeerCrush
 //
-//  Created by Troy Hakala on 9/11/09.
+//  Created by Troy Hakala on 10/5/09.
 //  Copyright 2009 Optional Corporation. All rights reserved.
 //
 
-#import "EditLineVC.h"
+#import "PouredFromVC.h"
 
 
-@implementation EditLineVC
+@implementation PouredFromVC
 
-@synthesize tag;
-@synthesize textType;
-@synthesize textToEdit;
-@synthesize textField;
 @synthesize delegate;
 
-- (id)init
+-(id)init
 {
-    // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
-		self.textType=EditLineVCTextTypeDefault;
     }
     return self;
 }
@@ -35,24 +29,25 @@
 }
 */
 
+/*
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-//	self.navigationItem.rightBarButtonItem = self.editButtonItem;
-	self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+*/
 
 /*
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
 }
 */
+/*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
- [self.textField becomeFirstResponder];
 }
-
+*/
 /*
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
@@ -94,7 +89,7 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return 5;
 }
 
 
@@ -106,24 +101,31 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-
-		self.textField=[[UITextField alloc] initWithFrame:CGRectMake(10, 10, 280, 30)];
-		self.textField.font=[UIFont systemFontOfSize:20];
-		self.textField.delegate=self;
-		
-		[cell.contentView addSubview:self.textField];
     }
     
     // Set up the cell...
-	self.textField.text=self.textToEdit;
-
-	if (self.textType==EditLineVCTextTypeCurrency)
-	{
-		self.textField.keyboardType=UIKeyboardTypeNumberPad;
-		self.textField.textAlignment=UITextAlignmentRight;
+	NSString* s=nil;
+	switch (indexPath.row) {
+		case 0:
+			s=NSLocalizedString(@"PouredFromDraft",@"Poured From Option: Draft");
+			break;
+		case 1:
+			s=NSLocalizedString(@"PouredFromBottle",@"Poured From Option: Bottle");
+			break;
+		case 2:
+			s=NSLocalizedString(@"PouredFromLargeBottle",@"Poured From Option: Large Bottle");
+			break;
+		case 3:
+			s=NSLocalizedString(@"PouredFromCan",@"Poured From Option: Can");
+			break;
+		case 4:
+			s=NSLocalizedString(@"PouredFromCask",@"Poured From Option: Cask");
+			break;
+		default:
+			break;
 	}
-	else if (self.textType==EditLineVCTextTypeInteger)
-		self.textField.keyboardType=UIKeyboardTypeNumberPad;
+
+	[cell.textLabel setText:s];
 	
     return cell;
 }
@@ -134,6 +136,29 @@
 	// AnotherViewController *anotherViewController = [[AnotherViewController alloc] initWithNibName:@"AnotherView" bundle:nil];
 	// [self.navigationController pushViewController:anotherViewController];
 	// [anotherViewController release];
+
+	PouredFromVCValueType n=0;
+	
+	switch (indexPath.row) {
+		case 0:
+			n=PouredFromVCValueTypeDraft;
+			break;
+		case 1:
+			n=PouredFromVCValueTypeBottle;
+			break;
+		case 2:
+			n=PouredFromVCValueTypeLargeBottle;
+			break;
+		case 3:
+			n=PouredFromVCValueTypeCan;
+			break;
+		case 4:
+			n=PouredFromVCValueTypeCask;
+			break;
+		default:
+			break;
+	}
+	[self.delegate pouredFromVC:self didChoosePouredFrom:n];
 }
 
 
@@ -178,18 +203,9 @@
 
 
 - (void)dealloc {
-	[self.textToEdit release];
-	[self.textField release];
-
     [super dealloc];
 }
 
-#pragma mark Target Action methods
-
--(void)doneButtonClicked:(id)sender
-{
-	[self.delegate editLineVC:self didChangeText:self.textField.text];
-}
 
 @end
 

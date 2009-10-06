@@ -6,10 +6,9 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "FullBeerReviewTVC.h"
-#import "RatingControl.h"
-#import "FlavorsAromasTVC.h"
 #import "BeerCrushAppDelegate.h"
+#import "SearchVC.h"
+#import "FullBeerReviewTVC.h"
 
 @implementation FullBeerReviewTVC
 
@@ -175,27 +174,30 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 5;
+    return 6;
 }
 
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
-		case 0:
+		case 0: // Beer title and brewery
 			return 1;
 			break;
-		case 1:
+		case 1: // My rating
 			return 1;
 			break;
-		case 2:
-			return 3;
+		case 2: // Review parameters
+			return 4;
 			break;
-		case 3:
+		case 3: // Additional comments
 			return 1;
 			break;
-		case 4:
-			return 1;
+		case 4: // How served/drank and where
+			return 4;
+			break;
+		case 5: // Social networking stuff
+			return 2;
 			break;
 		default:
 			break;
@@ -207,42 +209,24 @@
 {
 	if (section==3)
 	{
-		return @"Flavors & Aromas:";
-	}
-	else if (section==4)
-	{
 		return @"Comments:";
 	}
+	else if (section==4)
+		return @"Improve our listings:";
 	return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if (indexPath.section==4 && indexPath.row==0)
+	if (indexPath.section==3 && indexPath.row==0)
 	{
 		return tableView.rowHeight*3;
 	}
 	return tableView.rowHeight;
 }
 
--(UIView*)view:(UIView*)view findSubviewOfClass:(Class)class
-{
-	for (NSUInteger i=0,j=[view.subviews count];i<j;++i)
-	{
-		UIView* v=[view.subviews objectAtIndex:i];
-		DLog(@"subview #%d=%@",i,v);
-		if ([v isKindOfClass:class])
-		{
-			return v;
-		}
-	}
-	return nil;
-}
-
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-	DLog(@"indexPath.section=%d row=%d",indexPath.section,indexPath.row);
 
 	UITableViewCell *cell=nil;
 	
@@ -266,7 +250,7 @@
 			{
 				case 0:
 				{
-					NSString* n=[userReview objectForKey:@"beer_name"];
+					NSString* n=[[userReview objectForKey:@"beer"] objectForKey:@"name"];
 					if (n==nil)
 						n=[self.delegate beerName];
 					[cell.textLabel setText:n];
@@ -417,27 +401,11 @@
 					[cell.contentView addSubview:aftertasteSlider];
 					break;
 				}
-				default:
-					break;
-			}
-			break;
-		}
-		case 3:
-		{
-			static NSString *CellIdentifier = @"Section3Cell";
-			
-			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-			if (cell == nil) {
-				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-			}
-			
-			switch (indexPath.row)
-			{
-				case 0: // Flavors & Aromas
+				case 3: // Flavors & Aromas
 					if (self.flavorsLabel==nil)
 					{
 						self.flavorsLabel=[[[UILabel alloc] initWithFrame:CGRectInset(cell.contentView.frame,25.0,5.0)] autorelease];
-					
+						
 						self.flavorsLabel.font=[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
 						self.flavorsLabel.textAlignment=UITextAlignmentLeft;
 						self.flavorsLabel.lineBreakMode=UILineBreakModeWordWrap;
@@ -452,7 +420,7 @@
 			}
 			break;
 		}
-		case 4:
+		case 3:
 		{
 			static NSString *CellIdentifier = @"Section4Cell";
 			
@@ -481,6 +449,85 @@
 			}
 			break;
 		}
+		case 4: // Improve our listings:
+		{
+			static NSString *CellIdentifier = @"WhereDrankCells";
+			
+			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+			if (cell == nil) {
+				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier] autorelease];
+				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+			}
+			
+			switch (indexPath.row)
+			{
+				case 0:  // Purchased at
+					[cell.textLabel setText:@"Purchased at"];
+					[cell.detailTextLabel setText:[[self.userReview objectForKey:@"purchase_place_details"] objectForKey:@"name"]];
+					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+					break;
+				case 1: // Poured from
+				{
+					[cell.textLabel setText:@"Poured from"];
+					
+					NSString* value=[self.userReview objectForKey:@"poured_from"];
+					if ([value isEqualToString:@"can"])
+						[cell.detailTextLabel setText:NSLocalizedString(@"PouredFromCan",nil)];
+					else if ([value isEqualToString:@"bottle"])
+						[cell.detailTextLabel setText:NSLocalizedString(@"PouredFromBottle",nil)];
+					else if ([value isEqualToString:@"largebottle"])
+						[cell.detailTextLabel setText:NSLocalizedString(@"PouredFromLargeBottle",nil)];
+					else if ([value isEqualToString:@"cask"])
+						[cell.detailTextLabel setText:NSLocalizedString(@"PouredFromCask",nil)];
+					else if ([value isEqualToString:@"draft"])
+						[cell.detailTextLabel setText:NSLocalizedString(@"PouredFromDraft",nil)];
+					
+					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+					break;
+				}
+				case 2: // Date
+					[cell.textLabel setText:@"Date"];
+					[cell.detailTextLabel setText:[self.userReview objectForKey:@"date_drank"]];
+					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+					break;
+				case 3: // Price
+				{
+					[cell.textLabel setText:@"Price"];
+					NSNumber* n=[self.userReview objectForKey:@"purchase_price"];
+					if (n && [n intValue])
+					{
+						[cell.detailTextLabel setText:[n stringValue]];
+					}
+					break;
+				}
+				default:
+					break;
+			}
+			break;
+		}
+		case 5: // Social networking stuff
+		{
+			static NSString *CellIdentifier = @"SocialNetworking";
+			
+			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+			if (cell == nil) {
+				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+				cell.selectionStyle=UITableViewCellSelectionStyleNone;
+			}
+			
+			switch (indexPath.row)
+			{
+				case 0:  // Twitter this
+					[cell.textLabel setText:@"Twitter this"];
+					break;
+				case 1: // Post to Facebook
+					[cell.textLabel setText:@"Post to Facebook"];
+					break;
+				default:
+					break;
+			}
+			break;
+		}
 		default:
 			break;
 	}
@@ -496,11 +543,49 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.section==3 && indexPath.row==0) // Selected the Flavors & Aromas cell
+	if (indexPath.section==2 && indexPath.row==3) // Selected the Flavors & Aromas cell
 	{
 		FlavorsAromasTVC* fatvc=[[[FlavorsAromasTVC alloc] initWithFlavorSet:nil] autorelease];
 		fatvc.delegate=self;
 		[self.navigationController pushViewController:fatvc animated:YES];
+	}
+	else if (indexPath.section==4)
+	{
+		switch (indexPath.row) {
+			case 0: // Purchased at
+			{
+				SearchVC* vc=[[[SearchVC alloc] init] autorelease];
+				vc.searchTypes=BeerCrushSearchTypePlaces;
+				vc.delegate=self;
+				[self.navigationController pushViewController:vc animated:YES];
+				break;
+			}
+			case 1: // Poured from
+			{
+				PouredFromVC* vc=[[[PouredFromVC alloc] init] autorelease];
+				vc.delegate=self;
+				[self.navigationController pushViewController:vc animated:YES];
+				break;
+			}
+			case 2: // Date
+			{
+				DatePickerVC* vc=[[[DatePickerVC alloc] init] autorelease];
+				vc.delegate=self;
+				[self.navigationController pushViewController:vc animated:YES];
+				break;
+			}
+			case 3: // Price
+			{
+				EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+				vc.delegate=self;
+				vc.textType=EditLineVCTextTypeCurrency;
+				vc.textToEdit=[[self.userReview objectForKey:@"purchase_price"] stringValue];
+				[self.navigationController pushViewController:vc animated:YES];
+				break;
+			}
+			default:
+				break;
+		}
 	}
 }
 
@@ -557,6 +642,86 @@
     [super dealloc];
 }
 
+#pragma mark DatePickerVCDelegate methods
+
+-(void)datePickerVC:(DatePickerVC *)datePickerVC didChooseDate:(NSDate *)date
+{
+	[self.userReview setObject:[date description] forKey:@"date_drank"];
+	[self performSelectorOnMainThread:@selector(myReloadData) withObject:nil waitUntilDone:NO];
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark PouredFromVCDelegate methods
+
+-(void)pouredFromVC:(PouredFromVC *)vc didChoosePouredFrom:(PouredFromVCValueType)value
+{
+	NSString* s=nil;
+	
+	switch (value) {
+		case PouredFromVCValueTypeCan:
+			s=@"can";
+			break;
+		case PouredFromVCValueTypeBottle:
+			s=@"bottle";
+			break;
+		case PouredFromVCValueTypeLargeBottle:
+			s=@"largebottle";
+			break;
+		case PouredFromVCValueTypeCask:
+			s=@"cask";
+			break;
+		case PouredFromVCValueTypeDraft:
+			s=@"draft";
+			break;
+		default:
+			break;
+	}
+	
+	if (s)
+	{
+		[self.userReview setObject:s forKey:@"poured_from"];
+		[self performSelectorOnMainThread:@selector(myReloadData) withObject:nil waitUntilDone:NO];
+	}
+	
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark FullBeerReviewTVCDelegate methods
+
+-(BOOL)searchVC:(SearchVC *)searchVC didSelectSearchResult:(NSString *)id_string
+{
+	[self.userReview setObject:id_string forKey:@"purchase_place"];
+	
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getWherePurchasedText:) object:nil withActivityHUD:NO andActivityHUDText:nil];
+
+	[self.navigationController popViewControllerAnimated:YES];
+	return NO; // Do not continue 
+}
+
+#pragma mark Async methods
+
+-(void)myReloadData
+{
+	[self.tableView reloadData];
+}
+
+-(void)getWherePurchasedText:(id)obj
+{
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSDictionary* doc=[appDelegate getPlaceDoc:[self.userReview objectForKey:@"purchase_place"]];
+	[self.userReview setObject:doc forKey:@"purchase_place_details"];
+	[self performSelectorOnMainThread:@selector(myReloadData) withObject:nil waitUntilDone:NO];
+}
+
+#pragma mark EditLineVCDelegate methods
+
+-(void)editLineVC:(EditLineVC*)editLineVC didChangeText:(NSString*)text
+{
+	[self.userReview setObject:[NSNumber numberWithFloat:[text floatValue]] forKey:@"purchase_price"];
+	[self performSelectorOnMainThread:@selector(myReloadData) withObject:nil waitUntilDone:NO];
+	[self.navigationController popViewControllerAnimated:YES];
+}
 
 @end
 

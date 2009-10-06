@@ -15,6 +15,7 @@
 
 @synthesize logoView;
 @synthesize searchTypes;
+@synthesize delegate;
 @synthesize resultsList;
 @synthesize searchBar;
 @synthesize performedSearchQuery;
@@ -486,10 +487,11 @@
 	{ // Brewery
 		tvc=[[[BreweryTableViewController alloc] initWithBreweryID:idstr] autorelease];
 	}
-
-	if (tvc)
+	
+	searchBar.hidden=YES;
+	
+	if ([self.delegate searchVC:self didSelectSearchResult:idstr] && tvc)
 	{
-		searchBar.hidden=YES;
 		[self.navigationController pushViewController:tvc animated:YES];
 	}
 }
