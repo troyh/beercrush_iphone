@@ -490,7 +490,10 @@
 	
 	searchBar.hidden=YES;
 	
-	if ([self.delegate searchVC:self didSelectSearchResult:idstr] && tvc)
+	if (tvc==nil)
+		return;
+	
+	if (self.delegate==nil || [self.delegate searchVC:self didSelectSearchResult:idstr]==YES)
 	{
 		[self.navigationController pushViewController:tvc animated:YES];
 	}
