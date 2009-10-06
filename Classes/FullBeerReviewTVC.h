@@ -13,17 +13,12 @@
 #import "DatePickerVC.h"
 #import "PouredFromVC.h"
 
-@protocol FullBeerReviewTVCDelegate
-
--(void)fullBeerReview:(NSDictionary*)userReview withChanges:(BOOL)modified;
--(NSString*)beerName;
--(NSString*)breweryName;
-
-@end
+@protocol FullBeerReviewTVCDelegate;
 
 @interface FullBeerReviewTVC : UITableViewController <FlavorsAromasTVCDelegate,DatePickerVCDelegate,PouredFromVCDelegate,SearchVCDelegate,EditLineVCDelegate> {
+	id<FullBeerReviewTVCDelegate> delegate;
 	NSMutableDictionary* userReview;
-	
+@private	
 	RatingControl* ratingControl;
 	UISlider* bodySlider;
 	UISlider* balanceSlider;
@@ -31,7 +26,6 @@
 	UILabel* flavorsLabel;
 	UITextView* commentsTextView;
 	
-	id<FullBeerReviewTVCDelegate> delegate;
 }
 
 @property (nonatomic, retain) NSMutableDictionary* userReview;
@@ -43,7 +37,18 @@
 @property (nonatomic, retain) UILabel* flavorsLabel;
 @property (nonatomic, retain) UITextView* commentsTextView;
 
+-(id)initAsNewReviewOfBeer:(NSDictionary*)beer;
 -(id)initWithReviewObject:(NSDictionary*)review;
 -(NSString*)getFlavorsCellText;
+
+@end
+
+@protocol FullBeerReviewTVCDelegate
+
+-(void)fullBeerReview:(NSDictionary*)userReview withChanges:(BOOL)modified;
+-(void)fullBeerReviewVCReviewCancelled:(FullBeerReviewTVC *)vc;
+-(NSDictionary*)fullBeerReviewGetBeerData;
+-(NSString*)beerName;
+-(NSString*)breweryName;
 
 @end

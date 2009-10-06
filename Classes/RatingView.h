@@ -11,15 +11,15 @@
 
 @interface RatingView : UIView {
 	float rating;
-@private
-	UIImage* starFull;
-	UIImage* starHalf;
-	UIImage* starNone;
 }
 
++(UIImage*) starFull;
++(UIImage*) starHalf;
++(UIImage*) starNone;
+
 @property (nonatomic, assign) float rating;
-@property (nonatomic, retain) UIImage* starFull;
-@property (nonatomic, retain) UIImage* starHalf;
-@property (nonatomic, retain) UIImage* starNone;
+//@property (nonatomic, retain) UIImage* starFull;
+//@property (nonatomic, retain) UIImage* starHalf;
+//@property (nonatomic, retain) UIImage* starNone;
 
 @end

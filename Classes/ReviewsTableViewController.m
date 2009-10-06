@@ -36,23 +36,21 @@
 }
 */
 
-/*
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-*/
-
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-
+	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addReviewButtonClicked:)] autorelease];
+	
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getReviews:) object:self.reviewedDocID withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingReviews", @"Getting Reviews")];
 }
-
+/*
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+*/
 -(void)getReviews:(NSString*)docid
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
@@ -279,7 +277,7 @@
     [super dealloc];
 }
 
-// FullBeerReviewTVCDelegate methods
+#pragma mark FullBeerReviewTVCDelegate methods
 
 -(void)fullBeerReview:(NSDictionary*)review withChanges:(BOOL)edited
 {
@@ -294,6 +292,16 @@
 	}
 }
 
+-(void)fullBeerReviewVCReviewCancelled:(FullBeerReviewTVC *)vc
+{
+	[self dismissModalViewControllerAnimated:YES];
+}
+
+-(NSDictionary*)fullBeerReviewGetBeerData
+{
+	return [self.fullBeerReviewDelegate fullBeerReviewGetBeerData];
+}
+
 -(NSString*)beerName
 {
 	return nil;
@@ -304,6 +312,15 @@
 	return nil;
 }
 
+#pragma mark Action methods
+
+-(void)addReviewButtonClicked:(id)sender
+{
+	FullBeerReviewTVC* vc=[[[FullBeerReviewTVC alloc] initAsNewReviewOfBeer:[self.fullBeerReviewDelegate fullBeerReviewGetBeerData]] autorelease];
+	vc.delegate=self;
+	UINavigationController* nc=[[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
+	[self presentModalViewController:nc animated:YES];
+}
 
 @end
 

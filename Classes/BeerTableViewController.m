@@ -1443,7 +1443,7 @@ enum TAGS {
 	[self.navigationController popToViewController:self animated:YES];
 }
 
-// FullBeerReviewTVCDelegate methods
+#pragma mark FullBeerReviewTVCDelegate methods
 
 -(void)fullBeerReview:(NSDictionary*)userReview withChanges:(BOOL)modified
 {
@@ -1457,6 +1457,19 @@ enum TAGS {
 		}
 	}
 }
+
+-(void)fullBeerReviewVCReviewCancelled:(FullBeerReviewTVC *)vc
+{
+	// Don't need to do anything here
+}
+
+-(NSDictionary*)fullBeerReviewGetBeerData
+{
+	if (self.originalBeerData)
+		return self.originalBeerData;
+	return beerObj.data;
+}
+
 
 -(NSString*)beerName
 {

@@ -28,13 +28,25 @@
 //const int kTagAftertasteSlider=5;
 //const int kTagRatingControl=6;
 
+-(id)initAsNewReviewOfBeer:(NSDictionary*)beer
+{
+    if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+		self.userReview=[[[NSMutableDictionary alloc] initWithCapacity:10] autorelease];
+		[self.userReview setObject:beer forKey:@"beer"];
+		
+		self.title=@"New Review";
+    }
+    return self;
+}
+
 -(id)initWithReviewObject:(NSDictionary*)review
 {
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.userReview=[[NSMutableDictionary alloc] initWithDictionary:review];
-		self.title=@"Review";
 		
 		// TODO: if the review is not the user's, all controls should be read-only
+
+		self.title=@"Review";
     }
     return self;
 }
@@ -51,7 +63,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+	// Need a cancel button if we're modal
+	if ([self.navigationController.viewControllers count]==1) // Assume we're modal
+		self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelNewReviewButtonClicked)] autorelease];
 	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked)] autorelease];
+}
+
+-(void)cancelNewReviewButtonClicked
+{
+	[self.delegate fullBeerReviewVCReviewCancelled:self];
 }
 
 -(void)doneButtonClicked
