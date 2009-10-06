@@ -7,22 +7,20 @@
 //
 
 #import "ReviewsTableViewController.h"
+#import "RatingView.h"
 
 @implementation ReviewsTableViewController
 
 @synthesize reviewedDocID;
-@synthesize xmlParserPath;
-@synthesize currentElemValue;
 @synthesize reviewsList;
 @synthesize totalReviews;
+@synthesize reviewsSeqNum;
+@synthesize reviewsSeqMax;
 @synthesize fullBeerReviewDelegate;
 
 -(id)initWithID:(NSString*)docid dataType:(ResultType)t
 {
 	self.reviewedDocID=docid;
-	self.xmlParserPath=[NSMutableArray arrayWithCapacity:5];
-	self.reviewsList=[NSMutableArray arrayWithCapacity:10];
-	self.totalReviews=0;
 
 	self.title=@"Reviews";
 
@@ -58,7 +56,28 @@
 -(void)getReviews:(NSString*)docid
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate getReviewsForDocID:docid];
+	NSDictionary* doc=[appDelegate getReviewsForDocID:docid];
+	if (doc)
+	{
+		self.reviewsList=[doc objectForKey:@"reviews"];
+		self.totalReviews=0;
+		self.reviewsSeqNum=0;
+		self.reviewsSeqMax=0;
+
+		id v=[doc valueForKey:@"total"];
+		if ([v isKindOfClass:[NSNumber class]])
+			self.totalReviews=[(NSNumber*)v unsignedIntValue];
+
+		v=[doc valueForKey:@"seqnum"];
+		if ([v isKindOfClass:[NSNumber class]])
+			self.reviewsSeqNum=[(NSNumber*)v unsignedIntValue];
+
+		v=[doc valueForKey:@"seqmax"];
+		if ([v isKindOfClass:[NSNumber class]])
+			self.reviewsSeqMax=[(NSNumber*)v unsignedIntValue];
+		
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+	}
 	[appDelegate dismissActivityHUD];
 }
 
@@ -105,37 +124,93 @@
     return [self.reviewsList count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return 60;
+}
+
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"Cell";
     
+	enum {
+		kTagUserIDLabel=1,
+		kTagDateLabel,
+		kTagTextLabel,
+		kTagStarsView,
+		kTagAvatarView
+	};
+	
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
+
+		// Create user_id view
+		UILabel* userIDLabel=[[[UILabel alloc] initWithFrame:CGRectMake(40, 0, 200, 20)] autorelease];
+		userIDLabel.tag=kTagUserIDLabel;
+		userIDLabel.font=[UIFont boldSystemFontOfSize:16];
+		[cell.contentView addSubview:userIDLabel];
+		
+		// Create Date view
+		UILabel* dateLabel=[[[UILabel alloc] initWithFrame:CGRectMake(260, 0, 80, 20)] autorelease];
+		dateLabel.tag=kTagDateLabel;
+		dateLabel.font=[UIFont systemFontOfSize:12];
+		[cell.contentView addSubview:dateLabel];
+
+		// Create text view
+		UILabel* textLabel=[[[UILabel alloc] initWithFrame:CGRectMake(3, 40, 300, 20)] autorelease];
+		textLabel.tag=kTagTextLabel;
+		textLabel.font=[UIFont systemFontOfSize:14];
+		[cell.contentView addSubview:textLabel];
+
+		// Create stars view
+		RatingView* ratingView=[[[RatingView alloc] initWithFrame:CGRectMake(40, 20, 80, 20)] autorelease];
+		ratingView.tag=kTagStarsView;
+		[cell.contentView addSubview:ratingView];
+		
+		// Create avatar view
+		UIImageView* avatarView=[[[UIImageView alloc] initWithFrame:CGRectMake(3, 3, 35, 35)] autorelease];
+		avatarView.tag=kTagAvatarView;
+		[cell.contentView addSubview:avatarView];
+		
+		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     }
 	
-	if (indexPath.row > [self.reviewsList count])
+	if (indexPath.row >= [self.reviewsList count])
 	{
 		[cell.textLabel setText:[NSString stringWithFormat:@"%d more reviews",(self.totalReviews-[self.reviewsList count]),nil]];
 	}
 	else
 	{
-		NSArray* starsfmt=[NSArray arrayWithObjects:
-			@"☆☆☆☆☆ %@",
-			@"★☆☆☆☆ %@",
-			@"★★☆☆☆ %@",
-			@"★★★☆☆ %@",
-			@"★★★★☆ %@",
-			@"★★★★★ %@",
-			nil];
+		UILabel* label=(UILabel*)[cell viewWithTag:kTagUserIDLabel];
+		[label setText:[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"user_id"]];
 
-		// Set up the cell...
-		[cell.textLabel setText:[NSString stringWithFormat:[starsfmt objectAtIndex:[[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"rating"] integerValue]],
-							[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"user_id"]
-							
-		]];
+		label=(UILabel*)[cell viewWithTag:kTagDateLabel];
+		id v=[[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"mtime"];
+		if ([v isKindOfClass:[NSNumber class]])
+		{
+			NSDate* date=[NSDate dateWithTimeIntervalSince1970:[(NSNumber*)v unsignedIntValue]];
+			NSDateFormatter* df=[[[NSDateFormatter alloc] init] autorelease];
+			[df setDateStyle:NSDateFormatterShortStyle];
+			[df setTimeStyle:NSDateFormatterNoStyle];
+			[label setText:[df stringFromDate:date]];
+		}
+
+		label=(UILabel*)[cell viewWithTag:kTagTextLabel];
+		[label setText:[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"comments"]];
+
+		RatingView* rv=(RatingView*)[cell viewWithTag:kTagStarsView];
+		v=[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"rating"];
+		if ([v isKindOfClass:[NSNumber class]])
+		{
+			[rv setRating:[(NSNumber*)v floatValue]];
+		}
+		
+		UIImageView* avatar=(UIImageView*)[cell viewWithTag:kTagAvatarView];
+		avatar.image=[UIImage imageNamed:@"avatar_default.png"];
+
 	}
 
     return cell;
@@ -199,9 +274,7 @@
 
 - (void)dealloc {
 	[reviewedDocID release];
-	currentElemValue=nil;
 	[reviewsList release];
-	[xmlParserPath release];
 
     [super dealloc];
 }

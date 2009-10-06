@@ -13,18 +13,18 @@
 
 @interface ReviewsTableViewController : UITableViewController <FullBeerReviewTVCDelegate> {
 	NSString* reviewedDocID;
-	NSMutableArray* xmlParserPath;
 	NSMutableArray* reviewsList;
-	NSMutableString* currentElemValue;
-	NSInteger totalReviews;
+	NSUInteger totalReviews;
+	NSUInteger reviewsSeqNum;
+	NSUInteger reviewsSeqMax;
 	id<FullBeerReviewTVCDelegate> fullBeerReviewDelegate;
 }
 
 @property (nonatomic,retain) NSString* reviewedDocID;
-@property (nonatomic,retain) NSMutableArray* xmlParserPath;
 @property (nonatomic,retain) NSMutableArray* reviewsList;
-@property (nonatomic,retain) NSMutableString* currentElemValue;
-@property (nonatomic) NSInteger totalReviews;
+@property (nonatomic, assign) NSUInteger totalReviews;
+@property (nonatomic, assign) NSUInteger reviewsSeqNum;
+@property (nonatomic, assign) NSUInteger reviewsSeqMax;
 @property (assign) id<FullBeerReviewTVCDelegate> fullBeerReviewDelegate;
 
 -(id)initWithID:(NSString*)dataid dataType:(ResultType)t;

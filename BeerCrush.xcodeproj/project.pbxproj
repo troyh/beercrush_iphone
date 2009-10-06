@@ -27,6 +27,11 @@
 		051BC384107A837F004376D9 /* PouredFromVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 051BC383107A837F004376D9 /* PouredFromVC.m */; };
 		051BC38E107A8742004376D9 /* DatePickerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 051BC38C107A8742004376D9 /* DatePickerVC.m */; };
 		051BC38F107A8742004376D9 /* DatePickerVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 051BC38D107A8742004376D9 /* DatePickerVC.xib */; };
+		051BC5F3107BC500004376D9 /* star_sm_empty.png in Resources */ = {isa = PBXBuildFile; fileRef = 051BC5F0107BC500004376D9 /* star_sm_empty.png */; };
+		051BC5F4107BC500004376D9 /* star_sm_full.png in Resources */ = {isa = PBXBuildFile; fileRef = 051BC5F1107BC500004376D9 /* star_sm_full.png */; };
+		051BC5F5107BC500004376D9 /* star_sm_half.png in Resources */ = {isa = PBXBuildFile; fileRef = 051BC5F2107BC500004376D9 /* star_sm_half.png */; };
+		051BC629107BD6BD004376D9 /* RatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 051BC628107BD6BD004376D9 /* RatingView.m */; };
+		051BC6F3107BEFA5004376D9 /* avatar_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 051BC6F2107BEFA5004376D9 /* avatar_default.png */; };
 		053653960F703F99000389C1 /* PhoneNumberEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */; };
 		05451382104346EF00F9400B /* ColorsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05451381104346EF00F9400B /* ColorsTVC.m */; };
 		0545144710435A4900F9400B /* AvailabilityTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0545144610435A4900F9400B /* AvailabilityTVC.m */; };
@@ -123,6 +128,12 @@
 		051BC38B107A8742004376D9 /* DatePickerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerVC.h; sourceTree = "<group>"; };
 		051BC38C107A8742004376D9 /* DatePickerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerVC.m; sourceTree = "<group>"; };
 		051BC38D107A8742004376D9 /* DatePickerVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DatePickerVC.xib; sourceTree = "<group>"; };
+		051BC5F0107BC500004376D9 /* star_sm_empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star_sm_empty.png; sourceTree = "<group>"; };
+		051BC5F1107BC500004376D9 /* star_sm_full.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star_sm_full.png; sourceTree = "<group>"; };
+		051BC5F2107BC500004376D9 /* star_sm_half.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star_sm_half.png; sourceTree = "<group>"; };
+		051BC627107BD6BD004376D9 /* RatingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RatingView.h; sourceTree = "<group>"; };
+		051BC628107BD6BD004376D9 /* RatingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RatingView.m; sourceTree = "<group>"; };
+		051BC6F2107BEFA5004376D9 /* avatar_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar_default.png; sourceTree = "<group>"; };
 		053653940F703F99000389C1 /* PhoneNumberEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneNumberEditTableViewController.h; sourceTree = "<group>"; };
 		053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneNumberEditTableViewController.m; sourceTree = "<group>"; };
 		05451380104346EF00F9400B /* ColorsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsTVC.h; sourceTree = "<group>"; };
@@ -344,6 +355,8 @@
 				051BC38B107A8742004376D9 /* DatePickerVC.h */,
 				051BC38C107A8742004376D9 /* DatePickerVC.m */,
 				051BC38D107A8742004376D9 /* DatePickerVC.xib */,
+				051BC627107BD6BD004376D9 /* RatingView.h */,
+				051BC628107BD6BD004376D9 /* RatingView.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -382,6 +395,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				051BC6F2107BEFA5004376D9 /* avatar_default.png */,
+				051BC5F0107BC500004376D9 /* star_sm_empty.png */,
+				051BC5F1107BC500004376D9 /* star_sm_full.png */,
+				051BC5F2107BC500004376D9 /* star_sm_half.png */,
 				05DA329510640DAE0015EBFD /* Icon.png */,
 				05DA328E106408280015EBFD /* logo.png */,
 				0504ABD2105AEE75001FAEBC /* tab_beerreviews.png */,
@@ -503,6 +520,10 @@
 				05C0D4E2107413A6004D485E /* AboutUsVC.xib in Resources */,
 				051BBDA010753EE8004376D9 /* LogoVC.xib in Resources */,
 				051BC38F107A8742004376D9 /* DatePickerVC.xib in Resources */,
+				051BC5F3107BC500004376D9 /* star_sm_empty.png in Resources */,
+				051BC5F4107BC500004376D9 /* star_sm_full.png in Resources */,
+				051BC5F5107BC500004376D9 /* star_sm_half.png in Resources */,
+				051BC6F3107BEFA5004376D9 /* avatar_default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -560,6 +581,7 @@
 				051BBE951075539B004376D9 /* SearchVC.m in Sources */,
 				051BC384107A837F004376D9 /* PouredFromVC.m in Sources */,
 				051BC38E107A8742004376D9 /* DatePickerVC.m in Sources */,
+				051BC629107BD6BD004376D9 /* RatingView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
