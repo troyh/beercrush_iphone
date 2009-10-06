@@ -82,9 +82,6 @@
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
-						<object class="IBUIAccessibilityConfiguration" key="IBUIAccessibilityConfiguration">
-							<integer value="66" key="IBUIAccessibilityTraits"/>
-						</object>
 						<string key="IBUIText">Learn more about Beer Crush and stay up-to-date as we improve. beercrush.com/blog</string>
 						<object class="NSFont" key="IBUIFont" id="746481626">
 							<string key="NSName">Helvetica</string>
@@ -111,9 +108,6 @@
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
-						<object class="IBUIAccessibilityConfiguration" key="IBUIAccessibilityConfiguration">
-							<integer value="66" key="IBUIAccessibilityTraits"/>
-						</object>
 						<string key="IBUIText">Use of Beer Crush is governed by our Terms of Service Agreement http://beercrush.com/tos</string>
 						<reference key="IBUIFont" ref="746481626"/>
 						<reference key="IBUITextColor" ref="516146116"/>
@@ -324,7 +318,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>AboutUsVC</string>
 					<string>UIResponder</string>
-					<string>{{452, 206}, {320, 480}}</string>
+					<string>{{204, 249}, {320, 480}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
