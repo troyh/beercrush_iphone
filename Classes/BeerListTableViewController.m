@@ -12,6 +12,7 @@
 
 @implementation BeerListTableViewController
 
+@synthesize delegate;
 @synthesize breweryID;
 @synthesize placeID;
 @synthesize wishlistID;
@@ -132,27 +133,33 @@ static const NSInteger kTagBeerNameLabel=2;
  */
 -(void)browseBrewersPanel
 {
-	//	UIActionSheet* sheet=[[[UIActionSheet alloc] initWithTitle:@"New Beer" delegate:nil cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil] autorelease];
-	//	[sheet showInView:self.tableView];
-	
-	UIViewController* vc=[[[UIViewController alloc] init] autorelease];
-	UINavigationController* nc=[[UINavigationController alloc] initWithRootViewController:vc];
-	
-	BrowseBrewersTVC* bbtvc=[[[BrowseBrewersTVC alloc] init] autorelease];
-	[nc pushViewController:bbtvc animated:NO];
-	
-	// Add cancel buttons
-	UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(browseBrewersCancelButtonClicked)] autorelease];
-	
+	SearchVC* vc=[[[SearchVC alloc] init] autorelease];
+	vc.delegate=self;
+	vc.searchTypes=BeerCrushSearchTypeBeers|BeerCrushSearchTypeBreweries;
+	UINavigationController* nc=[[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
 	[self presentModalViewController:nc animated:YES];
-	// Take the (left) Back button off the navbar
-	[nc.navigationBar.topItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:[[[UIView alloc] initWithFrame:CGRectZero] autorelease]] autorelease]];
-	// Put a cancel button on the right
-	[nc.navigationBar.topItem setRightBarButtonItem:cancelButton animated:NO];
-
-	// Set onBeerSelected selector so we're called when the user selects a beer
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[delegate setOnBeerSelectedAction:@selector(addBeerToMenu:) target:self];
+	
+//	//	UIActionSheet* sheet=[[[UIActionSheet alloc] initWithTitle:@"New Beer" delegate:nil cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil] autorelease];
+//	//	[sheet showInView:self.tableView];
+//	
+//	UIViewController* vc=[[[UIViewController alloc] init] autorelease];
+//	UINavigationController* nc=[[UINavigationController alloc] initWithRootViewController:vc];
+//	
+//	BrowseBrewersTVC* bbtvc=[[[BrowseBrewersTVC alloc] init] autorelease];
+//	[nc pushViewController:bbtvc animated:NO];
+//	
+//	// Add cancel buttons
+//	UIBarButtonItem* cancelButton=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(browseBrewersCancelButtonClicked)] autorelease];
+//	
+//	[self presentModalViewController:nc animated:YES];
+//	// Take the (left) Back button off the navbar
+//	[nc.navigationBar.topItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:[[[UIView alloc] initWithFrame:CGRectZero] autorelease]] autorelease]];
+//	// Put a cancel button on the right
+//	[nc.navigationBar.topItem setRightBarButtonItem:cancelButton animated:NO];
+//
+//	// Set onBeerSelected selector so we're called when the user selects a beer
+//	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+//	[delegate setOnBeerSelectedAction:@selector(addBeerToMenu:) target:self];
 }
 
 -(void)browseBrewersCancelButtonClicked
@@ -160,14 +167,14 @@ static const NSInteger kTagBeerNameLabel=2;
 	[self.parentViewController dismissModalViewControllerAnimated:YES];
 
 	// Clear onBeerSelected selector so we're not called when the user selects a beer
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[delegate setOnBeerSelectedAction:nil target:nil];
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate setOnBeerSelectedAction:nil target:nil];
 }
 
 -(void)addBeerToMenu:(NSString*)beerID
 {
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[delegate performAsyncOperationWithTarget:self selector:@selector(postBeerToMenu:) object:beerID withActivityHUD:YES andActivityHUDText:@""];
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(postBeerToMenu:) object:beerID withActivityHUD:YES andActivityHUDText:@""];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -215,8 +222,8 @@ static const NSInteger kTagBeerNameLabel=2;
 		if (url)
 		{
 			[beerList removeAllObjects];
-			BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-			[delegate performAsyncOperationWithTarget:self selector:@selector(getBeerList:) object:url withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieveing beer list from server")];
+			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerList:) object:url withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieveing beer list from server")];
 		}
 	}
 }
@@ -300,7 +307,7 @@ static const NSInteger kTagBeerNameLabel=2;
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	
 	UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
-	[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[beer objectForKey:@"item_id"]]];
+	[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[[beer objectForKey:@"@attributes"] objectForKey:@"id"]]];
 
     return cell;
 }
@@ -313,7 +320,11 @@ static const NSInteger kTagBeerNameLabel=2;
 	NSString* beer_id=[[beer objectForKey:@"@attributes"] objectForKey:@"id"];
 	if (beer_id)
 	{
-		if ([appDelegate onBeerSelected:beer_id]==NO)
+		if (self.delegate && [self.delegate beerListTVCDidSelectBeer:beer_id]==NO)
+		{
+			// The delegate doesn't want us to continue navigating
+		}
+		else
 		{
 			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:beer_id]; // Saves the new nav state
 			
@@ -340,19 +351,14 @@ static const NSInteger kTagBeerNameLabel=2;
 		[self.beerList removeAllObjects];
 	}
 
-	[self performSelectorOnMainThread:@selector(myReloadData:) withObject:self.tableView waitUntilDone:NO];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 	
 	[appDelegate dismissActivityHUD];
 }
 
--(void)myReloadData:(UITableView*)tv
-{
-	[tv reloadData];
-}
-
 -(void)postBeerToMenu:(NSString*)beerID
 {
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_MENU_DOC];
 	NSString* postdata=[[NSString alloc] initWithFormat:
 						@"place_id=%@&"
@@ -360,7 +366,7 @@ static const NSInteger kTagBeerNameLabel=2;
 						self.placeID,
 						beerID];
 	NSMutableDictionary* answer=nil;
-	[delegate sendJSONRequest:url usingMethod:@"POST" withData:postdata returningJSON:&answer];
+	[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:postdata returningJSON:&answer];
 	if (answer)
 	{
 		self.beerList=[answer objectForKey:@"items"];
@@ -372,7 +378,7 @@ static const NSInteger kTagBeerNameLabel=2;
 
 	[postdata release];
 	
-	[delegate dismissActivityHUD];
+	[appDelegate dismissActivityHUD];
 }
 
 
@@ -416,6 +422,39 @@ static const NSInteger kTagBeerNameLabel=2;
     return YES;
 }
 */
+
+#pragma mark SearchVCDelegate methods
+
+-(BOOL)searchVC:(SearchVC*)searchVC didSelectSearchResult:(NSString*)id_string
+{
+	if ([[id_string substringToIndex:5] isEqualToString:@"beer:"])
+	{
+		[self addBeerToMenu:id_string];
+		[self.navigationController dismissModalViewControllerAnimated:YES];
+	}
+	else if ([[id_string substringToIndex:8] isEqualToString:@"brewery:"])
+	{
+		// Show the brewery's beer list
+		BeerListTableViewController* vc=[[[BeerListTableViewController alloc] initWithBreweryID:id_string] autorelease];
+		vc.delegate=self;
+		if (self.modalViewController)
+		{
+			UINavigationController* nc=(UINavigationController*)self.modalViewController;
+			[nc pushViewController:vc animated:YES];
+		}
+	}
+	return NO;
+}
+
+#pragma mark BeerListTVCDelegate methods
+
+-(BOOL)beerListTVCDidSelectBeer:(NSString*)beer_id
+{
+	[self addBeerToMenu:beer_id];
+	[self.navigationController dismissModalViewControllerAnimated:YES];
+	return NO;
+}
+
 
 @end
 

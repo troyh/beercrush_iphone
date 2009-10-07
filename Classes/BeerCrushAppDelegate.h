@@ -46,8 +46,6 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
     UIWindow *window;
 	LoginVC* loginVC;
     UITabBarController *tabBarController;
-	SEL onBeerSelectedAction;
-	id onBeerSelectedTarget;
 	UIProgressHUD* activityHUD;
 	
 	NSOperationQueue* sharedOperationQueue;
@@ -65,8 +63,6 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 @property (nonatomic, retain) LoginVC* loginVC;
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 @property (nonatomic, retain) NSOperationQueue* sharedOperationQueue;
-@property(nonatomic) SEL onBeerSelectedAction;
-@property(nonatomic,assign) id onBeerSelectedTarget;
 @property (nonatomic, retain) UIProgressHUD* activityHUD;
 @property (nonatomic, retain) NSMutableDictionary* flavorsDictionary;
 @property (nonatomic, retain) NSMutableDictionary* stylesDictionary;
@@ -80,8 +76,6 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 -(BOOL)login;
 -(NSHTTPURLResponse*)sendJSONRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSObject*)data returningJSON:(NSMutableDictionary**)jsonResponse;
 -(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSObject*)data returningData:(NSData**)responseData;
--(void)setOnBeerSelectedAction:(SEL)s target:(id)t;
--(BOOL)onBeerSelected:(id)obj;
 -(NSDictionary*)getFlavorsDictionary;
 -(NSDictionary*)getStylesDictionary;
 -(NSDictionary*)getColorsDictionary;

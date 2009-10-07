@@ -283,8 +283,6 @@ void normalizeBreweryData(NSMutableDictionary* data)
 @synthesize window;
 @synthesize loginVC;
 @synthesize tabBarController;
-@synthesize onBeerSelectedAction;
-@synthesize onBeerSelectedTarget;
 @synthesize flavorsDictionary;
 @synthesize stylesDictionary;
 @synthesize colorsDictionary;
@@ -1237,22 +1235,6 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		return answer;
 	}
 	return nil;
-}
-
--(void)setOnBeerSelectedAction:(SEL)s target:(id)t
-{
-	self.onBeerSelectedAction=s;
-	self.onBeerSelectedTarget=t;
-}
-
--(BOOL)onBeerSelected:(id)obj
-{
-	if ([onBeerSelectedTarget respondsToSelector:onBeerSelectedAction])
-	{
-		[onBeerSelectedTarget performSelector:onBeerSelectedAction withObject:obj];
-		return YES;
-	}
-	return NO;
 }
 
 -(void)dismissActivityHUD

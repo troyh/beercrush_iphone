@@ -9,7 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "BeerTableViewController.h"
 
-@interface BeerListTableViewController : UITableViewController <BeerTableViewControllerDelegate> {
+@protocol BeerListTVCDelegate
+
+-(BOOL)beerListTVCDidSelectBeer:(NSString*)beer_id;
+
+@end
+
+
+@interface BeerListTableViewController : UITableViewController <BeerTableViewControllerDelegate,SearchVCDelegate,BeerListTVCDelegate> {
+	id<BeerListTVCDelegate> delegate;
+	@private
 	NSString* breweryID;
 	NSString* placeID;
 	NSString* wishlistID;
@@ -19,6 +28,7 @@
 	BOOL setRightBarButtonItem;
 }
 
+@property (nonatomic,assign) id<BeerListTVCDelegate> delegate;
 @property (nonatomic,retain) NSString* breweryID;
 @property (nonatomic,retain) NSString* placeID;
 @property (nonatomic,retain) NSString* wishlistID;
@@ -33,3 +43,4 @@
 -(void)didCancelBeerEdits;
 
 @end
+
