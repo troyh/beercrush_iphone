@@ -17,7 +17,7 @@ typedef enum {
 } EditLineVCTextType;
 
 
-@interface EditLineVC : UITableViewController {
+@interface EditLineVC : UITableViewController <UITextFieldDelegate> {
 	NSUInteger tag;
 	EditLineVCTextType textType;
 	NSString* textToEdit;

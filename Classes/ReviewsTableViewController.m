@@ -44,7 +44,7 @@
 	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addReviewButtonClicked:)] autorelease];
 	
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getReviews:) object:self.reviewedDocID withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingReviews", @"Getting Reviews")];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getReviews:) object:self.reviewedDocID requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:GettingReviews", @"Getting Reviews")];
 }
 /*
 - (void)viewWillAppear:(BOOL)animated {

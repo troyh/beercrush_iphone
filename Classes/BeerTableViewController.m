@@ -138,7 +138,7 @@ enum TAGS {
 	if (self.editing)
 	{   // Editing is ending (or trying to end), send data to server
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate performAsyncOperationWithTarget:self selector:@selector(saveEdits:) object:nil withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:Saving",@"Saving")];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(saveEdits:) object:nil requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Saving",@"Saving")];
 	}
 	else
 	{
@@ -185,7 +185,7 @@ enum TAGS {
 		self.editButtonItem.action=@selector(editButtonClicked);
 
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerInfo:) object:self.beerID withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingBeerInfo",@"Getting Beer Info")];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerInfo:) object:self.beerID requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:GettingBeerInfo",@"Getting Beer Info")];
 	}
 }
 
@@ -1128,7 +1128,8 @@ enum TAGS {
 	
 	// Send the review to the site
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendBeerReview:) object:reviewDoc withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:SendingReview",@"Sending Review to server")];
+//	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendBeerReview:) object:reviewDoc withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:SendingReview",@"Sending Review to server")];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendBeerReview:) object:reviewDoc requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"HUD:SendingReview",@"Sending Review to server")];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -1323,7 +1324,7 @@ enum TAGS {
 			{
 				// Add beerID to wish list
 				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-				[appDelegate performAsyncOperationWithTarget:self selector:@selector(addToWishList:) object:self.beerID withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:AddToWishList",@"Adding to Wish List")];
+				[appDelegate performAsyncOperationWithTarget:self selector:@selector(addToWishList:) object:self.beerID requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"HUD:AddToWishList",@"Adding to Wish List")];
 
 				UITableViewCell* cell=[self.tableView cellForRowAtIndexPath:indexPath];
 				[cell setSelected:NO animated:YES];
@@ -1496,7 +1497,7 @@ enum TAGS {
 -(void)photoViewer:(PhotoViewer*)photoViewer didSelectPhotoToUpload:(UIImage*)photo
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(uploadPhoto:) object:photo withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:UploadingPhoto",@"Uploading Photo")];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(uploadPhoto:) object:photo requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:UploadingPhoto",@"Uploading Photo")];
 }
 
 #pragma mark EditLineVCDelegate methods
@@ -1540,17 +1541,34 @@ enum TAGS {
 	NSString* bodystr=[[[NSString alloc] initWithFormat:@"rating=%@&beer_id=%@", [reviewDoc objectForKey:@"rating"], [reviewDoc objectForKey:@"beer_id"]] autorelease];
 	NSMutableDictionary* answer;
 	NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:bodystr returningJSON:&answer];
+	[appDelegate dismissActivityHUD];
 
 	if ([response statusCode]==200) {
 		self.userReviewData=answer;
-		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:self.userReviewData] autorelease];
-		fbrtvc.delegate=self;
-		[self.navigationController pushViewController:fbrtvc animated:YES];
+		[self performSelectorOnMainThread:@selector(reviewPostSuccess:) withObject:answer waitUntilDone:NO];
 	} else {
-		// TODO: inform the user that the download could not be made
+		// Inform the user that the review could not be posted
+		[self performSelectorOnMainThread:@selector(reviewPostFailed) withObject:nil waitUntilDone:NO];
 	}	
 	
-	[appDelegate dismissActivityHUD];
+}
+
+-(void)reviewPostSuccess:(NSDictionary*)reviewData
+{
+	FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:self.userReviewData] autorelease];
+	fbrtvc.delegate=self;
+	[self.navigationController pushViewController:fbrtvc animated:YES];
+}
+
+-(void)reviewPostFailed
+{
+	UIAlertView* alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sending Review",@"PostReview: failure alert title")
+												  message:NSLocalizedString(@"Review not posted",@"PostReview: failure alert message")
+												 delegate:nil
+										cancelButtonTitle:NSLocalizedString(@"OK",@"PostReview: failure alert cancel button title")
+										otherButtonTitles:nil];
+	[alert show];
+	[alert release];
 }
 
 -(void)saveEdits:(id)nothing

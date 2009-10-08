@@ -71,7 +71,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 
 -(void)startApp;
 -(void)askUserForCredentialsWithDelegate:(id<LoginVCDelegate>)delegate;
--(BOOL)canAttemptAutomaticLogin;
+-(BOOL)haveUserCredentials;
 -(BOOL)automaticLogin;
 -(NSHTTPURLResponse*)sendJSONRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSObject*)data returningJSON:(NSMutableDictionary**)jsonResponse;
 -(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSObject*)data returningData:(NSData**)responseData;
@@ -95,7 +95,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 -(void)popNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem;
 -(void)dismissActivityHUD;
 -(void)presentActivityHUD:(NSString*)hudText;
--(void)performAsyncOperationWithTarget:(id)target selector:(SEL)sel object:(id)object withActivityHUD:(BOOL)withActivityHUD andActivityHUDText:(NSString*)hudText;
+-(void)performAsyncOperationWithTarget:(id)target selector:(SEL)sel object:(id)object requiresUserCredentials:(BOOL)requiresCredentials activityHUDText:(NSString*)hudText;
 
 -(NSString*)breweryNameFromBeerID:(NSString*)beer_id;
 

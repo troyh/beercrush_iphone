@@ -713,7 +713,7 @@
 	[self.userReview setObject:id_string forKey:@"purchase_place"];
 	
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getWherePurchasedText:) object:nil withActivityHUD:NO andActivityHUDText:nil];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getWherePurchasedText:) object:nil requiresUserCredentials:NO activityHUDText:nil];
 
 	[self.navigationController popViewControllerAnimated:YES];
 	return NO; // Do not continue 

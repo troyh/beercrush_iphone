@@ -290,7 +290,7 @@
 		[bar setShowsCancelButton:NO animated:YES];
 		
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate performAsyncOperationWithTarget:self selector:@selector(autocomplete:) object:searchText withActivityHUD:NO andActivityHUDText:nil];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(autocomplete:) object:searchText requiresUserCredentials:NO activityHUDText:nil];
 	}
 	else
 	{
@@ -308,7 +308,7 @@
 		[bar endEditing:YES];
 		
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate performAsyncOperationWithTarget:self selector:@selector(query:) object:bar.text withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:Searching",@"Searching")];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(query:) object:bar.text requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Searching",@"Searching")];
 	}
 }
 

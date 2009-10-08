@@ -170,7 +170,7 @@ static const NSInteger kTagBeerNameLabel=2;
 -(void)addBeerToMenu:(NSString*)beerID
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(postBeerToMenu:) object:beerID withActivityHUD:YES andActivityHUDText:@""];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(postBeerToMenu:) object:beerID requiresUserCredentials:NO activityHUDText:@""];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -219,7 +219,7 @@ static const NSInteger kTagBeerNameLabel=2;
 		{
 			[beerList removeAllObjects];
 			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-			[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerList:) object:url withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieveing beer list from server")];
+			[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerList:) object:url requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieveing beer list from server")];
 		}
 	}
 }

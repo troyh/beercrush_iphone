@@ -245,7 +245,7 @@ enum mytags {
 		{
 			// Retrieve JSON doc for this place
 			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-			[appDelegate performAsyncOperationWithTarget:self selector:@selector(getPlaceDoc:) object:self.placeID withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingPlaceInfo",@"Getting Place Info")];
+			[appDelegate performAsyncOperationWithTarget:self selector:@selector(getPlaceDoc:) object:self.placeID requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:GettingPlaceInfo",@"Getting Place Info")];
 		}
 	}
 	
@@ -1043,7 +1043,7 @@ enum mytags {
 	
 	// Send the review to the site
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendReview:) object:[NSNumber numberWithInt:rating] withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:SendingReview",@"Sending Review")];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendReview:) object:[NSNumber numberWithInt:rating] requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"HUD:SendingReview",@"Sending Review")];
 }
 
 -(void)photoThumbnailClicked:(id)sender
@@ -1486,7 +1486,7 @@ enum mytags {
 	[self.tableView reloadData];
 	[appDelegate dismissActivityHUD];
 	
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getUserReviewDoc:) object:self.placeID withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:GettingPlaceInfo", @"Getting Place Info")];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getUserReviewDoc:) object:self.placeID requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"HUD:GettingPlaceInfo", @"Getting Place Info")];
 }
 
 -(void)getUserReviewDoc:(NSString*)aPlaceID

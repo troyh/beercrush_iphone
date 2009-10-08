@@ -685,8 +685,9 @@ void normalizeBreweryData(NSMutableDictionary* data)
 {
 }
 
--(BOOL)canAttemptAutomaticLogin
+-(BOOL)haveUserCredentials
 {
+//	return NO; // Just for debugging
 	// Get the userid and password from App Preferences
 	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
 	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
@@ -844,19 +845,15 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			*responseData=rspdata;
 
 		if (rspdata) {
-			DLog(@"Response code:%d",[response statusCode]);
-			DLog(@"Response data:%.*s", [rspdata length], [rspdata bytes]);
 			
 			bRetry=NO;
 			int statuscode=[response statusCode];
+			
+			DLog(@"Response code:%d",statuscode);
+			DLog(@"Response data:%.*s", [rspdata length], [rspdata bytes]);
+
 			if (statuscode==420) // 420 means that the user must be logged in
 			{
-				if ([self canAttemptAutomaticLogin]==NO)
-				{
-					// Don't even have credentials to try, ask user for them
-					[self performSelectorOnMainThread:@selector(askUserForCredentials) withObject:nil waitUntilDone:YES];
-				}
-				
 				if (nTries < 2) // Don't retry over and over, just do it once
 				{
 					if ([self automaticLogin]==YES)
@@ -1256,12 +1253,19 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	[self.activityHUD show:YES]; 
 }
 
--(void)performAsyncOperationWithTarget:(id)target selector:(SEL)sel object:(id)object withActivityHUD:(BOOL)withActivityHUD andActivityHUDText:(NSString*)hudText
+-(void)performAsyncOperationWithTarget:(id)target selector:(SEL)sel object:(id)object requiresUserCredentials:(BOOL)requiresCredentials activityHUDText:(NSString*)hudText
 {
-	if (withActivityHUD)
-		[self presentActivityHUD:hudText];
-	NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:target selector:sel object:object] autorelease];
-	[self.sharedOperationQueue addOperation:op];
+	if (requiresCredentials && [self haveUserCredentials]==NO)
+	{
+		[self askUserForCredentialsWithDelegate:self];
+	}
+	else
+	{
+		if (hudText)
+			[self presentActivityHUD:hudText];
+		NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:target selector:sel object:object] autorelease];
+		[self.sharedOperationQueue addOperation:op];
+	}
 }
 
 #pragma mark LoginVCDelegate methods
