@@ -281,7 +281,6 @@ void normalizeBreweryData(NSMutableDictionary* data)
 @synthesize activityHUD;
 @synthesize sharedOperationQueue;
 @synthesize window;
-@synthesize loginVC;
 @synthesize tabBarController;
 @synthesize flavorsDictionary;
 @synthesize stylesDictionary;
@@ -294,58 +293,12 @@ void normalizeBreweryData(NSMutableDictionary* data)
     
 	// Create the sharedOperationQueue to use for async operations
 	self.sharedOperationQueue=[[NSOperationQueue alloc] init];
-	loginVC=nil;
 	
-	// If we don't know the username/password for the user, give them the login screen
-	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
-	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
-	if (userid==nil || password==nil)
-	{
-		[self askUserForCredentials];
-	}
-	else
-	{
-		[self startApp];
-	}
-
-}
-
--(void)askUserForCredentials
-{
-	if (loginVC==nil) // Don't create and show it if it's already up
-	{
-		loginVC=[[LoginVC alloc] initWithNibName:nil bundle:nil];
-		[window addSubview:loginVC.view];
-	}
+	[self startApp];
 }
 
 -(void)startApp
 {
-	if (loginVC)
-	{
-		loginVC=nil; // releases it too
-	}
-	
-//	UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//	button.frame = CGRectMake(290, 400, 20, 20);
-//	[button.titleLabel setFont:[UIFont fontWithName:@"Georgia-BoldItalic" size:14]];
-//	[button setTitle:@"i" forState:UIControlStateNormal];
-//	[button addTarget:self action:@selector(showAboutUs) forControlEvents:UIControlEventTouchUpInside];
-//
-//	[self.window addSubview:button];
-
-//	tabBarController.viewControllers=[NSArray arrayWithObjects:
-//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
-//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
-//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
-//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
-//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
-//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
-//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
-//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
-//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
-//									  [[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease],
-//									  nil];
 	
 	// Add the tab bar controller's current view as a subview of the window
 	[window addSubview:tabBarController.view];
@@ -478,6 +431,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Wish List" image:[UIImage imageNamed:@"tab_wishlist.png"] tag:kTabBarItemTagWishList] autorelease];
+				// TODO: if the user_id does not exist (the user is not logged in), this puts "(null)" in the ID string, which is wrong.
 				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
 				[nc pushViewController:bltvc animated:NO];
 				break;
@@ -559,6 +513,18 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		}
 	}
 
+//	// If we don't know the username/password for the user, give them the login screen
+//	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+//	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
+//	if (YES || userid==nil || password==nil)
+//	{
+//		[self askUserForCredentials];
+//	}
+//	else
+//	{
+//		[self startApp];
+//	}
+	
 }
 
 /*
@@ -696,7 +662,6 @@ void normalizeBreweryData(NSMutableDictionary* data)
     [window release];
 	[flavorsDictionary release];
 
-	[loginVC release];
 	[restoringNavState release];
 	
     [super dealloc];
@@ -720,44 +685,76 @@ void normalizeBreweryData(NSMutableDictionary* data)
 {
 }
 
-// Login
--(BOOL)login
+-(BOOL)canAttemptAutomaticLogin
 {
 	// Get the userid and password from App Preferences
 	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
 	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
 	
-	DLog(@"Logging in...");
-	NSString* bodystr=[[[NSString alloc] initWithFormat:@"userid=%@&password=%@", userid, password] autorelease];
-	NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
-
-	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_LOGIN]
-															cachePolicy:NSURLRequestUseProtocolCachePolicy
-														timeoutInterval:60.0];
-	[theRequest setHTTPMethod:@"POST"];
-	[theRequest setHTTPBody:body];
-	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
-	
-	// create the connection with the request and start loading the data
-	NSHTTPURLResponse* response;
-	NSError* error;
-
-	[UIApplication sharedApplication].networkActivityIndicatorVisible=YES;
-	NSData* respdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
-	[UIApplication sharedApplication].networkActivityIndicatorVisible=NO;
-
-	DLog(@"status code=%d",[response statusCode]);
-	if ([response statusCode]==200)
-	{
-		DLog(@"Login successful");
-		// We don't care about any response document, we just want the cookies to be stored (automatically)
-		DLog(@"Response data:%.*s", [respdata length], [respdata bytes]);
-		return YES;
-	} else {
-		DLog(@"Login failed.");
+	if (userid==nil || password==nil || [userid length]==0 || [password length]==0)
 		return NO;
-	}	
+	
+	return YES;
+}
 
+-(void)askUserForCredentialsWithDelegate:(id<LoginVCDelegate>)delegate
+{
+	LoginVC* loginVC=[[[LoginVC alloc] initWithNibName:nil bundle:nil] autorelease];
+	loginVC.delegate=delegate?delegate:self;
+	UINavigationController* nc=[[[UINavigationController alloc] initWithRootViewController:loginVC] autorelease];
+	[self.tabBarController.selectedViewController presentModalViewController:nc animated:YES];
+}
+
+-(BOOL)automaticLogin
+{
+	BOOL didSuccessfullyLogin=NO;
+	
+	// Get the userid and password from App Preferences
+	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
+	
+	if (userid==nil || password==nil || [userid length]==0 || [password length]==0)
+	{
+		// Just can't do it, somebody needs to ask user for them
+		DLog(@"Can't attempt login, need credentials");
+	}
+	else 
+	{
+		// TODO: do this over HTTPS
+		DLog(@"Logging in...");
+		NSString* bodystr=[[[NSString alloc] initWithFormat:@"userid=%@&password=%@", userid, password] autorelease];
+		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
+
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_LOGIN]
+																cachePolicy:NSURLRequestUseProtocolCachePolicy
+															timeoutInterval:60.0];
+		[theRequest setHTTPMethod:@"POST"];
+		[theRequest setHTTPBody:body];
+		[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+		
+		// create the connection with the request and start loading the data
+		NSHTTPURLResponse* response;
+		NSError* error;
+
+		[UIApplication sharedApplication].networkActivityIndicatorVisible=YES;
+		NSData* respdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+		[UIApplication sharedApplication].networkActivityIndicatorVisible=NO;
+
+		DLog(@"status code=%d",[response statusCode]);
+		if ([response statusCode]==200)
+		{
+			DLog(@"Login successful");
+			// We don't care about any response document, we just want the cookies to be stored (automatically)
+			DLog(@"Response data:%.*s", [respdata length], [respdata bytes]);
+			didSuccessfullyLogin=YES;
+		} 
+		else 
+		{
+			DLog(@"Login failed.");
+		}	
+	}
+	
+	return didSuccessfullyLogin;
 }
 
 -(NSHTTPURLResponse*)sendJSONRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSObject*)data returningJSON:(NSMutableDictionary**)jsonResponse
@@ -852,11 +849,17 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			
 			bRetry=NO;
 			int statuscode=[response statusCode];
-			if (statuscode==420)
+			if (statuscode==420) // 420 means that the user must be logged in
 			{
+				if ([self canAttemptAutomaticLogin]==NO)
+				{
+					// Don't even have credentials to try, ask user for them
+					[self performSelectorOnMainThread:@selector(askUserForCredentials) withObject:nil waitUntilDone:YES];
+				}
+				
 				if (nTries < 2) // Don't retry over and over, just do it once
 				{
-					if ([self login]==YES)
+					if ([self automaticLogin]==YES)
 					{
 						bRetry=YES; // Successfully logged in, retry original request
 					}
@@ -1260,6 +1263,29 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	NSInvocationOperation* op=[[[NSInvocationOperation alloc] initWithTarget:target selector:sel object:object] autorelease];
 	[self.sharedOperationQueue addOperation:op];
 }
+
+#pragma mark LoginVCDelegate methods
+
+-(void)loginVCSuccessful
+{
+	[self.tabBarController.selectedViewController dismissModalViewControllerAnimated:YES];
+}
+
+-(void)loginVCNewAccount:(NSString*)userid andPassword:(NSString*)password
+{
+	[self.tabBarController.selectedViewController dismissModalViewControllerAnimated:YES];
+}
+
+-(void)loginVCFailed
+{
+	// Don't care, the user can cancel if they can't or don't want to login
+}
+
+-(void)loginVCCancelled
+{
+	[self.tabBarController.selectedViewController dismissModalViewControllerAnimated:YES];
+}
+
 
 @end
 

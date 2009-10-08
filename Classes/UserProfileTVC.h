@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LoginVC.h"
 
-
-@interface UserProfileTVC : UITableViewController {
+@interface UserProfileTVC : UITableViewController <LoginVCDelegate>  {
 
 }
 

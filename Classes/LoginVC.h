@@ -8,14 +8,23 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol LoginVCDelegate
+
+-(void)loginVCSuccessful;
+-(void)loginVCNewAccount:(NSString*)userid andPassword:(NSString*)password;
+-(void)loginVCFailed;
+-(void)loginVCCancelled;
+
+@end
+
 
 @interface LoginVC : UIViewController {
-	BOOL bCreateAccount;
+	id<LoginVCDelegate> delegate;
 	UITextField* usernameTextField;
 	UITextField* passwordTextField;
 }
 
-@property (nonatomic, assign) BOOL bCreateAccount;
+@property (nonatomic, assign) id<LoginVCDelegate> delegate;
 @property (nonatomic, retain) UITextField* usernameTextField;
 @property (nonatomic, retain) UITextField* passwordTextField;
 

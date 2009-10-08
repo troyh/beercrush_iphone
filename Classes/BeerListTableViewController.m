@@ -165,10 +165,6 @@ static const NSInteger kTagBeerNameLabel=2;
 -(void)browseBrewersCancelButtonClicked
 {
 	[self.parentViewController dismissModalViewControllerAnimated:YES];
-
-	// Clear onBeerSelected selector so we're not called when the user selects a beer
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate setOnBeerSelectedAction:nil target:nil];
 }
 
 -(void)addBeerToMenu:(NSString*)beerID

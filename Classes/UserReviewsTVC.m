@@ -142,31 +142,6 @@
 	// e.g. self.myOutlet = nil;
 }
 
-// FullBeerReviewTVCDelegate methods
-
--(void)fullBeerReview:(NSDictionary*)review withChanges:(BOOL)edited
-{
-	if (edited)
-	{
-		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		NSData* answer;
-		if ([[del postBeerReview:review returningData:&answer] statusCode]==200)
-		{
-			[self.navigationController popViewControllerAnimated:YES];
-		}
-	}
-}
-
--(NSString*)beerName
-{
-	return nil;
-}
-
--(NSString*)breweryName
-{
-	return nil;
-}
-
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -294,6 +269,42 @@
 	[self.reviewsList release];
     [super dealloc];
 }
+
+#pragma mark FullBeerReviewTVCDelegate methods
+
+-(NSDictionary*)fullBeerReviewGetBeerData
+{
+	return nil; // TODO: what to do here? Is this method even necessary? Can't the caller just ask the App Delegate to retrieve the beer doc from the server or its cache?
+}
+
+-(void)fullBeerReviewVCReviewCancelled:(FullBeerReviewTVC *)vc
+{
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)fullBeerReview:(NSDictionary*)review withChanges:(BOOL)edited
+{
+	if (edited)
+	{
+		BeerCrushAppDelegate* del=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSData* answer;
+		if ([[del postBeerReview:review returningData:&answer] statusCode]==200)
+		{
+			[self.navigationController popViewControllerAnimated:YES];
+		}
+	}
+}
+
+-(NSString*)beerName
+{
+	return nil;
+}
+
+-(NSString*)breweryName
+{
+	return nil;
+}
+
 
 @end
 

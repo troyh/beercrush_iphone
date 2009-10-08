@@ -8,10 +8,11 @@
 
 #import "LoginVC.h"
 #import "BeerCrushAppDelegate.h"
+#import "RegexKitLite.h"
 
 @implementation LoginVC
 
-@synthesize bCreateAccount;
+@synthesize delegate;
 @synthesize usernameTextField;
 @synthesize passwordTextField;
 
@@ -19,31 +20,34 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         // Custom initialization
-		bCreateAccount=NO; // Default to no
     }
     return self;
 }
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView {
-	if (!self.isViewLoaded)
+	if ([self isViewLoaded]==NO)
 	{
+		self.title=NSLocalizedString(@"Sign In",@"Login Screen Title");
+		self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelLoginButtonClicked:)] autorelease];
+
 		// Give the user username and password text fields
 		CGRect screenRect=[[[UIApplication sharedApplication] keyWindow] frame];
-		UIView* mainview=[[UIView alloc] initWithFrame:screenRect];
+		UIView* mainview=[[[UIView alloc] initWithFrame:screenRect] autorelease];
+		mainview.backgroundColor=[UIColor whiteColor];
 		self.view=mainview;
 
 		// Username field
 		const int kTextFieldWidth=200;
 		const int kTextFieldHeight=30;
-		const int kButtonWidth=150;
-		const int kButtonHeight=30;
-		const int kSwitchButtonWidth=200;
+		const int kButtonWidth=125;
+		const int kButtonHeight=40;
+
 		usernameTextField=[[[UITextField alloc] initWithFrame:CGRectMake((screenRect.size.width-kTextFieldWidth)/2, 50, kTextFieldWidth, kTextFieldHeight)] autorelease];
 		usernameTextField.borderStyle=UITextBorderStyleBezel;
 		usernameTextField.adjustsFontSizeToFitWidth=YES;
 		usernameTextField.textAlignment=UITextAlignmentCenter;
-		usernameTextField.placeholder=@"Username";
+		usernameTextField.placeholder=@"Email address";
 		usernameTextField.clearButtonMode=UITextFieldViewModeWhileEditing;
 		usernameTextField.autocorrectionType=UITextAutocorrectionTypeNo;
 		usernameTextField.autocapitalizationType=UITextAutocapitalizationTypeNone;
@@ -67,60 +71,90 @@
 		passwordTextField.returnKeyType=UIReturnKeyGo;
 		passwordTextField.secureTextEntry=YES;
 		
-		UIButton* button=nil;
-		button=[UIButton buttonWithType:UIButtonTypeRoundedRect];
-		button.frame=CGRectMake((screenRect.size.width-kButtonWidth)/2, 120, kButtonWidth, kButtonHeight);
+		UIButton* signInButton=nil;
+		signInButton=[UIButton buttonWithType:UIButtonTypeRoundedRect];
+		signInButton.frame=CGRectMake(screenRect.size.width/2+((screenRect.size.width/2-kButtonWidth)/2), 120, kButtonWidth, kButtonHeight);
 
-		if (self.bCreateAccount==NO)
-		{
-			// Login button
-			[usernameTextField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]];
-			[passwordTextField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"password"]];
-			[button setTitle:@"Login" forState:UIControlStateNormal];
-			[button addTarget:self action:@selector(loginButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-		}
-		else
-		{
-			// Create Account button
-			[button setTitle:@"Create Account" forState:UIControlStateNormal];
-			[button addTarget:self action:@selector(createAccountButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-		}
+		// Sign In button
+		[usernameTextField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]];
+		[passwordTextField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"password"]];
+		[signInButton setTitle:@"Sign in" forState:UIControlStateNormal];
+		[signInButton addTarget:self action:@selector(loginButtonClicked) forControlEvents:UIControlEventTouchUpInside];
 
-		UIButton* switch_button=nil;
-		switch_button=[UIButton buttonWithType:UIButtonTypeRoundedRect];
-		switch_button.frame=CGRectMake((screenRect.size.width-kSwitchButtonWidth)/2, 155, kSwitchButtonWidth, kButtonHeight);
-		if (bCreateAccount)
-			[switch_button setTitle:@"I already have an account" forState:UIControlStateNormal];
-		else
-			[switch_button setTitle:@"I don't have an account" forState:UIControlStateNormal];
-		[switch_button addTarget:self action:@selector(switchButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-		
+		// Create Account button
+		UIButton* createAccountButton=nil;
+		createAccountButton=[UIButton buttonWithType:UIButtonTypeRoundedRect];
+		createAccountButton.frame=CGRectMake((screenRect.size.width/2-kButtonWidth)/2, 120, kButtonWidth, kButtonHeight);
+		[createAccountButton setTitle:@"Create Account" forState:UIControlStateNormal];
+		[createAccountButton addTarget:self action:@selector(createAccountButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+
 		[self.view addSubview:usernameTextField];
 		[self.view addSubview:passwordTextField];
-		[self.view addSubview:button];
-		[self.view addSubview:switch_button];
+		[self.view addSubview:signInButton];
+		[self.view addSubview:createAccountButton];
 	}
+}
+
+-(void)cancelLoginButtonClicked:(id)sender
+{
+	[self.delegate loginVCCancelled];
 }
 
 -(void)createAccountButtonClicked
 {
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	UIAlertView* alert=nil;
+
+	// Trim whitespace off username/email and password
+	usernameTextField.text=[usernameTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	passwordTextField.text=[passwordTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
-	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_CREATE_ACCOUNT];
-	NSString* bodystr=[NSString stringWithFormat:@"userid=%@&password=%@",
-					   usernameTextField.text,
-					   passwordTextField.text];
-	NSData* answer;
-	NSHTTPURLResponse* response=[delegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
-	if ([response statusCode]==200)
-	{	// Account successfully created
-		[self.view removeFromSuperview];
-		// TODO: make it call a specified selector action rather than always calling startApp
-		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[delegate startApp];
+	// Verify that email address looks like an email address. Regex from http://www.regular-expressions.info/email.html
+	if ([usernameTextField.text isMatchedByRegex:@"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$"]==NO)
+	{
+		alert=[[UIAlertView alloc] initWithTitle:nil
+										 message:NSLocalizedString(@"That email address does not look like an email address",@"CreateAccount: email address invalid") 
+										delegate:nil 
+							   cancelButtonTitle:NSLocalizedString(@"Try Again",@"CreateAccount: email address invalid OK button text") 
+							   otherButtonTitles:nil];
+	}
+	else if ([passwordTextField.text length]==0) // Verify that the password is not blank
+	{
+		alert=[[UIAlertView alloc] initWithTitle:nil
+										 message:NSLocalizedString(@"Your password cannot be blank",@"CreateAccount: password is blank") 
+										delegate:nil 
+							   cancelButtonTitle:NSLocalizedString(@"Try Again",@"CreateAccount: email address invalid OK button text") 
+							   otherButtonTitles:nil];
 	}
 	else
-	{	// Failed to create account
+	{
+		
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		
+		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_CREATE_ACCOUNT];
+		NSString* bodystr=[NSString stringWithFormat:@"userid=%@&password=%@",
+						   usernameTextField.text,
+						   passwordTextField.text];
+		NSData* answer;
+		NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
+		if ([response statusCode]==200)
+		{	// Account successfully created
+			[self.delegate loginVCNewAccount:usernameTextField.text andPassword:passwordTextField.text];
+
+		}
+		else if ([response statusCode]==520) // userid/email is already taken
+		{
+			alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Create Account failed",@"CreateAccount: failed alert title") 
+											 message:NSLocalizedString(@"That email address is already taken",@"CreateAccount: email address already exists") 
+											delegate:nil 
+								   cancelButtonTitle:NSLocalizedString(@"OK",@"OK Alert Button") 
+								   otherButtonTitles:nil];
+		}
+	}
+	
+	if (alert)
+	{
+		[alert show];
+		[alert release];
 	}
 }
 
@@ -131,24 +165,16 @@
 	[[NSUserDefaults standardUserDefaults] setObject:self.passwordTextField.text  forKey:@"password"];
 
 	// Attempt login
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	if ([delegate login]==NO)
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	if ([appDelegate automaticLogin]==NO)
 	{
+		// TODO: put up AlertView telling them it failed
+		[self.delegate loginVCFailed];
 	}
 	else
 	{
-		[self.view removeFromSuperview];
-		// TODO: make it call a specified selector action rather than always calling startApp
-		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[delegate startApp];
+		[self.delegate loginVCSuccessful];
 	}
-}
-
--(void)switchButtonClicked
-{
-	// Toggle between create account and login
-	bCreateAccount=bCreateAccount?NO:YES;
-	
 }
 
 /*

@@ -42,9 +42,8 @@ void normalizeBreweryData(NSMutableDictionary* data);
 NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* orig,NSDictionary* curr);
 
 
-@interface BeerCrushAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UINavigationControllerDelegate> {
+@interface BeerCrushAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UINavigationControllerDelegate,LoginVCDelegate> {
     UIWindow *window;
-	LoginVC* loginVC;
     UITabBarController *tabBarController;
 	UIProgressHUD* activityHUD;
 	
@@ -60,7 +59,6 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) LoginVC* loginVC;
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 @property (nonatomic, retain) NSOperationQueue* sharedOperationQueue;
 @property (nonatomic, retain) UIProgressHUD* activityHUD;
@@ -72,8 +70,9 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 @property (nonatomic, retain) NSMutableDictionary* appState;
 
 -(void)startApp;
--(void)askUserForCredentials;
--(BOOL)login;
+-(void)askUserForCredentialsWithDelegate:(id<LoginVCDelegate>)delegate;
+-(BOOL)canAttemptAutomaticLogin;
+-(BOOL)automaticLogin;
 -(NSHTTPURLResponse*)sendJSONRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSObject*)data returningJSON:(NSMutableDictionary**)jsonResponse;
 -(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSObject*)data returningData:(NSData**)responseData;
 -(NSDictionary*)getFlavorsDictionary;

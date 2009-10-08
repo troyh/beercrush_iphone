@@ -83,6 +83,7 @@
 		05C9AC400F53756F0020B102 /* MyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C9AC3F0F53756F0020B102 /* MyTableViewController.m */; };
 		05DA328F106408290015EBFD /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 05DA328E106408280015EBFD /* logo.png */; };
 		05DA329610640DAE0015EBFD /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 05DA329510640DAE0015EBFD /* Icon.png */; };
+		05ECB39F107D628F001D59A0 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 05ECB39E107D628F001D59A0 /* RegexKitLite.m */; };
 		05F3BFB30F6EEDCB00603ED1 /* NearbyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */; };
 		05F3C0740F6EF69400603ED1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05F3C0730F6EF69400603ED1 /* CoreLocation.framework */; };
 		05F3C18A0F6F150400603ED1 /* PlaceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F3C1890F6F150400603ED1 /* PlaceTableViewController.m */; };
@@ -215,6 +216,8 @@
 		05C9AC3F0F53756F0020B102 /* MyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableViewController.m; sourceTree = "<group>"; };
 		05DA328E106408280015EBFD /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		05DA329510640DAE0015EBFD /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		05ECB39D107D628F001D59A0 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
+		05ECB39E107D628F001D59A0 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		05F3BFB10F6EEDCB00603ED1 /* NearbyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NearbyTableViewController.h; sourceTree = "<group>"; };
 		05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NearbyTableViewController.m; sourceTree = "<group>"; };
 		05F3C0730F6EF69400603ED1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -268,9 +271,19 @@
 			path = JSON;
 			sourceTree = "<group>";
 		};
+		05ECB3A0107D629E001D59A0 /* RegexKitLite */ = {
+			isa = PBXGroup;
+			children = (
+				05ECB39D107D628F001D59A0 /* RegexKitLite.h */,
+				05ECB39E107D628F001D59A0 /* RegexKitLite.m */,
+			);
+			name = RegexKitLite;
+			sourceTree = "<group>";
+		};
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				05ECB3A0107D629E001D59A0 /* RegexKitLite */,
 				05C0D4DE107413A6004D485E /* AboutUsVC.h */,
 				05C0D4DF107413A6004D485E /* AboutUsVC.m */,
 				05C0D4E0107413A6004D485E /* AboutUsVC.xib */,
@@ -582,6 +595,7 @@
 				051BC384107A837F004376D9 /* PouredFromVC.m in Sources */,
 				051BC38E107A8742004376D9 /* DatePickerVC.m in Sources */,
 				051BC629107BD6BD004376D9 /* RatingView.m in Sources */,
+				05ECB39F107D628F001D59A0 /* RegexKitLite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -609,6 +623,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BeerCrush_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				PRODUCT_NAME = BeerCrush;
 			};
 			name = Debug;
@@ -623,6 +641,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BeerCrush_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				PRODUCT_NAME = BeerCrush;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -640,6 +662,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-licucore";
 				PREBINDING = NO;
 				SDKROOT = iphoneos2.2.1;
 			};
@@ -653,6 +676,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_LDFLAGS = "-licucore";
 				PREBINDING = NO;
 				SDKROOT = iphoneos2.2.1;
 			};

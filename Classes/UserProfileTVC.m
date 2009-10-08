@@ -7,6 +7,7 @@
 //
 
 #import "UserProfileTVC.h"
+#import "BeerCrushAppDelegate.h"
 
 
 @implementation UserProfileTVC
@@ -14,6 +15,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:style]) {
+		self.title=NSLocalizedString(@"My Profile",@"Title for My Profile screen");
     }
     return self;
 }
@@ -35,6 +37,7 @@
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+
 }
 */
 /*
@@ -72,12 +75,22 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	switch (section) {
+		case 0:
+			return 1;
+			break;
+		case 1:
+			return 2;
+			break;
+		default:
+			break;
+	}
     return 0;
 }
 
@@ -89,10 +102,50 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    // Set up the cell...
+	switch (indexPath.section) 
+	{
+		case 0:
+		{
+			switch (indexPath.row) 
+			{
+				case 0:
+					break;
+				default:
+					break;
+			}
+			break;
+		}
+		case 1:
+		{
+			switch (indexPath.row) 
+			{
+				case 0: // Email field
+				{
+					[cell.textLabel setText:NSLocalizedString(@"email",@"Email label for Profile screen")];
+					NSString* s=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+					if (s)
+						[cell.detailTextLabel setText:s];
+					break;
+				}
+				case 1: // Password field
+				{
+					[cell.textLabel setText:NSLocalizedString(@"password",@"Password label for Profile screen")];
+					NSString* s=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
+					if (s)
+						[cell.detailTextLabel setText:s];
+					break;
+				}
+				default:
+					break;
+			}
+			break;
+		}
+		default:
+			break;
+	}
 	
     return cell;
 }
@@ -103,6 +156,28 @@
 	// AnotherViewController *anotherViewController = [[AnotherViewController alloc] initWithNibName:@"AnotherView" bundle:nil];
 	// [self.navigationController pushViewController:anotherViewController];
 	// [anotherViewController release];
+	switch (indexPath.section) {
+		case 0:
+			break;
+		case 1:
+		{
+			switch (indexPath.row) {
+				case 0: // Email
+				case 1: // Password
+				{
+					// Put up login screen so they can edit these
+					BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+					[appDelegate askUserForCredentialsWithDelegate:self];
+					break;
+				}
+				default:
+					break;
+			}
+			break;
+		}
+		default:
+			break;
+	}
 }
 
 
@@ -145,9 +220,52 @@
 }
 */
 
-
 - (void)dealloc {
     [super dealloc];
+}
+
+#pragma mark LoginVCDelegate methods
+
+-(void)loginVCSuccessful
+{
+	[self.navigationController dismissModalViewControllerAnimated:YES];
+}
+
+-(void)loginVCNewAccount:(NSString*)userid andPassword:(NSString*)password
+{
+	[self.tabBarController.selectedViewController dismissModalViewControllerAnimated:YES];
+	
+	// Update email and password field
+	[[NSUserDefaults standardUserDefaults] setValue:userid forKey:@"user_id"];
+	[[NSUserDefaults standardUserDefaults] setValue:password forKey:@"password"];
+	[self.tableView reloadData];
+}
+
+-(void)loginVCFailed
+{
+}
+
+-(void)loginVCCancelled
+{
+	[self.navigationController dismissModalViewControllerAnimated:YES];
+	return;
+//	UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Cancelled",@"Login cancelled alert title") 
+//												   message:NSLocalizedString(@"I can't show you your Profile if you aren't logged in or have no account",@"Login cancelled alert message") 
+//												  delegate:nil 
+//										 cancelButtonTitle:NSLocalizedString(@"OK",@"Login cancelled cancel button title") 
+//										 otherButtonTitles:nil] autorelease];
+//	[alert show];
+//
+//	// Switch the user to another tab, but not this one
+//	for (NSUInteger i=0; i < [self.navigationController.tabBarController.viewControllers count]; ++i) {
+//		if (i != self.navigationController.tabBarController.selectedIndex)
+//		{
+//			self.navigationController.tabBarController.selectedIndex=i;
+//			return; // Get out of here!
+//		}
+//	}
+//	
+//	// Crap, we have only one tab?!?
 }
 
 

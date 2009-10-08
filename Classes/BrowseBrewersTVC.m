@@ -155,9 +155,6 @@
 -(void)newBeerCancelButtonClicked
 {
 	[self.parentViewController dismissModalViewControllerAnimated:YES];
-	// Clear onBeerSelected selector so we're not called when the user selects a beer
-	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[delegate setOnBeerSelectedAction:nil target:nil];
 }
 
 
