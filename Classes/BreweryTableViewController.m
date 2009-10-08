@@ -1083,9 +1083,21 @@ enum TAGS {
 	else
 	{
 		// Nope, we're staying in Edit mode
-		UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"Oops" message:@"Brewery could not be saved" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
-		[alert show];
+		[self performSelectorOnMainThread:@selector(saveEditsFailed) withObject:nil waitUntilDone:NO];
 	}
+}
+
+-(void)saveEditsFailed
+{
+	UIAlertView* alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Editing Brewery",@"SaveBreweryEditsFailed: failure alert title")
+												  message:NSLocalizedString(@"Unable to save brewery edits",@"SaveBreweryEditsFailed: failure alert message")
+												 delegate:nil
+										cancelButtonTitle:NSLocalizedString(@"OK",@"SaveBreweryEditsFailed: failure alert cancel button title")
+										otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	[alert show];
+	[alert release];
 }
 
 @end

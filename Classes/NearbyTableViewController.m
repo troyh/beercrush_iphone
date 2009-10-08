@@ -370,11 +370,24 @@ const NSInteger kViewTagDistance=2;
 
 		[self.tableView reloadData];
 	}
+	else {
+		[self performSelectorOnMainThread:@selector(getNearbyResultsFailed) withObject:nil waitUntilDone:NO];
+	}
+
 	
 	[delegate dismissActivityHUD];
 }
 
-
+-(void)getNearbyResultsFailed
+{
+	UIAlertView* alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Nearby",@"GetNearbyResultsFailed: failure alert title")
+												  message:NSLocalizedString(@"Failed to get nearby list",@"GetNearbyResultsFailed: failure alert message")
+												 delegate:nil
+										cancelButtonTitle:NSLocalizedString(@"OK",@"GetNearbyResultsFailed: failure alert cancel button title")
+										otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+}
 
 
 @end

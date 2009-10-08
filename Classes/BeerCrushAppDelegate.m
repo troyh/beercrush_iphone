@@ -839,8 +839,6 @@ void normalizeBreweryData(NSMutableDictionary* data)
 
 		NSData* rspdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
 
-		[UIApplication sharedApplication].networkActivityIndicatorVisible=NO;
-
 		if (responseData)
 			*responseData=rspdata;
 
@@ -866,11 +864,13 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			{
 			}
 		} else {
-			// TODO: inform the user that the download could not be made
+			// Let caller give an error alert
 		}	
 	}
 	while (bRetry);
 
+	[UIApplication sharedApplication].networkActivityIndicatorVisible=NO;
+	
 	return response;
 }
 
@@ -913,12 +913,25 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			}
 			else
 			{
-				// TODO: handle this gracefully
+				[self genericAlert:NSLocalizedString(@"Flavors ",@"GetFlavorsDictionary: Alert Message") 
+							 title:NSLocalizedString(@"Unable to get Flavors list",@"GetFlavorsDictionary: Alert Title") 
+					   buttonTitle:nil];
 			}
 		}
 	}
 	
 	return flavorsDictionary;
+}
+
+-(void)genericAlert:(NSString*)message title:(NSString*)alertTitle buttonTitle:(NSString*)buttonTitle
+{
+	UIAlertView* alert=[[UIAlertView alloc] initWithTitle:(alertTitle?alertTitle:@"")
+												  message:(message?message:@"")
+												 delegate:nil
+										cancelButtonTitle:(buttonTitle?buttonTitle:@"")
+										otherButtonTitles:nil];
+	[alert show];
+	[alert release];
 }
 
 void recursivelyGetBeerStyleIDs(NSArray* fromArray, NSMutableDictionary* toDict)
@@ -950,7 +963,9 @@ void recursivelyGetBeerStyleIDs(NSArray* fromArray, NSMutableDictionary* toDict)
 		}
 		else
 		{
-			// TODO: handle this gracefully
+			[self genericAlert:NSLocalizedString(@"Styles",@"GetStylesDictionary: Alert Message") 
+						 title:NSLocalizedString(@"Unable to get Styles list",@"GetStylesDictionary: Alert Title") 
+				   buttonTitle:nil];
 		}
 	}
 	
@@ -977,7 +992,9 @@ void recursivelyGetBeerStyleIDs(NSArray* fromArray, NSMutableDictionary* toDict)
 		}
 		else
 		{
-			// TODO: alert the user
+			[self genericAlert:NSLocalizedString(@"Colors",@"GetColorDictionary: Alert Message") 
+						 title:NSLocalizedString(@"Unable to get Colors list",@"GetColorsDictionary: Alert Title") 
+				   buttonTitle:nil];
 		}
 	}
 
@@ -1088,8 +1105,10 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		return answer;
 	}
 	else {
-		// TODO: alert the user
 		DLog(@"Response status code=%d",[response statusCode]);
+		[self genericAlert:NSLocalizedString(@"Beer",@"GetBeerDoc: Alert Message") 
+					 title:NSLocalizedString(@"Unable to get information about beer",@"GetBeerDoc: Alert Title") 
+			   buttonTitle:nil];
 	}
 
 	return nil;
@@ -1115,8 +1134,10 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		return answer;
 	}
 	else {
-		// TODO: alert the user
 		DLog(@"Response status code=%d",[response statusCode]);
+		[self genericAlert:NSLocalizedString(@"Beer Reviews",@"GetBeerReviews: Alert Message") 
+					 title:NSLocalizedString(@"Unable to get beer reviews",@"GetBeerReviews: Alert Title") 
+			   buttonTitle:nil];
 	}
 	return nil;
 }
@@ -1129,6 +1150,12 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	if ([response statusCode]==200)
 	{
 		return answer;
+	}
+	else
+	{
+		[self genericAlert:NSLocalizedString(@"Beer Reviews",@"GetUserBeerReviews: Alert Message") 
+					 title:NSLocalizedString(@"Unable to get beer reviews",@"GetUserBeerReviews: Alert Title") 
+			   buttonTitle:nil];
 	}
 	return nil;
 }
@@ -1155,6 +1182,12 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		normalizeBreweryData(answer);
 		return answer;
 	}
+	else {
+		[self genericAlert:NSLocalizedString(@"Brewery",@"GetBreweryDoc: Alert Message") 
+					 title:NSLocalizedString(@"Unable to get information for brewery",@"GetBreweryDoc: Alert Title") 
+			   buttonTitle:nil];
+	}
+
 	
 	return nil;
 }
@@ -1171,6 +1204,13 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		normalizePlaceData(answer);
 		return answer;
 	}
+	else {
+		[self genericAlert:NSLocalizedString(@"Place",@"GetPlaceDoc: Alert Message") 
+					 title:NSLocalizedString(@"Unable to get information for place",@"GetPlaceDoc: Alert Title") 
+			   buttonTitle:nil];
+		
+	}
+
 	return nil;
 }
 
@@ -1188,6 +1228,12 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		normalizePlaceReviewData(answer);
 		return answer;
 	}
+	else {
+		[self genericAlert:NSLocalizedString(@"Reviews",@"GetPlaceReviews: Alert Message") 
+					 title:NSLocalizedString(@"Unable to get reviews",@"GetPlaceReviews: Alert Title") 
+			   buttonTitle:nil];
+	}
+
 	return nil;
 }
 
@@ -1219,6 +1265,12 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		{
 			return answer;
 		}
+		else {
+			[self genericAlert:NSLocalizedString(@"Reviews",@"GetReviews: Alert Message") 
+						 title:NSLocalizedString(@"Unable to get reviews",@"GetReviews: Alert Title") 
+				   buttonTitle:nil];
+		}
+
 	}
 	
 	return nil;
@@ -1234,6 +1286,12 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	{
 		return answer;
 	}
+	else {
+		[self genericAlert:NSLocalizedString(@"Breweries",@"GetBreweriesDoc: Alert Message") 
+					 title:NSLocalizedString(@"Unable to get brewery list",@"GetBreweriesDoc: Alert Title") 
+			   buttonTitle:nil];
+	}
+
 	return nil;
 }
 

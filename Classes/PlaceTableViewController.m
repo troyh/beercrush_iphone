@@ -1509,8 +1509,23 @@ enum mytags {
 		self.userReviewData=answer;
 		normalizePlaceReviewData(self.userReviewData);
 	}
+	else {
+		[self performSelectorOnMainThread:@selector(sendReviewFailed) withObject:nil waitUntilDone:NO];
+	}
+
 	
 	[appDelegate dismissActivityHUD];
+}
+
+-(void)sendReviewFailed
+{
+	UIAlertView* alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Post Review",@"SendReviewFailed: failure alert title")
+												  message:NSLocalizedString(@"Failed to post review",@"SendReviewFailed: failure alert message")
+												 delegate:nil
+										cancelButtonTitle:NSLocalizedString(@"OK",@"SendReviewFailed: failure alert cancel button title")
+										otherButtonTitles:nil];
+	[alert show];
+	[alert release];
 }
 
 @end

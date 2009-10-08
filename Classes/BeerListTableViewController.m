@@ -345,6 +345,7 @@ static const NSInteger kTagBeerNameLabel=2;
 	}
 	else {
 		[self.beerList removeAllObjects];
+		[self performSelectorOnMainThread:@selector(getBeerListFailed) withObject:nil waitUntilDone:NO];
 	}
 
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
@@ -362,21 +363,43 @@ static const NSInteger kTagBeerNameLabel=2;
 						self.placeID,
 						beerID];
 	NSMutableDictionary* answer=nil;
-	[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:postdata returningJSON:&answer];
-	if (answer)
+	NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:postdata returningJSON:&answer];
+	[appDelegate dismissActivityHUD];
+	if ([response statusCode]==200)
 	{
 		self.beerList=[answer objectForKey:@"items"];
 	}
 	else 
 	{
 		[self.beerList removeAllObjects];
+		[self performSelectorOnMainThread:@selector(postBeerToMenuFailed) withObject:nil waitUntilDone:NO];
 	}
 
 	[postdata release];
 	
-	[appDelegate dismissActivityHUD];
 }
 
+-(void)getBeerListFailed
+{
+	UIAlertView* alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Beer List",@"GetBeerList: failure alert title")
+												  message:NSLocalizedString(@"Failed to get beer list",@"GetBeerList: failure alert message")
+												 delegate:nil
+										cancelButtonTitle:NSLocalizedString(@"OK",@"GetBeerList: failure alert cancel button title")
+										otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+}
+
+-(void)postBeerToMenuFailed
+{
+	UIAlertView* alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Add to Menu",@"AddToBeerMenu: failure alert title")
+												  message:NSLocalizedString(@"Failed to add beer to menu",@"AddToBeerMenu: failure alert message")
+												 delegate:nil
+										cancelButtonTitle:NSLocalizedString(@"OK",@"AddToBeerMenu: failure alert cancel button title")
+										otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+}
 
 
 

@@ -1128,7 +1128,6 @@ enum TAGS {
 	
 	// Send the review to the site
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-//	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendBeerReview:) object:reviewDoc withActivityHUD:YES andActivityHUDText:NSLocalizedString(@"HUD:SendingReview",@"Sending Review to server")];
 	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendBeerReview:) object:reviewDoc requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"HUD:SendingReview",@"Sending Review to server")];
 }
 
@@ -1632,15 +1631,24 @@ enum TAGS {
 		}
 		else
 		{
-			// TODO: alert the user that it failed and/or give a chance to retry
-			UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"HTTP Error" message:[NSString stringWithFormat:@"Status code %d",[response statusCode]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
-			[alert show];
+			[self performSelectorOnMainThread:@selector(saveEditsFailed) withObject:nil waitUntilDone:NO];
 		}
 	}
 	
 	[appDelegate dismissActivityHUD];
 }
 
+-(void)saveEditsFailed
+{
+	UIAlertView* alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Editing Beer",@"SaveBeerEdits: failure alert title")
+												  message:NSLocalizedString(@"Failed to save beer edits",@"SaveBeerEdits: failure alert message")
+												 delegate:nil
+										cancelButtonTitle:NSLocalizedString(@"OK",@"SaveBeerEdits: failure alert cancel button title")
+										otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	
+}
 -(void)addToWishList:(id)aBeerID
 {
 	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_WISHLIST_DOC];

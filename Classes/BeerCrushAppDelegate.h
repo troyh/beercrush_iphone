@@ -99,6 +99,8 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 
 -(NSString*)breweryNameFromBeerID:(NSString*)beer_id;
 
+-(void)genericAlert:(NSString*)message title:(NSString*)alertTitle buttonTitle:(NSString*)buttonTitle;
+
 @end
 
 #ifdef DEBUG
