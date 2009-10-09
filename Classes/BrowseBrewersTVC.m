@@ -14,8 +14,6 @@
 
 @synthesize breweryList;
 @synthesize breweryGroups;
-@synthesize currentElemValue;
-@synthesize xmlParserPath;
 @synthesize currentGroup;
 @synthesize currentBrewery;
 
@@ -27,9 +25,6 @@
 		breweryGroups=nil;
 		currentGroup=nil;
 		currentBrewery=nil;
-		
-		currentElemValue=nil;
-		xmlParserPath=nil;
     }
     return self;
 }

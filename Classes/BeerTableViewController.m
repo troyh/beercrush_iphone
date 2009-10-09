@@ -24,8 +24,6 @@
 @synthesize breweryID;
 @synthesize beerObj;
 @synthesize originalBeerData;
-@synthesize currentElemValue;
-@synthesize xmlParserPath;
 @synthesize userReviewData;
 @synthesize userRatingControl;
 @synthesize overallRatingControl;
@@ -98,8 +96,6 @@ enum TAGS {
 	//	[beerID release];
 	[self.beerObj release];
 	[self.originalBeerData release];
-	[self.currentElemValue release];
-	[self.xmlParserPath release];
 	[self.userReviewData release];
 
 	[self.userRatingControl release];

@@ -44,8 +44,6 @@
 	NSString* breweryID;
 	BreweryObject* breweryObject;
 	NSDictionary* originalBreweryData;
-	NSMutableString* currentElemValue;
-	NSMutableArray* xmlParserPath;
 	id<BreweryVCDelegate> delegate;
 	BOOL editingWasCanceled;
 }
@@ -53,8 +51,6 @@
 @property (nonatomic,retain) NSString* breweryID;
 @property (nonatomic,retain) BreweryObject* breweryObject;
 @property (nonatomic,retain) NSDictionary* originalBreweryData;
-@property (nonatomic,retain) NSMutableString* currentElemValue;
-@property (nonatomic,retain) NSMutableArray* xmlParserPath;
 @property (assign) id<BreweryVCDelegate> delegate;
 @property (assign) BOOL editingWasCanceled;
 

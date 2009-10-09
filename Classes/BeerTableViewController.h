@@ -36,8 +36,6 @@
 	NSString* breweryID;
 	BeerObject* beerObj;
 	NSDictionary* originalBeerData;
-	NSMutableString* currentElemValue;
-	NSMutableArray* xmlParserPath;
 	NSMutableDictionary* userReviewData;
 	
 	// UI controls
@@ -64,8 +62,6 @@
 @property (nonatomic,retain) NSString* breweryID;
 @property (nonatomic,retain) BeerObject* beerObj;
 @property (nonatomic,retain) NSDictionary* originalBeerData;
-@property (nonatomic,retain) NSMutableString* currentElemValue;
-@property (nonatomic,retain) NSMutableArray* xmlParserPath;
 @property (nonatomic,retain) NSMutableDictionary* userReviewData;
 @property (nonatomic,retain) RatingControl* userRatingControl;
 @property (nonatomic,retain) RatingControl* overallRatingControl;

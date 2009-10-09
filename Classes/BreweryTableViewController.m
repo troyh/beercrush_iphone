@@ -40,8 +40,6 @@
 @synthesize breweryID;
 @synthesize breweryObject;
 @synthesize originalBreweryData;
-@synthesize currentElemValue;
-@synthesize xmlParserPath;
 @synthesize delegate;
 @synthesize editingWasCanceled;
 
@@ -68,8 +66,6 @@ enum TAGS {
 	else 
 	{
 		self.breweryID=brewery_id;
-		self.xmlParserPath=[NSMutableArray arrayWithCapacity:10];
-		self.currentElemValue=nil;
 		
 		self.title=@"Brewery";
 		
@@ -96,8 +92,6 @@ enum TAGS {
 	[self.breweryID release];
 	[self.breweryObject release];
 	[self.originalBreweryData release];
-	[self.currentElemValue release];
-	[self.xmlParserPath release];
 	
 	[super dealloc];
 }
