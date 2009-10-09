@@ -1664,7 +1664,13 @@ enum TAGS {
 	}
 	else
 	{
-		// TODO: tell the user it didn't work
+		UIAlertView* alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Wish List",@"AddToWishList: failure alert title")
+													  message:NSLocalizedString(@"Failed to save to wish list",@"AddToWishList: failure alert message")
+													 delegate:nil
+											cancelButtonTitle:NSLocalizedString(@"OK",@"AddToWishList: failure alert cancel button title")
+											otherButtonTitles:nil];
+		[alert show];
+		[alert release];
 	}
 	
 	[appDelegate dismissActivityHUD];
