@@ -20,12 +20,12 @@
 
 @interface LoginVC : UIViewController {
 	id<LoginVCDelegate> delegate;
-	UITextField* usernameTextField;
+	UITextField* emailTextField;
 	UITextField* passwordTextField;
 }
 
 @property (nonatomic, assign) id<LoginVCDelegate> delegate;
-@property (nonatomic, retain) UITextField* usernameTextField;
+@property (nonatomic, retain) UITextField* emailTextField;
 @property (nonatomic, retain) UITextField* passwordTextField;
 
 @end

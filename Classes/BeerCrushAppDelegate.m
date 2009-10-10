@@ -512,19 +512,6 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			}
 		}
 	}
-
-//	// If we don't know the username/password for the user, give them the login screen
-//	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
-//	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
-//	if (YES || userid==nil || password==nil)
-//	{
-//		[self askUserForCredentials];
-//	}
-//	else
-//	{
-//		[self startApp];
-//	}
-	
 }
 
 /*
@@ -689,10 +676,10 @@ void normalizeBreweryData(NSMutableDictionary* data)
 {
 //	return NO; // Just for debugging
 	// Get the userid and password from App Preferences
-	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+	NSString* email=[[NSUserDefaults standardUserDefaults] stringForKey:@"email"];
 	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
 	
-	if (userid==nil || password==nil || [userid length]==0 || [password length]==0)
+	if (email==nil || password==nil || [email length]==0 || [password length]==0)
 		return NO;
 	
 	return YES;
@@ -711,10 +698,10 @@ void normalizeBreweryData(NSMutableDictionary* data)
 	BOOL didSuccessfullyLogin=NO;
 	
 	// Get the userid and password from App Preferences
-	NSString* userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+	NSString* email=[[NSUserDefaults standardUserDefaults] stringForKey:@"email"];
 	NSString* password=[[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
 	
-	if (userid==nil || password==nil || [userid length]==0 || [password length]==0)
+	if (email==nil || password==nil || [email length]==0 || [password length]==0)
 	{
 		// Just can't do it, somebody needs to ask user for them
 		DLog(@"Can't attempt login, need credentials");
@@ -723,7 +710,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 	{
 		// TODO: do this over HTTPS
 		DLog(@"Logging in...");
-		NSString* bodystr=[[[NSString alloc] initWithFormat:@"userid=%@&password=%@", userid, password] autorelease];
+		NSString* bodystr=[[[NSString alloc] initWithFormat:@"email=%@&password=%@", email, password] autorelease];
 		NSData* body=[NSData dataWithBytes:[bodystr UTF8String] length:[bodystr length]];
 
 		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:BEERCRUSH_API_URL_LOGIN]
@@ -748,6 +735,13 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			// We don't care about any response document, we just want the cookies to be stored (automatically)
 			DLog(@"Response data:%.*s", [respdata length], [respdata bytes]);
 			didSuccessfullyLogin=YES;
+			
+			NSString* s=[[[NSString alloc] initWithData:respdata encoding:NSUTF8StringEncoding] autorelease];
+			NSDictionary* logininfo=[s JSONValue];
+
+			// Store the login info in UserDefaults
+			[[NSUserDefaults standardUserDefaults] setObject:[logininfo objectForKey:@"userid"] forKey:@"user_id"];
+			[[NSUserDefaults standardUserDefaults] setObject:[logininfo objectForKey:@"usrkey"] forKey:@"usrkey"];
 		} 
 		else 
 		{
@@ -784,13 +778,21 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			if ([data isKindOfClass:[NSString class]])
 			{
 				NSString* stringData=(NSString*)data;
-				DLog(@"POST data:%@",data);
+				
+				// Always add userid= and usrkey= parameters
+				NSString* userid=[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
+				NSString* usrkey=[[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"];
+				stringData=[stringData stringByAppendingFormat:@"&userid=%@&usrkey=%@",userid,usrkey];
+				
 				NSData* body=[NSData dataWithBytes:[stringData UTF8String] length:[stringData length]];
+				DLog(@"POST data:%@",stringData);
+				
 				[theRequest setHTTPBody:body];
 				[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
 			}
 			else if ([data isKindOfClass:[NSData class]])
 			{
+				// TODO: Always add userid= and usrkey= parameters
 				NSData* dataData=(NSData*)data;
 				// The following code based on http://iphone.zcentric.com/?p=218
 				/*
@@ -821,6 +823,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 	}
 	else if ([method isEqualToString:@"GET"])
 	{
+		// TODO: Always add userid= and usrkey= parameters
 	}
 	
 	[theRequest setHTTPMethod:method];
@@ -845,12 +848,12 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		if (rspdata) {
 			
 			bRetry=NO;
-			int statuscode=[response statusCode];
+			NSInteger statuscode=[response statusCode];
 			
 			DLog(@"Response code:%d",statuscode);
 			DLog(@"Response data:%.*s", [rspdata length], [rspdata bytes]);
 
-			if (statuscode==420) // 420 means that the user must be logged in
+			if (statuscode==403) // 403 means that the user must be logged in
 			{
 				if (nTries < 2) // Don't retry over and over, just do it once
 				{
@@ -1135,9 +1138,9 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	}
 	else {
 		DLog(@"Response status code=%d",[response statusCode]);
-		[self genericAlert:NSLocalizedString(@"Beer Reviews",@"GetBeerReviews: Alert Message") 
-					 title:NSLocalizedString(@"Unable to get beer reviews",@"GetBeerReviews: Alert Title") 
-			   buttonTitle:nil];
+//		[self genericAlert:NSLocalizedString(@"Beer Reviews",@"GetBeerReviews: Alert Message") 
+//					 title:NSLocalizedString(@"Unable to get beer reviews",@"GetBeerReviews: Alert Title") 
+//			   buttonTitle:nil];
 	}
 	return nil;
 }
@@ -1153,9 +1156,9 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	}
 	else
 	{
-		[self genericAlert:NSLocalizedString(@"Beer Reviews",@"GetUserBeerReviews: Alert Message") 
-					 title:NSLocalizedString(@"Unable to get beer reviews",@"GetUserBeerReviews: Alert Title") 
-			   buttonTitle:nil];
+//		[self genericAlert:NSLocalizedString(@"Beer Reviews",@"GetUserBeerReviews: Alert Message") 
+//					 title:NSLocalizedString(@"Unable to get beer reviews",@"GetUserBeerReviews: Alert Title") 
+//			   buttonTitle:nil];
 	}
 	return nil;
 }
@@ -1183,9 +1186,9 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		return answer;
 	}
 	else {
-		[self genericAlert:NSLocalizedString(@"Brewery",@"GetBreweryDoc: Alert Message") 
-					 title:NSLocalizedString(@"Unable to get information for brewery",@"GetBreweryDoc: Alert Title") 
-			   buttonTitle:nil];
+//		[self genericAlert:NSLocalizedString(@"Brewery",@"GetBreweryDoc: Alert Message") 
+//					 title:NSLocalizedString(@"Unable to get information for brewery",@"GetBreweryDoc: Alert Title") 
+//			   buttonTitle:nil];
 	}
 
 	
@@ -1205,10 +1208,9 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		return answer;
 	}
 	else {
-		[self genericAlert:NSLocalizedString(@"Place",@"GetPlaceDoc: Alert Message") 
-					 title:NSLocalizedString(@"Unable to get information for place",@"GetPlaceDoc: Alert Title") 
-			   buttonTitle:nil];
-		
+//		[self genericAlert:NSLocalizedString(@"Place",@"GetPlaceDoc: Alert Message") 
+//					 title:NSLocalizedString(@"Unable to get information for place",@"GetPlaceDoc: Alert Title") 
+//			   buttonTitle:nil];
 	}
 
 	return nil;
@@ -1229,9 +1231,9 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		return answer;
 	}
 	else {
-		[self genericAlert:NSLocalizedString(@"Reviews",@"GetPlaceReviews: Alert Message") 
-					 title:NSLocalizedString(@"Unable to get reviews",@"GetPlaceReviews: Alert Title") 
-			   buttonTitle:nil];
+//		[self genericAlert:NSLocalizedString(@"Reviews",@"GetPlaceReviews: Alert Message") 
+//					 title:NSLocalizedString(@"Unable to get reviews",@"GetPlaceReviews: Alert Title") 
+//			   buttonTitle:nil];
 	}
 
 	return nil;
@@ -1266,9 +1268,9 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 			return answer;
 		}
 		else {
-			[self genericAlert:NSLocalizedString(@"Reviews",@"GetReviews: Alert Message") 
-						 title:NSLocalizedString(@"Unable to get reviews",@"GetReviews: Alert Title") 
-				   buttonTitle:nil];
+//			[self genericAlert:NSLocalizedString(@"Reviews",@"GetReviews: Alert Message") 
+//						 title:NSLocalizedString(@"Unable to get reviews",@"GetReviews: Alert Title") 
+//				   buttonTitle:nil];
 		}
 
 	}
@@ -1287,9 +1289,9 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		return answer;
 	}
 	else {
-		[self genericAlert:NSLocalizedString(@"Breweries",@"GetBreweriesDoc: Alert Message") 
-					 title:NSLocalizedString(@"Unable to get brewery list",@"GetBreweriesDoc: Alert Title") 
-			   buttonTitle:nil];
+//		[self genericAlert:NSLocalizedString(@"Breweries",@"GetBreweriesDoc: Alert Message") 
+//					 title:NSLocalizedString(@"Unable to get brewery list",@"GetBreweriesDoc: Alert Title") 
+//			   buttonTitle:nil];
 	}
 
 	return nil;

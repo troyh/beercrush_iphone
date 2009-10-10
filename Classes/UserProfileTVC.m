@@ -125,7 +125,7 @@
 				case 0: // Email field
 				{
 					[cell.textLabel setText:NSLocalizedString(@"email",@"Email label for Profile screen")];
-					NSString* s=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+					NSString* s=[[NSUserDefaults standardUserDefaults] stringForKey:@"email"];
 					if (s)
 						[cell.detailTextLabel setText:s];
 					break;
@@ -229,14 +229,15 @@
 -(void)loginVCSuccessful
 {
 	[self.navigationController dismissModalViewControllerAnimated:YES];
+	[self.tableView reloadData];
 }
 
--(void)loginVCNewAccount:(NSString*)userid andPassword:(NSString*)password
+-(void)loginVCNewAccount:(NSString*)email andPassword:(NSString*)password
 {
 	[self.tabBarController.selectedViewController dismissModalViewControllerAnimated:YES];
 	
 	// Update email and password field
-	[[NSUserDefaults standardUserDefaults] setValue:userid forKey:@"user_id"];
+	[[NSUserDefaults standardUserDefaults] setValue:email forKey:@"email"];
 	[[NSUserDefaults standardUserDefaults] setValue:password forKey:@"password"];
 	[self.tableView reloadData];
 }

@@ -13,7 +13,7 @@
 @implementation LoginVC
 
 @synthesize delegate;
-@synthesize usernameTextField;
+@synthesize emailTextField;
 @synthesize passwordTextField;
 
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -43,19 +43,19 @@
 		const int kButtonWidth=125;
 		const int kButtonHeight=40;
 
-		usernameTextField=[[[UITextField alloc] initWithFrame:CGRectMake((screenRect.size.width-kTextFieldWidth)/2, 50, kTextFieldWidth, kTextFieldHeight)] autorelease];
-		usernameTextField.borderStyle=UITextBorderStyleBezel;
-		usernameTextField.adjustsFontSizeToFitWidth=YES;
-		usernameTextField.textAlignment=UITextAlignmentCenter;
-		usernameTextField.placeholder=@"Email address";
-		usernameTextField.clearButtonMode=UITextFieldViewModeWhileEditing;
-		usernameTextField.autocorrectionType=UITextAutocorrectionTypeNo;
-		usernameTextField.autocapitalizationType=UITextAutocapitalizationTypeNone;
-		usernameTextField.enablesReturnKeyAutomatically=YES;
-		usernameTextField.keyboardAppearance=UIKeyboardAppearanceDefault;
-		usernameTextField.keyboardType=UIKeyboardTypeAlphabet;
-		usernameTextField.returnKeyType=UIReturnKeyNext;
-		usernameTextField.secureTextEntry=NO;
+		emailTextField=[[[UITextField alloc] initWithFrame:CGRectMake((screenRect.size.width-kTextFieldWidth)/2, 50, kTextFieldWidth, kTextFieldHeight)] autorelease];
+		emailTextField.borderStyle=UITextBorderStyleBezel;
+		emailTextField.adjustsFontSizeToFitWidth=YES;
+		emailTextField.textAlignment=UITextAlignmentCenter;
+		emailTextField.placeholder=@"Email address";
+		emailTextField.clearButtonMode=UITextFieldViewModeWhileEditing;
+		emailTextField.autocorrectionType=UITextAutocorrectionTypeNo;
+		emailTextField.autocapitalizationType=UITextAutocapitalizationTypeNone;
+		emailTextField.enablesReturnKeyAutomatically=YES;
+		emailTextField.keyboardAppearance=UIKeyboardAppearanceDefault;
+		emailTextField.keyboardType=UIKeyboardTypeAlphabet;
+		emailTextField.returnKeyType=UIReturnKeyNext;
+		emailTextField.secureTextEntry=NO;
 
 		// Password field
 		passwordTextField=[[[UITextField alloc] initWithFrame:CGRectMake((screenRect.size.width-kTextFieldWidth)/2, 85, kTextFieldWidth, kTextFieldHeight)] autorelease];
@@ -76,7 +76,7 @@
 		signInButton.frame=CGRectMake(screenRect.size.width/2+((screenRect.size.width/2-kButtonWidth)/2), 120, kButtonWidth, kButtonHeight);
 
 		// Sign In button
-		[usernameTextField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]];
+		[emailTextField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"email"]];
 		[passwordTextField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"password"]];
 		[signInButton setTitle:@"Sign in" forState:UIControlStateNormal];
 		[signInButton addTarget:self action:@selector(loginButtonClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -88,7 +88,7 @@
 		[createAccountButton setTitle:@"Create Account" forState:UIControlStateNormal];
 		[createAccountButton addTarget:self action:@selector(createAccountButtonClicked) forControlEvents:UIControlEventTouchUpInside];
 
-		[self.view addSubview:usernameTextField];
+		[self.view addSubview:emailTextField];
 		[self.view addSubview:passwordTextField];
 		[self.view addSubview:signInButton];
 		[self.view addSubview:createAccountButton];
@@ -105,11 +105,11 @@
 	UIAlertView* alert=nil;
 
 	// Trim whitespace off username/email and password
-	usernameTextField.text=[usernameTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	emailTextField.text=[emailTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	passwordTextField.text=[passwordTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
 	// Verify that email address looks like an email address. Regex from http://www.regular-expressions.info/email.html
-	if ([usernameTextField.text isMatchedByRegex:@"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$"]==NO)
+	if ([emailTextField.text isMatchedByRegex:@"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$"]==NO)
 	{
 		alert=[[UIAlertView alloc] initWithTitle:nil
 										 message:NSLocalizedString(@"That email address does not look like an email address",@"CreateAccount: email address invalid") 
@@ -131,20 +131,31 @@
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 		
 		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_CREATE_ACCOUNT];
-		NSString* bodystr=[NSString stringWithFormat:@"userid=%@&password=%@",
-						   usernameTextField.text,
+		NSString* bodystr=[NSString stringWithFormat:@"email=%@&password=%@",
+						   emailTextField.text,
 						   passwordTextField.text];
 		NSData* answer;
 		NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:bodystr returningData:&answer];
+
+		DLog(@"Create account status code=%d",[response statusCode]);
+
 		if ([response statusCode]==200)
 		{	// Account successfully created
-			[self.delegate loginVCNewAccount:usernameTextField.text andPassword:passwordTextField.text];
+			[self.delegate loginVCNewAccount:emailTextField.text andPassword:passwordTextField.text];
 
 		}
-		else if ([response statusCode]==520) // userid/email is already taken
+		else if ([response statusCode]==409) // email is already taken
 		{
 			alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Create Account failed",@"CreateAccount: failed alert title") 
 											 message:NSLocalizedString(@"That email address is already taken",@"CreateAccount: email address already exists") 
+											delegate:nil 
+								   cancelButtonTitle:NSLocalizedString(@"OK",@"OK Alert Button") 
+								   otherButtonTitles:nil];
+		}
+		else // Other unidentified error
+		{
+			alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Create Account failed",@"CreateAccount: failed alert title") 
+											 message:NSLocalizedString(@"Account could not be created",@"CreateAccount: unknown error") 
 											delegate:nil 
 								   cancelButtonTitle:NSLocalizedString(@"OK",@"OK Alert Button") 
 								   otherButtonTitles:nil];
@@ -161,7 +172,7 @@
 -(void)loginButtonClicked
 {
 	// Save values into defaults (the login function will use these values)
-	[[NSUserDefaults standardUserDefaults] setObject:self.usernameTextField.text  forKey:@"user_id"];
+	[[NSUserDefaults standardUserDefaults] setObject:self.emailTextField.text  forKey:@"email"];
 	[[NSUserDefaults standardUserDefaults] setObject:self.passwordTextField.text  forKey:@"password"];
 
 	// Attempt login

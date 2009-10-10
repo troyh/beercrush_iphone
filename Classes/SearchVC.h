@@ -33,6 +33,7 @@ typedef enum
 	UISearchBar* searchBar;
 	NSMutableArray* resultsList;
 	BOOL performedSearchQuery;
+	BOOL isPerformingAsyncQuery;
 	UIEdgeInsets insets;
 }
 
@@ -42,6 +43,7 @@ typedef enum
 @property (nonatomic, assign) BeerCrushSearchType searchTypes;
 @property (nonatomic, assign) id<SearchVCDelegate> delegate;
 @property (nonatomic, assign) BOOL performedSearchQuery;
+@property (nonatomic, assign) BOOL isPerformingAsyncQuery;
 @property (nonatomic, assign) UIEdgeInsets insets;
 
 -(void)autocomplete:(NSString*)qs;

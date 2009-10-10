@@ -190,7 +190,7 @@ enum TAGS {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	self.beerObj.data=[appDelegate getBeerDoc:aBeerID];
 	self.userReviewData=[appDelegate getReviewsOfBeer:aBeerID byUserID:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]];
-	[self.tableView reloadData]; // Reload data because we may come back from an editing view controller
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO]; // Reload data because we may come back from an editing view controller
 	
 	[appDelegate dismissActivityHUD];
 }

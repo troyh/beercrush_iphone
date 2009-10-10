@@ -19,6 +19,7 @@
 @synthesize resultsList;
 @synthesize searchBar;
 @synthesize performedSearchQuery;
+@synthesize isPerformingAsyncQuery;
 @synthesize insets;
 
 -(id)init
@@ -174,6 +175,8 @@
 	{
 		//		[appDelegate alertUser:@"Search failed"];
 	}
+	
+	self.isPerformingAsyncQuery=NO;
 }
 
 -(void)myReloadData
@@ -190,23 +193,6 @@
 	}
 	
 	[tv reloadData];
-
-//	if (self.autoCompleteTVC==nil)
-//	{
-//		self.autoCompleteTVC=[[[AutoCompleteTVC alloc] init] autorelease];
-//	}
-//	
-//	if (self.navigationController.topViewController!=self.autoCompleteTVC)
-//	{
-//		// Put up a TableViewController to display results
-//		[self.navigationController pushViewController:self.autoCompleteTVC animated:NO];
-//	}
-
-//	self.autoCompleteTVC.resultsList=self.resultsList;
-//	[self.autoCompleteTVC.tableView setContentInset:self.insets];
-//	[self.autoCompleteTVC.tableView setScrollIndicatorInsets:self.insets];
-//	[self.autoCompleteTVC.tableView reloadData];
-
 }
 
 
@@ -253,32 +239,10 @@
 
 -(void)keyboardWillShow:(NSNotification*)notification
 {
-//	// Resize the tableview so that it isn't obscured by the keyboard
-//	CGRect bounds=[[[notification userInfo] objectForKey:UIKeyboardBoundsUserInfoKey] CGRectValue];
-//	CGPoint center=[[[notification userInfo] objectForKey:UIKeyboardCenterEndUserInfoKey] CGPointValue];
-//	
-//	CGRect keyboardFrame=CGRectMake(round(center.x - bounds.size.width/2.0), round(center.y - bounds.size.height/2.0), bounds.size.width, bounds.size.height);
-//	CGRect tableViewFrame=[self.view.window convertRect:self.view.frame fromView:self.view.superview];
-//	DLog(@"self.view=%p",self.view);
-//	DLog(@"self.view.window=%p",self.view.window);
-//	DLog(@"self.view.frame=%@",self.view.frame);
-//	DLog(@"self.view.superview=%@",self.view.superview);
-//	CGRect tableViewFrame=[self.view convertRect:self.view.frame fromView:self.view.superview];
-//	DLog(@"tableViewFrame=%@",tableViewFrame);
-	
-//	CGRect intersectionFrame=CGRectIntersection(tableViewFrame, keyboardFrame);
-	
-//	self.insets=UIEdgeInsetsMake(0, 0, intersectionFrame.size.height, 0);
-		
-//		[self.autoCompleteTVC.tableView setContentInset:insets];
-//		[self.autoCompleteTVC.tableView setScrollIndicatorInsets:insets];
 }
 
 -(void)keyboardWillHide:(NSNotification*)notification
 {
-//		// Resize the tableview back to normal
-//		[self.autoCompleteTVC.tableView setContentInset:UIEdgeInsetsZero];
-//		[self.autoCompleteTVC.tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
 }
 
 #pragma mark UISearchBarDelegate methods
@@ -287,10 +251,18 @@
 {
 	if (searchText.length)
 	{
+		// TODO: set a timer so we don't do this too quickly in succession as the user types fast
 		[bar setShowsCancelButton:NO animated:YES];
 		
-		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate performAsyncOperationWithTarget:self selector:@selector(autocomplete:) object:searchText requiresUserCredentials:NO activityHUDText:nil];
+		@synchronized(self)
+		{
+			if (self.isPerformingAsyncQuery==NO)
+			{
+				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+				[appDelegate performAsyncOperationWithTarget:self selector:@selector(autocomplete:) object:searchText requiresUserCredentials:NO activityHUDText:nil];
+				self.isPerformingAsyncQuery=YES;
+			}
+		}
 	}
 	else
 	{
@@ -318,9 +290,6 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)bar
 {
-//	UIView* tmp=[[[UIView alloc] initWithFrame:CGRectZero] autorelease];
-//	tmp.backgroundColor=[UIColor redColor];
-//	self.view=tmp;
 	self.view=logoView.view;
 
 	[bar endEditing:YES];
@@ -329,10 +298,6 @@
 	[self.resultsList removeAllObjects];
 	
 	[bar setShowsCancelButton:NO animated:YES];
-//	if (self.autoCompleteTVC)
-//		[self.autoCompleteTVC.tableView reloadData];
-//	if (self.navigationController.topViewController==self.autoCompleteTVC)
-//		[self.navigationController popViewControllerAnimated:NO];
 }
 
 #pragma mark Events
