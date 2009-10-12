@@ -9,7 +9,6 @@
 #import "BeerCrushAppDelegate.h"
 #import "BreweryTableViewController.h"
 #import "ReviewsTableViewController.h"
-#import "BeerListTableViewController.h"
 #import "RatingControl.h"
 #import "PhotoThumbnailControl.h"
 #import "JSON.h"

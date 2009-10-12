@@ -303,7 +303,20 @@ static const NSInteger kTagBeerNameLabel=2;
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	
 	UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
-	[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[[beer objectForKey:@"@attributes"] objectForKey:@"id"]]];
+
+	/*
+	 Wish List docs and beerlist docs are in different formats. Those should probably be changed on the server to be more consistent.
+	 */
+	NSString* beer_id=[beer objectForKey:@"item_id"];
+	if (beer_id==nil)
+	{
+		beer_id=[[beer objectForKey:@"@attributes"] objectForKey:@"id"];
+		if (beer_id==nil)
+		{ // Uh oh.
+		}
+	}
+	
+	[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:beer_id]];
 
     return cell;
 }
@@ -313,7 +326,19 @@ static const NSInteger kTagBeerNameLabel=2;
 	NSDictionary* beer=[beerList objectAtIndex:indexPath.row];
 	
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSString* beer_id=[[beer objectForKey:@"@attributes"] objectForKey:@"id"];
+	
+	/*
+	 Wish List docs and beerlist docs are in different formats. Those should probably be changed on the server to be more consistent.
+	 */
+	NSString* beer_id=[beer objectForKey:@"item_id"];
+	if (beer_id==nil)
+	{
+		beer_id=[[beer objectForKey:@"@attributes"] objectForKey:@"id"];
+		if (beer_id==nil)
+		{ // Uh oh.
+		}
+	}
+	
 	if (beer_id)
 	{
 		if (self.delegate && [self.delegate beerListTVCDidSelectBeer:beer_id]==NO)

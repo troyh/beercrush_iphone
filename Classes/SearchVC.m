@@ -341,11 +341,13 @@
 
 -(void)placeVCDidFinishEditing:(PlaceTableViewController*)placeVC
 {
+	placeVC.editing=NO;
 	[self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
 -(void)placeVCDidCancelEditing:(PlaceTableViewController*)placeVC
 {
+	placeVC.editing=NO;
 	[self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
@@ -446,7 +448,9 @@
 	}
 	else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
 	{ // Place
-		tvc=[[[PlaceTableViewController alloc] initWithPlaceID:idstr] autorelease];
+		PlaceTableViewController* ptvc=[[[PlaceTableViewController alloc] initWithPlaceID:idstr] autorelease];
+		ptvc.delegate=self;
+		tvc=ptvc;
 	}
 	else if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
 	{ // Brewery

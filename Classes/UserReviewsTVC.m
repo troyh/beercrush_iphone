@@ -102,6 +102,10 @@
 		[appDelegate popNavigationStateForTabBarItem:self.tabBarItem];
 
 		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[self.reviewsList removeAllObjects];
+		self.totalReviews=0;
+		self.seqNext=0;
+		self.seqMax=0;
 		[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:0] requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"HUD:GettingReviews",@"Getting Reviews")];
 	}
 }

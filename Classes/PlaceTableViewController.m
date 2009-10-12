@@ -177,8 +177,8 @@ enum mytags {
 			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:6] withRowAnimation:UITableViewRowAnimationFade];
 			[self.tableView endUpdates];
-			
-			[self.delegate placeVCDidCancelEditing:self];
+
+			[self.navigationItem setLeftBarButtonItem:nil];
 		}
 	}
 }

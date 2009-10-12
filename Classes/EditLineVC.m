@@ -48,11 +48,11 @@
 
 }
 */
+/*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
- [self.textField becomeFirstResponder];
 }
-
+*/
 /*
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
@@ -125,6 +125,8 @@
 	else if (self.textType==EditLineVCTextTypeInteger)
 		self.textField.keyboardType=UIKeyboardTypeNumberPad;
 	
+	[self.textField becomeFirstResponder];
+
     return cell;
 }
 

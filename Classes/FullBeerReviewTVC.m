@@ -483,8 +483,17 @@
 			{
 				case 0:  // Purchased at
 					[cell.textLabel setText:@"Purchased at"];
-					[cell.detailTextLabel setText:[[self.userReview objectForKey:@"purchase_place_details"] objectForKey:@"name"]];
-					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+
+					if ([self.userReview objectForKey:@"purchase_place_details"]==nil)
+					{
+						BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+						[appDelegate performAsyncOperationWithTarget:self selector:@selector(getWherePurchasedText:) object:nil requiresUserCredentials:NO activityHUDText:nil];
+					}
+					else 
+					{
+						[cell.detailTextLabel setText:[[self.userReview objectForKey:@"purchase_place_details"] objectForKey:@"name"]];
+						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+					}
 					break;
 				case 1: // Poured from
 				{
@@ -710,7 +719,7 @@
 
 -(BOOL)searchVC:(SearchVC *)searchVC didSelectSearchResult:(NSString *)id_string
 {
-	[self.userReview setObject:id_string forKey:@"purchase_place"];
+	[self.userReview setObject:id_string forKey:@"purchase_place_id"];
 	
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getWherePurchasedText:) object:nil requiresUserCredentials:NO activityHUDText:nil];
@@ -729,7 +738,7 @@
 -(void)getWherePurchasedText:(id)obj
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSDictionary* doc=[appDelegate getPlaceDoc:[self.userReview objectForKey:@"purchase_place"]];
+	NSDictionary* doc=[appDelegate getPlaceDoc:[self.userReview objectForKey:@"purchase_place_id"]];
 	[self.userReview setObject:doc forKey:@"purchase_place_details"];
 	[self performSelectorOnMainThread:@selector(myReloadData) withObject:nil waitUntilDone:NO];
 }

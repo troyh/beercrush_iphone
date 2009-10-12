@@ -767,80 +767,82 @@ void normalizeBreweryData(NSMutableDictionary* data)
 
 -(NSHTTPURLResponse*)sendRequest:(NSURL*)url usingMethod:(NSString*)method withData:(NSObject*)data returningData:(NSData**)responseData
 {
-	NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:url 
-													cachePolicy:NSURLRequestUseProtocolCachePolicy
-													timeoutInterval:30.0];
-	
-	if ([method isEqualToString:@"POST"])
-	{
-		if (data)
-		{
-			if ([data isKindOfClass:[NSString class]])
-			{
-				NSString* stringData=(NSString*)data;
-				
-				// Always add userid= and usrkey= parameters
-				NSString* userid=[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
-				NSString* usrkey=[[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"];
-				stringData=[stringData stringByAppendingFormat:@"&userid=%@&usrkey=%@",userid,usrkey];
-				
-				NSData* body=[NSData dataWithBytes:[stringData UTF8String] length:[stringData length]];
-				DLog(@"POST data:%@",stringData);
-				
-				[theRequest setHTTPBody:body];
-				[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
-			}
-			else if ([data isKindOfClass:[NSData class]])
-			{
-				// TODO: Always add userid= and usrkey= parameters
-				NSData* dataData=(NSData*)data;
-				// The following code based on http://iphone.zcentric.com/?p=218
-				/*
-				 add some header info now
-				 we always need a boundary when we post a file
-				 also we need to set the content type
-				 
-				 You might want to generate a random boundary.. this is just the same 
-				 as my output from wireshark on a valid html post
-				 */
-				NSString *boundary = [NSString stringWithString:@"---------------------------14737809831466499882746641449"];
-				NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@",boundary];
-				[theRequest addValue:contentType forHTTPHeaderField: @"Content-Type"];
-				
-				/*
-				 now lets create the body of the post
-				 */
-				NSMutableData *body = [NSMutableData data];
-				[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];	
-				[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"photo\"; filename=\"photo.jpg\"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-				[body appendData:[[NSString stringWithString:@"Content-Type: application/octet-stream\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-				[body appendData:[NSData dataWithData:dataData]];
-				[body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-				// setting the body of the post to the reqeust
-				[theRequest setHTTPBody:body];
-			}
-		}
-	}
-	else if ([method isEqualToString:@"GET"])
-	{
-		// TODO: Always add userid= and usrkey= parameters
-	}
-	
-	[theRequest setHTTPMethod:method];
-	
-	NSHTTPURLResponse* response=nil;
-	NSError* error;
 	int nTries=0;
 	BOOL bRetry=NO;
+	NSHTTPURLResponse* response=nil;
 	
 	do
 	{
 		++nTries;
 		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:url 
+																cachePolicy:NSURLRequestUseProtocolCachePolicy
+															timeoutInterval:30.0];
+		
+		if ([method isEqualToString:@"POST"])
+		{
+			if (data)
+			{
+				if ([data isKindOfClass:[NSString class]])
+				{
+					NSString* stringData=(NSString*)data;
+					
+					// Always add userid= and usrkey= parameters
+					NSString* userid=[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
+					NSString* usrkey=[[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"];
+					stringData=[stringData stringByAppendingFormat:@"&userid=%@&usrkey=%@",userid,usrkey];
+					
+					NSData* body=[NSData dataWithBytes:[stringData UTF8String] length:[stringData length]];
+					DLog(@"POST data:%@",stringData);
+					
+					[theRequest setHTTPBody:body];
+					[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+				}
+				else if ([data isKindOfClass:[NSData class]])
+				{
+					// TODO: Always add userid= and usrkey= parameters
+					NSData* dataData=(NSData*)data;
+					// The following code based on http://iphone.zcentric.com/?p=218
+					/*
+					 add some header info now
+					 we always need a boundary when we post a file
+					 also we need to set the content type
+					 
+					 You might want to generate a random boundary.. this is just the same 
+					 as my output from wireshark on a valid html post
+					 */
+					NSString *boundary = [NSString stringWithString:@"---------------------------14737809831466499882746641449"];
+					NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@",boundary];
+					[theRequest addValue:contentType forHTTPHeaderField: @"Content-Type"];
+					
+					/*
+					 now lets create the body of the post
+					 */
+					NSMutableData *body = [NSMutableData data];
+					[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];	
+					[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"photo\"; filename=\"photo.jpg\"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+					[body appendData:[[NSString stringWithString:@"Content-Type: application/octet-stream\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+					[body appendData:[NSData dataWithData:dataData]];
+					[body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+					// setting the body of the post to the reqeust
+					[theRequest setHTTPBody:body];
+				}
+			}
+		}
+		else if ([method isEqualToString:@"GET"])
+		{
+			// TODO: Always add userid= and usrkey= parameters
+		}
+		
+		[theRequest setHTTPMethod:method];
+		
 		DLog(@"%@ URL:%@",method,[url absoluteString]);
-		[UIApplication sharedApplication].networkActivityIndicatorVisible=YES;
 
+		NSError* error;
+		
+		[UIApplication sharedApplication].networkActivityIndicatorVisible=YES;
 		NSData* rspdata=[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+		[UIApplication sharedApplication].networkActivityIndicatorVisible=NO;
 
 		if (responseData)
 			*responseData=rspdata;
@@ -872,8 +874,6 @@ void normalizeBreweryData(NSMutableDictionary* data)
 	}
 	while (bRetry);
 
-	[UIApplication sharedApplication].networkActivityIndicatorVisible=NO;
-	
 	return response;
 }
 
@@ -1063,7 +1063,7 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 			[values addObject:[NSString stringWithFormat:@"flavors=%@",[flavors componentsJoinedByString:@" "]]];
 		
 		// Add Purchase Place
-		NSString* s=[userReview objectForKey:@"purchase_place"];
+		NSString* s=[userReview objectForKey:@"purchase_place_id"];
 		if (s && [s length])
 			[values addObject:[NSString stringWithFormat:@"purchase_place_id=%@",s]];
 
@@ -1165,11 +1165,20 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 
 -(NSString*)breweryNameFromBeerID:(NSString*)beer_id
 {
-	NSArray* parts=[beer_id componentsSeparatedByString:@":"];
-	NSMutableDictionary* doc=[self getBreweryDoc:[parts objectAtIndex:1]];
-	NSObject* s=[doc objectForKey:@"name"];
-	if (s && [s isKindOfClass:[NSString class]])
-		return (NSString*)s;
+	if (beer_id && [beer_id length])
+	{
+		NSArray* parts=[beer_id componentsSeparatedByString:@":"];
+		if ([parts count] >= 2)
+		{
+			NSMutableDictionary* doc=[self getBreweryDoc:[parts objectAtIndex:1]];
+			if (doc)
+			{
+				NSObject* s=[doc objectForKey:@"name"];
+				if (s && [s isKindOfClass:[NSString class]])
+					return (NSString*)s;
+			}
+		}
+	}
 	return @"";
 }
 
@@ -1177,20 +1186,22 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 {
 	// TODO: support caching
 	NSArray* parts=[breweryID componentsSeparatedByString:@":"];
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC_JSON,[parts lastObject]]];
-	NSMutableDictionary* answer;
-	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
-	if ([response statusCode]==200)
+	if ([parts count])
 	{
-		normalizeBreweryData(answer);
-		return answer;
+		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC_JSON,[parts lastObject]]];
+		NSMutableDictionary* answer;
+		NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+		if ([response statusCode]==200)
+		{
+			normalizeBreweryData(answer);
+			return answer;
+		}
+		else {
+	//		[self genericAlert:NSLocalizedString(@"Brewery",@"GetBreweryDoc: Alert Message") 
+	//					 title:NSLocalizedString(@"Unable to get information for brewery",@"GetBreweryDoc: Alert Title") 
+	//			   buttonTitle:nil];
+		}
 	}
-	else {
-//		[self genericAlert:NSLocalizedString(@"Brewery",@"GetBreweryDoc: Alert Message") 
-//					 title:NSLocalizedString(@"Unable to get information for brewery",@"GetBreweryDoc: Alert Title") 
-//			   buttonTitle:nil];
-	}
-
 	
 	return nil;
 }
