@@ -89,10 +89,10 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 -(NSMutableDictionary*)getBeerReviewsByUser:(NSString*)userID seqNum:(NSNumber*)seqNum;
 -(NSMutableDictionary*)getBreweriesList;
 
--(BOOL)restoringNavigationStateAutomatically;
--(NSObject*)nextNavigationStateToRestore;
--(BOOL)pushNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem withData:(NSObject*)data;
--(void)popNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem;
+//-(BOOL)restoringNavigationStateAutomatically;
+//-(NSObject*)nextNavigationStateToRestore;
+//-(BOOL)pushNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem withData:(NSObject*)data;
+//-(void)popNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem;
 -(void)dismissActivityHUD;
 -(void)presentActivityHUD:(NSString*)hudText;
 -(void)performAsyncOperationWithTarget:(id)target selector:(SEL)sel object:(id)object requiresUserCredentials:(BOOL)requiresCredentials activityHUDText:(NSString*)hudText;
@@ -143,6 +143,14 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 #define BEERCRUSH_API_URL_UPLOAD_PLACE_IMAGE			@BEERCRUSH_API_URL_HOST"/api/place/photo?place_id=%@"
 #define BEERCRUSH_API_URL_UPLOAD_BEER_IMAGE				@BEERCRUSH_API_URL_HOST"/api/beer/photo?beer_id=%@"
 #define BEERCRUSH_API_URL_UPLOAD_BREWERY_IMAGE			@BEERCRUSH_API_URL_HOST"/api/brewery/?brewery_id=%@"
+
+typedef enum resultType
+{
+	Beer=1,
+	Brewer=2,
+	Place=3
+} ResultType;
+
 
 @interface BeerObject : NSObject
 {

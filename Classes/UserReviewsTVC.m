@@ -80,34 +80,12 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	if ([appDelegate restoringNavigationStateAutomatically])
-	{
-		NSObject* navData=[appDelegate nextNavigationStateToRestore];
-		if ([navData isKindOfClass:[NSDictionary class]])
-		{
-			NSDictionary* reviewData=(NSDictionary*)navData;
-			if (reviewData)
-			{
-				[appDelegate pushNavigationStateForTabBarItem:self.tabBarItem withData:reviewData]; // Saves the new nav state
-				
-				FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData] autorelease];
-				fbrtvc.delegate=self;
-				[self.navigationController pushViewController:fbrtvc animated:NO];
-			}
-		}
-	}
-	else
-	{ // Pop an item off the appstate navstack
-		[appDelegate popNavigationStateForTabBarItem:self.tabBarItem];
-
-		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[self.reviewsList removeAllObjects];
-		self.totalReviews=0;
-		self.seqNext=0;
-		self.seqMax=0;
-		[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:0] requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"HUD:GettingReviews",@"Getting Reviews")];
-	}
+	BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[self.reviewsList removeAllObjects];
+	self.totalReviews=0;
+	self.seqNext=0;
+	self.seqMax=0;
+	[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:0] requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"HUD:GettingReviews",@"Getting Reviews")];
 }
 
 /*
@@ -209,11 +187,6 @@
 	if (indexPath.row<[self.reviewsList count])
 	{
 		NSDictionary* reviewData=[self.reviewsList objectAtIndex:indexPath.row];
-		
-		// Create my navigation state and store it so I can restore it the next time the app launches
-		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:reviewData]; // Saves the new nav state
-		
 		FullBeerReviewTVC* fbrtvc=[[[FullBeerReviewTVC alloc] initWithReviewObject:reviewData] autorelease];
 		fbrtvc.delegate=self;
 		[self.navigationController pushViewController:fbrtvc animated:YES];
@@ -224,8 +197,8 @@
 		
 		// Query the server for the next set of reviews
 		// TODO: put spinner in accessoryview so the user knows network stuff is going on
-		BeerCrushAppDelegate* delegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[delegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:self.seqNext] requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"HUD:GettingReviews",@"Getting Reviews")];
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(retrieveReviews:) object:[NSNumber numberWithInt:self.seqNext] requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"HUD:GettingReviews",@"Getting Reviews")];
 	}
 }
 

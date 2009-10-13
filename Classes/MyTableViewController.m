@@ -31,46 +31,11 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
 }
-
+/*
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-	
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	if ([appDelegate restoringNavigationStateAutomatically])
-	{
-		NSObject* navData=[appDelegate nextNavigationStateToRestore];
-		if ([navData isKindOfClass:[NSString class]])
-		{
-			// See what type it is
-			NSString* idstr=(NSString*)navData;
-			if (idstr)
-			{
-				if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
-				{
-					BreweryTableViewController* btvc=[[[BreweryTableViewController alloc] initWithBreweryID:idstr] autorelease];
-					[self.navigationController pushViewController: btvc animated:NO];
-					
-					[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
-				}
-				else if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
-				{
-					BeerTableViewController* btvc=[[[BeerTableViewController alloc] initWithBeerID:idstr] autorelease];
-					[self.navigationController pushViewController:btvc animated:NO];
-					
-					[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
-				}
-				else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
-				{
-					PlaceTableViewController* btvc=[[[PlaceTableViewController alloc] initWithPlaceID:idstr] autorelease];
-					[self.navigationController pushViewController: btvc animated:NO];
-					
-					[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:idstr];
-				}
-			}
-		}
-	}
 }
-
+*/
 
 
 /*

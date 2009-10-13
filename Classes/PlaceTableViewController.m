@@ -50,6 +50,11 @@ enum mytags {
 	return self;
 }
 
+-(NSObject*)navigationRestorationData
+{
+	return self.placeID;
+}
+
 - (void)dealloc {
 	[self.placeID release];
 	[self.placeData release];
@@ -1486,7 +1491,7 @@ enum mytags {
 	[self.tableView reloadData];
 	[appDelegate dismissActivityHUD];
 	
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getUserReviewDoc:) object:self.placeID requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"HUD:GettingPlaceInfo", @"Getting Place Info")];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getUserReviewDoc:) object:self.placeID requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:GettingPlaceInfo", @"Getting Place Info")];
 }
 
 -(void)getUserReviewDoc:(NSString*)aPlaceID

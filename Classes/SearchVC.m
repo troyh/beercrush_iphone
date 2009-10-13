@@ -8,8 +8,8 @@
 
 #import "SearchVC.h"
 #import "BeerCrushAppDelegate.h"
+#import "BeerTableViewController.h"
 #import "JSON.h"
-#import "MyTableViewController.h"
 
 @implementation SearchVC
 
@@ -34,6 +34,12 @@
 	}
 	return self;
 }
+
+-(NSObject*)navigationRestorationData
+{
+	return nil;
+}
+
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -54,7 +60,6 @@
 		// Put Logo View up
 		self.logoView.myNC=self.navigationController;
 		self.view=logoView.view;
-		//	[self.navigationController pushViewController:logoView animated:NO];
 		
 		if (self.searchTypes==(BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
 			self.searchBar.placeholder=@"Beers, brewers, etc.";
@@ -63,6 +68,7 @@
 		
 		self.searchBar.autocorrectionType=UITextAutocorrectionTypeNo;
 		
+		self.searchBar.hidden=YES;
 		self.searchBar.delegate=self;
 		[self.searchBar sizeToFit];
 		[self.navigationController.navigationBar addSubview:self.searchBar];
@@ -88,10 +94,28 @@
 -(void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	
-	searchBar.hidden=NO;
+	self.searchBar.hidden=NO;
 }
-
+/*
+-(void)viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+	self.searchBar.hidden=NO;
+}
+*/
+-(void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	self.searchBar.hidden=YES;
+}
+/*
+- (void)viewDidDisappear:(BOOL)animated
+{
+	[super viewDidDisappear:animated];
+	
+	self.searchBar.hidden=YES;
+}
+*/
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
@@ -440,34 +464,38 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	UITableViewController* tvc=nil;
 	NSString* idstr=[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
+	[self navigateBasedOnDocumentID:idstr];
+}
+
+-(BOOL)navigateBasedOnDocumentID:(NSString*)idstr
+{
+	UIViewController* vc=nil;
 	if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
 	{ // Beer
-		tvc=[[[BeerTableViewController alloc] initWithBeerID:idstr] autorelease];
+		vc=[[[BeerTableViewController alloc] initWithBeerID:idstr] autorelease];
 	}
 	else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
 	{ // Place
 		PlaceTableViewController* ptvc=[[[PlaceTableViewController alloc] initWithPlaceID:idstr] autorelease];
 		ptvc.delegate=self;
-		tvc=ptvc;
+		vc=ptvc;
 	}
 	else if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
 	{ // Brewery
-		tvc=[[[BreweryTableViewController alloc] initWithBreweryID:idstr] autorelease];
+		vc=[[[BreweryTableViewController alloc] initWithBreweryID:idstr] autorelease];
 	}
 	
-	searchBar.hidden=YES;
-	
-	if (tvc==nil)
-		return;
+	if (vc==nil)
+		return NO;
 	
 	if (self.delegate==nil || [self.delegate searchVC:self didSelectSearchResult:idstr]==YES)
 	{
-		[self.navigationController pushViewController:tvc animated:YES];
+		[self.navigationController pushViewController:vc animated:YES];
 	}
+	
+	return YES;
 }
-
 
 /*
  // Override to support conditional editing of the table view.

@@ -27,9 +27,3 @@
 
 @end
 
-typedef enum resultType
-{
-	Beer=1,
-	Brewer=2,
-	Place=3
-} ResultType;

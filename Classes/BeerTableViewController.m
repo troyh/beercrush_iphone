@@ -89,6 +89,11 @@ enum TAGS {
 	return self;
 }
 
+-(NSObject*)navigationRestorationData
+{
+	return self.beerID;
+}
+
 - (void)dealloc
 {
 	DLog(@"BeerTableViewController release: retainCount=%d",[self retainCount]);
@@ -189,8 +194,12 @@ enum TAGS {
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	self.beerObj.data=[appDelegate getBeerDoc:aBeerID];
-	self.userReviewData=[appDelegate getReviewsOfBeer:aBeerID byUserID:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]];
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO]; // Reload data because we may come back from an editing view controller
+	NSString* user_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+	if (user_id)
+	{
+		self.userReviewData=[appDelegate getReviewsOfBeer:aBeerID byUserID:user_id];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO]; // Reload data because we may come back from an editing view controller
+	}
 	
 	[appDelegate dismissActivityHUD];
 }

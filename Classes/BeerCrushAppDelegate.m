@@ -7,7 +7,6 @@
 //
 
 #import "BeerCrushAppDelegate.h"
-#import "MyTableViewController.h"
 #import "NearbyTableViewController.h"
 #import "BreweryTableViewController.h"
 #import "UserReviewsTVC.h"
@@ -32,6 +31,22 @@
 #define kTabBarItemTagBuddies 8
 #define kTabBarItemTagRecommended 9
 #define kTabBarItemTagBookmarks 10
+
+
+typedef enum _VCType {
+	kVCTypeUnknown=0,
+	kVCTypeSearchVC,
+	kVCTypeBeerTableViewController,
+	kVCTypePlaceTableViewController,
+	kVCTypeNearbyTableViewController,
+	kVCTypeBeerListTableViewController,
+	kVCTypeUserReviewsTVC,
+	kVCTypePlacesTVC,
+	kVCTypeUserProfileTVC,
+	kVCTypeBuddiesTVC,
+	kVCTypeRecommendedTVC,
+	kVCTypeBookmarksTVC
+} VCType;
 
 #pragma mark Utility functions
 
@@ -382,7 +397,6 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		}
 	}
 	
-	
 	// Create a new appstate dictionary to store the app's state as it runs
 	self.appState=[[NSMutableDictionary alloc] init];
 	NSMutableArray* stacks=[NSMutableArray arrayWithCapacity:(sizeof(tabOrder)/sizeof(tabOrder[0]))];
@@ -400,6 +414,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagBeers:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Beers" image:[UIImage imageNamed:@"tab_beers.png"] tag:kTabBarItemTagBeers] autorelease];
 				SearchVC* svc=[[[SearchVC alloc] init] autorelease];
@@ -410,6 +425,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagPlaces:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Places" image:[UIImage imageNamed:@"tab_places.png"] tag:kTabBarItemTagPlaces] autorelease];
 				SearchVC* svc=[[[SearchVC alloc] init] autorelease];
@@ -420,6 +436,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagNearby:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Nearby" image:[UIImage imageNamed:@"tab_nearby.png"] tag:kTabBarItemTagNearby] autorelease];
 				NearbyTableViewController* ntvc=[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain];
@@ -429,16 +446,17 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagWishList:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Wish List" image:[UIImage imageNamed:@"tab_wishlist.png"] tag:kTabBarItemTagWishList] autorelease];
-				// TODO: if the user_id does not exist (the user is not logged in), this puts "(null)" in the ID string, which is wrong.
-				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:[NSString stringWithFormat:@"wishlist:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]]] autorelease];
+				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:@"wishlist:"] autorelease];
 				[nc pushViewController:bltvc animated:NO];
 				break;
 			}
 			case kTabBarItemTagMyBeerReviews:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Beers" image:[UIImage imageNamed:@"tab_beerreviews.png"] tag:kTabBarItemTagMyBeerReviews] autorelease];
 				UserReviewsTVC* urtvc=[[[UserReviewsTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
@@ -448,6 +466,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagMyPlaces:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Places" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagMyPlaces] autorelease];
 				PlacesTVC* bltvc=[[[PlacesTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
@@ -457,6 +476,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagProfile:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagProfile] autorelease];
 				UserProfileTVC* uptvc=[[[UserProfileTVC alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
@@ -542,6 +562,8 @@ void normalizeBreweryData(NSMutableDictionary* data)
 	[self.appState setValue:[NSNumber numberWithInt:tag] forKey:@"selectedtabtag"];
 	// TODO: if the app state is empty, just remove the key 'appstate' from NSUserDefaults
 	[[NSUserDefaults standardUserDefaults] setObject:self.appState forKey:@"appstate"];
+	
+	DLog(@"standardUserDefaults=%@",[NSUserDefaults standardUserDefaults]);
 }
 
 
@@ -581,6 +603,22 @@ void normalizeBreweryData(NSMutableDictionary* data)
 	}
 	
 	return nil;
+}
+
+-(void)abortNavigationRestorationForTabBarItem:(UITabBarItem*)tabBarItem
+{
+	NSUInteger idx=0;
+	for (UIViewController* vc in self.tabBarController.viewControllers)
+	{
+		if (vc.tabBarItem.tag==tabBarItem.tag)
+		{	// Found it
+			NSMutableArray* stacks=[self.restoringNavState objectForKey:@"navstacks"];
+			NSMutableArray* stack=[stacks objectAtIndex:idx];
+			[stack removeAllObjects];
+			break;
+		}
+		++idx;
+	}
 }
 
 -(BOOL)pushNavigationStateForTabBarItem:(UITabBarItem*)tabBarItem withData:(NSObject*)data
@@ -654,23 +692,6 @@ void normalizeBreweryData(NSMutableDictionary* data)
     [super dealloc];
 }
 
-
-- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
-{
-	if (navigationController.viewControllers.count==1)
-	{
-//		CGRect f=tabBarController.view.frame;
-//		f.size.height=411-mySearchBar.frame.size.height;
-//		f.origin.y=mySearchBar.frame.size.height;
-//		nav.view.frame=f;
-//		mySearchBar.hidden=NO;
-//		nav.navigationBarHidden=YES;
-	}
-}
-
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
-{
-}
 
 -(BOOL)haveUserCredentials
 {
@@ -1121,26 +1142,32 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 {
 	// TODO: support caching
 
-	// Separate the brewery ID and the beer ID from the beerID
-	NSArray* idparts=[beerID componentsSeparatedByString:@":"];
-
-	// Retrieve user's review for this beer
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_REVIEW_DOC, 
-							  [idparts objectAtIndex:1], 
-							  [idparts objectAtIndex:2], 
-							  userID]];
-	NSMutableDictionary* answer;
-	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
-	if ([response statusCode]==200)
+	if (beerID && [beerID length])
 	{
-		[answer retain];
-		return answer;
-	}
-	else {
-		DLog(@"Response status code=%d",[response statusCode]);
-//		[self genericAlert:NSLocalizedString(@"Beer Reviews",@"GetBeerReviews: Alert Message") 
-//					 title:NSLocalizedString(@"Unable to get beer reviews",@"GetBeerReviews: Alert Title") 
-//			   buttonTitle:nil];
+		// Separate the brewery ID and the beer ID from the beerID
+		NSArray* idparts=[beerID componentsSeparatedByString:@":"];
+
+		if (userID && [userID length])
+		{
+			// Retrieve user's review for this beer
+			NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_REVIEW_DOC, 
+									  [idparts objectAtIndex:1], 
+									  [idparts objectAtIndex:2], 
+									  userID]];
+			NSMutableDictionary* answer;
+			NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+			if ([response statusCode]==200)
+			{
+				[answer retain];
+				return answer;
+			}
+			else {
+				DLog(@"Response status code=%d",[response statusCode]);
+		//		[self genericAlert:NSLocalizedString(@"Beer Reviews",@"GetBeerReviews: Alert Message") 
+		//					 title:NSLocalizedString(@"Unable to get beer reviews",@"GetBeerReviews: Alert Title") 
+		//			   buttonTitle:nil];
+			}
+		}
 	}
 	return nil;
 }
@@ -1361,6 +1388,107 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	[self.tabBarController.selectedViewController dismissModalViewControllerAnimated:YES];
 }
 
+#pragma mark UINavigationControllerDelegate methods
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+	// Do auto-navigation to restore app state
+	if ([self restoringNavigationStateAutomatically])
+	{
+		NSObject* obj=[self nextNavigationStateToRestore];
+		if (obj && [obj isKindOfClass:[NSDictionary class]])
+		{
+			UIViewController* vc=nil;
+			
+			NSDictionary* navdict=(NSDictionary*)obj;
+			
+			// Instantiate a view controller of type VCClass
+			NSNumber* vctype=[navdict objectForKey:@"vctype"];
+			NSObject* navobj=[navdict objectForKey:@"navobj"];
+
+			switch ([vctype intValue]) {
+				case kVCTypeSearchVC:
+					vc=[[[SearchVC alloc] init] autorelease];
+					break;
+				case kVCTypeBeerTableViewController:
+					if ([navobj isKindOfClass:[NSString class]])
+						vc=[[[BeerTableViewController alloc] initWithBeerID:(NSString*)navobj] autorelease];
+					break;
+				case kVCTypePlaceTableViewController:
+					if ([navobj isKindOfClass:[NSString class]])
+						vc=[[[PlaceTableViewController alloc] initWithPlaceID:(NSString*)navobj] autorelease];
+					break;
+				case kVCTypeNearbyTableViewController:
+				case kVCTypeBeerListTableViewController:
+				case kVCTypeUserReviewsTVC:
+				case kVCTypePlacesTVC:
+				case kVCTypeUserProfileTVC:
+				case kVCTypeBuddiesTVC:
+				case kVCTypeRecommendedTVC:
+				case kVCTypeBookmarksTVC:
+				default:
+					// Stop restoring...
+					[self abortNavigationRestorationForTabBarItem:navigationController.tabBarItem];
+					break;
+			}
+			/* 
+			 Manually call viewWillDisappear on top view controller because it won't get called otherwise. 
+			 I don't know if it's a bug in the iPhone SDK or not, but it doesn't make sense to me.
+			 SearchVC, specifically, needs this so it can show/hide the searchbar control when it is presented 
+			 or covered up.
+			 */
+			[navigationController.topViewController viewWillDisappear:NO];
+			
+			[navigationController pushViewController:vc animated:NO];
+		}
+	}
+	else 
+	{
+		NSMutableDictionary* navdict=[NSMutableDictionary dictionaryWithCapacity:2];
+		NSObject* navobj=nil;
+		VCType vctype=kVCTypeUnknown;
+		
+		// Ask the new view controller for its nav restore data
+		if ([viewController respondsToSelector:@selector(navigationRestorationData)])
+		{
+			navobj=[viewController performSelector:@selector(navigationRestorationData)];
+			
+			if ([viewController isKindOfClass:[SearchVC class]])
+				vctype=kVCTypeSearchVC;
+			else if ([viewController isKindOfClass:[BeerTableViewController class]])
+				vctype=kVCTypeBeerTableViewController;
+			else if ([viewController isKindOfClass:[PlaceTableViewController class]])
+				vctype=kVCTypePlaceTableViewController;
+			else if ([viewController isKindOfClass:[NearbyTableViewController class]])
+				vctype=kVCTypeNearbyTableViewController;
+			else if ([viewController isKindOfClass:[BeerListTableViewController class]])
+				vctype=kVCTypeBeerListTableViewController;
+			else if ([viewController isKindOfClass:[UserReviewsTVC class]])
+				vctype=kVCTypeUserReviewsTVC;
+			else if ([viewController isKindOfClass:[PlacesTVC class]])
+				vctype=kVCTypePlacesTVC;
+			else if ([viewController isKindOfClass:[UserProfileTVC class]])
+				vctype=kVCTypeUserProfileTVC;
+			else if ([viewController isKindOfClass:[BuddiesTVC class]])
+				vctype=kVCTypeBuddiesTVC;
+			else if ([viewController isKindOfClass:[RecommendedTVC class]])
+				vctype=kVCTypeRecommendedTVC;
+			else if ([viewController isKindOfClass:[BookmarksTVC class]])
+				vctype=kVCTypeBookmarksTVC;
+		}
+				
+		[navdict setObject:[NSNumber numberWithInt:vctype] forKey:@"vctype"];
+		if (navobj)
+			[navdict setObject:navobj forKey:@"navobj"];
+		
+		[self pushNavigationStateForTabBarItem:navigationController.tabBarItem withData:navdict];
+	}
+}
+
+//- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+//{
+//	
+//}
 
 @end
 

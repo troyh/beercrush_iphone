@@ -48,6 +48,8 @@ typedef enum
 
 -(void)autocomplete:(NSString*)qs;
 -(void)query:(NSString*)qs;
+-(BOOL)navigateBasedOnDocumentID:(NSString*)idstr;
+-(NSObject*)navigationRestorationData;
 
 @end
 

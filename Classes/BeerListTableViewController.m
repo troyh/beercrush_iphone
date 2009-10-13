@@ -176,51 +176,32 @@ static const NSInteger kTagBeerNameLabel=2;
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	if ([appDelegate restoringNavigationStateAutomatically])
-	{
-		NSObject* navData=[appDelegate nextNavigationStateToRestore];
-		if ([navData isKindOfClass:[NSString class]])
-		{
-			NSString* beerID=(NSString*)navData;
-			if (beerID)
-			{
-				[appDelegate pushNavigationStateForTabBarItem:self.tabBarController.tabBarItem withData:beerID]; // Saves the new nav state
-				
-				BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:beerID] autorelease];
-				[self.navigationController pushViewController:vc animated:NO];
-			}
-		}
-	}
-	else
-	{
-		[appDelegate popNavigationStateForTabBarItem:self.tabBarItem];
+	// Retrieve an XML doc from server
+	NSURL* url=nil;
+	if (breweryID)
+	{	// Get brewery doc, it includes the beer list
+		NSArray* idparts=[breweryID componentsSeparatedByString:@":"];
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_BEERLIST, [idparts objectAtIndex:1]]];
 		
-		// Retrieve an XML doc from server
-		NSURL* url=nil;
-		if (breweryID)
-		{	// Get brewery doc, it includes the beer list
-			NSArray* idparts=[breweryID componentsSeparatedByString:@":"];
-			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_BEERLIST, [idparts objectAtIndex:1]]];
-			
-		}
-		else if (placeID)
-		{	// Get the place menu doc
-			NSArray* idparts=[placeID componentsSeparatedByString:@":"];
-			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_MENU_DOC, [idparts objectAtIndex:0], [idparts objectAtIndex:1]]];
-		}
-		else if (wishlistID)
-		{	 // Get the wishlist doc
-			NSArray* idparts=[wishlistID componentsSeparatedByString:@":"];
-			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_WISHLIST_DOC, [idparts objectAtIndex:1]]];
-		}
+	}
+	else if (placeID)
+	{	// Get the place menu doc
+		NSArray* idparts=[placeID componentsSeparatedByString:@":"];
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_MENU_DOC, [idparts objectAtIndex:0], [idparts objectAtIndex:1]]];
+	}
+	else if (wishlistID)
+	{	 // Get the wishlist doc
+		NSString* user_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+		if (user_id==nil)
+			user_id=@"";
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_WISHLIST_DOC, user_id]];
+	}
 
-		if (url)
-		{
-			[beerList removeAllObjects];
-			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-			[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerList:) object:url requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieveing beer list from server")];
-		}
+	if (url)
+	{
+		[beerList removeAllObjects];
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerList:) object:url requiresUserCredentials:wishlistID?YES:NO activityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieveing beer list from server")];
 	}
 }
 
@@ -325,8 +306,6 @@ static const NSInteger kTagBeerNameLabel=2;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSDictionary* beer=[beerList objectAtIndex:indexPath.row];
 	
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	
 	/*
 	 Wish List docs and beerlist docs are in different formats. Those should probably be changed on the server to be more consistent.
 	 */
@@ -347,8 +326,6 @@ static const NSInteger kTagBeerNameLabel=2;
 		}
 		else
 		{
-			[appDelegate pushNavigationStateForTabBarItem:self.navigationController.tabBarItem withData:beer_id]; // Saves the new nav state
-			
 			BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:beer_id] autorelease];
 			[self.navigationController pushViewController:vc animated:YES];
 		}

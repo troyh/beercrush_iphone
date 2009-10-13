@@ -80,6 +80,7 @@
 @property (assign) id<BeerTableViewControllerDelegate> delegate;
 
 -(id) initWithBeerID:(NSString*)beer_id;
+-(NSObject*)navigationRestorationData;
 
 @end
 

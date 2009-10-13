@@ -10,7 +10,6 @@
 #import <CoreLocation/CLLocationManager.h>
 
 #import "NearbyTableViewController.h"
-#import "MyTableViewController.h"
 #import "BreweryTableViewController.h"
 #import "PlaceTableViewController.h"
 #import "BeerTableViewController.h"
@@ -21,14 +20,6 @@
 @synthesize data;
 @synthesize editeddata;
 @synthesize distanceAway;
-//@synthesize name;
-//@synthesize loc;
-//@synthesize street;
-//@synthesize city;
-//@synthesize state;
-//@synthesize zip;
-//@synthesize phone;
-//@synthesize uri;
 
 -(id)init
 {
