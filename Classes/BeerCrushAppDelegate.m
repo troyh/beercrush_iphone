@@ -769,6 +769,18 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		else 
 		{
 			DLog(@"Login failed.");
+			// Erase the login info in UserDefaults
+			[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"user_id"];
+			[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"usrkey"];
+			if ([response statusCode]==403 || [response statusCode]==404) // 404 means email doesn't exist, 403 means password was wrong
+			{
+				/* 
+				 Remove the password so they are asked for it again. We could remove the email address on 404 errors but that would
+				 be annoying to the user if they just had a typo in their email address and had to retype the entire thing, which is more
+				 painful on an iPhone.
+				 */
+				[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"password"];
+			}
 		}	
 	}
 	
