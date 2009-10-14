@@ -13,7 +13,8 @@
 typedef enum {
 	EditLineVCTextTypeDefault=1,
 	EditLineVCTextTypeCurrency,
-	EditLineVCTextTypeInteger
+	EditLineVCTextTypeInteger,
+	EditLineVCTextTypeFloat
 } EditLineVCTextType;
 
 
@@ -35,6 +36,6 @@ typedef enum {
 
 @protocol EditLineVCDelegate
 
--(void)editLineVC:(EditLineVC*)editLineVC didChangeText:(NSString*)text;
+-(void)editLineVC:(EditLineVC*)editLineVC doneEditing:(NSString*)text;
 
 @end

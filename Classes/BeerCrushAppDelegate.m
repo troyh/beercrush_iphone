@@ -84,7 +84,7 @@ void normalizeToNumber(NSMutableDictionary* dict,NSString* key)
 	}
 	else if ([[dict objectForKey:key] isKindOfClass:[NSString class]])
 	{
-		[dict setObject:[NSNumber numberWithInt:[[dict objectForKey:key] intValue]] forKey:key];
+		[dict setObject:[NSNumber numberWithFloat:[[dict objectForKey:key] floatValue]] forKey:key];
 	}
 	else
 	{
@@ -155,9 +155,9 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 			{
 				NSNumber* origNumber=(NSNumber*)origObj;
 				NSNumber* currNumber=(NSNumber*)currObj;
-				if ([origNumber intValue] != [currNumber intValue])
+				if ([origNumber isEqualToNumber:currNumber]==NO)
 				{
-					[values addObject:[NSString stringWithFormat:@"%@=%d",keyName,[currNumber intValue]]];
+					[values addObject:[NSString stringWithFormat:@"%@=%@",keyName,currNumber]];
 				}
 			}
 			else if ([origObj isKindOfClass:[NSArray class]])
@@ -188,6 +188,7 @@ void normalizeBeerData(NSMutableDictionary* beerData)
 	normalizeToString(beerData, @"grains");
 	normalizeToString(beerData, @"hops");
 	normalizeToString(beerData, @"availability");
+	normalizeToString(beerData, @"otherings");
 	
 	normalizeToArray(beerData, @"styles", 3);
 	normalizeToDictionary(beerData, @"@attributes", 5);
@@ -197,6 +198,7 @@ void normalizeBeerData(NSMutableDictionary* beerData)
 	normalizeToString([beerData objectForKey:@"@attributes"], @"og");
 	normalizeToString([beerData objectForKey:@"@attributes"], @"fg");
 	normalizeToString([beerData objectForKey:@"@attributes"], @"srm");
+	normalizeToNumber([beerData objectForKey:@"@attributes"], @"calories_per_ml");
 }
 
 void normalizePlaceData(NSMutableDictionary* placeData)

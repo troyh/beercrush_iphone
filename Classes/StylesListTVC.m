@@ -152,7 +152,7 @@
 		{
 			// For now, we only support selecting one style, so we'll remove any already set and replace them with the one the user just selected
 			[self.selectedStyleIDs removeAllObjects];
-			[self.selectedStyleIDs addObject:[self.stylesDictionary objectForKey:@"id"]];
+			[self.selectedStyleIDs addObject:[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.row] objectForKey:@"id"]];
 			[delegate stylesTVC:self didSelectStyle:self.selectedStyleIDs];
 		}
 	}

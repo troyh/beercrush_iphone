@@ -124,6 +124,8 @@
 	}
 	else if (self.textType==EditLineVCTextTypeInteger)
 		self.textField.keyboardType=UIKeyboardTypeNumberPad;
+	else if (self.textType==EditLineVCTextTypeFloat)
+		self.textField.keyboardType=UIKeyboardTypeNumberPad;
 	
 	[self.textField becomeFirstResponder];
 
@@ -190,7 +192,7 @@
 
 -(void)doneButtonClicked:(id)sender
 {
-	[self.delegate editLineVC:self didChangeText:self.textField.text];
+	[self.delegate editLineVC:self doneEditing:self.textField.text];
 }
 
 @end

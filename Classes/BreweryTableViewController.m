@@ -1019,7 +1019,7 @@ enum TAGS {
 
 #pragma mark EditLineVCDelegate methods
 
--(void)editLineVC:(EditLineVC*)editLineVC didChangeText:(NSString*)text
+-(void)editLineVC:(EditLineVC*)editLineVC doneEditing:(NSString*)text
 {
 	[self.breweryObject.data setObject:text forKey:@"name"];
 	[self.navigationController popViewControllerAnimated:YES];

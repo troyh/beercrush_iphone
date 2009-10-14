@@ -53,6 +53,8 @@ enum TAGS {
 	kTagEditTextFG,
 	kTagEditTextGrains,
 	kTagEditTextHops,
+	kTagEditTextOtherIngs,
+	kTagEditTextCalories,
 	kTagBeerNameLabel,
 	kTagBreweryNameLabel,
 	kTagDescriptionLabel,
@@ -68,7 +70,7 @@ enum TAGS {
 	kTagDetailsHops,
 	kTagDetailsYeast,
 	kTagDetailsOtherIngs,
-	kTagDetailsSizes
+	kTagDetailsSizes,
 };
 
 -(id) initWithBeerID:(NSString*)beer_id
@@ -435,8 +437,8 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section0CellEditing"] autorelease];
 							[cell.textLabel setText:@"Name"];
 							cell.selectionStyle=UITableViewCellSelectionStyleNone;
-							[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"name"]];
 						}
+						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"name"]];
 					}
 					else
 					{
@@ -858,36 +860,27 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row8Editing"] autorelease];
 						
 						[cell.textLabel setText:@"Misc Ingredients"];
-						
-//						if (ingsTextField==nil)
-//						{
-//							ingsTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 150, 30)];
-//							ingsTextField.text=[self.beerObj.data objectForKey:@"otherings"];
-//							ingsTextField.font=[UIFont boldSystemFontOfSize:16];
-//							ingsTextField.keyboardType=UIKeyboardTypeDefault;
-//						}
+						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"otherings"]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-//						[cell addSubview:ingsTextField];
 						break;
 					case 9:
+					{
 						cell = [tableView dequeueReusableCellWithIdentifier:@"Section2Row9Editing"];
 						if (cell == nil)
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row9Editing"] autorelease];
 						
 						[cell.textLabel setText:@"Calories/12oz"];
 						
-//						if (ingsTextField==nil)
-//						{
-//							ingsTextField=[[UITextField alloc] initWithFrame:CGRectMake(100, 10, 150, 30)];
-//							ingsTextField.text=[self.beerObj.data objectForKey:@"otherings"];
-//							ingsTextField.font=[UIFont boldSystemFontOfSize:16];
-//							ingsTextField.keyboardType=UIKeyboardTypeDefault;
-//						}
+						NSNumber* cals=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"calories_per_ml"];
+						if ([cals floatValue])
+						{
+							[cell.detailTextLabel setText:[NSString stringWithFormat:@"%0.0f",[cals floatValue]*355]]; // 355ml=12 fl.oz.
+						}
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
-//						[cell addSubview:ingsTextField];
 						break;
+					}
 					default:
 						break;
 				}
@@ -1149,6 +1142,7 @@ enum TAGS {
 					{
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
+						vc.tag=kTagEditTextName;
 						vc.textToEdit=[self.beerObj.data objectForKey:@"name"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
@@ -1204,6 +1198,8 @@ enum TAGS {
 					{
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
+						vc.tag=kTagEditTextABV;
+						vc.textType=EditLineVCTextTypeFloat;
 						vc.textToEdit=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"abv"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
@@ -1212,6 +1208,8 @@ enum TAGS {
 					{
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
+						vc.tag=kTagEditTextIBU;
+						vc.textType=EditLineVCTextTypeInteger;
 						vc.textToEdit=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"ibu"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
@@ -1220,6 +1218,8 @@ enum TAGS {
 					{
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
+						vc.tag=kTagEditTextOG;
+						vc.textType=EditLineVCTextTypeFloat;
 						vc.textToEdit=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"og"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
@@ -1228,6 +1228,8 @@ enum TAGS {
 					{
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
+						vc.tag=kTagEditTextFG;
+						vc.textType=EditLineVCTextTypeFloat;
 						vc.textToEdit=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"fg"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
@@ -1236,6 +1238,7 @@ enum TAGS {
 					{
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
+						vc.tag=kTagEditTextGrains;
 						vc.textToEdit=[self.beerObj.data objectForKey:@"grains"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
@@ -1244,14 +1247,31 @@ enum TAGS {
 					{
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
+						vc.tag=kTagEditTextHops;
 						vc.textToEdit=[self.beerObj.data objectForKey:@"hops"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
 					case 8: // Misc Ingredients
+					{
+						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						vc.delegate=self;
+						vc.tag=kTagEditTextOtherIngs;
+						vc.textToEdit=[self.beerObj.data objectForKey:@"otherings"];
+						[self.navigationController pushViewController:vc animated:YES];
 						break;
+					}
 					case 9: // Calories/12oz
+					{
+						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						vc.delegate=self;
+						vc.textType=EditLineVCTextTypeInteger;
+						vc.tag=kTagEditTextCalories;
+						NSNumber* n=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"calories_per_ml"];
+						vc.textToEdit=[NSString stringWithFormat:@"%0.0f",[n floatValue]*355]; // 355ml=12 fl.oz.
+						[self.navigationController pushViewController:vc animated:YES];
 						break;
+					}
 					default:
 						break;
 				}
@@ -1431,7 +1451,7 @@ enum TAGS {
 }
 */
 
-// ColorsTVCDelegate methods
+#pragma mark ColorsTVCDelegate methods
 
 -(void)colorsTVC:(ColorsTVC*)tvc didSelectColor:(NSUInteger)srm
 {
@@ -1440,7 +1460,8 @@ enum TAGS {
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
-// StylesListTVCDelegate methods
+#pragma mark StylesListTVCDelegate methods
+
 -(void)stylesTVC:(StylesListTVC*)tvc didSelectStyle:(NSArray*)styleids
 {
 	[self.beerObj.data setObject:styleids forKey:@"styles"];
@@ -1506,7 +1527,7 @@ enum TAGS {
 
 #pragma mark EditLineVCDelegate methods
 
--(void)editLineVC:(EditLineVC*)editLineVC didChangeText:(NSString*)text
+-(void)editLineVC:(EditLineVC*)editLineVC doneEditing:(NSString*)text
 {
 	switch (editLineVC.tag) {
 		case kTagEditTextName:
@@ -1530,9 +1551,21 @@ enum TAGS {
 		case kTagEditTextHops:
 			[self.beerObj.data setObject:text forKey:@"hops"];
 			break;
+		case kTagEditTextOtherIngs:
+			[self.beerObj.data setObject:text forKey:@"otherings"];
+			break;
+		case kTagEditTextCalories:
+		{
+			float f=((float)[text intValue])/355; // 355ml=12 fl.oz.
+			[[self.beerObj.data objectForKey:@"@attributes"] setObject:[NSNumber numberWithFloat:f] forKey:@"calories_per_ml"];
+			break;
+		}
 		default:
 			break;
 	}
+	
+	[self.navigationController popViewControllerAnimated:YES];
+	[self.tableView reloadData];
 }
 
 #pragma mark Async operations
@@ -1588,8 +1621,10 @@ enum TAGS {
 					   @"@attributes:og",
 					   @"@attributes:fg",
 					   @"@attributes:srm",
+					   @"@attributes:calories_per_ml",
 					   @"grains",
 					   @"hops",
+					   @"otherings",
 					   @"availability",
 					   @"styles",
 					   nil
@@ -1639,6 +1674,11 @@ enum TAGS {
 			[self performSelectorOnMainThread:@selector(saveEditsFailed) withObject:nil waitUntilDone:NO];
 		}
 	}
+	else // No changes, but change out of editing mode
+	{
+		[self setEditing:NO animated:YES];
+	}
+
 	
 	[appDelegate dismissActivityHUD];
 }

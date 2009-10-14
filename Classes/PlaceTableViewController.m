@@ -1351,7 +1351,7 @@ enum mytags {
 
 #pragma mark EditLineVCDelegate methods
 
--(void)editLineVC:(EditLineVC*)editLineVC didChangeText:(NSString*)text
+-(void)editLineVC:(EditLineVC*)editLineVC doneEditing:(NSString*)text
 {
 	if (editLineVC.tag==kTagEditTextPlaceName)
 		[self.placeData setObject:text forKey:@"name"];
