@@ -144,6 +144,19 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 #define BEERCRUSH_API_URL_UPLOAD_BEER_IMAGE				@BEERCRUSH_API_URL_HOST"/api/beer/photo?beer_id=%@"
 #define BEERCRUSH_API_URL_UPLOAD_BREWERY_IMAGE			@BEERCRUSH_API_URL_HOST"/api/brewery/?brewery_id=%@"
 
+
+@interface UIColor (BeerCrush)
+
++(UIColor*)beercrushLightTanColor;
++(UIColor*)beercrushTanColor;
++(UIColor*)beercrushLightRedColor;
++(UIColor*)beercrushRedColor;
++(UIColor*)beercrushLightBlueColor;
++(UIColor*)beercrushBlueColor; 	
+
+@end
+
+
 typedef enum resultType
 {
 	Beer=1,

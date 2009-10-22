@@ -20,6 +20,18 @@
 #import "JSON.h"
 #import "SearchVC.h"
 
+@implementation UIColor (BeerCrush)
+
++(UIColor*)beercrushLightTanColor 	{return [UIColor colorWithRed:(234/255) green:(221/255) blue:(201/255) 	alpha:1.0];}
++(UIColor*)beercrushTanColor		{return [UIColor colorWithRed:(196/255) green:(154/255) blue:(108/255) 	alpha:1.0];}
++(UIColor*)beercrushLightRedColor 	{return [UIColor colorWithRed:(238/255) green:(49/255) 	blue:(36/255) 	alpha:1.0];}
++(UIColor*)beercrushRedColor 		{return [UIColor colorWithRed:(111/255) green:(0/255) 	blue:(20/255) 	alpha:1.0];}
++(UIColor*)beercrushLightBlueColor 	{return [UIColor colorWithRed:(56/255)  green:(189/255) blue:(236/255) 	alpha:1.0];}
++(UIColor*)beercrushBlueColor 		{return [UIColor colorWithRed:(19/255)  green:(122/255) blue:(161/255) 	alpha:1.0];}
+
+@end
+
+
 // Unique numbers to identify the tabs (they are not necessarily in this order)
 #define kTabBarItemTagBeers 1
 #define kTabBarItemTagPlaces 2

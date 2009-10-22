@@ -715,7 +715,7 @@
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark FullBeerReviewTVCDelegate methods
+#pragma mark SearchVCDelegate methods
 
 -(BOOL)searchVC:(SearchVC *)searchVC didSelectSearchResult:(NSString *)id_string
 {
@@ -745,7 +745,7 @@
 
 #pragma mark EditLineVCDelegate methods
 
--(void)editLineVC:(EditLineVC*)editLineVC didChangeText:(NSString*)text
+-(void)editLineVC:(EditLineVC*)editLineVC doneEditing:(NSString*)text;
 {
 	[self.userReview setObject:[NSNumber numberWithFloat:[text floatValue]] forKey:@"purchase_price"];
 	[self performSelectorOnMainThread:@selector(myReloadData) withObject:nil waitUntilDone:NO];
