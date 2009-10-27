@@ -1497,8 +1497,12 @@ enum mytags {
 -(void)getUserReviewDoc:(NSString*)aPlaceID
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	self.userReviewData=[appDelegate getPlaceReviews:aPlaceID byUser:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"]];
-	[self.tableView reloadData];
+	NSString* user_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+	if (user_id)
+	{
+		self.userReviewData=[appDelegate getPlaceReviews:aPlaceID byUser:user_id];
+		[self.tableView reloadData];
+	}
 	[appDelegate dismissActivityHUD];
 }
 

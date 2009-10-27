@@ -176,7 +176,7 @@ static const NSInteger kTagBeerNameLabel=2;
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	// Retrieve an XML doc from server
+	// Retrieve a JSON doc from server
 	NSURL* url=nil;
 	if (breweryID)
 	{	// Get brewery doc, it includes the beer list
@@ -288,13 +288,10 @@ static const NSInteger kTagBeerNameLabel=2;
 	/*
 	 Wish List docs and beerlist docs are in different formats. Those should probably be changed on the server to be more consistent.
 	 */
-	NSString* beer_id=[beer objectForKey:@"item_id"];
+	NSString* beer_id=[beer objectForKey:@"beer_id"];
 	if (beer_id==nil)
 	{
-		beer_id=[[beer objectForKey:@"@attributes"] objectForKey:@"id"];
-		if (beer_id==nil)
-		{ // Uh oh.
-		}
+		// Uh oh.
 	}
 	
 	[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:beer_id]];
@@ -309,15 +306,7 @@ static const NSInteger kTagBeerNameLabel=2;
 	/*
 	 Wish List docs and beerlist docs are in different formats. Those should probably be changed on the server to be more consistent.
 	 */
-	NSString* beer_id=[beer objectForKey:@"item_id"];
-	if (beer_id==nil)
-	{
-		beer_id=[[beer objectForKey:@"@attributes"] objectForKey:@"id"];
-		if (beer_id==nil)
-		{ // Uh oh.
-		}
-	}
-	
+	NSString* beer_id=[beer objectForKey:@"beer_id"];
 	if (beer_id)
 	{
 		if (self.delegate && [self.delegate beerListTVCDidSelectBeer:beer_id]==NO)

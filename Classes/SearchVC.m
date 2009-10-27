@@ -229,13 +229,13 @@
 	
 	const char* dataset="";
 	if (self.searchTypes == (BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
-		dataset="beersandbreweries";
+		dataset="beer brewery";
 	else if (self.searchTypes == BeerCrushSearchTypeBreweries)
-		dataset="breweries";
+		dataset="brewery";
 	else if (self.searchTypes == BeerCrushSearchTypeBeers)
-		dataset="beers";
+		dataset="beer";
 	else if (self.searchTypes == BeerCrushSearchTypePlaces)
-		dataset="places";
+		dataset="place";
 	
 	NSURL* url=[NSURL URLWithString:[[NSString stringWithFormat:BEERCRUSH_API_URL_SEARCH_QUERY, qs, dataset ] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	NSData* answer;

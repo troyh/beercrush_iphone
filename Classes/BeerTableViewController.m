@@ -200,9 +200,9 @@ enum TAGS {
 	if (user_id)
 	{
 		self.userReviewData=[appDelegate getReviewsOfBeer:aBeerID byUserID:user_id];
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO]; // Reload data because we may come back from an editing view controller
 	}
 	
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO]; // Reload data because we may come back from an editing view controller
 	[appDelegate dismissActivityHUD];
 }
 

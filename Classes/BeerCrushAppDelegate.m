@@ -1037,7 +1037,9 @@ void recursivelyGetBeerStyleIDs(NSArray* fromArray, NSMutableDictionary* toDict)
 			[self.colorsDictionary setObject:[NSMutableDictionary dictionaryWithCapacity:12] forKey:@"colornamebysrm"];
 			for (NSDictionary* colorInfo in [self.colorsDictionary objectForKey:@"colors"])
 			{
-				[[self.colorsDictionary objectForKey:@"colornamebysrm"] setObject:colorInfo forKey:[[colorInfo objectForKey:@"@attributes"] objectForKey:@"srm"]];
+				NSObject* srm=[colorInfo objectForKey:@"srm"];
+				if (srm!=nil)
+					[[self.colorsDictionary objectForKey:@"colornamebysrm"] setObject:colorInfo forKey:srm];
 			}
 		}
 		else
@@ -1282,10 +1284,8 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 
 -(NSMutableDictionary*)getPlaceReviews:(NSString*)placeID byUser:(NSString*)user_id
 {
-	// Separate the 2 parts of the place ID
-	NSArray* idparts=[placeID componentsSeparatedByString:@":"];
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PLACE_REVIEW_DOC, 
-							  [idparts objectAtIndex:1], 
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_PLACE_REVIEW_DOC, 
+							  placeID,
 							  user_id]];
 	NSMutableDictionary* answer;
 	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
