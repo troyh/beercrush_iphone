@@ -226,41 +226,26 @@ enum TAGS {
 	[self.tableView beginUpdates];
 
 	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
-											[NSIndexPath indexPathForRow:3 inSection:5],
+											[NSIndexPath indexPathForRow:3 inSection:4],
 											nil
 											] withRowAnimation:UITableViewRowAnimationFade];
-	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
 	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 	
-	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
-//	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:
-//											[NSIndexPath indexPathForRow:0 inSection:1], // Edit Street
-//											[NSIndexPath indexPathForRow:1 inSection:1], // Edit Street 2
-//											[NSIndexPath indexPathForRow:2 inSection:1], // Edit City, State ZIP
-//											[NSIndexPath indexPathForRow:3 inSection:1], // Edit Country
-//											nil] withRowAnimation:UITableViewRowAnimationFade];
+	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 	[self.tableView endUpdates];
 }
 
 -(void)endEditingMode
 {
-//	self.editing=NO;
 	self.title=@"Brewery";
 	
 	[self.tableView beginUpdates];
-//	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
-//											[NSIndexPath indexPathForRow:0 inSection:1],
-//											[NSIndexPath indexPathForRow:1 inSection:1],
-//											[NSIndexPath indexPathForRow:2 inSection:1],
-//											[NSIndexPath indexPathForRow:3 inSection:1],
-//											nil] withRowAnimation:UITableViewRowAnimationFade];
-	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
+	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
 	
 	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:
-											[NSIndexPath indexPathForRow:3 inSection:5],
+											[NSIndexPath indexPathForRow:3 inSection:4],
 											nil] withRowAnimation:UITableViewRowAnimationFade];
 	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
-	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
 	[self.tableView endUpdates];
 	
 }
@@ -268,7 +253,7 @@ enum TAGS {
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.editing?5:6;
+    return self.editing?5:5;
 }
 
 
@@ -282,16 +267,13 @@ enum TAGS {
 			return self.editing?3:1;
 			break;
 		case 2:
-			return self.editing?1:1;
+			return self.editing?1:3;
 			break;
 		case 3:
-			return self.editing?3:3;
-			break;
-		case 4:
 			return self.editing?3:1;
 			break;
-		case 5:
-			return self.editing?0:4;
+		case 4:
+			return self.editing?3:4;
 			break;
 		default:
 			break;
@@ -320,10 +302,10 @@ enum TAGS {
 	else 
 	{
 		switch (section) {
-			case 4:
+			case 3:
 				return @"Owner's Description";
 				break;
-			case 5:
+			case 4:
 				return @"Details";
 				break;
 			default:
@@ -371,7 +353,7 @@ enum TAGS {
 			case 0: // Brewery name
 				return 50;
 				break;
-			case 3:
+			case 2:
 			{
 				switch (indexPath.row) {
 					case 0: // Address
@@ -380,7 +362,7 @@ enum TAGS {
 				}
 				break;
 			}
-			case 4:
+			case 3:
 				return 80;
 				break;
 		}
@@ -591,16 +573,7 @@ enum TAGS {
 				[cell.textLabel setText:[NSString stringWithFormat:@"%d Beers Brewed",[[self.beerList objectForKey:@"beers"] count]]];
 				break;
 			}
-			case 2: // Affiliated bars/restaurants
-			{
-				cell = [tableView dequeueReusableCellWithIdentifier:@"Section5Cell"];
-				if (cell == nil) {
-					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section5Cell"] autorelease];
-				}
-				[cell.textLabel setText:[NSString stringWithFormat:@"%d Affiliated Bars/Restaurants",0]];
-				break;
-			}
-			case 3: // Address, phone and web site
+			case 2: // Address, phone and web site
 			{
 				switch (indexPath.row)
 				{
@@ -653,7 +626,7 @@ enum TAGS {
 				}
 				break;
 			}
-			case 4: // Owner's Description
+			case 3: // Owner's Description
 			{
 				cell = [tableView dequeueReusableCellWithIdentifier:@"Section3Cell"];
 				if (cell == nil) {
@@ -667,7 +640,7 @@ enum TAGS {
 				}
 				break;
 			}
-			case 5: // Details
+			case 4: // Details
 			{
 				cell = [tableView dequeueReusableCellWithIdentifier:@"Section4Cell"];
 				if (cell == nil) {
