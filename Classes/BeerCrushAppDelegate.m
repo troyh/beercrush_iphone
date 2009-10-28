@@ -104,11 +104,12 @@ void normalizeToNumber(NSMutableDictionary* dict,NSString* key)
 	}
 }
 
-void normalizeToBoolean(NSMutableDictionary* dict,NSString* key)
+void normalizeToBoolean(NSMutableDictionary* dict,NSString* key,BOOL addIfNotExist)
 {
 	if ([dict objectForKey:key]==nil)
 	{
-		[dict setObject:[NSNumber numberWithInt:0] forKey:key];
+		if (addIfNotExist)
+			[dict setObject:[NSNumber numberWithInt:0] forKey:key];
 	}
 	else if ([[dict objectForKey:key] isKindOfClass:[NSString class]])
 	{
@@ -221,7 +222,7 @@ void normalizePlaceData(NSMutableDictionary* placeData)
 	normalizeToString(placeData, @"placestyle");
 	normalizeToString(placeData, @"placetype");
 	normalizeToString(placeData, @"uri");
-	normalizeToBoolean(placeData, @"kid_friendly");
+	normalizeToBoolean(placeData, @"kid_friendly",NO);
 	
 	if ([placeData objectForKey:@"hours"]==nil)
 		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"hours"];
@@ -231,16 +232,16 @@ void normalizePlaceData(NSMutableDictionary* placeData)
 		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"restaurant"];
 	
 	normalizeToNumber([placeData objectForKey:@"restaurant"],@"price_range");
-	normalizeToBoolean([placeData objectForKey:@"restaurant"], @"outdoor_seating");
+	normalizeToBoolean([placeData objectForKey:@"restaurant"], @"outdoor_seating",NO);
 	normalizeToString([placeData objectForKey:@"restaurant"],@"food_description");
 	
 	if ([placeData objectForKey:@"@attributes"]==nil)
 		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"@attributes"];
 	
-	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"wifi");
-	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"bottled_beer_to_go");
-	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"growlers_to_go");
-	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"kegs_to_go");
+	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"wifi",NO);
+	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"bottled_beer_to_go",NO);
+	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"growlers_to_go",NO);
+	normalizeToBoolean([placeData objectForKey:@"@attributes"], @"kegs_to_go",NO);
 	
 	if ([placeData objectForKey:@"address"]==nil)
 		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:5] forKey:@"address"];
@@ -269,9 +270,9 @@ void normalizeBreweryData(NSMutableDictionary* data)
 	
 	if ([data objectForKey:@"togo"]==nil)
 		[data setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"togo"];
-	normalizeToBoolean([data objectForKey:@"togo"], @"bottled_beer");
-	normalizeToBoolean([data objectForKey:@"togo"], @"growlers");
-	normalizeToBoolean([data objectForKey:@"togo"], @"kegs");
+	normalizeToBoolean([data objectForKey:@"togo"], @"bottled_beer",NO);
+	normalizeToBoolean([data objectForKey:@"togo"], @"growlers",NO);
+	normalizeToBoolean([data objectForKey:@"togo"], @"kegs",NO);
 	
 	if ([data objectForKey:@"address"]==nil)
 		[data setObject:[NSMutableDictionary dictionaryWithCapacity:5] forKey:@"address"];

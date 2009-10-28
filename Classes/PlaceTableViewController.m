@@ -1019,7 +1019,10 @@ enum mytags {
 
 				NSArray* dollars=[NSArray arrayWithObjects:@"",@"$",@"$$",@"$$$",@"$$$$",nil];
 				[(UILabel*)[cell.contentView viewWithTag:2] setText:[dollars objectAtIndex:[[[self.placeData objectForKey:@"restaurant"] objectForKey:@"price_range"] integerValue]]];
-				[(UILabel*)[cell.contentView viewWithTag:3] setText:[self.placeData objectForKey:@"kid_friendly"]?@"yes":@"no"];
+				
+#define TEXT_FOR_BOOLEAN(v) (v==nil?@"":([v boolValue]?@"Yes":@"No"))
+				
+				[(UILabel*)[cell.contentView viewWithTag:3] setText:TEXT_FOR_BOOLEAN([self.placeData objectForKey:@"kid_friendly"])];
 		
 				NSMutableArray* togoValues=[NSMutableArray arrayWithCapacity:3];
 				if ([[[self.placeData objectForKey:@"@attributes"] objectForKey:@"bottled_beer_to_go"] boolValue])
@@ -1030,8 +1033,8 @@ enum mytags {
 					[togoValues addObject:@"kegs"];
 				[(UILabel*)[cell.contentView viewWithTag:4] setText:[togoValues componentsJoinedByString:@", "]];
 
-				[(UILabel*)[cell.contentView viewWithTag:5] setText:[[[self.placeData objectForKey:@"@attributes"] objectForKey:@"wifi"] boolValue] ?@"yes":@"no"];
-				[(UILabel*)[cell.contentView viewWithTag:6] setText:[[[self.placeData objectForKey:@"restaurant"] objectForKey:@"outdoor_seating"] boolValue]?@"yes":@"no"];
+				[(UILabel*)[cell.contentView viewWithTag:5] setText:TEXT_FOR_BOOLEAN([self.placeData objectForKey:@"wifi"])];
+				[(UILabel*)[cell.contentView viewWithTag:6] setText:TEXT_FOR_BOOLEAN([[self.placeData objectForKey:@"restaurant"] objectForKey:@"outdoor_seating"])];
 
 				break;
 			}
