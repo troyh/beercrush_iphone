@@ -22,12 +22,12 @@
 
 @implementation UIColor (BeerCrush)
 
-+(UIColor*)beercrushLightTanColor 	{return [UIColor colorWithRed:(234/255) green:(221/255) blue:(201/255) 	alpha:1.0];}
-+(UIColor*)beercrushTanColor		{return [UIColor colorWithRed:(196/255) green:(154/255) blue:(108/255) 	alpha:1.0];}
-+(UIColor*)beercrushLightRedColor 	{return [UIColor colorWithRed:(238/255) green:(49/255) 	blue:(36/255) 	alpha:1.0];}
-+(UIColor*)beercrushRedColor 		{return [UIColor colorWithRed:(111/255) green:(0/255) 	blue:(20/255) 	alpha:1.0];}
-+(UIColor*)beercrushLightBlueColor 	{return [UIColor colorWithRed:(56/255)  green:(189/255) blue:(236/255) 	alpha:1.0];}
-+(UIColor*)beercrushBlueColor 		{return [UIColor colorWithRed:(19/255)  green:(122/255) blue:(161/255) 	alpha:1.0];}
++(UIColor*)beercrushLightTanColor 	{return [UIColor colorWithRed:(234.0/255) green:(221.0/255) blue:(201.0/255) 	alpha:1.0];}
++(UIColor*)beercrushTanColor		{return [UIColor colorWithRed:(196.0/255) green:(154.0/255) blue:(108.0/255) 	alpha:1.0];}
++(UIColor*)beercrushLightRedColor 	{return [UIColor colorWithRed:(238.0/255) green:(49.0/255) 	blue:(36.0/255) 	alpha:1.0];}
++(UIColor*)beercrushRedColor 		{return [UIColor colorWithRed:(111.0/255) green:(0.0/255) 	blue:(20.0/255) 	alpha:1.0];}
++(UIColor*)beercrushLightBlueColor 	{return [UIColor colorWithRed:(56.0/255)  green:(189.0/255) blue:(236.0/255) 	alpha:1.0];}
++(UIColor*)beercrushBlueColor 		{return [UIColor colorWithRed:(19.0/255)  green:(122.0/255) blue:(161.0/255) 	alpha:1.0];}
 
 @end
 
@@ -428,6 +428,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagBeers:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Beers" image:[UIImage imageNamed:@"tab_beers.png"] tag:kTabBarItemTagBeers] autorelease];
@@ -439,6 +440,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagPlaces:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Places" image:[UIImage imageNamed:@"tab_places.png"] tag:kTabBarItemTagPlaces] autorelease];
@@ -450,6 +452,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagNearby:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Nearby" image:[UIImage imageNamed:@"tab_nearby.png"] tag:kTabBarItemTagNearby] autorelease];
@@ -460,6 +463,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagWishList:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Wish List" image:[UIImage imageNamed:@"tab_wishlist.png"] tag:kTabBarItemTagWishList] autorelease];
@@ -470,6 +474,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagMyBeerReviews:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Beers" image:[UIImage imageNamed:@"tab_beerreviews.png"] tag:kTabBarItemTagMyBeerReviews] autorelease];
@@ -480,6 +485,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagMyPlaces:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Places" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagMyPlaces] autorelease];
@@ -490,6 +496,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagProfile:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagProfile] autorelease];
@@ -500,6 +507,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagBuddies:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Buddies" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagBuddies] autorelease];
 				BuddiesTVC* btvc=[[[BuddiesTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
@@ -509,6 +517,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagRecommended:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Recommended" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagRecommended] autorelease];
 				RecommendedTVC* rtvc=[[[RecommendedTVC alloc]  initWithStyle:UITableViewStylePlain] autorelease];
@@ -518,6 +527,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			case kTabBarItemTagBookmarks:
 			{
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
+				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag:kTabBarItemTagBookmarks] autorelease];
 				BookmarksTVC* btvc=[[[BookmarksTVC alloc]  initWithStyle:UITableViewStylePlain] autorelease];
@@ -532,6 +542,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 	
 	tabBarController.viewControllers=tabBarControllers;
 	tabBarController.delegate=self;
+	tabBarController.moreNavigationController.navigationBar.tintColor=[UIColor beercrushTanColor];
 	
 	if (self.restoringNavState)
 	{
@@ -1435,6 +1446,12 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 			switch ([vctype intValue]) {
 				case kVCTypeSearchVC:
 					vc=[[[SearchVC alloc] init] autorelease];
+					if ([navobj isKindOfClass:[NSNumber class]])
+					{
+						SearchVC* svc=(SearchVC*)vc;
+						NSNumber* st=(NSNumber*)navobj;
+						svc.searchTypes=[st intValue];
+					}
 					break;
 				case kVCTypeBeerTableViewController:
 					if ([navobj isKindOfClass:[NSString class]])

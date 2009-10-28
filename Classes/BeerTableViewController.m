@@ -507,7 +507,7 @@ enum TAGS {
 					}
 					NSDictionary* stylesDict=[appDelegate getStylesDictionary];
 					NSArray* style=[beerObj.data objectForKey:@"styles"];
-					if (style)
+					if (style && [style count])
 						[cell.detailTextLabel setText:[[[stylesDict objectForKey:@"names"] objectForKey:[style objectAtIndex:0]] objectForKey:@"name"]]; // Take just the 1st
 					break;
 				}

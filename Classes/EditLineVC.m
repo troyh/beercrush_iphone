@@ -109,6 +109,7 @@
 
 		self.textField=[[UITextField alloc] initWithFrame:CGRectMake(10, 10, 280, 30)];
 		self.textField.font=[UIFont systemFontOfSize:20];
+		self.textField.autocapitalizationType=UITextAutocapitalizationTypeWords;
 		self.textField.delegate=self;
 		
 		[cell.contentView addSubview:self.textField];

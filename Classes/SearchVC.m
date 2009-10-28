@@ -28,6 +28,7 @@
 	{
 		self.logoView=[[[LogoVC alloc] initWithNibName:@"LogoVC" bundle:nil] autorelease];
 		self.searchBar=[[UISearchBar alloc] initWithFrame:CGRectZero];
+		self.searchBar.tintColor=[UIColor beercrushTanColor];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardDidHideNotification object:nil];
@@ -37,7 +38,7 @@
 
 -(NSObject*)navigationRestorationData
 {
-	return nil;
+	return [NSNumber numberWithInt:self.searchTypes];
 }
 
 /*
@@ -330,8 +331,9 @@
 {
 	UIViewController* vc=[[[UIViewController alloc] initWithNibName:nil bundle:nil] autorelease];
 	UINavigationController* nc=[[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
+	nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 	
-	if (self.searchTypes & BeerCrushSearchTypeBreweries)
+	if (self.searchTypes & (BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
 	{
 		BreweryTableViewController* btvc=[[[BreweryTableViewController alloc] initWithBreweryID:nil] autorelease];
 		btvc.delegate=self;
@@ -344,6 +346,9 @@
 		ptvc.delegate=self;
 		[ptvc setEditing:YES animated:NO];
 		[nc pushViewController:ptvc animated:NO];
+	}
+	else {
+		return; // Can't continue and present a view controller
 	}
 	
 	[self.navigationController presentModalViewController:nc animated:YES];
@@ -403,6 +408,7 @@
 	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		[cell.textLabel setFont:[UIFont systemFontOfSize:14]];
 	}
 	
 	/* 
@@ -464,8 +470,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	NSString* idstr=[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
-	[self navigateBasedOnDocumentID:idstr];
+	if (indexPath.row < [self.resultsList count])
+	{
+		NSString* idstr=[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
+		[self navigateBasedOnDocumentID:idstr];
+	}
+	else
+	{
+		[self addBeerOrBreweryButtonClicked:nil];
+	}
 }
 
 -(BOOL)navigateBasedOnDocumentID:(NSString*)idstr
