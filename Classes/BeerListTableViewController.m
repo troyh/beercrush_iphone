@@ -49,9 +49,6 @@ static const NSInteger kTagBeerNameLabel=2;
 	
 	self.beerList=nil;
 	
-	
-	beerList=[[NSMutableArray alloc] initWithCapacity:10];
-	
 	return self;
 }
 
@@ -175,34 +172,9 @@ static const NSInteger kTagBeerNameLabel=2;
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	
-	// Retrieve a JSON doc from server
-	NSURL* url=nil;
-	if (breweryID)
-	{	// Get brewery doc, it includes the beer list
-		NSArray* idparts=[breweryID componentsSeparatedByString:@":"];
-		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_BEERLIST, [idparts objectAtIndex:1]]];
-		
-	}
-	else if (placeID)
-	{	// Get the place menu doc
-		NSArray* idparts=[placeID componentsSeparatedByString:@":"];
-		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_MENU_DOC, [idparts objectAtIndex:0], [idparts objectAtIndex:1]]];
-	}
-	else if (wishlistID)
-	{	 // Get the wishlist doc
-		NSString* user_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
-		if (user_id==nil)
-			user_id=@"";
-		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_WISHLIST_DOC, user_id]];
-	}
 
-	if (url)
-	{
-		[beerList removeAllObjects];
-		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerList:) object:url requiresUserCredentials:wishlistID?YES:NO activityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieveing beer list from server")];
-	}
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerList:) object:nil requiresUserCredentials:wishlistID?YES:NO activityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieveing beer list from server")];
 }
 
 /*
@@ -248,7 +220,7 @@ static const NSInteger kTagBeerNameLabel=2;
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [beerList count];
+    return [[beerList objectForKey:@"beers"] count];
 }
 
 // Customize the appearance of table view cells.
@@ -275,7 +247,7 @@ static const NSInteger kTagBeerNameLabel=2;
     }
     
     // Set up the cell...
-	NSDictionary* beer=[beerList objectAtIndex:indexPath.row];
+	NSDictionary* beer=[[beerList objectForKey:@"beers"] objectAtIndex:indexPath.row];
 	UILabel* beerNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBeerNameLabel];
 	[beerNameLabel setText:[beer objectForKey:@"name"]];
 
@@ -301,7 +273,7 @@ static const NSInteger kTagBeerNameLabel=2;
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSDictionary* beer=[beerList objectAtIndex:indexPath.row];
+	NSDictionary* beer=[[beerList objectForKey:@"beers"] objectAtIndex:indexPath.row];
 	
 	/*
 	 Wish List docs and beerlist docs are in different formats. Those should probably be changed on the server to be more consistent.
@@ -323,20 +295,45 @@ static const NSInteger kTagBeerNameLabel=2;
 
 #pragma mark Async operations
 
--(void)getBeerList:(NSURL*)url
+-(void)getBeerList:(NSObject*)obj
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSMutableDictionary* answer;
-	NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
-	if ([response statusCode]==200)
-	{
-		self.beerList=[answer objectForKey:@"beers"];
-		if (self.beerList==nil)
-			self.beerList=[answer objectForKey:@"items"];
+
+	self.beerList=nil;
+
+	// Retrieve a JSON doc from server
+	if (breweryID)
+	{	// Get brewery doc, it includes the beer list
+		self.beerList=[appDelegate getBeerList:self.breweryID];
 	}
-	else {
-		[self.beerList removeAllObjects];
-		[self performSelectorOnMainThread:@selector(getBeerListFailed) withObject:nil waitUntilDone:NO];
+	else
+	{
+		NSURL* url=nil;
+		if (placeID)
+		{	// Get the place menu doc
+			NSArray* idparts=[placeID componentsSeparatedByString:@":"];
+			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_MENU_DOC, [idparts objectAtIndex:0], [idparts objectAtIndex:1]]];
+		}
+		else if (wishlistID)
+		{	 // Get the wishlist doc
+			NSString* user_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+			if (user_id==nil)
+				user_id=@"";
+			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_WISHLIST_DOC, user_id]];
+		}
+
+		if (url)
+		{
+			NSMutableDictionary* answer;
+			NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+			if ([response statusCode]==200)
+			{
+				self.beerList=answer;
+			}
+			else {
+				[self performSelectorOnMainThread:@selector(getBeerListFailed) withObject:nil waitUntilDone:NO];
+			}
+		}
 	}
 
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
@@ -358,11 +355,11 @@ static const NSInteger kTagBeerNameLabel=2;
 	[appDelegate dismissActivityHUD];
 	if ([response statusCode]==200)
 	{
-		self.beerList=[answer objectForKey:@"items"];
+		self.beerList=answer;
 	}
 	else 
 	{
-		[self.beerList removeAllObjects];
+		self.beerList=nil;
 		[self performSelectorOnMainThread:@selector(postBeerToMenuFailed) withObject:nil waitUntilDone:NO];
 	}
 

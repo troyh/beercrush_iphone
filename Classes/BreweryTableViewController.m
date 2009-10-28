@@ -8,6 +8,7 @@
 
 #import "BeerCrushAppDelegate.h"
 #import "BreweryTableViewController.h"
+#import "BeerListTableViewController.h"
 #import "ReviewsTableViewController.h"
 #import "RatingControl.h"
 #import "PhotoThumbnailControl.h"
@@ -39,6 +40,7 @@
 @synthesize breweryID;
 @synthesize breweryObject;
 @synthesize originalBreweryData;
+@synthesize beerList;
 @synthesize delegate;
 @synthesize editingWasCanceled;
 
@@ -72,8 +74,10 @@ enum TAGS {
 		if ([parts count]==2)
 		{
 			// Retrieve JSON doc from server
+			// TODO: do these asynchronously
 			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 			self.breweryObject.data=[appDelegate getBreweryDoc:self.breweryID];
+			self.beerList=[appDelegate getBeerList:self.breweryID];
 		}
 		else
 		{
@@ -584,7 +588,7 @@ enum TAGS {
 				if (cell == nil) {
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section1Cell"] autorelease];
 				}
-				[cell.textLabel setText:[NSString stringWithFormat:@"%d Beers Brewed",0]];
+				[cell.textLabel setText:[NSString stringWithFormat:@"%d Beers Brewed",[[self.beerList objectForKey:@"beers"] count]]];
 				break;
 			}
 			case 2: // Affiliated bars/restaurants
@@ -808,6 +812,20 @@ enum TAGS {
 	else
 	{
 		switch (indexPath.section) {
+			case 1:
+			{
+				switch (indexPath.row) {
+					case 0: // Beers Brewed
+					{
+						BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:self.breweryID] autorelease];
+						[self.navigationController pushViewController:bltvc animated:YES];
+						break;
+					}
+					default:
+						break;
+				}
+				break;
+			}
 			case 2:
 			{
 				switch (indexPath.row) 

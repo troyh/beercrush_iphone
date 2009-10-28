@@ -1254,7 +1254,7 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	NSArray* parts=[breweryID componentsSeparatedByString:@":"];
 	if ([parts count])
 	{
-		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC_JSON,[parts lastObject]]];
+		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_DOC,[parts lastObject]]];
 		NSMutableDictionary* answer;
 		NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
 		if ([response statusCode]==200)
@@ -1269,6 +1269,19 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		}
 	}
 	
+	return nil;
+}
+
+-(NSDictionary*)getBeerList:(NSString*)breweryID
+{
+	// TODO: support caching
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_BEERLIST,breweryID]];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
+		return answer;
+	}
 	return nil;
 }
 

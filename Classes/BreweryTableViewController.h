@@ -44,6 +44,7 @@
 	NSString* breweryID;
 	BreweryObject* breweryObject;
 	NSDictionary* originalBreweryData;
+	NSDictionary* beerList;
 	id<BreweryVCDelegate> delegate;
 	BOOL editingWasCanceled;
 }
@@ -51,6 +52,7 @@
 @property (nonatomic,retain) NSString* breweryID;
 @property (nonatomic,retain) BreweryObject* breweryObject;
 @property (nonatomic,retain) NSDictionary* originalBreweryData;
+@property (nonatomic,retain) NSDictionary* beerList;
 @property (assign) id<BreweryVCDelegate> delegate;
 @property (assign) BOOL editingWasCanceled;
 
