@@ -53,6 +53,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 	NSMutableDictionary* stylesDictionary;
 	NSMutableDictionary* colorsDictionary;
 	NSMutableDictionary* placeStylesDictionary;
+	NSMutableDictionary* documentCache;
 	
 	NSMutableDictionary* restoringNavState;
 	NSMutableDictionary* appState;
@@ -66,6 +67,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 @property (nonatomic, retain) NSMutableDictionary* stylesDictionary;
 @property (nonatomic, retain) NSMutableDictionary* colorsDictionary;
 @property (nonatomic, retain) NSMutableDictionary* placeStylesDictionary;
+@property (nonatomic, retain) NSMutableDictionary* documentCache;
 @property (nonatomic, retain) NSMutableDictionary* restoringNavState;
 @property (nonatomic, retain) NSMutableDictionary* appState;
 

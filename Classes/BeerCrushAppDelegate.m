@@ -303,7 +303,6 @@ void normalizeBreweryData(NSMutableDictionary* data)
 	[super dealloc];
 }
 
-
 @end
 
 @implementation BeerCrushAppDelegate
@@ -316,6 +315,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 @synthesize stylesDictionary;
 @synthesize colorsDictionary;
 @synthesize placeStylesDictionary;
+@synthesize documentCache;
 @synthesize restoringNavState;
 @synthesize appState;
 
@@ -323,6 +323,8 @@ void normalizeBreweryData(NSMutableDictionary* data)
     
 	// Create the sharedOperationQueue to use for async operations
 	self.sharedOperationQueue=[[NSOperationQueue alloc] init];
+	
+	self.documentCache=[NSMutableDictionary dictionaryWithCapacity:100];
 	
 	[self startApp];
 }
@@ -1251,7 +1253,10 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 
 -(NSMutableDictionary*)getBreweryDoc:(NSString*)breweryID
 {
-	// TODO: support caching
+	NSMutableDictionary* doc=[self.documentCache objectForKey:breweryID];
+	if (doc)
+		return doc;
+	
 	NSArray* parts=[breweryID componentsSeparatedByString:@":"];
 	if ([parts count])
 	{
@@ -1261,6 +1266,7 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		if ([response statusCode]==200)
 		{
 			normalizeBreweryData(answer);
+			[self.documentCache setObject:answer forKey:breweryID];
 			return answer;
 		}
 		else {
