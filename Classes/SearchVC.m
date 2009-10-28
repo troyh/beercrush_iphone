@@ -22,6 +22,10 @@
 @synthesize isPerformingAsyncQuery;
 @synthesize insets;
 
+enum {
+	kTagBreweryNameLabel=1,
+};
+
 -(id)init
 {
     if (self = [super initWithNibName:nil bundle:nil])
@@ -404,18 +408,14 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"Cell";
-	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-		[cell.textLabel setFont:[UIFont systemFontOfSize:14]];
-	}
 	
 	/* 
 	 Because the requests to the server are done asynchronously, we could return a different value
 	 from numberOfRowsInSection than we now have in self.resultsList. We may not have a row to return if the resultsList is 
 	 smaller than what the iPhone thinks it should be. So we *always* return a cell, even if it's empty.
 	 */
+	
+	UITableViewCell* cell=nil;
 	
 	if ((indexPath.row >= [self.resultsList count]))
 	{ // Show the Add a [Brewery|Place] row
@@ -446,18 +446,37 @@
 	}
 	else 
 	{
-		[cell.textLabel setText:[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"name"]];
-		NSString* idstr=[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
+		static NSString *CellIdentifier = @"Cell";
+		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+		if (cell == nil) {
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+			[cell.textLabel setFont:[UIFont systemFontOfSize:14]];
+			
+			UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 1, 200, 12)] autorelease];
+			breweryNameLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+			breweryNameLabel.textColor=[UIColor grayColor];
+			breweryNameLabel.tag=kTagBreweryNameLabel;
+			[cell.contentView addSubview:breweryNameLabel];
+		}
+
+		UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
+
+		NSDictionary* beer=[self.resultsList objectAtIndex:indexPath.row];
+		[cell.textLabel setText:[beer objectForKey:@"name"]];
+		NSString* idstr=[beer objectForKey:@"id"];
 		if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
 		{ // Beer
+			[breweryNameLabel setText:[[beer objectForKey:@"brewery"] objectForKey:@"name"]];
 			[cell.imageView initWithImage:[UIImage imageNamed:@"beer.png"]];
 		}
 		else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
 		{ // Place
+			[breweryNameLabel setText:@""];
 			[cell.imageView initWithImage:[UIImage imageNamed:@"restaurant.png"]];
 		}
 		else if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
 		{ // Brewery
+			[breweryNameLabel setText:@""];
 			[cell.imageView initWithImage:[UIImage imageNamed:@"brewery.png"]];
 		}
 		
