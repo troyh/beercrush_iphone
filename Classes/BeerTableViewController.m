@@ -1356,7 +1356,7 @@ enum TAGS {
 			}
 			case 6: // More from this brewer
 			{
-				NSString* brewery_id=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"brewery_id"];
+				NSString* brewery_id=[self.beerObj.data objectForKey:@"brewery_id"];
 				BeerListTableViewController* beerlistVC=[[[BeerListTableViewController alloc] initWithBreweryID:brewery_id] autorelease];
 				[self.navigationController pushViewController:beerlistVC animated:YES];
 				break;
