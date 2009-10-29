@@ -220,6 +220,8 @@ static const NSInteger kTagBeerNameLabel=2;
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	if (self.wishlistID)
+		return [[beerList objectForKey:@"items"] count];
     return [[beerList objectForKey:@"beers"] count];
 }
 
@@ -247,7 +249,12 @@ static const NSInteger kTagBeerNameLabel=2;
     }
     
     // Set up the cell...
-	NSDictionary* beer=[[beerList objectForKey:@"beers"] objectAtIndex:indexPath.row];
+	NSDictionary* beer=nil;
+	if (self.wishlistID)
+		beer=[[beerList objectForKey:@"items"] objectAtIndex:indexPath.row];
+	else
+		beer=[[beerList objectForKey:@"beers"] objectAtIndex:indexPath.row];
+	
 	UILabel* beerNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBeerNameLabel];
 	[beerNameLabel setText:[beer objectForKey:@"name"]];
 
@@ -273,7 +280,11 @@ static const NSInteger kTagBeerNameLabel=2;
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSDictionary* beer=[[beerList objectForKey:@"beers"] objectAtIndex:indexPath.row];
+	NSDictionary* beer=nil;
+	if (self.wishlistID)
+		beer=[[beerList objectForKey:@"items"] objectAtIndex:indexPath.row];
+	else
+		beer=[[beerList objectForKey:@"beers"] objectAtIndex:indexPath.row];
 	
 	/*
 	 Wish List docs and beerlist docs are in different formats. Those should probably be changed on the server to be more consistent.
