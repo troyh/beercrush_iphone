@@ -72,6 +72,7 @@
 		059DA054104C70B200D5652E /* EditTextVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 059DA053104C70B200D5652E /* EditTextVC.m */; };
 		059DA303104F3F3600D5652E /* CountryListTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 059DA302104F3F3600D5652E /* CountryListTVC.m */; };
 		05A12716109B70E2002F0F32 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A12715109B70E2002F0F32 /* MessageUI.framework */; };
+		05A127E4109B86E1002F0F32 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A127E3109B86E1002F0F32 /* Foundation.framework */; };
 		05B7DB5E103F42700021EEDA /* StylesListTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B7DB5D103F42700021EEDA /* StylesListTVC.m */; };
 		05B7DB7B103F45A70021EEDA /* StyleVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B7DB7A103F45A70021EEDA /* StyleVC.m */; };
 		05C0D47B10740500004D485E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 05C0D47A10740500004D485E /* Localizable.strings */; };
@@ -90,7 +91,6 @@
 		05F3C18A0F6F150400603ED1 /* PlaceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F3C1890F6F150400603ED1 /* PlaceTableViewController.m */; };
 		1D3623260D0F684500981E51 /* BeerCrushAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
-		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28216C970DB411BC00E5133A /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28216C960DB411BC00E5133A /* FirstViewController.m */; };
 		288765080DF74369002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765070DF74369002DB57D /* CoreGraphics.framework */; };
@@ -197,7 +197,8 @@
 		059DA053104C70B200D5652E /* EditTextVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditTextVC.m; sourceTree = "<group>"; };
 		059DA301104F3F3600D5652E /* CountryListTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryListTVC.h; sourceTree = "<group>"; };
 		059DA302104F3F3600D5652E /* CountryListTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryListTVC.m; sourceTree = "<group>"; };
-		05A12715109B70E2002F0F32 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.0.sdk/System/Library/Frameworks/MessageUI.framework; sourceTree = DEVELOPER_DIR; };
+		05A12715109B70E2002F0F32 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		05A127E3109B86E1002F0F32 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = ../../../../../../System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		05B7DB5C103F42700021EEDA /* StylesListTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StylesListTVC.h; sourceTree = "<group>"; };
 		05B7DB5D103F42700021EEDA /* StylesListTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StylesListTVC.m; sourceTree = "<group>"; };
 		05B7DB79103F45A70021EEDA /* StyleVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleVC.h; sourceTree = "<group>"; };
@@ -225,7 +226,6 @@
 		05F3C0730F6EF69400603ED1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		05F3C1880F6F150400603ED1 /* PlaceTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceTableViewController.h; sourceTree = "<group>"; };
 		05F3C1890F6F150400603ED1 /* PlaceTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceTableViewController.m; sourceTree = "<group>"; };
-		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeerCrushAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeerCrushAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* BeerCrush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeerCrush.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -243,11 +243,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765080DF74369002DB57D /* CoreGraphics.framework in Frameworks */,
 				05F3C0740F6EF69400603ED1 /* CoreLocation.framework in Frameworks */,
 				05A12716109B70E2002F0F32 /* MessageUI.framework in Frameworks */,
+				05A127E4109B86E1002F0F32 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,9 +449,9 @@
 			children = (
 				05F3C0730F6EF69400603ED1 /* CoreLocation.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
-				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765070DF74369002DB57D /* CoreGraphics.framework */,
 				05A12715109B70E2002F0F32 /* MessageUI.framework */,
+				05A127E3109B86E1002F0F32 /* Foundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -646,10 +646,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.0.sdk/System/Library/Frameworks\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BeerCrush_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
@@ -660,7 +657,7 @@
 				PRODUCT_NAME = BeerCrush;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos3.0;
+				SDKROOT = iphoneos3.1;
 			};
 			name = Release;
 		};
@@ -676,7 +673,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-licucore";
 				PREBINDING = NO;
-				SDKROOT = iphoneos2.2.1;
+				SDKROOT = iphonesimulator3.0;
 			};
 			name = Debug;
 		};
@@ -690,7 +687,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = "-licucore";
 				PREBINDING = NO;
-				SDKROOT = iphoneos2.2.1;
+				SDKROOT = iphoneos3.1;
 			};
 			name = Release;
 		};
