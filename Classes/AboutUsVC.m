@@ -8,8 +8,11 @@
 
 #import "AboutUsVC.h"
 
-
 @implementation AboutUsVC
+
+#define MAIL_RECIPIENT_EMAIL @"feedback@beercrush.com"
+#define MAIL_SUBJECT_TEXT	 @"My feedback"
+#define MAIL_BODY_TEXT		 @""
 
 -(id)init
 {
@@ -69,6 +72,75 @@
 -(IBAction)sendFeedbackButtonClicked:(id)sender
 {
 	// TODO: Launch mail to send mail to feedback@beercrush.com
+	Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
+	if (mailClass != nil)
+	{
+		if ([mailClass canSendMail])
+		{
+			[self displayComposerSheet];
+		}
+		else
+		{
+			[self launchMailAppOnDevice];
+		}
+	}
+	else
+	{
+		[self launchMailAppOnDevice];
+	}
+	
+}
+
+#pragma mark MFMailComposeViewControllerDelegate methods
+
+/* 
+ Code taken from http://jackpaternoster.com/2009/07/iphone-sdk-tip-sending-emails-from-an-app-part-2/
+ */
+-(void)displayComposerSheet
+{
+	//alloc and init the MFMailComposeViewController
+	MFMailComposeViewController *email = [[MFMailComposeViewController alloc] init];
+	//set the delegate to the current View controller
+	email.mailComposeDelegate = self;
+
+	//Set the subject of the email
+	[email setSubject:MAIL_SUBJECT_TEXT];
+
+	//set the to: address
+	NSArray *toRecipients = [NSArray arrayWithObject:MAIL_RECIPIENT_EMAIL];
+	[email setToRecipients:toRecipients];
+
+	// body text
+//	NSString *emailBody = MAIL_BODY_TEXT;
+//	[email setMessageBody:emailBody isHTML:NO];
+
+	[self presentModalViewController:email animated:YES];
+	[email release];
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+	[self dismissModalViewControllerAnimated:YES];
+}
+
+-(void)launchMailAppOnDevice
+{
+	//email address string
+	NSString *emailAddress = MAIL_RECIPIENT_EMAIL;
+	//subject string
+	NSString *subject = MAIL_SUBJECT_TEXT;
+	//body string
+	NSString *body = MAIL_BODY_TEXT;
+	//have to percent escape the subject string to be compatible with the mailto: uri scheme
+	NSString *processedSubject = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)subject, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
+	//have to percent escape the body string to be compatible with the mailto: uri scheme
+	NSString *processedBody = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)body, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
+	//create the mailto: URL string
+	NSString *mailToString = [NSString stringWithFormat:@"mailto:%@?subject=$@&body=%@", emailAddress, processedSubject, processedBody];
+	//Convert NSString to NSURL
+	NSURL *url = [NSURL URLWithString:mailToString];
+	//Open the Mail App with the NSURL
+	[[UIApplication sharedApplication] openURL:url];
 }
 
 

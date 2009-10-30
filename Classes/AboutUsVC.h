@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 
-@interface AboutUsVC : UIViewController {
+@interface AboutUsVC : UIViewController <MFMailComposeViewControllerDelegate> {
 
 }
 
@@ -17,5 +19,8 @@
 
 -(IBAction)doneButtonClicked:(id)sender;
 -(IBAction)sendFeedbackButtonClicked:(id)sender;
+
+-(void)displayComposerSheet;
+-(void)launchMailAppOnDevice;
 
 @end

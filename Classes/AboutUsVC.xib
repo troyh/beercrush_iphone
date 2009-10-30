@@ -77,12 +77,12 @@
 					<object class="IBUILabel" id="800636517">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">310</int>
-						<string key="NSFrame">{{56, 291}, {207, 102}}</string>
+						<string key="NSFrame">{{42, 281}, {235, 105}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
-						<string key="IBUIText">Learn more about Beer Crush and stay up-to-date as we improve. beercrush.com/blog</string>
+						<string key="IBUIText">Learn more about Beer Crush and stay up-to-date as we improve. http://blog.beercrush.com</string>
 						<object class="NSFont" key="IBUIFont" id="746481626">
 							<string key="NSName">Helvetica</string>
 							<double key="NSSize">14</double>
@@ -222,8 +222,8 @@
 							<reference ref="601018353"/>
 							<reference ref="803823751"/>
 							<reference ref="205116516"/>
-							<reference ref="800636517"/>
 							<reference ref="888282774"/>
+							<reference ref="800636517"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>

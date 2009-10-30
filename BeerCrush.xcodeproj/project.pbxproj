@@ -71,6 +71,7 @@
 		05944DC50F72E7C30043D34C /* BeerCrush.png in Resources */ = {isa = PBXBuildFile; fileRef = 05944DC40F72E7C30043D34C /* BeerCrush.png */; };
 		059DA054104C70B200D5652E /* EditTextVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 059DA053104C70B200D5652E /* EditTextVC.m */; };
 		059DA303104F3F3600D5652E /* CountryListTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 059DA302104F3F3600D5652E /* CountryListTVC.m */; };
+		05A12716109B70E2002F0F32 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A12715109B70E2002F0F32 /* MessageUI.framework */; };
 		05B7DB5E103F42700021EEDA /* StylesListTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B7DB5D103F42700021EEDA /* StylesListTVC.m */; };
 		05B7DB7B103F45A70021EEDA /* StyleVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B7DB7A103F45A70021EEDA /* StyleVC.m */; };
 		05C0D47B10740500004D485E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 05C0D47A10740500004D485E /* Localizable.strings */; };
@@ -196,6 +197,7 @@
 		059DA053104C70B200D5652E /* EditTextVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditTextVC.m; sourceTree = "<group>"; };
 		059DA301104F3F3600D5652E /* CountryListTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryListTVC.h; sourceTree = "<group>"; };
 		059DA302104F3F3600D5652E /* CountryListTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryListTVC.m; sourceTree = "<group>"; };
+		05A12715109B70E2002F0F32 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.0.sdk/System/Library/Frameworks/MessageUI.framework; sourceTree = DEVELOPER_DIR; };
 		05B7DB5C103F42700021EEDA /* StylesListTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StylesListTVC.h; sourceTree = "<group>"; };
 		05B7DB5D103F42700021EEDA /* StylesListTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StylesListTVC.m; sourceTree = "<group>"; };
 		05B7DB79103F45A70021EEDA /* StyleVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleVC.h; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765080DF74369002DB57D /* CoreGraphics.framework in Frameworks */,
 				05F3C0740F6EF69400603ED1 /* CoreLocation.framework in Frameworks */,
+				05A12716109B70E2002F0F32 /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,93 +286,93 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				05ECB3A0107D629E001D59A0 /* RegexKitLite */,
 				05C0D4DE107413A6004D485E /* AboutUsVC.h */,
 				05C0D4DF107413A6004D485E /* AboutUsVC.m */,
 				05C0D4E0107413A6004D485E /* AboutUsVC.xib */,
-				051BBD9C10753EE8004376D9 /* LogoVC.h */,
-				051BBD9D10753EE8004376D9 /* LogoVC.m */,
-				051BBD9E10753EE8004376D9 /* LogoVC.xib */,
-				0504AC4F105B05F3001FAEBC /* EditLineVC.h */,
-				0504AC50105B05F3001FAEBC /* EditLineVC.m */,
-				0516656510583A1B00D9C98D /* PhotoViewer.h */,
-				0516656610583A1B00D9C98D /* PhotoViewer.m */,
-				051665401058310D00D9C98D /* PhotoThumbnailControl.h */,
-				051665411058310D00D9C98D /* PhotoThumbnailControl.m */,
-				05165EBA1051D76500D9C98D /* EditURIVC.h */,
-				05165EBB1051D76500D9C98D /* EditURIVC.m */,
-				05165EAF1051D60E00D9C98D /* EditAddressVC.h */,
-				05165EB01051D60E00D9C98D /* EditAddressVC.m */,
-				05165E371051C5C800D9C98D /* PlacePriceTVC.h */,
-				05165E381051C5C800D9C98D /* PlacePriceTVC.m */,
-				05165D0B10519C5300D9C98D /* PlaceStyleTVC.h */,
-				05165D0C10519C5300D9C98D /* PlaceStyleTVC.m */,
-				05165D0810519C3D00D9C98D /* PlaceTypeTVC.h */,
-				05165D0910519C3D00D9C98D /* PlaceTypeTVC.m */,
-				059DA301104F3F3600D5652E /* CountryListTVC.h */,
-				059DA302104F3F3600D5652E /* CountryListTVC.m */,
-				059DA052104C70B200D5652E /* EditTextVC.h */,
-				059DA053104C70B200D5652E /* EditTextVC.m */,
-				05451D7A1049DAE800F9400B /* JSON */,
-				05451C44104883E800F9400B /* PlacesTVC.h */,
-				05451C45104883E800F9400B /* PlacesTVC.m */,
-				05451C281048827F00F9400B /* BookmarksTVC.h */,
-				05451C291048827F00F9400B /* BookmarksTVC.m */,
-				05451C251048827700F9400B /* RecommendedTVC.h */,
-				05451C261048827700F9400B /* RecommendedTVC.m */,
-				05451C221048826F00F9400B /* BuddiesTVC.h */,
-				05451C231048826F00F9400B /* BuddiesTVC.m */,
-				05451C1F1048820100F9400B /* UserProfileTVC.h */,
-				05451C201048820100F9400B /* UserProfileTVC.m */,
 				0545144510435A4900F9400B /* AvailabilityTVC.h */,
 				0545144610435A4900F9400B /* AvailabilityTVC.m */,
+				1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */,
+				1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */,
+				05C637F20F56087F00B1C78A /* BeerListTableViewController.h */,
+				05C637F30F56087F00B1C78A /* BeerListTableViewController.m */,
+				05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */,
+				05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */,
+				05451C281048827F00F9400B /* BookmarksTVC.h */,
+				05451C291048827F00F9400B /* BookmarksTVC.m */,
+				05C6364B0F55C03C00B1C78A /* BreweryTableViewController.h */,
+				05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */,
+				058FF38B1030C41E00DA6D81 /* BrowseBrewersTVC.h */,
+				058FF38C1030C41E00DA6D81 /* BrowseBrewersTVC.m */,
+				05451C221048826F00F9400B /* BuddiesTVC.h */,
+				05451C231048826F00F9400B /* BuddiesTVC.m */,
 				05451380104346EF00F9400B /* ColorsTVC.h */,
 				05451381104346EF00F9400B /* ColorsTVC.m */,
-				05B7DB5C103F42700021EEDA /* StylesListTVC.h */,
-				05B7DB5D103F42700021EEDA /* StylesListTVC.m */,
+				059DA301104F3F3600D5652E /* CountryListTVC.h */,
+				059DA302104F3F3600D5652E /* CountryListTVC.m */,
+				051BC38B107A8742004376D9 /* DatePickerVC.h */,
+				051BC38C107A8742004376D9 /* DatePickerVC.m */,
+				051BC38D107A8742004376D9 /* DatePickerVC.xib */,
+				05165EAF1051D60E00D9C98D /* EditAddressVC.h */,
+				05165EB01051D60E00D9C98D /* EditAddressVC.m */,
+				0504AC4F105B05F3001FAEBC /* EditLineVC.h */,
+				0504AC50105B05F3001FAEBC /* EditLineVC.m */,
+				059DA052104C70B200D5652E /* EditTextVC.h */,
+				059DA053104C70B200D5652E /* EditTextVC.m */,
+				05165EBA1051D76500D9C98D /* EditURIVC.h */,
+				05165EBB1051D76500D9C98D /* EditURIVC.m */,
+				28216C950DB411BC00E5133A /* FirstViewController.h */,
+				28216C960DB411BC00E5133A /* FirstViewController.m */,
 				058FFCA210360A1E00DA6D81 /* FlavorsAromasTVC.h */,
 				058FFCA310360A1E00DA6D81 /* FlavorsAromasTVC.m */,
 				058FFBC81035DE4200DA6D81 /* FullBeerReviewTVC.h */,
 				058FFBC91035DE4200DA6D81 /* FullBeerReviewTVC.m */,
+				05451D7A1049DAE800F9400B /* JSON */,
 				058FF79010332E2100DA6D81 /* LoginVC.h */,
 				058FF79110332E2100DA6D81 /* LoginVC.m */,
-				058FF38B1030C41E00DA6D81 /* BrowseBrewersTVC.h */,
-				058FF38C1030C41E00DA6D81 /* BrowseBrewersTVC.m */,
-				28216C950DB411BC00E5133A /* FirstViewController.h */,
-				28216C960DB411BC00E5133A /* FirstViewController.m */,
-				1D3623240D0F684500981E51 /* BeerCrushAppDelegate.h */,
-				1D3623250D0F684500981E51 /* BeerCrushAppDelegate.m */,
+				051BBD9C10753EE8004376D9 /* LogoVC.h */,
+				051BBD9D10753EE8004376D9 /* LogoVC.m */,
+				051BBD9E10753EE8004376D9 /* LogoVC.xib */,
 				05C9AC3E0F53756F0020B102 /* MyTableViewController.h */,
 				05C9AC3F0F53756F0020B102 /* MyTableViewController.m */,
-				05C6364B0F55C03C00B1C78A /* BreweryTableViewController.h */,
-				05C6364C0F55C03C00B1C78A /* BreweryTableViewController.m */,
-				05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */,
-				05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */,
-				05C6378E0F56018100B1C78A /* ReviewsTableViewController.h */,
-				05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */,
-				05C637F20F56087F00B1C78A /* BeerListTableViewController.h */,
-				05C637F30F56087F00B1C78A /* BeerListTableViewController.m */,
 				05F3BFB10F6EEDCB00603ED1 /* NearbyTableViewController.h */,
 				05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */,
-				05F3C1880F6F150400603ED1 /* PlaceTableViewController.h */,
-				05F3C1890F6F150400603ED1 /* PlaceTableViewController.m */,
 				053653940F703F99000389C1 /* PhoneNumberEditTableViewController.h */,
 				053653950F703F99000389C1 /* PhoneNumberEditTableViewController.m */,
-				0577ECB710068A1300A2468C /* RatingControl.h */,
-				0577ECB810068A1300A2468C /* RatingControl.m */,
-				0511029F100FDC8300610251 /* UserReviewsTVC.h */,
-				051102A0100FDC8300610251 /* UserReviewsTVC.m */,
-				05B7DB79103F45A70021EEDA /* StyleVC.h */,
-				05B7DB7A103F45A70021EEDA /* StyleVC.m */,
-				051BBE931075539B004376D9 /* SearchVC.h */,
-				051BBE941075539B004376D9 /* SearchVC.m */,
+				051665401058310D00D9C98D /* PhotoThumbnailControl.h */,
+				051665411058310D00D9C98D /* PhotoThumbnailControl.m */,
+				0516656510583A1B00D9C98D /* PhotoViewer.h */,
+				0516656610583A1B00D9C98D /* PhotoViewer.m */,
+				05165E371051C5C800D9C98D /* PlacePriceTVC.h */,
+				05165E381051C5C800D9C98D /* PlacePriceTVC.m */,
+				05451C44104883E800F9400B /* PlacesTVC.h */,
+				05451C45104883E800F9400B /* PlacesTVC.m */,
+				05165D0B10519C5300D9C98D /* PlaceStyleTVC.h */,
+				05165D0C10519C5300D9C98D /* PlaceStyleTVC.m */,
+				05F3C1880F6F150400603ED1 /* PlaceTableViewController.h */,
+				05F3C1890F6F150400603ED1 /* PlaceTableViewController.m */,
+				05165D0810519C3D00D9C98D /* PlaceTypeTVC.h */,
+				05165D0910519C3D00D9C98D /* PlaceTypeTVC.m */,
 				051BC382107A837F004376D9 /* PouredFromVC.h */,
 				051BC383107A837F004376D9 /* PouredFromVC.m */,
-				051BC38B107A8742004376D9 /* DatePickerVC.h */,
-				051BC38C107A8742004376D9 /* DatePickerVC.m */,
-				051BC38D107A8742004376D9 /* DatePickerVC.xib */,
+				0577ECB710068A1300A2468C /* RatingControl.h */,
+				0577ECB810068A1300A2468C /* RatingControl.m */,
 				051BC627107BD6BD004376D9 /* RatingView.h */,
 				051BC628107BD6BD004376D9 /* RatingView.m */,
+				05451C251048827700F9400B /* RecommendedTVC.h */,
+				05451C261048827700F9400B /* RecommendedTVC.m */,
+				05ECB3A0107D629E001D59A0 /* RegexKitLite */,
+				05C6378E0F56018100B1C78A /* ReviewsTableViewController.h */,
+				05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */,
+				051BBE931075539B004376D9 /* SearchVC.h */,
+				051BBE941075539B004376D9 /* SearchVC.m */,
+				05B7DB5C103F42700021EEDA /* StylesListTVC.h */,
+				05B7DB5D103F42700021EEDA /* StylesListTVC.m */,
+				05B7DB79103F45A70021EEDA /* StyleVC.h */,
+				05B7DB7A103F45A70021EEDA /* StyleVC.m */,
+				05451C1F1048820100F9400B /* UserProfileTVC.h */,
+				05451C201048820100F9400B /* UserProfileTVC.m */,
+				0511029F100FDC8300610251 /* UserReviewsTVC.h */,
+				051102A0100FDC8300610251 /* UserReviewsTVC.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -448,6 +451,7 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765070DF74369002DB57D /* CoreGraphics.framework */,
+				05A12715109B70E2002F0F32 /* MessageUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -618,6 +622,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.0.sdk/System/Library/Frameworks\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -638,6 +646,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.0.sdk/System/Library/Frameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BeerCrush_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
