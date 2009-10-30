@@ -24,7 +24,8 @@
 
 @protocol StylesListTVCDelegate
 
--(void)stylesTVC:(StylesListTVC*)tvc didSelectStyle:(NSArray*)styleids;
+-(void)stylesTVC:(StylesListTVC*)tvc didSelectStyle:(NSArray*)styleids selectedStyle:(NSString*)styleid;
+-(void)stylesTVC:(StylesListTVC*)tvc didUnselectStyle:(NSArray*)styleids unselectedStyle:(NSString*)styleid;
 
 @end
 

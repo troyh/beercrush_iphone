@@ -23,6 +23,13 @@
 			self.stylesDictionary=[appDelegate getStylesDictionary];
 		else
 			self.stylesDictionary=styles;
+	
+		NSString* name=[self.stylesDictionary objectForKey:@"name"];
+		if (name==nil) // This is the top-level
+			self.title=NSLocalizedString(@"Beer Styles",@"Beer Styles");
+		else // This is a substyle
+			self.title=[NSString stringWithFormat:@"%@ %@",name,NSLocalizedString(@"Beer Styles",@"Beer Styles")];
+			
     }
     return self;
 }
@@ -128,7 +135,13 @@
 		if ([self.selectedStyleIDs containsObject:styleID])
 			cell.accessoryType=UITableViewCellAccessoryCheckmark;
 		else
-			cell.accessoryType=UITableViewCellAccessoryNone;
+		{
+			NSArray* substyles=[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.row] objectForKey:@"styles"];
+			if (substyles && [substyles isKindOfClass:[NSArray class]])
+				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+			else
+				cell.accessoryType=UITableViewCellAccessoryNone;
+		}
 	}
 	
     return cell;
@@ -137,23 +150,38 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if (indexPath.row < [[self.stylesDictionary objectForKey:@"styles"] count])
+	NSArray* styles=[self.stylesDictionary objectForKey:@"styles"];
+	if (indexPath.row < [styles count])
 	{
-		NSArray* substyles=[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.row] objectForKey:@"styles"];
+		NSArray* substyles=[[styles objectAtIndex:indexPath.row] objectForKey:@"styles"];
 		if (substyles && [substyles isKindOfClass:[NSArray class]])
 		{
 			// Navigate to the next level of styles
-			StylesListTVC* vc=[[[StylesListTVC alloc] initWithStyleID:[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.row]] autorelease];
+			StylesListTVC* vc=[[[StylesListTVC alloc] initWithStyleID:[styles objectAtIndex:indexPath.row]] autorelease];
 			vc.selectedStyleIDs=self.selectedStyleIDs;
 			vc.delegate=self.delegate;
 			[self.navigationController pushViewController:vc animated:YES];
 		}
 		else 
 		{
-			// For now, we only support selecting one style, so we'll remove any already set and replace them with the one the user just selected
-			[self.selectedStyleIDs removeAllObjects];
-			[self.selectedStyleIDs addObject:[[[self.stylesDictionary objectForKey:@"styles"] objectAtIndex:indexPath.row] objectForKey:@"id"]];
-			[delegate stylesTVC:self didSelectStyle:self.selectedStyleIDs];
+			// If it's checked, uncheck it
+			NSString* tappedStyle=[[styles objectAtIndex:indexPath.row] objectForKey:@"id"];
+			NSUInteger existingIndex=[self.selectedStyleIDs indexOfObject:tappedStyle];
+			if (existingIndex==NSNotFound)
+			{
+				[self.selectedStyleIDs addObject:[[styles objectAtIndex:indexPath.row] objectForKey:@"id"]];
+				[delegate stylesTVC:self didSelectStyle:self.selectedStyleIDs selectedStyle:tappedStyle];
+			}
+			else
+			{
+				[delegate stylesTVC:self didUnselectStyle:self.selectedStyleIDs unselectedStyle:tappedStyle];
+				 
+				[self.selectedStyleIDs removeObjectAtIndex:existingIndex];
+				UITableViewCell* cell=[self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+				cell.accessoryType=UITableViewCellAccessoryNone;
+				cell.highlighted=NO;
+				[self.tableView reloadData];
+			}
 		}
 	}
 }

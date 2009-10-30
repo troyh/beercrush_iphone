@@ -497,13 +497,14 @@ enum TAGS {
 						}
 					}
 					break;
-				case 1:
+				case 1: // Style
 				{
 					cell = [tableView dequeueReusableCellWithIdentifier:@"Section0Row1Cell"];
 					if (cell == nil)
 					{
 						cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section0Row1Cell"] autorelease];
 						[cell.textLabel setText:@"Style"];
+						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 					}
 					NSDictionary* stylesDict=[appDelegate getStylesDictionary];
 					NSArray* style=[beerObj.data objectForKey:@"styles"];
@@ -1462,11 +1463,20 @@ enum TAGS {
 
 #pragma mark StylesListTVCDelegate methods
 
--(void)stylesTVC:(StylesListTVC*)tvc didSelectStyle:(NSArray*)styleids
+-(void)stylesTVC:(StylesListTVC*)tvc didSelectStyle:(NSArray*)styleids selectedStyle:(NSString*)styleid
 {
-	[self.beerObj.data setObject:styleids forKey:@"styles"];
+	// For now, we only support one style per beer, so only use the one they just selected
+	[self.beerObj.data setObject:[NSMutableArray arrayWithObject:styleid] forKey:@"styles"];
 	[self.tableView reloadData];
 	[self.navigationController popToViewController:self animated:YES];
+}
+
+-(void)stylesTVC:(StylesListTVC*)tvc didUnselectStyle:(NSArray*)styleids unselectedStyle:(NSString*)styleid
+{
+	// For now, we only support one style per beer, so only take the first one in the styleids array (should only be
+	// 1 at most anyway since we don't ever store more than one on the beer)
+	[self.beerObj.data setObject:[NSMutableArray arrayWithObject:[styleids objectAtIndex:0]] forKey:@"styles"];
+	[self.tableView reloadData];
 }
 
 #pragma mark FullBeerReviewTVCDelegate methods
