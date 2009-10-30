@@ -79,8 +79,7 @@ enum mytags {
 		[self.tableView beginUpdates];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
-		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:6] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
 
 		[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:
 												[NSIndexPath indexPathForRow:1 inSection:0],
@@ -179,8 +178,7 @@ enum mytags {
 			
 			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
-			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
-			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:6] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationFade];
 			[self.tableView endUpdates];
 
 			[self.navigationItem setLeftBarButtonItem:nil];
@@ -289,7 +287,7 @@ enum mytags {
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.editing?6:7;
+    return self.editing?6:6;
 }
 
 
@@ -306,16 +304,13 @@ enum mytags {
 			return self.editing?3:1;
 			break;
 		case 3:
-			return self.editing?1:1;
+			return self.editing?1:3;
 			break;
 		case 4:
-			return self.editing?5:3;
+			return self.editing?5:1;
 			break;
 		case 5:
 			return self.editing?3:1;
-			break;
-		case 6:
-			return self.editing?0:1;
 			break;
 		default:
 			break;
@@ -344,10 +339,10 @@ enum mytags {
 	else 
 	{
 		switch (section) {
-			case 5:
+			case 4:
 				return @"Owner's Description";
 				break;
-			case 6:
+			case 5:
 				return @"Details";
 				break;
 			default:
@@ -408,7 +403,7 @@ enum mytags {
 				}
 				break;
 			}
-			case 4:
+			case 3:
 			{
 				switch (indexPath.row) {
 					case 0: // Address
@@ -419,10 +414,10 @@ enum mytags {
 				}
 				break;
 			}
-			case 5: // Owner's Description
+			case 4: // Owner's Description
 				return 80;
 				break;
-			case 6: // Details
+			case 5: // Details
 				return 130;
 				break;
 		}
@@ -857,17 +852,7 @@ enum mytags {
 				}
 				break;
 			}
-			case 3: // Affiliations
-			{
-				cell = [tableView dequeueReusableCellWithIdentifier:@"Affiliations"];
-				if (cell == nil) {
-					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Affiliations"] autorelease];
-					[cell.textLabel setText:[NSString stringWithFormat:@"Affiliated with %@",@""]];
-					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-				}
-				break;
-			}
-			case 4: // Map, phone and web
+			case 3: // Map, phone and web
 			{
 				switch (indexPath.row)
 				{
@@ -922,7 +907,7 @@ enum mytags {
 				}
 				break;
 			}
-			case 5: // Owner's Description
+			case 4: // Owner's Description
 			{
 				cell = [tableView dequeueReusableCellWithIdentifier:@"OwnerDescription"];
 				if (cell == nil) {
@@ -935,7 +920,7 @@ enum mytags {
 				[cell.textLabel setText:[self.placeData objectForKey:@"description"]];
 				break;
 			}
-			case 6: // Details
+			case 5: // Details
 			{
 				cell = [tableView dequeueReusableCellWithIdentifier:@"Details"];
 				if (cell == nil) {
