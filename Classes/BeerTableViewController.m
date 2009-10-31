@@ -482,7 +482,7 @@ enum TAGS {
 						[beerNameLabel setText:[beerObj.data objectForKey:@"name"]];
 
 						UILabel* breweryNameLabel=(UILabel*)[cell viewWithTag:kTagBreweryNameLabel];
-						[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"brewery_id"]]];
+						[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[self.beerObj.data objectForKey:@"brewery_id"]]];
 
 						NSArray* styles=[beerObj.data objectForKey:@"styles"];
 						if (styles && [styles isKindOfClass:[NSArray class]] && [styles count])
@@ -781,7 +781,7 @@ enum TAGS {
 						
 						NSDictionary* colorsDict=[appDelegate getColorsDictionary];
 						[cell.textLabel setText:@"Color"];
-						[cell.detailTextLabel setText:[[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"srm"]]] objectForKey:@"name" ]];
+						[cell.detailTextLabel setText:[[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:[NSString stringWithFormat:@"%@",[self.beerObj.data objectForKey:@"srm"]]] objectForKey:@"name" ]];
 						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						break;
 					}
@@ -792,7 +792,7 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row2Editing"] autorelease];
 						
 						[cell.textLabel setText:@"ABV"];
-						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"abv"]];
+						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"abv"]];
 
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
@@ -804,7 +804,7 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row3Editing"] autorelease];
 						
 						[cell.textLabel setText:@"IBUs"];
-						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"ibu"]];
+						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"ibu"]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
@@ -816,7 +816,7 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row4Editing"] autorelease];
 						
 						[cell.textLabel setText:@"OG"];
-						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"og"]];
+						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"og"]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
@@ -828,7 +828,7 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row5Editing"] autorelease];
 						
 						[cell.textLabel setText:@"FG"];
-						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"fg"]];
+						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"fg"]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
@@ -873,7 +873,7 @@ enum TAGS {
 						
 						[cell.textLabel setText:@"Calories/12oz"];
 						
-						NSNumber* cals=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"calories_per_ml"];
+						NSNumber* cals=[self.beerObj.data objectForKey:@"calories_per_ml"];
 						if ([cals floatValue])
 						{
 							[cell.detailTextLabel setText:[NSString stringWithFormat:@"%0.0f",[cals floatValue]*355]]; // 355ml=12 fl.oz.
@@ -996,11 +996,11 @@ enum TAGS {
 				label=(UILabel*)[cell viewWithTag:kTagDetailsColor];
 				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 				NSDictionary* colorsDict=[appDelegate getColorsDictionary];
-				NSString* srmval=[NSString stringWithFormat:@"%@",[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"srm"]];
+				NSString* srmval=[NSString stringWithFormat:@"%@",[self.beerObj.data objectForKey:@"srm"]];
 				NSDictionary* colorInfo=[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:srmval];
 				[label setText:[colorInfo objectForKey:@"name"]];
 
-				NSArray* rgbValues=[[colorInfo objectForKey:@"@attributes"] objectForKey:@"rgb"];
+				NSArray* rgbValues=[colorInfo objectForKey:@"rgb"];
 				UIView* swatch=[cell viewWithTag:kTagDetailsColorSwatch];
 				swatch.backgroundColor=[UIColor colorWithRed:[[rgbValues objectAtIndex:0] integerValue]/255.0 
 															green:[[rgbValues objectAtIndex:1] integerValue]/255.0 
@@ -1008,31 +1008,31 @@ enum TAGS {
 															alpha:1.0];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsABV];
-				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"abv"]];
+				[label setText:[self.beerObj.data objectForKey:@"abv"]];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsIBU];
-				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"ibu"]];
+				[label setText:[self.beerObj.data objectForKey:@"ibu"]];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsOG];
-				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"og"]];
+				[label setText:[self.beerObj.data objectForKey:@"og"]];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsFG];
-				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"fg"]];
+				[label setText:[self.beerObj.data objectForKey:@"fg"]];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsGrains];
-				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"grains"]];
+				[label setText:[self.beerObj.data objectForKey:@"grains"]];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsHops];
-				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"hops"]];
+				[label setText:[self.beerObj.data objectForKey:@"hops"]];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsYeast];
-				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"yeast"]];
+				[label setText:[self.beerObj.data objectForKey:@"yeast"]];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsOtherIngs];
-				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"otherings"]];
+				[label setText:[self.beerObj.data objectForKey:@"otherings"]];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsSizes];
-				[label setText:[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"sizes"]];
+				[label setText:[self.beerObj.data objectForKey:@"sizes"]];
 
 				cell.selectionStyle=UITableViewCellSelectionStyleNone;
 			}
@@ -1191,7 +1191,7 @@ enum TAGS {
 					{
 						ColorsTVC* ctvc=[[[ColorsTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
 						ctvc.delegate=self;
-						ctvc.selectedColorSRM=[[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"srm"] integerValue];
+						ctvc.selectedColorSRM=[[self.beerObj.data objectForKey:@"srm"] integerValue];
 						[self.navigationController pushViewController:ctvc animated:YES];
 						break;
 					}
@@ -1201,7 +1201,7 @@ enum TAGS {
 						vc.delegate=self;
 						vc.tag=kTagEditTextABV;
 						vc.textType=EditLineVCTextTypeFloat;
-						vc.textToEdit=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"abv"];
+						vc.textToEdit=[self.beerObj.data objectForKey:@"abv"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1211,7 +1211,7 @@ enum TAGS {
 						vc.delegate=self;
 						vc.tag=kTagEditTextIBU;
 						vc.textType=EditLineVCTextTypeInteger;
-						vc.textToEdit=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"ibu"];
+						vc.textToEdit=[self.beerObj.data objectForKey:@"ibu"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1221,7 +1221,7 @@ enum TAGS {
 						vc.delegate=self;
 						vc.tag=kTagEditTextOG;
 						vc.textType=EditLineVCTextTypeFloat;
-						vc.textToEdit=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"og"];
+						vc.textToEdit=[self.beerObj.data objectForKey:@"og"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1231,7 +1231,7 @@ enum TAGS {
 						vc.delegate=self;
 						vc.tag=kTagEditTextFG;
 						vc.textType=EditLineVCTextTypeFloat;
-						vc.textToEdit=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"fg"];
+						vc.textToEdit=[self.beerObj.data objectForKey:@"fg"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1268,7 +1268,7 @@ enum TAGS {
 						vc.delegate=self;
 						vc.textType=EditLineVCTextTypeInteger;
 						vc.tag=kTagEditTextCalories;
-						NSNumber* n=[[self.beerObj.data objectForKey:@"@attributes"] objectForKey:@"calories_per_ml"];
+						NSNumber* n=[self.beerObj.data objectForKey:@"calories_per_ml"];
 						vc.textToEdit=[NSString stringWithFormat:@"%0.0f",[n floatValue]*355]; // 355ml=12 fl.oz.
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
@@ -1456,7 +1456,7 @@ enum TAGS {
 
 -(void)colorsTVC:(ColorsTVC*)tvc didSelectColor:(NSUInteger)srm
 {
-	[[self.beerObj.data objectForKey:@"@attributes"] setObject:[NSNumber numberWithUnsignedInt:srm] forKey:@"srm"];
+	[self.beerObj.data setObject:[NSNumber numberWithUnsignedInt:srm] forKey:@"srm"];
 	[self.tableView reloadData];
 	[self.navigationController popViewControllerAnimated:YES];
 }
@@ -1544,16 +1544,16 @@ enum TAGS {
 			[self.beerObj.data setObject:text forKey:@"name"];
 			break;
 		case kTagEditTextABV:
-			[[self.beerObj.data objectForKey:@"@attributes"] setObject:text forKey:@"abv"];
+			[self.beerObj.data setObject:text forKey:@"abv"];
 			break;
 		case kTagEditTextIBU:
-			[[self.beerObj.data objectForKey:@"@attributes"] setObject:text forKey:@"ibu"];
+			[self.beerObj.data setObject:text forKey:@"ibu"];
 			break;
 		case kTagEditTextOG:
-			[[self.beerObj.data objectForKey:@"@attributes"] setObject:text forKey:@"og"];
+			[self.beerObj.data setObject:text forKey:@"og"];
 			break;
 		case kTagEditTextFG:
-			[[self.beerObj.data objectForKey:@"@attributes"] setObject:text forKey:@"fg"];
+			[self.beerObj.data setObject:text forKey:@"fg"];
 			break;
 		case kTagEditTextGrains:
 			[self.beerObj.data setObject:text forKey:@"grains"];
@@ -1567,7 +1567,7 @@ enum TAGS {
 		case kTagEditTextCalories:
 		{
 			float f=((float)[text intValue])/355; // 355ml=12 fl.oz.
-			[[self.beerObj.data objectForKey:@"@attributes"] setObject:[NSNumber numberWithFloat:f] forKey:@"calories_per_ml"];
+			[self.beerObj.data setObject:[NSNumber numberWithFloat:f] forKey:@"calories_per_ml"];
 			break;
 		}
 		default:
@@ -1626,12 +1626,12 @@ enum TAGS {
 	NSArray* keyNames=[NSArray arrayWithObjects:
 					   @"name",
 					   @"description",
-					   @"@attributes:abv",
-					   @"@attributes:ibu",
-					   @"@attributes:og",
-					   @"@attributes:fg",
-					   @"@attributes:srm",
-					   @"@attributes:calories_per_ml",
+					   @"abv",
+					   @"ibu",
+					   @"og",
+					   @"fg",
+					   @"srm",
+					   @"calories_per_ml",
 					   @"grains",
 					   @"hops",
 					   @"otherings",
