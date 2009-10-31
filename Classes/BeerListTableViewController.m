@@ -115,6 +115,8 @@ static const NSInteger kTagBeerNameLabel=2;
 	
 }
 
+#pragma mark BeerTableViewControllerDelegate methods
+
 -(void)didSaveBeerEdits
 {
 	[self.parentViewController dismissModalViewControllerAnimated:YES];

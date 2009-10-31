@@ -1686,7 +1686,9 @@ enum TAGS {
 	}
 	else // No changes, but change out of editing mode
 	{
-		[self setEditing:NO animated:YES];
+		UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Beer Editing",@"Alert title for beer editing") message:NSLocalizedString(@"No changes were made.",@"Alert message when user makes no changes to beer edit but tapped Save") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK",@"OK button on alert") otherButtonTitles:nil] autorelease];
+		[alert show];
+//		[self setEditing:NO animated:YES];
 	}
 
 	
