@@ -20,6 +20,7 @@
     if (self = [super initWithStyle:style]) {
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 		self.colorsDict=[appDelegate getColorsDictionary];
+		self.title=NSLocalizedString(@"Colors",@"Title for Colors view controller");
     }
     return self;
 }
@@ -105,13 +106,13 @@
 	[cell.contentView addSubview:colorNameLabel];
 	[colorNameLabel setText:[colorInfo objectForKey:@"name"]];
 
-	if (self.selectedColorSRM==[[[colorInfo objectForKey:@"@attributes"] objectForKey:@"srm"] integerValue])
+	if (self.selectedColorSRM==[[colorInfo objectForKey:@"srm"] integerValue])
 		cell.accessoryType=UITableViewCellAccessoryCheckmark;
 	else
 		cell.accessoryType=UITableViewCellAccessoryNone;
 	
 	// Put color swatch on the cell
-	NSArray* rgbValues=[[colorInfo objectForKey:@"@attributes"] objectForKey:@"rgb"];
+	NSArray* rgbValues=[colorInfo objectForKey:@"rgb"];
 	UIView* colorSwatch=[[[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.rowHeight, tableView.rowHeight)] autorelease];
 	colorSwatch.backgroundColor=[UIColor colorWithRed:[[rgbValues objectAtIndex:0] integerValue]/255.0 green:[[rgbValues objectAtIndex:1] integerValue]/255.0 blue:[[rgbValues objectAtIndex:2] integerValue]/255.0 alpha:1.0];
 	[cell.contentView addSubview:colorSwatch];
@@ -121,7 +122,7 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[delegate colorsTVC:self didSelectColor:[[[[[self.colorsDict objectForKey:@"colors"] objectAtIndex:indexPath.row] objectForKey:@"@attributes"] objectForKey:@"srm"] integerValue]];
+	[delegate colorsTVC:self didSelectColor:[[[[self.colorsDict objectForKey:@"colors"] objectAtIndex:indexPath.row] objectForKey:@"srm"] integerValue]];
 }
 
 
@@ -169,25 +170,6 @@
 	[self.colorsDict release];
     [super dealloc];
 }
-
-/*
- Sample Colors doc:
- 
-<colors>
-<color srm="2" srmmin="0" srmmax="2.4"><name>Pale Straw</name></color>
-<color srm="3"  srmmin="2.5" srmmax="3.4"><name>Straw</name></color>
-<color srm="4"  srmmin="3.4" srmmax="4.9"><name>Pale Gold</name></color>
-<color srm="6"  srmmin="5" srmmax="7.4"><name>Deep Gold</name></color>
-<color srm="9"  srmmin="7.5" srmmax="10.4"><name>Pale Amber</name></color>
-<color srm="12" srmmin="10.5" srmmax="13.4"><name>Medium Amber</name></color>
-<color srm="15" srmmin="13.5" srmmax="16.4"><name>Deep Amber</name></color>
-<color srm="18" srmmin="16.5" srmmax="19.4"><name>Amber Brown</name></color>
-<color srm="21" srmmin="19.5" srmmax="22.9"><name>Brown</name></color>
-<color srm="24" srmmin="23" srmmax="26.9"><name>Ruby Brown</name></color>
-<color srm="30" srmmin="27" srmmax="34.9"><name>Deep Brown</name></color>
-<color srm="40" srmmin="35"><name>Black</name></color>
-</colors>
-*/
 
 
 
