@@ -569,8 +569,12 @@ enum TAGS {
 				cell = [tableView dequeueReusableCellWithIdentifier:@"Section1Cell"];
 				if (cell == nil) {
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section1Cell"] autorelease];
+					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				}
-				[cell.textLabel setText:[NSString stringWithFormat:@"%d Beers Brewed",[[self.beerList objectForKey:@"beers"] count]]];
+				if ([[self.beerList objectForKey:@"beers"] count])
+					[cell.textLabel setText:[NSString stringWithFormat:NSLocalizedString(@"%d Beers Brewed",@"Beers Brewed label"),[[self.beerList objectForKey:@"beers"] count]]];
+				else
+					[cell.textLabel setText:NSLocalizedString(@"Beers Brewed",@"Beers Brewed label with zero/unknown beers")];
 				break;
 			}
 			case 2: // Address, phone and web site

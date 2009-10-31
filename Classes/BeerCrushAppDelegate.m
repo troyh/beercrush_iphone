@@ -1292,6 +1292,20 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	return nil;
 }
 
+-(NSDictionary*)getBeerMenu:(NSString*)placeID
+{
+	// TODO: support caching
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_MENU_DOC, placeID]];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
+		return answer;
+	}
+	return nil;
+	
+}
+
 -(NSMutableDictionary*)getPlaceDoc:(NSString*)placeID
 {
 	// Separate the 2 parts of the place ID

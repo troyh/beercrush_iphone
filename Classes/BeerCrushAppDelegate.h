@@ -86,6 +86,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 -(NSHTTPURLResponse*)postBeerReview:(NSDictionary*)userReview returningData:(NSData**)answer;
 -(NSMutableDictionary*)getBreweryDoc:(NSString*)breweryID;
 -(NSDictionary*)getBeerList:(NSString*)breweryID;
+-(NSDictionary*)getBeerMenu:(NSString*)placeID;
 -(NSMutableDictionary*)getPlaceDoc:(NSString*)placeID;
 -(NSMutableDictionary*)getPlaceReviews:(NSString*)placeID byUser:(NSString*)user_id;
 -(NSMutableDictionary*)getReviewsForDocID:(NSString*)docid;
@@ -130,7 +131,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 #define BEERCRUSH_API_URL_GET_BREWERY_DOC				@BEERCRUSH_API_URL_HOST"/api/brewery/view?brewery_id=brewery:%@"
 #define BEERCRUSH_API_URL_GET_COLORSLIST				@BEERCRUSH_API_URL_HOST"/api/beercolors"
 #define BEERCRUSH_API_URL_GET_FLAVORS_DOC				@BEERCRUSH_API_URL_HOST"/api/flavors"
-#define BEERCRUSH_API_URL_GET_MENU_DOC					@BEERCRUSH_API_URL_HOST"/api/menu/view?place_id=place:%@"
+#define BEERCRUSH_API_URL_GET_MENU_DOC					@BEERCRUSH_API_URL_HOST"/api/menu/view?place_id=%@"
 #define BEERCRUSH_API_URL_GET_PLACE_DOC					@BEERCRUSH_API_URL_HOST"/api/place/view?place_id=place:%@"
 #define BEERCRUSH_API_URL_GET_USER_PLACE_REVIEW_DOC		@BEERCRUSH_API_URL_HOST"/api/review/place?place_id=place:%@&user_id=%@"
 #define BEERCRUSH_API_URI_GET_PLACE_STYLES				@BEERCRUSH_API_URL_HOST"/api/restaurantcategories"

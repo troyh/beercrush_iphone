@@ -37,6 +37,7 @@
 	NSString* placeID;
 	NSMutableDictionary* placeData;
 	NSDictionary* originalPlaceData;
+	NSDictionary* beerMenu;
 	NSMutableDictionary* userReviewData;
 	id<PlaceVCDelegate> delegate;
 }
@@ -44,6 +45,7 @@
 @property (nonatomic,retain) NSString* placeID;
 @property (nonatomic, retain) NSMutableDictionary* placeData;
 @property (nonatomic,retain) NSDictionary* originalPlaceData;
+@property (nonatomic,retain) NSDictionary* beerMenu;
 @property (nonatomic,retain) NSMutableDictionary* userReviewData;
 @property (assign) id<PlaceVCDelegate> delegate;
 

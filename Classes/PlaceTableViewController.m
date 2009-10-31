@@ -20,6 +20,7 @@
 @synthesize placeID;
 @synthesize placeData;
 @synthesize originalPlaceData;
+@synthesize beerMenu;
 @synthesize delegate;
 @synthesize userReviewData;
 
@@ -847,7 +848,12 @@ enum mytags {
 				cell = [tableView dequeueReusableCellWithIdentifier:@"AvailableBeers"];
 				if (cell == nil) {
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EditNameCell"] autorelease];
-					[cell.textLabel setText:[NSString stringWithFormat:@"%d Available Beers",0]];
+					NSUInteger n=[[self.beerMenu objectForKey:@"items"] count];
+					if (n)
+						[cell.textLabel setText:[NSString stringWithFormat:NSLocalizedString(@"%d Available Beers",@"Available Beers label"),n]];
+					else
+						[cell.textLabel setText:NSLocalizedString(@"Available Beers",@"Available Beers label with zero/unknown beer menu")];
+					
 					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 				}
 				break;
@@ -1478,8 +1484,12 @@ enum mytags {
 	self.placeData=[appDelegate getPlaceDoc:aPlaceID];
 	[self.tableView reloadData];
 	[appDelegate dismissActivityHUD];
-	
+
+	// Get user's review
 	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getUserReviewDoc:) object:self.placeID requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:GettingPlaceInfo", @"Getting Place Info")];
+	
+	// Get beer menu too
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerMenu:) object:aPlaceID requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"Getting Beer Menu",@"HUD: Getting Beer Menu")];
 }
 
 -(void)getUserReviewDoc:(NSString*)aPlaceID
@@ -1491,6 +1501,15 @@ enum mytags {
 		self.userReviewData=[appDelegate getPlaceReviews:aPlaceID byUser:user_id];
 		[self.tableView reloadData];
 	}
+	[appDelegate dismissActivityHUD];
+}
+
+-(void)getBeerMenu:(NSString*)aPlaceID
+{
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	self.beerMenu=[appDelegate getBeerMenu:aPlaceID];
+	[self.tableView reloadData];
+
 	[appDelegate dismissActivityHUD];
 }
 

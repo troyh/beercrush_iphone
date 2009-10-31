@@ -220,7 +220,7 @@ static const NSInteger kTagBeerNameLabel=2;
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (self.wishlistID)
+	if (self.wishlistID || self.placeID)
 		return [[beerList objectForKey:@"items"] count];
     return [[beerList objectForKey:@"beers"] count];
 }
@@ -250,7 +250,7 @@ static const NSInteger kTagBeerNameLabel=2;
     
     // Set up the cell...
 	NSDictionary* beer=nil;
-	if (self.wishlistID)
+	if (self.wishlistID || self.placeID)
 		beer=[[beerList objectForKey:@"items"] objectAtIndex:indexPath.row];
 	else
 		beer=[[beerList objectForKey:@"beers"] objectAtIndex:indexPath.row];
@@ -270,7 +270,11 @@ static const NSInteger kTagBeerNameLabel=2;
 	NSString* beer_id=[beer objectForKey:@"beer_id"];
 	if (beer_id==nil)
 	{
-		// Uh oh.
+		beer_id=[beer objectForKey:@"id"];
+		if (beer_id==nil)
+		{
+			// Uh oh.
+		}
 	}
 	
 	[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:beer_id]];
@@ -281,7 +285,7 @@ static const NSInteger kTagBeerNameLabel=2;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSDictionary* beer=nil;
-	if (self.wishlistID)
+	if (self.wishlistID || self.placeID)
 		beer=[[beerList objectForKey:@"items"] objectAtIndex:indexPath.row];
 	else
 		beer=[[beerList objectForKey:@"beers"] objectAtIndex:indexPath.row];
@@ -314,18 +318,17 @@ static const NSInteger kTagBeerNameLabel=2;
 
 	// Retrieve a JSON doc from server
 	if (breweryID)
-	{	// Get brewery doc, it includes the beer list
+	{	// Get beer list
 		self.beerList=[appDelegate getBeerList:self.breweryID];
+	}
+	else if (placeID)
+	{	// Get the place menu doc
+		self.beerList=[appDelegate getBeerMenu:self.placeID];
 	}
 	else
 	{
 		NSURL* url=nil;
-		if (placeID)
-		{	// Get the place menu doc
-			NSArray* idparts=[placeID componentsSeparatedByString:@":"];
-			url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_MENU_DOC, [idparts objectAtIndex:0], [idparts objectAtIndex:1]]];
-		}
-		else if (wishlistID)
+		if (wishlistID)
 		{	 // Get the wishlist doc
 			NSString* user_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
 			if (user_id==nil)
