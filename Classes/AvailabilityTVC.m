@@ -18,7 +18,8 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:style]) {
-		self.options=[NSArray arrayWithObjects:@"Year-round",@"Seasonal",@"Limited",nil];
+		self.options=[NSArray arrayWithObjects:@"Year-round",@"Spring",@"Summer",@"Fall",@"Winter",@"Limited",nil];
+		self.title=NSLocalizedString(@"Available",@"Title for Availability view controller");
     }
     return self;
 }
