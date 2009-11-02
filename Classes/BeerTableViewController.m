@@ -781,7 +781,7 @@ enum TAGS {
 						
 						NSDictionary* colorsDict=[appDelegate getColorsDictionary];
 						[cell.textLabel setText:@"Color"];
-						[cell.detailTextLabel setText:[[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:[NSString stringWithFormat:@"%@",[self.beerObj.data objectForKey:@"srm"]]] objectForKey:@"name" ]];
+						[cell.detailTextLabel setText:[[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:[[self.beerObj.data objectForKey:@"srm"] stringValue]] objectForKey:@"name" ]];
 						cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						break;
 					}
@@ -792,7 +792,7 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row2Editing"] autorelease];
 						
 						[cell.textLabel setText:@"ABV"];
-						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"abv"]];
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"abv"] stringValue]];
 
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
@@ -804,7 +804,7 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row3Editing"] autorelease];
 						
 						[cell.textLabel setText:@"IBUs"];
-						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"ibu"]];
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"ibu"] stringValue]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
@@ -816,7 +816,7 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row4Editing"] autorelease];
 						
 						[cell.textLabel setText:@"OG"];
-						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"og"]];
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"og"] stringValue]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
@@ -828,7 +828,7 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Section2Row5Editing"] autorelease];
 						
 						[cell.textLabel setText:@"FG"];
-						[cell.detailTextLabel setText:[self.beerObj.data objectForKey:@"fg"]];
+						[cell.detailTextLabel setText:[[self.beerObj.data objectForKey:@"fg"] stringValue]];
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleNone;
 						break;
@@ -993,31 +993,34 @@ enum TAGS {
 				UILabel* label=(UILabel*)[dataTableView viewWithTag:kTagDetailsAvailability];
 				[label setText:[self.beerObj.data objectForKey:@"availability"]];
 
-				label=(UILabel*)[cell viewWithTag:kTagDetailsColor];
-				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-				NSDictionary* colorsDict=[appDelegate getColorsDictionary];
-				NSString* srmval=[NSString stringWithFormat:@"%@",[self.beerObj.data objectForKey:@"srm"]];
-				NSDictionary* colorInfo=[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:srmval];
-				[label setText:[colorInfo objectForKey:@"name"]];
+				if ([self.beerObj.data objectForKey:@"srm"]!=nil)
+				{
+					label=(UILabel*)[cell viewWithTag:kTagDetailsColor];
+					BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+					NSDictionary* colorsDict=[appDelegate getColorsDictionary];
+					NSString* srmval=[[self.beerObj.data objectForKey:@"srm"] stringValue];
+					NSDictionary* colorInfo=[[colorsDict objectForKey:@"colornamebysrm"] objectForKey:srmval];
+					[label setText:[colorInfo objectForKey:@"name"]];
 
-				NSArray* rgbValues=[colorInfo objectForKey:@"rgb"];
-				UIView* swatch=[cell viewWithTag:kTagDetailsColorSwatch];
-				swatch.backgroundColor=[UIColor colorWithRed:[[rgbValues objectAtIndex:0] integerValue]/255.0 
-															green:[[rgbValues objectAtIndex:1] integerValue]/255.0 
-															 blue:[[rgbValues objectAtIndex:2] integerValue]/255.0 
-															alpha:1.0];
+					NSArray* rgbValues=[colorInfo objectForKey:@"rgb"];
+					UIView* swatch=[cell viewWithTag:kTagDetailsColorSwatch];
+					swatch.backgroundColor=[UIColor colorWithRed:[[rgbValues objectAtIndex:0] integerValue]/255.0 
+																green:[[rgbValues objectAtIndex:1] integerValue]/255.0 
+																 blue:[[rgbValues objectAtIndex:2] integerValue]/255.0 
+																alpha:1.0];
+				}
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsABV];
-				[label setText:[self.beerObj.data objectForKey:@"abv"]];
+				[label setText:[[self.beerObj.data objectForKey:@"abv"] stringValue]];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsIBU];
-				[label setText:[self.beerObj.data objectForKey:@"ibu"]];
+				[label setText:[[self.beerObj.data objectForKey:@"ibu"] stringValue]];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsOG];
-				[label setText:[self.beerObj.data objectForKey:@"og"]];
+				[label setText:[[self.beerObj.data objectForKey:@"og"] stringValue]];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsFG];
-				[label setText:[self.beerObj.data objectForKey:@"fg"]];
+				[label setText:[[self.beerObj.data objectForKey:@"fg"] stringValue]];
 
 				label=(UILabel*)[dataTableView viewWithTag:kTagDetailsGrains];
 				[label setText:[self.beerObj.data objectForKey:@"grains"]];

@@ -31,7 +31,7 @@
 @end
 
 void normalizeToString(NSMutableDictionary* dict,NSString* key);
-void normalizeToNumber(NSMutableDictionary* dict,NSString* key);
+void normalizeToNumber(NSMutableDictionary* dict,NSString* key, BOOL addIfNotExist);
 void normalizeToBoolean(NSMutableDictionary* dict,NSString* key,BOOL addIfNotExist);
 void normalizeToArray(NSMutableDictionary* data, NSString* key, NSUInteger n);
 void normalizeToDictionary(NSMutableDictionary* data, NSString* key, NSUInteger n);

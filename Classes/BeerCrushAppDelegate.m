@@ -84,11 +84,12 @@ void normalizeToString(NSMutableDictionary* dict,NSString* key)
 		[dict setObject:[NSString stringWithFormat:@"%@",[dict objectForKey:key]] forKey:key];
 }
 
-void normalizeToNumber(NSMutableDictionary* dict,NSString* key)
+void normalizeToNumber(NSMutableDictionary* dict,NSString* key, BOOL addIfNotExist)
 {
 	if ([dict objectForKey:key]==nil)
 	{
-		[dict setObject:[NSNumber numberWithInt:0] forKey:key];
+		if (addIfNotExist)
+			[dict setObject:[NSNumber numberWithInt:0] forKey:key];
 	}
 	else if ([[dict objectForKey:key] isKindOfClass:[NSNumber class]])
 	{
@@ -202,16 +203,13 @@ void normalizeBeerData(NSMutableDictionary* beerData)
 	normalizeToString(beerData, @"hops");
 	normalizeToString(beerData, @"availability");
 	normalizeToString(beerData, @"otherings");
-	
 	normalizeToArray(beerData, @"styles", 3);
-	normalizeToDictionary(beerData, @"@attributes", 5);
-	
-	normalizeToString([beerData objectForKey:@"@attributes"], @"abv");
-	normalizeToString([beerData objectForKey:@"@attributes"], @"ibu");
-	normalizeToString([beerData objectForKey:@"@attributes"], @"og");
-	normalizeToString([beerData objectForKey:@"@attributes"], @"fg");
-	normalizeToString([beerData objectForKey:@"@attributes"], @"srm");
-	normalizeToNumber([beerData objectForKey:@"@attributes"], @"calories_per_ml");
+	normalizeToNumber(beerData, @"abv",NO);
+	normalizeToNumber(beerData, @"ibu",NO);
+	normalizeToNumber(beerData, @"og",NO);
+	normalizeToNumber(beerData, @"fg",NO);
+	normalizeToNumber(beerData, @"srm",NO);
+	normalizeToNumber(beerData, @"calories_per_ml",NO);
 }
 
 void normalizePlaceData(NSMutableDictionary* placeData)
@@ -231,7 +229,7 @@ void normalizePlaceData(NSMutableDictionary* placeData)
 	if ([placeData objectForKey:@"restaurant"]==nil)
 		[placeData setObject:[NSMutableDictionary dictionaryWithCapacity:3] forKey:@"restaurant"];
 	
-	normalizeToNumber([placeData objectForKey:@"restaurant"],@"price_range");
+	normalizeToNumber([placeData objectForKey:@"restaurant"],@"price_range",NO);
 	normalizeToBoolean([placeData objectForKey:@"restaurant"], @"outdoor_seating",NO);
 	normalizeToString([placeData objectForKey:@"restaurant"],@"food_description");
 	
