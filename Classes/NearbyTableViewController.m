@@ -49,6 +49,11 @@
 	return self;
 }
 
+-(NSObject*)navigationRestorationData
+{
+	return nil;
+}
+
 -(NSInteger)compareLocation:(id)other
 {
 	PlaceObject* otherplace=(PlaceObject*)other;

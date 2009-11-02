@@ -52,6 +52,11 @@ static const NSInteger kTagBeerNameLabel=2;
 	return self;
 }
 
+-(NSObject*)navigationRestorationData
+{
+	return self.breweryID;
+}
+
 - (void)dealloc {
 //	DLog(@"currentElemValue retainCount=%d",[self.currentElemValue retainCount]);
 //	DLog(@"currentElemAttribs retainCount=%d",[self.currentElemAttribs retainCount]);

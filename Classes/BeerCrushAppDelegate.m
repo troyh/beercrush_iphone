@@ -485,7 +485,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Beers" image:[UIImage imageNamed:@"tab_beerreviews.png"] tag:kTabBarItemTagMyBeerReviews] autorelease];
 				
-				UserReviewsTVC* urtvc=[[[UserReviewsTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
+				UserReviewsTVC* urtvc=[[[UserReviewsTVC alloc] init] autorelease];
 				[nc pushViewController:urtvc animated:NO];
 				break;
 			}
@@ -1509,9 +1509,16 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 					if ([navobj isKindOfClass:[NSString class]])
 						vc=[[[PlaceTableViewController alloc] initWithPlaceID:(NSString*)navobj] autorelease];
 					break;
-				case kVCTypeNearbyTableViewController:
 				case kVCTypeBeerListTableViewController:
+					if ([navobj isKindOfClass:[NSString class]])
+						vc=[[[BeerListTableViewController alloc] initWithBreweryID:(NSString*)navobj] autorelease];
+					break;
+				case kVCTypeNearbyTableViewController:
+					vc=[[[NearbyTableViewController alloc] init] autorelease];
+					break;
 				case kVCTypeUserReviewsTVC:
+					vc=[[[UserReviewsTVC alloc] init] autorelease];
+					break;
 				case kVCTypePlacesTVC:
 				case kVCTypeUserProfileTVC:
 				case kVCTypeBuddiesTVC:

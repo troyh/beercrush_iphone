@@ -15,14 +15,20 @@
 @synthesize seqNext;
 @synthesize seqMax;
 
-- (id)initWithStyle:(UITableViewStyle)style {
+- (id)init {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-    if (self = [super initWithStyle:style]) {
+    if (self = [super initWithStyle:UITableViewStylePlain]) {
 		self.title=@"My Reviews";
 		self.reviewsList=[[NSMutableArray alloc] initWithCapacity:10];
     }
     return self;
 }
+
+-(NSObject*)navigationRestorationData
+{
+	return nil;
+}
+
 
 /*
 - (void)viewDidLoad {

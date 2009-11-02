@@ -21,6 +21,7 @@
 @property (nonatomic,assign) NSUInteger seqNext;
 @property (nonatomic,assign) NSUInteger seqMax;
 
+-(id)init;
 -(void)retrieveReviews:(NSNumber*)seqnum;
 
 @end
