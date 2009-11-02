@@ -90,6 +90,11 @@ enum TAGS {
 	return self;
 }
 
+-(NSObject*)navigationRestorationData
+{
+	return self.breweryID;
+}
+
 -(void)dealloc
 {
 	[self.breweryID release];

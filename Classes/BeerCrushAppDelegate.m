@@ -49,6 +49,7 @@ typedef enum _VCType {
 	kVCTypeUnknown=0,
 	kVCTypeSearchVC,
 	kVCTypeBeerTableViewController,
+	kVCTypeBreweryTableViewController,
 	kVCTypePlaceTableViewController,
 	kVCTypeNearbyTableViewController,
 	kVCTypeBeerListTableViewController,
@@ -433,6 +434,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Beers" image:[UIImage imageNamed:@"tab_beers.png"] tag:kTabBarItemTagBeers] autorelease];
+
 				SearchVC* svc=[[[SearchVC alloc] init] autorelease];
 				svc.searchTypes=BeerCrushSearchTypeBeers|BeerCrushSearchTypeBreweries; // Search both beers and breweries
 				[nc pushViewController:svc animated:NO];
@@ -445,6 +447,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Places" image:[UIImage imageNamed:@"tab_places.png"] tag:kTabBarItemTagPlaces] autorelease];
+				
 				SearchVC* svc=[[[SearchVC alloc] init] autorelease];
 				svc.searchTypes=BeerCrushSearchTypePlaces; // Search only Places
 				[nc pushViewController:svc animated:NO];
@@ -457,6 +460,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Nearby" image:[UIImage imageNamed:@"tab_nearby.png"] tag:kTabBarItemTagNearby] autorelease];
+				
 				NearbyTableViewController* ntvc=[[NearbyTableViewController alloc] initWithStyle: UITableViewStylePlain];
 				[nc pushViewController:ntvc animated:NO ];
 				break;
@@ -468,6 +472,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Wish List" image:[UIImage imageNamed:@"tab_wishlist.png"] tag:kTabBarItemTagWishList] autorelease];
+				
 				BeerListTableViewController* bltvc=[[[BeerListTableViewController alloc] initWithBreweryID:@"wishlist:"] autorelease];
 				[nc pushViewController:bltvc animated:NO];
 				break;
@@ -479,6 +484,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Beers" image:[UIImage imageNamed:@"tab_beerreviews.png"] tag:kTabBarItemTagMyBeerReviews] autorelease];
+				
 				UserReviewsTVC* urtvc=[[[UserReviewsTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
 				[nc pushViewController:urtvc animated:NO];
 				break;
@@ -490,6 +496,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Places" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagMyPlaces] autorelease];
+				
 				PlacesTVC* bltvc=[[[PlacesTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
 				[nc pushViewController:bltvc animated:NO];
 				break;
@@ -501,6 +508,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagProfile] autorelease];
+				
 				UserProfileTVC* uptvc=[[[UserProfileTVC alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
 				[nc pushViewController:uptvc animated:NO];
 				break;
@@ -511,6 +519,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Buddies" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagBuddies] autorelease];
+				
 				BuddiesTVC* btvc=[[[BuddiesTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
 				[nc pushViewController:btvc animated:NO];
 				break;
@@ -521,6 +530,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Recommended" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagRecommended] autorelease];
+				
 				RecommendedTVC* rtvc=[[[RecommendedTVC alloc]  initWithStyle:UITableViewStylePlain] autorelease];
 				[nc pushViewController:rtvc animated:NO];
 				break;
@@ -531,6 +541,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				[tabBarControllers addObject:nc];
 				nc.tabBarItem=[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag:kTabBarItemTagBookmarks] autorelease];
+				
 				BookmarksTVC* btvc=[[[BookmarksTVC alloc]  initWithStyle:UITableViewStylePlain] autorelease];
 				[nc pushViewController:btvc animated:NO];
 				break;
@@ -558,6 +569,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			}
 		}
 	}
+
 }
 
 /*
@@ -1489,6 +1501,10 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 					if ([navobj isKindOfClass:[NSString class]])
 						vc=[[[BeerTableViewController alloc] initWithBeerID:(NSString*)navobj] autorelease];
 					break;
+				case kVCTypeBreweryTableViewController:
+					if ([navobj isKindOfClass:[NSString class]])
+						vc=[[[BreweryTableViewController alloc] initWithBreweryID:(NSString*)navobj] autorelease];
+					break;
 				case kVCTypePlaceTableViewController:
 					if ([navobj isKindOfClass:[NSString class]])
 						vc=[[[PlaceTableViewController alloc] initWithPlaceID:(NSString*)navobj] autorelease];
@@ -1532,6 +1548,8 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 				vctype=kVCTypeSearchVC;
 			else if ([viewController isKindOfClass:[BeerTableViewController class]])
 				vctype=kVCTypeBeerTableViewController;
+			else if ([viewController isKindOfClass:[BreweryTableViewController class]])
+				vctype=kVCTypeBreweryTableViewController;
 			else if ([viewController isKindOfClass:[PlaceTableViewController class]])
 				vctype=kVCTypePlaceTableViewController;
 			else if ([viewController isKindOfClass:[NearbyTableViewController class]])
