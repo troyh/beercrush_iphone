@@ -863,7 +863,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 					NSString* usrkey=[[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"];
 					stringData=[stringData stringByAppendingFormat:@"&userid=%@&usrkey=%@",userid,usrkey];
 					
-					NSData* body=[NSData dataWithBytes:[stringData UTF8String] length:[stringData length]];
+					NSData* body=[stringData dataUsingEncoding:NSUTF8StringEncoding];
 					DLog(@"POST data:%@",stringData);
 					
 					[theRequest setHTTPBody:body];
