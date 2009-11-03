@@ -852,15 +852,16 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		
 		if ([method isEqualToString:@"POST"])
 		{
+			// Always add userid= and usrkey= parameters
+			NSString* userid=[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
+			NSString* usrkey=[[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"];
+			
 			if (data)
 			{
 				if ([data isKindOfClass:[NSString class]])
 				{
 					NSString* stringData=(NSString*)data;
 					
-					// Always add userid= and usrkey= parameters
-					NSString* userid=[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
-					NSString* usrkey=[[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"];
 					stringData=[stringData stringByAppendingFormat:@"&userid=%@&usrkey=%@",userid,usrkey];
 					
 					NSData* body=[stringData dataUsingEncoding:NSUTF8StringEncoding];
@@ -891,8 +892,15 @@ void normalizeBreweryData(NSMutableDictionary* data)
 					 */
 					NSMutableData *body = [NSMutableData data];
 					[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];	
+					[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"userid\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+					[body appendData:[userid dataUsingEncoding:NSUTF8StringEncoding]];
+					[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+					[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"usrkey\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+					[body appendData:[usrkey dataUsingEncoding:NSUTF8StringEncoding]];
+					[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
 					[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"photo\"; filename=\"photo.jpg\"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
 					[body appendData:[[NSString stringWithString:@"Content-Type: application/octet-stream\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+//					DLog(@"POST data:%s<PHOTO DATA HERE>",body.bytes);
 					[body appendData:[NSData dataWithData:dataData]];
 					[body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
 					// setting the body of the post to the reqeust
