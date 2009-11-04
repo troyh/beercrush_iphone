@@ -104,6 +104,11 @@ const NSInteger kViewTagDistance=2;
 }
 */
 
+-(NSObject*)navigationRestorationData
+{
+	return nil;
+}
+
 - (void)viewWillAppear:(BOOL)animated {
 	if (myLocation==nil || [myLocation.timestamp timeIntervalSinceNow] > 60)
 	{
