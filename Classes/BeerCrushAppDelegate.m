@@ -1545,7 +1545,8 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 			 */
 			[navigationController.topViewController viewWillDisappear:NO];
 			
-			[navigationController pushViewController:vc animated:NO];
+			if (vc)
+				[navigationController pushViewController:vc animated:NO];
 		}
 	}
 	else 
