@@ -1474,8 +1474,11 @@ enum TAGS {
 {
 	// For now, we only support one style per beer, so only take the first one in the styleids array (should only be
 	// 1 at most anyway since we don't ever store more than one on the beer)
-	[self.beerObj.data setObject:[NSMutableArray arrayWithObject:[styleids objectAtIndex:0]] forKey:@"styles"];
-	[self.tableView reloadData];
+	if ([styleids count])
+	{
+		[self.beerObj.data setObject:[NSMutableArray arrayWithObject:[styleids objectAtIndex:0]] forKey:@"styles"];
+		[self.tableView reloadData];
+	}
 }
 
 #pragma mark FullBeerReviewTVCDelegate methods

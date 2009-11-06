@@ -23,7 +23,7 @@
 			self.stylesDictionary=[appDelegate getStylesDictionary];
 		else
 			self.stylesDictionary=styles;
-	
+		
 		NSString* name=[self.stylesDictionary objectForKey:@"name"];
 		if (name==nil) // This is the top-level
 			self.title=NSLocalizedString(@"Beer Styles",@"Beer Styles");
@@ -167,8 +167,13 @@
 			// If it's checked, uncheck it
 			NSString* tappedStyle=[[styles objectAtIndex:indexPath.row] objectForKey:@"id"];
 			NSUInteger existingIndex=[self.selectedStyleIDs indexOfObject:tappedStyle];
-			if (existingIndex==NSNotFound)
+			if (self.selectedStyleIDs==nil || existingIndex==NSNotFound)
 			{
+				if (self.selectedStyleIDs==nil)
+				{
+					self.selectedStyleIDs=[NSMutableArray arrayWithCapacity:3];
+				}
+				
 				[self.selectedStyleIDs addObject:[[styles objectAtIndex:indexPath.row] objectForKey:@"id"]];
 				[delegate stylesTVC:self didSelectStyle:self.selectedStyleIDs selectedStyle:tappedStyle];
 			}
