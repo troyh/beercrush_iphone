@@ -1345,6 +1345,25 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	return nil;
 }
 
+-(NSMutableDictionary*)getPlacesWithBeer:(NSString*)beerID nearLocation:(CLLocation*)location withinDistance:(NSUInteger)distance
+{
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_NEARBY_PLACES_WITH_BEER, 
+									 location.coordinate.latitude, 
+									 location.coordinate.longitude,
+									 distance,
+									 beerID]];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
+		return answer;
+	}
+	else {
+	}
+	
+	return nil;
+}
+
 -(NSMutableDictionary*)getPlaceReviews:(NSString*)placeID byUser:(NSString*)user_id
 {
 	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_PLACE_REVIEW_DOC, 

@@ -14,67 +14,27 @@
 #import "PlaceTableViewController.h"
 #import "BeerTableViewController.h"
 
-@implementation PlaceObject
-
-@synthesize place_id;
-@synthesize data;
-@synthesize editeddata;
-@synthesize distanceAway;
-
--(id)init
+NSInteger compareLocation(id a, id b, void* context)
 {
-	self.data=[[NSMutableDictionary alloc] initWithCapacity:10];
-	self.editeddata=nil;
-	if (self.data)
-	{
-		[self.data setObject:@"" forKey:@"name"];
-		[self.data setObject:@"" forKey:@"uri"];
-		[self.data setObject:@"" forKey:@"phone"];
-		[self.data setObject:@"" forKey:@"hours"];
-		[self.data setObject:@"" forKey:@"meals"];
-		[self.data setObject:@"" forKey:@"price"];
-		[self.data setObject:@"" forKey:@"placetype"];
-		[self.data setObject:@"" forKey:@"placestyle"];
+	NSDictionary* aDict=(NSDictionary*)a;
+	NSDictionary* bDict=(NSDictionary*)b;
 
-		[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease] forKey:@"address"];
-		[self.data setObject:[[[NSMutableDictionary alloc] initWithCapacity:4] autorelease] forKey:@"togo"];
-		
-		[[self.data objectForKey:@"address"] setObject:@"" forKey:@"street"];
-		[[self.data objectForKey:@"address"] setObject:@"" forKey:@"city"];
-		[[self.data objectForKey:@"address"] setObject:@"" forKey:@"state"];
-		[[self.data objectForKey:@"address"] setObject:@"" forKey:@"zip"];
-		[[self.data objectForKey:@"address"] setObject:@"" forKey:@"country"];
+	NSNumber* aDistance=[aDict objectForKey:@"distanceAway"];
+	NSNumber* bDistance=[bDict objectForKey:@"distanceAway"];
+	
+	return [aDistance compare:bDistance];
+}
+
+void orderByDistance(CLLocation* myLocation, NSMutableArray* placesArray)
+{
+	for (NSMutableDictionary* place in placesArray)
+	{
+		CLLocation* loc=[[[CLLocation alloc] initWithLatitude:[[place valueForKey:@"lat"] doubleValue] longitude:[[place valueForKey:@"lon"] doubleValue]] autorelease];
+		[place setObject:[NSNumber numberWithDouble:[loc getDistanceFrom:myLocation]] forKey:@"distanceAway"];
 	}
 	
-	return self;
+	[placesArray sortUsingFunction:compareLocation context:nil];
 }
-
--(NSObject*)navigationRestorationData
-{
-	return nil;
-}
-
--(NSInteger)compareLocation:(id)other
-{
-	PlaceObject* otherplace=(PlaceObject*)other;
-	if (self.distanceAway < otherplace.distanceAway)
-		return NSOrderedAscending;
-	else if (self.distanceAway > otherplace.distanceAway)
-		return NSOrderedDescending;
-	else 
-		return NSOrderedSame;
-}
-
--(void)dealloc
-{
-	[place_id release];
-	[data release];
-	[editeddata release];
-
-	[super dealloc];
-}	
-
-@end
 
 
 @implementation NearbyTableViewController
@@ -82,6 +42,7 @@
 @synthesize myLocation;
 @synthesize places;
 @synthesize locationManager;
+@synthesize beerID;
 
 const NSInteger kViewTagName=1;
 const NSInteger kViewTagDistance=2;
@@ -94,6 +55,28 @@ const NSInteger kViewTagDistance=2;
     return self;
 }
 */
+
+- (id)initWithBeerID:(NSString*)beer_id {
+    // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
+    if (self = [super initWithStyle:UITableViewStylePlain]) {
+		self.beerID=beer_id;
+    }
+    return self;
+}
+
+-(void)getPlaceList:(NSString*)beer_id
+{
+	// TODO: get the actual location
+//	CLLocation* myLocation=[[[CLLocation alloc] initWithLatitude:37.331689 longitude:-122.030731] autorelease];
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	self.places=[appDelegate getPlacesWithBeer:beer_id nearLocation:self.myLocation withinDistance:10];
+
+	orderByDistance(self.myLocation, [self.places objectForKey:@"places"]);
+
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+	
+	[appDelegate dismissActivityHUD];
+}
 
 /*
 - (void)viewDidLoad {
@@ -182,7 +165,7 @@ const NSInteger kViewTagDistance=2;
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [places count];
+    return [[self.places objectForKey:@"places"] count];
 }
 
 
@@ -209,15 +192,15 @@ const NSInteger kViewTagDistance=2;
     }
     
     // Set up the cell...
-	PlaceObject* p=[places objectAtIndex:indexPath.row];
+	NSDictionary* p=[[self.places objectForKey:@"places"] objectAtIndex:indexPath.row];
 
 	UILabel* namelabel=(UILabel*)[cell.contentView viewWithTag:kViewTagName];
-	[namelabel setText:[p.data objectForKey:@"name"]];
+	[namelabel setText:([p objectForKey:@"name"]?[p objectForKey:@"name"]:@"")];
 	
 	UILabel* distlabel=(UILabel*)[cell.contentView viewWithTag:kViewTagDistance];
-	[distlabel setText:[NSString stringWithFormat:@"%0.1f mi",(p.distanceAway/1000*0.62137119)]]; // Convert meters to miles
+	[distlabel setText:[NSString stringWithFormat:@"%0.1f mi",([[p objectForKey:@"distanceAway"] doubleValue]/1000*0.62137119)]]; // Convert meters to miles
 
-	if ([p.place_id hasPrefix:@"brewery:"])
+	if ([[p objectForKey:@"place_id"] hasPrefix:@"brewery:"])
 		cell.imageView.image=[UIImage imageNamed:@"brewery.png"];
 	else
 		cell.imageView.image=[UIImage imageNamed:@"restaurant.png"];
@@ -247,8 +230,8 @@ const NSInteger kViewTagDistance=2;
 //	}
 	if (t == Place)
 	{
-		PlaceObject* po=[places objectAtIndex:indexPath.row];
-		PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID:po.place_id];
+		NSDictionary* po=[[self.places objectForKey:@"places"] objectAtIndex:indexPath.row];
+		PlaceTableViewController* btvc=[[PlaceTableViewController alloc] initWithPlaceID:[po objectForKey:@"place_id"]];
 		UINavigationController* nav=(UINavigationController*)self.parentViewController;
 		[nav pushViewController: btvc animated:YES];
 		[btvc release];
@@ -328,9 +311,16 @@ const NSInteger kViewTagDistance=2;
 	myLocation=newLocation;
 	[myLocation retain];
 	
-	// Ask server for nearby places
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_NEARBY_QUERY, myLocation.coordinate.latitude, myLocation.coordinate.longitude, 10]];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getNearbyResults:) object:url requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Updating",@"Updating")];
+	if (self.beerID)
+	{
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(getPlaceList:) object:self.beerID requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"Getting Places",@"HUD: Getting Places that have this beer")];
+	}
+	else 
+	{
+		// Ask server for nearby places
+		NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_NEARBY_QUERY, myLocation.coordinate.latitude, myLocation.coordinate.longitude, 10]];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(getNearbyResults:) object:url requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Updating",@"Updating")];
+	}
 }
 
 // Called when there is an error getting the location
@@ -349,25 +339,8 @@ const NSInteger kViewTagDistance=2;
 	NSHTTPURLResponse* response=[delegate sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&data];
 	if ([response statusCode]==200)
 	{
-		if (self.places==nil)
-			self.places=[[NSMutableArray alloc] initWithCapacity:100];
-
-		for (NSDictionary* place in [data objectForKey:@"places"])
-		{
-			// Create a PlaceObject
-			PlaceObject* placeObject=[[[PlaceObject alloc] init] autorelease];
-			
-			[placeObject.data setObject:[place objectForKey:@"name"] forKey:@"name"];
-			
-			CLLocation* loc=[[[CLLocation alloc] initWithLatitude:[[place valueForKey:@"latitude"] doubleValue] longitude:[[place valueForKey:@"longitude"] doubleValue]] autorelease];
-			[placeObject.data setObject:loc forKey:@"loc"];
-			placeObject.place_id=[place valueForKey:@"id"];
-			
-			placeObject.distanceAway=[loc getDistanceFrom:myLocation];
-			[self.places addObject:placeObject];
-		}
-		
-		[self.places sortUsingSelector:@selector(compareLocation:)];
+		self.places=data;
+		orderByDistance(self.myLocation, [self.places objectForKey:@"places"]);
 
 		[self.tableView reloadData];
 	}

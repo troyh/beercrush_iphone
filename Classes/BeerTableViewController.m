@@ -1340,12 +1340,8 @@ enum TAGS {
 			}
 			case 4:
 			{
-				UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"NYI" message:@"This is not yet implemented." delegate:nil cancelButtonTitle:@"Hurry up, Troy" otherButtonTitles:nil] autorelease];
-				[alert show];
-
-				UITableViewCell* cell=[self.tableView cellForRowAtIndexPath:indexPath];
-				[cell setSelected:NO animated:YES];
-				
+				NearbyTableViewController* vc=[[[NearbyTableViewController alloc] initWithBeerID:self.beerID] autorelease];
+				[self.navigationController pushViewController:vc animated:YES];
 				break;
 			}
 			case 5:

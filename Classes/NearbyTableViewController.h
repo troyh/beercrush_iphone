@@ -11,32 +11,17 @@
 #import <CoreLocation/CLLocation.h>
 #import "BeerCrushAppDelegate.h"
 
-@interface PlaceObject: NSObject
-{
-	NSString* place_id;
-	NSMutableDictionary* data;
-	NSMutableDictionary* editeddata;
-	CLLocationDistance distanceAway;
-}
-
-@property (nonatomic,retain) NSString* place_id;
-@property (nonatomic,retain) NSMutableDictionary* data;
-@property (nonatomic,retain) NSMutableDictionary* editeddata;
-@property (nonatomic) CLLocationDistance distanceAway;
-
--(id)init;
--(NSInteger)compareLocation:(id)other;
-
-@end
-
 
 @interface NearbyTableViewController : UITableViewController<CLLocationManagerDelegate> {
 	CLLocation* myLocation;
-	NSMutableArray* places;
+	NSMutableDictionary* places;
 	CLLocationManager* locationManager;
+	NSString* beerID;
 }
 
 @property (nonatomic, retain) CLLocation* myLocation;
-@property (nonatomic, retain) NSMutableArray* places;
+@property (nonatomic, retain) NSMutableDictionary* places;
 @property (nonatomic, retain) CLLocationManager* locationManager;
+@property (nonatomic,retain) NSString* beerID;
+
 @end

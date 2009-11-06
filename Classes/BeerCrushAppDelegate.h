@@ -6,6 +6,8 @@
 //  Copyright __MyCompanyName__ 2009. All rights reserved.
 //
 
+#import <CoreLocation/CoreLocation.h>
+
 #import <UIKit/UIKit.h>
 #import "LoginVC.h"
 
@@ -88,6 +90,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 -(NSDictionary*)getBeerList:(NSString*)breweryID;
 -(NSDictionary*)getBeerMenu:(NSString*)placeID;
 -(NSMutableDictionary*)getPlaceDoc:(NSString*)placeID;
+-(NSMutableDictionary*)getPlacesWithBeer:(NSString*)beerID nearLocation:(CLLocation*)location withinDistance:(NSUInteger)distance;
 -(NSMutableDictionary*)getPlaceReviews:(NSString*)placeID byUser:(NSString*)user_id;
 -(NSMutableDictionary*)getReviewsForDocID:(NSString*)docid;
 -(NSMutableDictionary*)getBeerReviewsByUser:(NSString*)userID seqNum:(NSNumber*)seqNum;
@@ -132,6 +135,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 #define BEERCRUSH_API_URL_GET_COLORSLIST				@BEERCRUSH_API_URL_HOST"/api/beercolors"
 #define BEERCRUSH_API_URL_GET_FLAVORS_DOC				@BEERCRUSH_API_URL_HOST"/api/flavors"
 #define BEERCRUSH_API_URL_GET_MENU_DOC					@BEERCRUSH_API_URL_HOST"/api/menu/view?place_id=%@"
+#define BEERCRUSH_API_URL_GET_NEARBY_PLACES_WITH_BEER   @BEERCRUSH_API_URL_HOST"/api/nearby_beer.fcgi?lat=%f&lon=%f&within=%d&beer_id=%@"
 #define BEERCRUSH_API_URL_GET_PLACE_DOC					@BEERCRUSH_API_URL_HOST"/api/place/view?place_id=place:%@"
 #define BEERCRUSH_API_URL_GET_USER_PLACE_REVIEW_DOC		@BEERCRUSH_API_URL_HOST"/api/review/place?place_id=place:%@&user_id=%@"
 #define BEERCRUSH_API_URI_GET_PLACE_STYLES				@BEERCRUSH_API_URL_HOST"/api/restaurantcategories"
@@ -147,7 +151,6 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 #define BEERCRUSH_API_URL_UPLOAD_PLACE_IMAGE			@BEERCRUSH_API_URL_HOST"/api/place/photo?place_id=%@"
 #define BEERCRUSH_API_URL_UPLOAD_BEER_IMAGE				@BEERCRUSH_API_URL_HOST"/api/beer/photo?beer_id=%@"
 #define BEERCRUSH_API_URL_UPLOAD_BREWERY_IMAGE			@BEERCRUSH_API_URL_HOST"/api/brewery/?brewery_id=%@"
-
 
 @interface UIColor (BeerCrush)
 
