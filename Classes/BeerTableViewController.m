@@ -1204,7 +1204,7 @@ enum TAGS {
 						vc.delegate=self;
 						vc.tag=kTagEditTextABV;
 						vc.textType=EditLineVCTextTypeFloat;
-						vc.textToEdit=[self.beerObj.data objectForKey:@"abv"];
+						vc.textToEdit=[[self.beerObj.data objectForKey:@"abv"] stringValue];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1546,16 +1546,16 @@ enum TAGS {
 			[self.beerObj.data setObject:text forKey:@"name"];
 			break;
 		case kTagEditTextABV:
-			[self.beerObj.data setObject:text forKey:@"abv"];
+			[self.beerObj.data setObject:[NSNumber numberWithFloat:[text floatValue]] forKey:@"abv"];
 			break;
 		case kTagEditTextIBU:
-			[self.beerObj.data setObject:text forKey:@"ibu"];
+			[self.beerObj.data setObject:[NSNumber numberWithFloat:[text floatValue]] forKey:@"ibu"];
 			break;
 		case kTagEditTextOG:
-			[self.beerObj.data setObject:text forKey:@"og"];
+			[self.beerObj.data setObject:[NSNumber numberWithFloat:[text floatValue]] forKey:@"og"];
 			break;
 		case kTagEditTextFG:
-			[self.beerObj.data setObject:text forKey:@"fg"];
+			[self.beerObj.data setObject:[NSNumber numberWithFloat:[text floatValue]] forKey:@"fg"];
 			break;
 		case kTagEditTextGrains:
 			[self.beerObj.data setObject:text forKey:@"grains"];
