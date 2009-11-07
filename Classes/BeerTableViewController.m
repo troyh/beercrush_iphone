@@ -1147,6 +1147,7 @@ enum TAGS {
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
 						vc.tag=kTagEditTextName;
+						vc.title=NSLocalizedString(@"Name",@"Title: Editing beer name");
 						vc.textToEdit=[self.beerObj.data objectForKey:@"name"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
@@ -1203,6 +1204,7 @@ enum TAGS {
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
 						vc.tag=kTagEditTextABV;
+						vc.title=NSLocalizedString(@"ABV",@"Title: Editing beer ABV");
 						vc.textType=EditLineVCTextTypeFloat;
 						vc.textToEdit=[[self.beerObj.data objectForKey:@"abv"] stringValue];
 						[self.navigationController pushViewController:vc animated:YES];
@@ -1213,8 +1215,9 @@ enum TAGS {
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
 						vc.tag=kTagEditTextIBU;
+						vc.title=NSLocalizedString(@"IBUs",@"Title: Editing beer IBUs");
 						vc.textType=EditLineVCTextTypeInteger;
-						vc.textToEdit=[self.beerObj.data objectForKey:@"ibu"];
+						vc.textToEdit=[[self.beerObj.data objectForKey:@"ibu"] stringValue];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1223,8 +1226,9 @@ enum TAGS {
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
 						vc.tag=kTagEditTextOG;
+						vc.title=NSLocalizedString(@"OG",@"Title: Editing beer OG");
 						vc.textType=EditLineVCTextTypeFloat;
-						vc.textToEdit=[self.beerObj.data objectForKey:@"og"];
+						vc.textToEdit=[[self.beerObj.data objectForKey:@"og"] stringValue];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1233,8 +1237,9 @@ enum TAGS {
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
 						vc.tag=kTagEditTextFG;
+						vc.title=NSLocalizedString(@"FG",@"Title: Editing beer FG");
 						vc.textType=EditLineVCTextTypeFloat;
-						vc.textToEdit=[self.beerObj.data objectForKey:@"fg"];
+						vc.textToEdit=[[self.beerObj.data objectForKey:@"fg"] stringValue];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
@@ -1243,6 +1248,7 @@ enum TAGS {
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
 						vc.tag=kTagEditTextGrains;
+						vc.title=NSLocalizedString(@"Grains",@"Title: Editing beer grains");
 						vc.textToEdit=[self.beerObj.data objectForKey:@"grains"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
@@ -1252,6 +1258,7 @@ enum TAGS {
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
 						vc.tag=kTagEditTextHops;
+						vc.title=NSLocalizedString(@"Hops",@"Title: Editing beer hops");
 						vc.textToEdit=[self.beerObj.data objectForKey:@"hops"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
@@ -1261,6 +1268,7 @@ enum TAGS {
 						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
 						vc.delegate=self;
 						vc.tag=kTagEditTextOtherIngs;
+						vc.title=NSLocalizedString(@"Other Ingredients",@"Title: Editing beer misc ingredients");
 						vc.textToEdit=[self.beerObj.data objectForKey:@"otherings"];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
@@ -1271,6 +1279,7 @@ enum TAGS {
 						vc.delegate=self;
 						vc.textType=EditLineVCTextTypeInteger;
 						vc.tag=kTagEditTextCalories;
+						vc.title=NSLocalizedString(@"Calories",@"Title: Editing beer calories");
 						NSNumber* n=[self.beerObj.data objectForKey:@"calories_per_ml"];
 						vc.textToEdit=[NSString stringWithFormat:@"%0.0f",[n floatValue]*355]; // 355ml=12 fl.oz.
 						[self.navigationController pushViewController:vc animated:YES];
