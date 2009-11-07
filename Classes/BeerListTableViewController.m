@@ -301,6 +301,12 @@ static const NSInteger kTagBeerNameLabel=2;
 	 Wish List docs and beerlist docs are in different formats. Those should probably be changed on the server to be more consistent.
 	 */
 	NSString* beer_id=[beer objectForKey:@"beer_id"];
+	if (beer_id==nil)
+	{
+		beer_id=[beer objectForKey:@"id"];
+		// TODO: verify that it's really a beer ID (it could theoretically be another item type if we ever support more than beers)
+	}
+	
 	if (beer_id)
 	{
 		if (self.delegate && [self.delegate beerListTVCDidSelectBeer:beer_id]==NO)
