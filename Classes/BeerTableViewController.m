@@ -1382,6 +1382,7 @@ enum TAGS {
 	[self.beerObj.data setObject:text forKey:@"description"];
 	// Dismiss view controller
 	[self.navigationController popViewControllerAnimated:YES];
+	[self.tableView reloadData];
 }
 
 
