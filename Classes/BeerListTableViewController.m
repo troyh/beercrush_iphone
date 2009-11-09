@@ -265,7 +265,18 @@ static const NSInteger kTagBeerNameLabel=2;
 	UILabel* beerNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBeerNameLabel];
 	[beerNameLabel setText:[beer objectForKey:@"name"]];
 
-	cell.imageView.image=[UIImage imageNamed:@"beer.png"];
+	if ([[beer objectForKey:@"ontap"] boolValue])
+		cell.imageView.image=[UIImage imageNamed:@"draft.png"];
+	else if ([[beer objectForKey:@"oncask"] boolValue])
+		cell.imageView.image=[UIImage imageNamed:@"cask.png"];
+	else if ([[beer objectForKey:@"inbottle"] boolValue])
+		cell.imageView.image=[UIImage imageNamed:@"bottle12.png"];
+	else if ([[beer objectForKey:@"inbottle22"] boolValue])
+		cell.imageView.image=[UIImage imageNamed:@"bottle22.png"];
+	else if ([[beer objectForKey:@"incan"] boolValue])
+		cell.imageView.image=[UIImage imageNamed:@"can.png"];
+	else
+		cell.imageView.image=nil;
 	
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	
