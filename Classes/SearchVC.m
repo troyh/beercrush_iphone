@@ -467,17 +467,24 @@ enum {
 		if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
 		{ // Beer
 			[breweryNameLabel setText:[[beer objectForKey:@"brewery"] objectForKey:@"name"]];
-			[cell.imageView initWithImage:[UIImage imageNamed:@"beer.png"]];
+			cell.imageView.image=[UIImage imageNamed:@"beer.png"];
 		}
 		else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
 		{ // Place
 			[breweryNameLabel setText:@""];
-			[cell.imageView initWithImage:[UIImage imageNamed:@"restaurant.png"]];
+			if ([[beer objectForKey:@"placetype"] isEqualToString:@"Store"])
+				cell.imageView.image=[UIImage imageNamed:@"store.png"];
+			else if ([[beer objectForKey:@"placetype"] isEqualToString:@"Bar"])
+				cell.imageView.image=[UIImage imageNamed:@"bar.png"];
+			else if ([[beer objectForKey:@"placetype"] isEqualToString:@"Brewpub"])
+				cell.imageView.image=[UIImage imageNamed:@"brewpub.png"];
+			else
+				cell.imageView.image=[UIImage imageNamed:@"restaurant.png"];
 		}
 		else if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
 		{ // Brewery
 			[breweryNameLabel setText:@""];
-			[cell.imageView initWithImage:[UIImage imageNamed:@"brewery.png"]];
+			cell.imageView.image=[UIImage imageNamed:@"brewery.png"];
 		}
 		
 		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
