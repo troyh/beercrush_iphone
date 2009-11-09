@@ -67,9 +67,9 @@ enum {
 		self.view=logoView.view;
 		
 		if (self.searchTypes==(BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
-			self.searchBar.placeholder=@"Beers, brewers, etc.";
+			self.searchBar.placeholder=@"Beers and Breweries";
 		else if (self.searchTypes==BeerCrushSearchTypePlaces)
-			self.searchBar.placeholder=@"Pubs, restaurants, bars, stores, etc.";
+			self.searchBar.placeholder=@"Bars, Brewpubs, Restaurants, Stores, etc.";
 		
 		self.searchBar.autocorrectionType=UITextAutocorrectionTypeNo;
 		

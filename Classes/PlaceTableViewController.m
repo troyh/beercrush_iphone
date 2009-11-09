@@ -391,7 +391,7 @@ enum mytags {
 	{
 		switch (indexPath.section) {
 			case 0: // Place name
-				return 50;
+				return 60;
 				break;
 			case 1:
 			{

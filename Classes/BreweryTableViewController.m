@@ -356,7 +356,7 @@ enum TAGS {
 	{
 		switch (indexPath.section) {
 			case 0: // Brewery name
-				return 50;
+				return 60;
 				break;
 			case 2:
 			{

@@ -495,7 +495,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
-				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Places" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagMyPlaces] autorelease];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"My Places" image:[UIImage imageNamed:@"tab_placeratings.png"] tag:kTabBarItemTagMyPlaces] autorelease];
 				
 				PlacesTVC* bltvc=[[[PlacesTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
 				[nc pushViewController:bltvc animated:NO];
@@ -507,7 +507,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				nc.delegate=self;
 				[tabBarControllers addObject:nc];
-				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagProfile] autorelease];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"tab_profile.png"] tag:kTabBarItemTagProfile] autorelease];
 				
 				UserProfileTVC* uptvc=[[[UserProfileTVC alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
 				[nc pushViewController:uptvc animated:NO];
@@ -518,7 +518,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
 				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				[tabBarControllers addObject:nc];
-				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Buddies" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagBuddies] autorelease];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Buddies" image:[UIImage imageNamed:@"tab_buddies.png"] tag:kTabBarItemTagBuddies] autorelease];
 				
 				BuddiesTVC* btvc=[[[BuddiesTVC alloc] initWithStyle:UITableViewStylePlain] autorelease];
 				[nc pushViewController:btvc animated:NO];
@@ -529,7 +529,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				UINavigationController* nc=[[[UINavigationController alloc] initWithNibName:nil bundle:nil] autorelease];
 				nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 				[tabBarControllers addObject:nc];
-				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Recommended" image:[UIImage imageNamed:@"beer.png"] tag:kTabBarItemTagRecommended] autorelease];
+				nc.tabBarItem=[[[UITabBarItem alloc] initWithTitle:@"Recommended" image:[UIImage imageNamed:@"tab_recommended.png"] tag:kTabBarItemTagRecommended] autorelease];
 				
 				RecommendedTVC* rtvc=[[[RecommendedTVC alloc]  initWithStyle:UITableViewStylePlain] autorelease];
 				[nc pushViewController:rtvc animated:NO];

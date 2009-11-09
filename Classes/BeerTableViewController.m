@@ -451,8 +451,8 @@ enum TAGS {
 							UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 0, 200, 20)] autorelease];
 							breweryNameLabel.backgroundColor=[UIColor clearColor];
 							breweryNameLabel.tag=kTagBreweryNameLabel;
-							breweryNameLabel.font=[UIFont boldSystemFontOfSize:12];
-							breweryNameLabel.textColor=[UIColor grayColor];
+							breweryNameLabel.font=[UIFont systemFontOfSize:14];
+							breweryNameLabel.textColor=[UIColor blackColor];
 							[cell.contentView addSubview:breweryNameLabel];
 							
 							UILabel* beerNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 15, 200, 30)] autorelease];
@@ -463,8 +463,8 @@ enum TAGS {
 							
 							UILabel* styleLabel=[[[UILabel alloc] initWithFrame:CGRectMake(80, 40, 200, 20)] autorelease];
 							styleLabel.backgroundColor=[UIColor clearColor];
-							styleLabel.font=[UIFont boldSystemFontOfSize:14];
-							styleLabel.textColor=[UIColor blackColor];
+							styleLabel.font=[UIFont systemFontOfSize:12];
+							styleLabel.textColor=[UIColor grayColor];
 							styleLabel.tag=kTagStyleLabel;
 							[cell.contentView addSubview:styleLabel];
 							
@@ -526,7 +526,7 @@ enum TAGS {
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section1CellEditing"] autorelease];
 					
 					UILabel* descriptionLabel=[[[UILabel alloc] initWithFrame:CGRectMake(8, 0, 275, 70)] autorelease];
-					[descriptionLabel setFont:[UIFont systemFontOfSize:14.0]];
+					[descriptionLabel setFont:[UIFont systemFontOfSize:12.0]];
 					descriptionLabel.tag=kTagDescriptionLabel;
 					descriptionLabel.numberOfLines=3;
 					descriptionLabel.lineBreakMode=UILineBreakModeTailTruncation;
@@ -746,8 +746,8 @@ enum TAGS {
 						NSString* flavors=[self.beerObj.data objectForKey:@"flavors"];
 						if (flavors==nil)
 						{
-							[cell.detailTextLabel setText:@"No flavors or aromas rated yet"];
-							[cell.detailTextLabel setFont:[UIFont systemFontOfSize:14]];
+							[cell.detailTextLabel setText:@"No flavors or aromas reported yet"];
+							[cell.detailTextLabel setFont:[UIFont systemFontOfSize:12]];
 							[cell.detailTextLabel setTextColor:[UIColor grayColor]];
 						}
 						else
