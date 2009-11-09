@@ -19,7 +19,7 @@
 {
 	if (self=[super initWithStyle:UITableViewStylePlain])
 	{
-		self.typeOptions=[NSArray arrayWithObjects:@"Bar",@"Restaurant",@"Store",nil];
+		self.typeOptions=[NSArray arrayWithObjects:@"Bar",@"Brewpub",@"Restaurant",@"Store",nil];
 		
 		self.title=@"Place Type";
 	}
