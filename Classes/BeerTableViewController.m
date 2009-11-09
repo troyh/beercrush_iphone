@@ -1670,39 +1670,48 @@ enum TAGS {
 			[x raise];
 		}
 		
-		NSString* bodystr=[values componentsJoinedByString:@"&"];
-		DLog(@"POST data:%@",bodystr);
-		
-		NSMutableDictionary* answer;
-		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC];
-		// TODO: put up a view that covers entire screen with spinning animation
-		NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:bodystr returningJSON:&answer];
-		// TODO: remove spinning animation
-		if ([response statusCode]==200)
+		// Verify that the beer has a non-blank name
+		if ([[[self.beerObj.data objectForKey:@"name"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]==0)
 		{
-			self.beerObj.data=answer;
-			normalizeBeerData(self.beerObj.data);
-			
-			[self.dataTableView removeFromSuperview];
-			self.dataTableView=nil; // Causes it to be recreated in cellForRowAtIndexPath, which causes the updated data to appear
-			
-			[self setEditing:NO animated:YES];
-			[self.tableView reloadData];
-			
-			[self.delegate didSaveBeerEdits];
+			UIAlertView* alert=[[UIAlertView alloc] initWithTitle:nil
+														  message:NSLocalizedString(@"Beers must have a name",@"SaveBeerEdits: Beers must have a name")
+														 delegate:nil
+												cancelButtonTitle:NSLocalizedString(@"OK",@"SaveBeerEdits: OK button title")
+												otherButtonTitles:nil];
+			[alert show];
+			[alert release];
 		}
-		else
+		else 
 		{
-			[self performSelectorOnMainThread:@selector(saveEditsFailed) withObject:nil waitUntilDone:NO];
+			NSString* bodystr=[values componentsJoinedByString:@"&"];
+			DLog(@"POST data:%@",bodystr);
+			
+			NSMutableDictionary* answer;
+			NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BEER_DOC];
+			NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:bodystr returningJSON:&answer];
+			if ([response statusCode]==200)
+			{
+				self.beerObj.data=answer;
+				normalizeBeerData(self.beerObj.data);
+				
+				[self.dataTableView removeFromSuperview];
+				self.dataTableView=nil; // Causes it to be recreated in cellForRowAtIndexPath, which causes the updated data to appear
+				
+				[self.tableView reloadData];
+				
+				[self setEditing:NO animated:YES];
+				[self.delegate didSaveBeerEdits];
+			}
+			else
+			{
+				[self performSelectorOnMainThread:@selector(saveEditsFailed) withObject:nil waitUntilDone:NO];
+			}
 		}
 	}
-	else // No changes, but change out of editing mode
+	else
 	{
-		UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Beer Editing",@"Alert title for beer editing") message:NSLocalizedString(@"No changes were made.",@"Alert message when user makes no changes to beer edit but tapped Save") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK",@"OK button on alert") otherButtonTitles:nil] autorelease];
-		[alert show];
-//		[self setEditing:NO animated:YES];
+		[self.delegate didCancelBeerEdits];
 	}
-
 	
 	[appDelegate dismissActivityHUD];
 }
