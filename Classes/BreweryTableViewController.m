@@ -1061,6 +1061,9 @@ enum TAGS {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSMutableDictionary* answer;
 	NSHTTPURLResponse* response=[appDelegate sendJSONRequest:[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_BREWERY_DOC] usingMethod:@"POST" withData:bodystring returningJSON:&answer];
+	
+	[appDelegate dismissActivityHUD];
+	
 	if ([response statusCode]==200)
 	{
 		self.breweryObject.data=answer;
@@ -1087,8 +1090,6 @@ enum TAGS {
 												 delegate:nil
 										cancelButtonTitle:NSLocalizedString(@"OK",@"SaveBreweryEditsFailed: failure alert cancel button title")
 										otherButtonTitles:nil];
-	[alert show];
-	[alert release];
 	[alert show];
 	[alert release];
 }
