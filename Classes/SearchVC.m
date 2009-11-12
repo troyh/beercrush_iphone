@@ -297,6 +297,7 @@ enum {
 	{
 		//		self.view.hidden=YES;
 		[self.resultsList removeAllObjects];
+		[self myReloadData];
 		
 		[bar setShowsCancelButton:YES animated:YES];
 	}
