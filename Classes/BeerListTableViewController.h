@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "BeerTableViewController.h"
+#import "ServingTypeVC.h"
 
 @protocol BeerListTVCDelegate
 
@@ -16,14 +17,16 @@
 @end
 
 
-@interface BeerListTableViewController : UITableViewController <BeerTableViewControllerDelegate,SearchVCDelegate,BeerListTVCDelegate> {
+@interface BeerListTableViewController : UITableViewController <BeerTableViewControllerDelegate,SearchVCDelegate,BeerListTVCDelegate,ServingTypeVCDelegate> {
 	id<BeerListTVCDelegate> delegate;
 	@private
 	NSString* breweryID;
 	NSString* placeID;
 	NSString* wishlistID;
 	
-	NSDictionary* beerList;
+	NSMutableDictionary* beerList;
+	NSMutableArray* beerListAdditions;
+	NSMutableArray* beerListDeletions;
 	BeerTableViewController* btvc;
 	BOOL setRightBarButtonItem;
 }
@@ -33,6 +36,8 @@
 @property (nonatomic,retain) NSString* placeID;
 @property (nonatomic,retain) NSString* wishlistID;
 @property (nonatomic,retain) NSDictionary* beerList;
+@property (nonatomic,retain) NSMutableArray* beerListAdditions;
+@property (nonatomic,retain) NSMutableArray* beerListDeletions;
 @property (nonatomic,retain) BeerTableViewController* btvc;
 @property (nonatomic,assign) BOOL setRightBarButtonItem;
 

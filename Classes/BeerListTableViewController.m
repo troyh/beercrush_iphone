@@ -18,11 +18,15 @@
 @synthesize wishlistID;
 // TODO: just use one ID string above and use an enum to signify the type of ID it is
 @synthesize beerList;
+@synthesize beerListAdditions;
+@synthesize beerListDeletions;
 @synthesize btvc;
 @synthesize setRightBarButtonItem;
 
 static const NSInteger kTagBreweryNameLabel=1;
 static const NSInteger kTagBeerNameLabel=2;
+
+#define BEERLIST_ARRAY	[self.beerList objectForKey:((self.wishlistID || self.placeID)?@"items":@"beers")]
 
 -(id)initWithBreweryID:(NSString*)brewery_id
 {
@@ -86,10 +90,14 @@ static const NSInteger kTagBeerNameLabel=2;
 	if (setRightBarButtonItem)
 	{
 		if (self.placeID)
-			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd	target:self action:@selector(browseBrewersPanel)] autorelease];
+			self.navigationItem.rightBarButtonItem=self.editButtonItem;
 		else if (self.breweryID)
 			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd	target:self action:@selector(newBeerPanel)] autorelease];
 	}
+
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerList) object:nil requiresUserCredentials:wishlistID?YES:NO activityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieveing beer list from server")];
+
 }
 
 /*
@@ -173,15 +181,20 @@ static const NSInteger kTagBeerNameLabel=2;
 
 -(void)addBeerToMenu:(NSString*)beerID
 {
+	if (self.beerListAdditions==nil)
+		self.beerListAdditions=[[[NSMutableArray alloc] initWithCapacity:5] autorelease];
+	[self.beerListAdditions addObject:beerID];
+	
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(postBeerToMenu:) object:beerID requiresUserCredentials:NO activityHUDText:@""];
+	NSDictionary* beer=[appDelegate getBeerDoc:beerID];
+	[BEERLIST_ARRAY addObject:beer];
+
+	[self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerList:) object:nil requiresUserCredentials:wishlistID?YES:NO activityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieveing beer list from server")];
+	[self.tableView reloadData];
 }
 
 /*
@@ -213,6 +226,32 @@ static const NSInteger kTagBeerNameLabel=2;
     // Release anything that's not essential, such as cached data
 }
 
+#pragma mark UIViewController methods
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated
+{
+	if (self.editing)
+	{ // Going out of editing mode
+		[super setEditing:editing animated:animated];
+		
+		// Save adds/deletes to server
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(postMenuEdits) object:nil requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"Saving",@"HUD: Saving beer menu edits")];
+	}
+	else  // Going into editing mode
+	{
+		[super setEditing:editing animated:animated];
+		
+		// Add a row to the table view
+		[self.tableView beginUpdates];
+		[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:
+												[NSIndexPath indexPathForRow:[BEERLIST_ARRAY count] inSection:0],
+												nil] 
+							  withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView endUpdates];
+	}
+}
+
 #pragma mark Table view methods
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -227,114 +266,156 @@ static const NSInteger kTagBeerNameLabel=2;
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (self.wishlistID || self.placeID)
-		return [[beerList objectForKey:@"items"] count];
-    return [[beerList objectForKey:@"beers"] count];
+    return [BEERLIST_ARRAY count] + (self.editing?1:0);
 }
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"BeerCell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
-		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
-		UILabel* beerNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 8, 250, 30)] autorelease];
-		beerNameLabel.font=[UIFont boldSystemFontOfSize:15];
-		beerNameLabel.textColor=[UIColor blackColor];
-		beerNameLabel.tag=kTagBeerNameLabel;
-		[cell.contentView addSubview:beerNameLabel];
-		
-		UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 1, 200, 12)] autorelease];
-		breweryNameLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
-		breweryNameLabel.textColor=[UIColor grayColor];
-		breweryNameLabel.tag=kTagBreweryNameLabel;
-		[cell.contentView addSubview:breweryNameLabel];
-    }
-    
-    // Set up the cell...
-	NSDictionary* beer=nil;
-	if (self.wishlistID || self.placeID)
-		beer=[[beerList objectForKey:@"items"] objectAtIndex:indexPath.row];
-	else
-		beer=[[beerList objectForKey:@"beers"] objectAtIndex:indexPath.row];
+	UITableViewCell *cell=nil;
 	
-	UILabel* beerNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBeerNameLabel];
-	[beerNameLabel setText:[beer objectForKey:@"name"]];
-
-	if ([[beer objectForKey:@"ontap"] boolValue])
-		cell.imageView.image=[UIImage imageNamed:@"draft.png"];
-	else if ([[beer objectForKey:@"oncask"] boolValue])
-		cell.imageView.image=[UIImage imageNamed:@"cask.png"];
-	else if ([[beer objectForKey:@"inbottle"] boolValue])
-		cell.imageView.image=[UIImage imageNamed:@"bottle12.png"];
-	else if ([[beer objectForKey:@"inbottle22"] boolValue])
-		cell.imageView.image=[UIImage imageNamed:@"bottle22.png"];
-	else if ([[beer objectForKey:@"incan"] boolValue])
-		cell.imageView.image=[UIImage imageNamed:@"can.png"];
-	else
-		cell.imageView.image=nil;
-	
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	
-	UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
-
-	/*
-	 Wish List docs and beerlist docs are in different formats. Those should probably be changed on the server to be more consistent.
-	 */
-	NSString* beer_id=[beer objectForKey:@"beer_id"];
-	if (beer_id==nil)
+	if (indexPath.row < [BEERLIST_ARRAY count])
 	{
-		beer_id=[beer objectForKey:@"id"];
+		static NSString *CellIdentifier = @"BeerCell";
+		
+		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+		if (cell == nil) {
+			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
+			cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+
+			UILabel* beerNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 8, 250, 30)] autorelease];
+			beerNameLabel.font=[UIFont boldSystemFontOfSize:15];
+			beerNameLabel.textColor=[UIColor blackColor];
+			beerNameLabel.tag=kTagBeerNameLabel;
+			[cell.contentView addSubview:beerNameLabel];
+			
+			UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 1, 200, 12)] autorelease];
+			breweryNameLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+			breweryNameLabel.textColor=[UIColor grayColor];
+			breweryNameLabel.tag=kTagBreweryNameLabel;
+			[cell.contentView addSubview:breweryNameLabel];
+			
+			cell.editingAccessoryType=UITableViewCellAccessoryDetailDisclosureButton;
+		}
+		
+		// Set up the cell...
+		NSDictionary* beer=[BEERLIST_ARRAY objectAtIndex:indexPath.row];
+		
+		UILabel* beerNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBeerNameLabel];
+		[beerNameLabel setText:[beer objectForKey:@"name"]];
+
+		if ([[beer objectForKey:@"ontap"] boolValue])
+			cell.imageView.image=[UIImage imageNamed:@"draft.png"];
+		else if ([[beer objectForKey:@"oncask"] boolValue])
+			cell.imageView.image=[UIImage imageNamed:@"cask.png"];
+		else if ([[beer objectForKey:@"inbottle"] boolValue])
+			cell.imageView.image=[UIImage imageNamed:@"bottle12.png"];
+		else if ([[beer objectForKey:@"inbottle22"] boolValue])
+			cell.imageView.image=[UIImage imageNamed:@"bottle22.png"];
+		else if ([[beer objectForKey:@"incan"] boolValue])
+			cell.imageView.image=[UIImage imageNamed:@"can.png"];
+		else
+			cell.imageView.image=nil;
+		
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		
+		UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
+
+		/*
+		 Wish List docs and beerlist docs are in different formats. Those should probably be changed on the server to be more consistent.
+		 */
+		NSString* beer_id=[beer objectForKey:@"beer_id"];
 		if (beer_id==nil)
 		{
-			// Uh oh.
+			beer_id=[beer objectForKey:@"id"];
+			if (beer_id==nil)
+			{
+				// Uh oh.
+			}
 		}
+		
+		[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:beer_id]];
 	}
-	
-	[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:beer_id]];
+	else // Create the extra row for adding a beer
+	{
+		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero] autorelease];
+		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+		cell.editingAccessoryType=UITableViewCellAccessoryNone;
+		
+		[cell.textLabel setText:NSLocalizedString(@"Add a beer",@"Text for row to add a beer to beer list")];
+	}
+
 
     return cell;
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSDictionary* beer=nil;
-	if (self.wishlistID || self.placeID)
-		beer=[[beerList objectForKey:@"items"] objectAtIndex:indexPath.row];
-	else
-		beer=[[beerList objectForKey:@"beers"] objectAtIndex:indexPath.row];
-	
-	/*
-	 Wish List docs and beerlist docs are in different formats. Those should probably be changed on the server to be more consistent.
-	 */
-	NSString* beer_id=[beer objectForKey:@"beer_id"];
-	if (beer_id==nil)
+
+	NSArray* beers=BEERLIST_ARRAY;
+	if (indexPath.row < [beers count])
 	{
-		beer_id=[beer objectForKey:@"id"];
-		// TODO: verify that it's really a beer ID (it could theoretically be another item type if we ever support more than beers)
-	}
-	
-	if (beer_id)
-	{
-		if (self.delegate && [self.delegate beerListTVCDidSelectBeer:beer_id]==NO)
+		NSDictionary* beer=[beers objectAtIndex:indexPath.row];
+		
+		/*
+		 Wish List docs and beerlist docs are in different formats. Those should probably be changed on the server to be more consistent.
+		 */
+		NSString* beer_id=[beer objectForKey:@"beer_id"];
+		if (beer_id==nil)
 		{
-			// The delegate doesn't want us to continue navigating
+			beer_id=[beer objectForKey:@"id"];
+			// TODO: verify that it's really a beer ID (it could theoretically be another item type if we ever support more than beers)
 		}
-		else
+		
+		if (beer_id)
 		{
-			BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:beer_id] autorelease];
-			[self.navigationController pushViewController:vc animated:YES];
+			if (self.delegate && [self.delegate beerListTVCDidSelectBeer:beer_id]==NO)
+			{
+				// The delegate doesn't want us to continue navigating
+			}
+			else
+			{
+				BeerTableViewController* vc=[[[BeerTableViewController alloc] initWithBeerID:beer_id] autorelease];
+				[self.navigationController pushViewController:vc animated:YES];
+			}
 		}
 	}
 }
 
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+	ServingTypeVC* vc=[[[ServingTypeVC alloc] init] autorelease];
+	vc.delegate=self;
+
+	NSMutableDictionary* beer=[BEERLIST_ARRAY objectAtIndex:indexPath.row];
+
+	if ([[beer objectForKey:@"ontap"] boolValue])
+		vc.selectedType|=BeerCrushServingTypeTap;
+	if ([[beer objectForKey:@"oncask"] boolValue])
+		vc.selectedType|=BeerCrushServingTypeCask;
+	if ([[beer objectForKey:@"inbottle"] boolValue])
+		vc.selectedType|=BeerCrushServingTypeBottle355;
+	if ([[beer objectForKey:@"inbottle22"] boolValue])
+		vc.selectedType|=BeerCrushServingTypeBottle650;
+	if ([[beer objectForKey:@"incan"] boolValue])
+		vc.selectedType|=BeerCrushServingTypeCan;
+	
+	vc.dataObject=beer;
+
+	[self.navigationController pushViewController:vc animated:YES];
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	if (indexPath.row >= [BEERLIST_ARRAY count])
+		return UITableViewCellEditingStyleInsert;
+	return UITableViewCellEditingStyleDelete;
+}
+
+
 #pragma mark Async operations
 
--(void)getBeerList:(NSObject*)obj
+-(void)getBeerList
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 
@@ -379,30 +460,39 @@ static const NSInteger kTagBeerNameLabel=2;
 	[appDelegate dismissActivityHUD];
 }
 
--(void)postBeerToMenu:(NSString*)beerID
+-(void)postMenuEdits
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_MENU_DOC];
-	NSString* postdata=[[NSString alloc] initWithFormat:
+
+	NSString* adds=(self.beerListAdditions?[self.beerListAdditions componentsJoinedByString:@" "]:@"");
+	NSString* dels=(self.beerListDeletions?[self.beerListDeletions componentsJoinedByString:@" "]:@"");
+	
+	NSString* postdata=[[[NSString alloc] initWithFormat:
 						@"place_id=%@&"
-						"add_item=%@",
+						"add_item=%@&"
+						"del_item=%@",
 						self.placeID,
-						beerID];
+						adds,
+						dels] autorelease];
+
 	NSMutableDictionary* answer=nil;
 	NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:postdata returningJSON:&answer];
 	[appDelegate dismissActivityHUD];
 	if ([response statusCode]==200)
 	{
+		// Refresh it by doing another request (the result from the edit request is not a full beer menu)
 		self.beerList=answer;
+		
+		[self.beerListAdditions removeAllObjects];
+		[self.beerListDeletions removeAllObjects];
+		
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 	}
 	else 
 	{
-		self.beerList=nil;
 		[self performSelectorOnMainThread:@selector(postBeerToMenuFailed) withObject:nil waitUntilDone:NO];
 	}
-
-	[postdata release];
-	
 }
 
 -(void)getBeerListFailed
@@ -418,8 +508,8 @@ static const NSInteger kTagBeerNameLabel=2;
 
 -(void)postBeerToMenuFailed
 {
-	UIAlertView* alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Add to Menu",@"AddToBeerMenu: failure alert title")
-												  message:NSLocalizedString(@"Failed to add beer to menu",@"AddToBeerMenu: failure alert message")
+	UIAlertView* alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Edit Menu",@"AddToBeerMenu: failure alert title")
+												  message:NSLocalizedString(@"Failed to edit beer menu",@"AddToBeerMenu: failure alert message")
 												 delegate:nil
 										cancelButtonTitle:NSLocalizedString(@"OK",@"AddToBeerMenu: failure alert cancel button title")
 										otherButtonTitles:nil];
@@ -438,19 +528,27 @@ static const NSInteger kTagBeerNameLabel=2;
 */
 
 
-/*
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
+		NSMutableDictionary* beer=[BEERLIST_ARRAY objectAtIndex:indexPath.row];
+		if (self.beerListDeletions==nil)
+			self.beerListDeletions=[[[NSMutableArray alloc] initWithCapacity:5] autorelease];
+		NSString* s=[beer objectForKey:@"beer_id"];
+		if (s==nil)
+			s=[beer objectForKey:@"id"];
+		if (s)
+			[self.beerListDeletions addObject:s];
+		[BEERLIST_ARRAY removeObjectAtIndex:indexPath.row];
+
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+		[self browseBrewersPanel];
     }   
 }
-*/
 
 
 /*
@@ -500,6 +598,23 @@ static const NSInteger kTagBeerNameLabel=2;
 	return NO;
 }
 
+#pragma mark ServingTypeVCDelegate methods
+
+-(void)servingTypeVC:(ServingTypeVC*)vc didSelectServingType:(BeerCrushServingType)t setOn:(BOOL)b
+{
+	NSMutableDictionary* beer=(NSMutableDictionary*)vc.dataObject;
+
+	if (t==BeerCrushServingTypeTap)
+		[beer setObject:[NSNumber numberWithBool:b] forKey:@"ontap"];
+	else if (t==BeerCrushServingTypeCask)
+		[beer setObject:[NSNumber numberWithBool:b] forKey:@"oncask"];
+	else if (t==BeerCrushServingTypeBottle355)
+		[beer setObject:[NSNumber numberWithBool:b] forKey:@"inbottle"];
+	else if (t==BeerCrushServingTypeBottle650)
+		[beer setObject:[NSNumber numberWithBool:b] forKey:@"inbottle22"];
+	else if (t==BeerCrushServingTypeCan)
+		[beer setObject:[NSNumber numberWithBool:b] forKey:@"incan"];
+}
 
 @end
 
