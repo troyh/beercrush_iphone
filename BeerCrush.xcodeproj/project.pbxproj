@@ -74,6 +74,7 @@
 		05A12716109B70E2002F0F32 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A12715109B70E2002F0F32 /* MessageUI.framework */; };
 		05A127E4109B86E1002F0F32 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A127E3109B86E1002F0F32 /* Foundation.framework */; };
 		05A12A6410A09A07002F0F32 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 05A12A6310A09A07002F0F32 /* Icon.png */; };
+		05A12D5810AA1418002F0F32 /* ServingTypeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A12D5710AA1418002F0F32 /* ServingTypeVC.m */; };
 		05B7DB5E103F42700021EEDA /* StylesListTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B7DB5D103F42700021EEDA /* StylesListTVC.m */; };
 		05B7DB7B103F45A70021EEDA /* StyleVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B7DB7A103F45A70021EEDA /* StyleVC.m */; };
 		05C0D47B10740500004D485E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 05C0D47A10740500004D485E /* Localizable.strings */; };
@@ -210,6 +211,8 @@
 		05A12715109B70E2002F0F32 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		05A127E3109B86E1002F0F32 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = ../../../../../../System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		05A12A6310A09A07002F0F32 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		05A12D5610AA1418002F0F32 /* ServingTypeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServingTypeVC.h; sourceTree = "<group>"; };
+		05A12D5710AA1418002F0F32 /* ServingTypeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServingTypeVC.m; sourceTree = "<group>"; };
 		05B7DB5C103F42700021EEDA /* StylesListTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StylesListTVC.h; sourceTree = "<group>"; };
 		05B7DB5D103F42700021EEDA /* StylesListTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StylesListTVC.m; sourceTree = "<group>"; };
 		05B7DB79103F45A70021EEDA /* StyleVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleVC.h; sourceTree = "<group>"; };
@@ -385,6 +388,8 @@
 				05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */,
 				051BBE931075539B004376D9 /* SearchVC.h */,
 				051BBE941075539B004376D9 /* SearchVC.m */,
+				05A12D5610AA1418002F0F32 /* ServingTypeVC.h */,
+				05A12D5710AA1418002F0F32 /* ServingTypeVC.m */,
 				05B7DB5C103F42700021EEDA /* StylesListTVC.h */,
 				05B7DB5D103F42700021EEDA /* StylesListTVC.m */,
 				05B7DB79103F45A70021EEDA /* StyleVC.h */,
@@ -640,6 +645,7 @@
 				051BC38E107A8742004376D9 /* DatePickerVC.m in Sources */,
 				051BC629107BD6BD004376D9 /* RatingView.m in Sources */,
 				05ECB39F107D628F001D59A0 /* RegexKitLite.m in Sources */,
+				05A12D5810AA1418002F0F32 /* ServingTypeVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
