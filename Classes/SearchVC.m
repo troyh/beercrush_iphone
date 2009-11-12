@@ -24,6 +24,7 @@
 
 enum {
 	kTagBreweryNameLabel=1,
+	kTagAddressLabel
 };
 
 -(id)init
@@ -458,6 +459,12 @@ enum {
 			breweryNameLabel.textColor=[UIColor grayColor];
 			breweryNameLabel.tag=kTagBreweryNameLabel;
 			[cell.contentView addSubview:breweryNameLabel];
+
+			UILabel* addressLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 30, 200, 12)] autorelease];
+			addressLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+			addressLabel.textColor=[UIColor grayColor];
+			addressLabel.tag=kTagAddressLabel;
+			[cell.contentView addSubview:addressLabel];
 		}
 
 		UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
@@ -472,7 +479,26 @@ enum {
 		}
 		else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
 		{ // Place
-			[breweryNameLabel setText:@""];
+			UILabel* addressLabel=(UILabel*)[cell.contentView viewWithTag:kTagAddressLabel];
+
+			if ([beer objectForKey:@"address_city"] && [beer objectForKey:@"address_state"])
+			{
+				[addressLabel setText:[NSString stringWithFormat:@"%@, %@",
+										   [beer objectForKey:@"address_city"],
+										   [beer objectForKey:@"address_state"]
+										   ]];
+			}
+			else if ([beer objectForKey:@"address_state"])
+			{
+				[addressLabel setText:[beer objectForKey:@"address_state"]];
+			}
+			else if ([beer objectForKey:@"address_city"])
+			{
+				[addressLabel setText:[beer objectForKey:@"address_city"]];
+			}
+			else
+				[addressLabel setText:@""];
+
 			if ([[beer objectForKey:@"placetype"] isEqualToString:@"Store"])
 				cell.imageView.image=[UIImage imageNamed:@"store.png"];
 			else if ([[beer objectForKey:@"placetype"] isEqualToString:@"Bar"])
