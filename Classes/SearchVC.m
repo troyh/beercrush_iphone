@@ -33,6 +33,7 @@ enum {
 	{
 		self.logoView=[[[LogoVC alloc] initWithNibName:@"LogoVC" bundle:nil] autorelease];
 		self.searchBar=[[UISearchBar alloc] initWithFrame:CGRectZero];
+		self.searchBar.showsCancelButton=NO;
 		self.searchBar.tintColor=[UIColor beercrushTanColor];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
@@ -77,6 +78,7 @@ enum {
 		self.searchBar.hidden=YES;
 		self.searchBar.delegate=self;
 		[self.searchBar sizeToFit];
+
 		[self.navigationController.navigationBar addSubview:self.searchBar];
 	}
 }
@@ -269,10 +271,12 @@ enum {
 
 -(void)keyboardWillShow:(NSNotification*)notification
 {
+	[self.searchBar setShowsCancelButton:YES animated:YES];
 }
 
 -(void)keyboardWillHide:(NSNotification*)notification
 {
+	[self.searchBar setShowsCancelButton:NO animated:YES];
 }
 
 #pragma mark UISearchBarDelegate methods
@@ -282,7 +286,6 @@ enum {
 	if (searchText.length)
 	{
 		// TODO: set a timer so we don't do this too quickly in succession as the user types fast
-		[bar setShowsCancelButton:NO animated:YES];
 		
 		@synchronized(self)
 		{
@@ -299,8 +302,6 @@ enum {
 		//		self.view.hidden=YES;
 		[self.resultsList removeAllObjects];
 		[self myReloadData];
-		
-		[bar setShowsCancelButton:YES animated:YES];
 	}
 }
 
@@ -327,8 +328,6 @@ enum {
     bar.text = @"";
 	
 	[self.resultsList removeAllObjects];
-	
-	[bar setShowsCancelButton:NO animated:YES];
 }
 
 #pragma mark Events
