@@ -395,6 +395,13 @@ enum {
 
 #pragma mark Table view methods
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	if (self.performedSearchQuery)
+		return tableView.rowHeight;
+	return 30; // Autocomplete row height
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -464,79 +471,92 @@ enum {
 	}
 	else 
 	{
-		static NSString *CellIdentifier = @"Cell";
-		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-		if (cell == nil) {
-			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		if (self.performedSearchQuery)
+		{
+			static NSString *CellIdentifier = @"Cell";
+			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+			if (cell == nil) {
+				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
-			UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 1, 200, 8)] autorelease];
-			breweryNameLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
-			breweryNameLabel.textColor=[UIColor grayColor];
-			breweryNameLabel.tag=kTagBreweryNameLabel;
-			[cell.contentView addSubview:breweryNameLabel];
+				UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 1, 200, 8)] autorelease];
+				breweryNameLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+				breweryNameLabel.textColor=[UIColor grayColor];
+				breweryNameLabel.tag=kTagBreweryNameLabel;
+				[cell.contentView addSubview:breweryNameLabel];
 
-			UILabel* titleLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 9, 200, 20)] autorelease];
-			[titleLabel setFont:[UIFont boldSystemFontOfSize:14]];
-			titleLabel.tag=kTagTitleLabel;
-			[cell.contentView addSubview:titleLabel];
+				UILabel* titleLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 9, 200, 20)] autorelease];
+				[titleLabel setFont:[UIFont boldSystemFontOfSize:14]];
+				titleLabel.tag=kTagTitleLabel;
+				[cell.contentView addSubview:titleLabel];
+				
+				UILabel* addressLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 30, 200, 14)] autorelease];
+				addressLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+				addressLabel.textColor=[UIColor grayColor];
+				addressLabel.tag=kTagAddressLabel;
+				[cell.contentView addSubview:addressLabel];
+			}
+
+			UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
+
+			NSDictionary* beer=[self.resultsList objectAtIndex:indexPath.row];
+			UILabel* titleLabel=(UILabel*)[cell.contentView viewWithTag:kTagTitleLabel];
+			[titleLabel setText:[beer objectForKey:@"name"]];
 			
-			UILabel* addressLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 30, 200, 14)] autorelease];
-			addressLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
-			addressLabel.textColor=[UIColor grayColor];
-			addressLabel.tag=kTagAddressLabel;
-			[cell.contentView addSubview:addressLabel];
-		}
-
-		UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
-
-		NSDictionary* beer=[self.resultsList objectAtIndex:indexPath.row];
-		UILabel* titleLabel=(UILabel*)[cell.contentView viewWithTag:kTagTitleLabel];
-		[titleLabel setText:[beer objectForKey:@"name"]];
-		
-		NSString* idstr=[beer objectForKey:@"id"];
-		if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
-		{ // Beer
-			[breweryNameLabel setText:[[beer objectForKey:@"brewery"] objectForKey:@"name"]];
-			cell.imageView.image=[UIImage imageNamed:@"beer.png"];
-		}
-		else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
-		{ // Place
-			UILabel* addressLabel=(UILabel*)[cell.contentView viewWithTag:kTagAddressLabel];
-
-			if ([beer objectForKey:@"address_city"] && [beer objectForKey:@"address_state"])
-			{
-				[addressLabel setText:[NSString stringWithFormat:@"%@, %@",
-										   [beer objectForKey:@"address_city"],
-										   [beer objectForKey:@"address_state"]
-										   ]];
+			NSString* idstr=[beer objectForKey:@"id"];
+			if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
+			{ // Beer
+				[breweryNameLabel setText:[[beer objectForKey:@"brewery"] objectForKey:@"name"]];
+				cell.imageView.image=[UIImage imageNamed:@"beer.png"];
 			}
-			else if ([beer objectForKey:@"address_state"])
-			{
-				[addressLabel setText:[beer objectForKey:@"address_state"]];
-			}
-			else if ([beer objectForKey:@"address_city"])
-			{
-				[addressLabel setText:[beer objectForKey:@"address_city"]];
-			}
-			else
-				[addressLabel setText:@""];
+			else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
+			{ // Place
+				UILabel* addressLabel=(UILabel*)[cell.contentView viewWithTag:kTagAddressLabel];
 
-			if ([[beer objectForKey:@"placetype"] isEqualToString:@"Store"])
-				cell.imageView.image=[UIImage imageNamed:@"store.png"];
-			else if ([[beer objectForKey:@"placetype"] isEqualToString:@"Bar"])
-				cell.imageView.image=[UIImage imageNamed:@"bar.png"];
-			else if ([[beer objectForKey:@"placetype"] isEqualToString:@"Brewpub"])
-				cell.imageView.image=[UIImage imageNamed:@"brewpub.png"];
-			else
-				cell.imageView.image=[UIImage imageNamed:@"restaurant.png"];
+				if ([beer objectForKey:@"address_city"] && [beer objectForKey:@"address_state"])
+				{
+					[addressLabel setText:[NSString stringWithFormat:@"%@, %@",
+											   [beer objectForKey:@"address_city"],
+											   [beer objectForKey:@"address_state"]
+											   ]];
+				}
+				else if ([beer objectForKey:@"address_state"])
+				{
+					[addressLabel setText:[beer objectForKey:@"address_state"]];
+				}
+				else if ([beer objectForKey:@"address_city"])
+				{
+					[addressLabel setText:[beer objectForKey:@"address_city"]];
+				}
+				else
+					[addressLabel setText:@""];
+
+				if ([[beer objectForKey:@"placetype"] isEqualToString:@"Store"])
+					cell.imageView.image=[UIImage imageNamed:@"store.png"];
+				else if ([[beer objectForKey:@"placetype"] isEqualToString:@"Bar"])
+					cell.imageView.image=[UIImage imageNamed:@"bar.png"];
+				else if ([[beer objectForKey:@"placetype"] isEqualToString:@"Brewpub"])
+					cell.imageView.image=[UIImage imageNamed:@"brewpub.png"];
+				else
+					cell.imageView.image=[UIImage imageNamed:@"restaurant.png"];
+			}
+			else if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
+			{ // Brewery
+				[breweryNameLabel setText:@""];
+				cell.imageView.image=[UIImage imageNamed:@"brewery.png"];
+			}
+			
+			cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 		}
-		else if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
-		{ // Brewery
-			[breweryNameLabel setText:@""];
-			cell.imageView.image=[UIImage imageNamed:@"brewery.png"];
+		else // Autocomplete result cell
+		{
+			static NSString *CellIdentifier = @"AutoCompleteCell";
+			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+			if (cell == nil)
+				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+			
+			NSDictionary* result=[self.resultsList objectAtIndex:indexPath.row];
+			[cell.textLabel setText:[result objectForKey:@"name"]];
 		}
-		
-		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 	}
 	
     return cell;
@@ -547,14 +567,26 @@ enum {
 {
 	if (indexPath.row < [self.resultsList count])
 	{
-		NSString* idstr=[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
-		[self navigateBasedOnDocumentID:idstr];
+		if (self.performedSearchQuery)
+		{
+			NSString* idstr=[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
+			[self navigateBasedOnDocumentID:idstr];
+		}
+		else // Autocomplete result cell, do a search on the text in the cell
+		{
+			NSDictionary* result=[self.resultsList objectAtIndex:indexPath.row];
+			self.searchBar.text=[result objectForKey:@"name"];
+
+			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			[appDelegate performAsyncOperationWithTarget:self selector:@selector(query) object:nil requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Searching",@"Searching")];
+		}
 	}
 	else
 	{
 		if (indexPath.row == [self.resultsList count] && [self.resultsList count] < self.totalResultCount)
 		{
-			[self query];
+			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			[appDelegate performAsyncOperationWithTarget:self selector:@selector(query) object:nil requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Searching",@"Searching")];
 		}
 		else 
 		{
