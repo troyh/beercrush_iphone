@@ -5,7 +5,7 @@
 	<key>StringsTable</key>
 	<string>Root</string>
 	<key>Title</key>
-	<string>BeerCrush</string>
+	<string>Beer Crush</string>
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
@@ -54,26 +54,26 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Enabled</string>
+			<string>Restore State</string>
 			<key>Key</key>
-			<string>enabled_preference</string>
+			<string>nav_restore</string>
 			<key>DefaultValue</key>
 			<true/>
 		</dict>
 		<dict>
 			<key>Type</key>
-			<string>PSSliderSpecifier</string>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>App Info</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>Version</string>
 			<key>Key</key>
-			<string>slider_preference</string>
+			<string>info_source_version</string>
 			<key>DefaultValue</key>
-			<real>0.5</real>
-			<key>MinimumValue</key>
-			<integer>0</integer>
-			<key>MaximumValue</key>
-			<integer>1</integer>
-			<key>MinimumValueImage</key>
-			<string></string>
-			<key>MaximumValueImage</key>
 			<string></string>
 		</dict>
 	</array>
