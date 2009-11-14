@@ -229,6 +229,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -277,9 +279,9 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>63</integer>
-									<integer>59</integer>
-									<integer>58</integer>
+									<integer>56</integer>
+									<integer>55</integer>
+									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
@@ -313,8 +315,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -332,7 +332,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>05DD36DC10AF51BA007F6F71</string>
+										<string>05DD36FC10AF55BD007F6F71</string>
 										<key>history</key>
 										<array>
 											<string>059FF95F100F8A6A00960819</string>
@@ -617,9 +617,9 @@
 		<string>05DD35F810ADC372007F6F71</string>
 		<string>05DD35FA10ADC372007F6F71</string>
 		<string>1CD10A99069EF8BA00B06720</string>
+		<string>056D28710F5319CA00A1F223</string>
 		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/troy/Documents/BeerCrush/BeerCrush.xcodeproj</string>
-		<string>056D28710F5319CA00A1F223</string>
 	</array>
 	<key>WindowString</key>
 	<string>1032 110 1382 1468 0 0 2560 1578 </string>
@@ -712,7 +712,7 @@
 			<key>WindowToolGUID</key>
 			<string>056D28710F5319CA00A1F223</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
