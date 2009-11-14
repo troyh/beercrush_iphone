@@ -32,12 +32,16 @@ typedef enum
 	id<SearchVCDelegate> delegate;
 	UISearchBar* searchBar;
 	NSMutableArray* resultsList;
+	unsigned int totalResultCount;
+	NSString* searchText;
 	BOOL performedSearchQuery;
 	BOOL isPerformingAsyncQuery;
 	UIEdgeInsets insets;
 }
 
 @property (nonatomic, retain) NSMutableArray* resultsList;
+@property (nonatomic, assign) unsigned int totalResultCount;
+@property (nonatomic, retain) NSString* searchText;
 @property (nonatomic,retain) UISearchBar* searchBar;
 @property (nonatomic, retain) LogoVC* logoView;
 @property (nonatomic, assign) BeerCrushSearchType searchTypes;
@@ -47,7 +51,7 @@ typedef enum
 @property (nonatomic, assign) UIEdgeInsets insets;
 
 -(void)autocomplete:(NSString*)qs;
--(void)query:(NSString*)qs;
+-(void)query;
 -(BOOL)navigateBasedOnDocumentID:(NSString*)idstr;
 -(NSObject*)navigationRestorationData;
 

@@ -15,8 +15,10 @@
 
 @synthesize logoView;
 @synthesize searchTypes;
+@synthesize searchText;
 @synthesize delegate;
 @synthesize resultsList;
+@synthesize totalResultCount;
 @synthesize searchBar;
 @synthesize performedSearchQuery;
 @synthesize isPerformingAsyncQuery;
@@ -24,7 +26,8 @@
 
 enum {
 	kTagBreweryNameLabel=1,
-	kTagAddressLabel
+	kTagAddressLabel,
+	kTagTitleLabel
 };
 
 -(id)init
@@ -228,7 +231,7 @@ enum {
 }
 
 
--(void)query:(NSString*)qs 
+-(void)query
 {
 	self.performedSearchQuery=YES;
 	
@@ -244,20 +247,18 @@ enum {
 		dataset="beer";
 	else if (self.searchTypes == BeerCrushSearchTypePlaces)
 		dataset="place";
-	
-	NSURL* url=[NSURL URLWithString:[[NSString stringWithFormat:BEERCRUSH_API_URL_SEARCH_QUERY, qs, dataset ] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-	NSData* answer;
-	
+
+	NSURL* url=[NSURL URLWithString:[[NSString stringWithFormat:BEERCRUSH_API_URL_SEARCH_QUERY, self.searchText, dataset, [self.resultsList count]] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	NSData* answer=nil;
 	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-	
-	[self.resultsList removeAllObjects];
 	
 	if ([response statusCode]==200)
 	{
 		NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
 		NSDictionary* results=[s JSONValue];
-		self.resultsList=[[results objectForKey:@"response"] objectForKey:@"docs"];
-		DLog(@"Results:%@",results);
+		[self.resultsList addObjectsFromArray:[[results objectForKey:@"response"] objectForKey:@"docs"]];
+		self.totalResultCount=[[[results objectForKey:@"response"] objectForKey:@"numFound"] unsignedIntValue];
+		DLog(@"%d Results:%@",self.totalResultCount,results);
 	}
 	else
 	{
@@ -266,7 +267,6 @@ enum {
 	[self performSelectorOnMainThread:@selector(myReloadData) withObject:nil waitUntilDone:NO];
 	
 	[appDelegate dismissActivityHUD];
-	
 }
 
 -(void)keyboardWillShow:(NSNotification*)notification
@@ -281,9 +281,9 @@ enum {
 
 #pragma mark UISearchBarDelegate methods
 
-- (void)searchBar:(UISearchBar *)bar textDidChange:(NSString *)searchText
+- (void)searchBar:(UISearchBar *)bar textDidChange:(NSString *)text
 {
-	if (searchText.length)
+	if (text.length)
 	{
 		// TODO: set a timer so we don't do this too quickly in succession as the user types fast
 		
@@ -292,27 +292,33 @@ enum {
 			if (self.isPerformingAsyncQuery==NO)
 			{
 				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-				[appDelegate performAsyncOperationWithTarget:self selector:@selector(autocomplete:) object:searchText requiresUserCredentials:NO activityHUDText:nil];
+				[appDelegate performAsyncOperationWithTarget:self selector:@selector(autocomplete:) object:text requiresUserCredentials:NO activityHUDText:nil];
 				self.isPerformingAsyncQuery=YES;
 			}
 		}
 	}
 	else
 	{
-		//		self.view.hidden=YES;
 		[self.resultsList removeAllObjects];
+		self.totalResultCount=0;
+		self.searchText=nil;
 		[self myReloadData];
 	}
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)bar
 {
+	self.searchText=nil;
+	[self.resultsList removeAllObjects];
+	self.totalResultCount=0;
+	
 	if (bar.text.length)
 	{
 		[bar endEditing:YES];
 		
+		self.searchText=bar.text;
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-		[appDelegate performAsyncOperationWithTarget:self selector:@selector(query:) object:bar.text requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Searching",@"Searching")];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(query) object:nil requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Searching",@"Searching")];
 	}
 }
 
@@ -327,7 +333,9 @@ enum {
 	[bar endEditing:YES];
     bar.text = @"";
 	
+	self.searchText=nil;
 	[self.resultsList removeAllObjects];
+	self.totalResultCount=0;
 }
 
 #pragma mark Events
@@ -397,7 +405,7 @@ enum {
 	if (self.performedSearchQuery)  // It's a real query
 	{
 		DLog(@"numberOfRowsInSection=%d",[self.resultsList count]+1);
-		return [self.resultsList count]+1;
+		return [self.resultsList count]+([self.resultsList count]<self.totalResultCount?1:0)+([self.searchText length]?1:0);
 	}
 	else
 	{
@@ -419,30 +427,39 @@ enum {
 	UITableViewCell* cell=nil;
 	
 	if ((indexPath.row >= [self.resultsList count]))
-	{ // Show the Add a [Brewery|Place] row
-		if (self.performedSearchQuery)
+	{ 
+		if (indexPath.row == [self.resultsList count] && [self.resultsList count] < self.totalResultCount)
+		{ // Make the "Get more results..." cell
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
+			[cell.textLabel setText:NSLocalizedString(@"More Results...",@"Search: Get More Results")];
+		}
+		else
 		{
-			static NSString *CellIdentifier = @"AddNewItemCell";
-			
-			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-			if (cell == nil) {
-				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-			}
-			
-			//			if (self.searchTypes == BeerCrushSearchTypePlaces)
-			if (NO)
-				[cell.textLabel setText:NSLocalizedString(@"Missing Place?",@"Missing place? Add it.")];
-			else
+			// Show the Add a [Brewery|Place] row
+			if (self.performedSearchQuery)
 			{
-				[cell.textLabel setText:NSLocalizedString(@"Missing Brewery?",@"Missing brewery? Add it.")];
-				[cell.detailTextLabel setText:NSLocalizedString(@"Missing Brewery? Subtitle",@"(add beers on the brewery's beer list page)")];
+				static NSString *CellIdentifier = @"AddNewItemCell";
+				
+				cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+				}
+				
+				//			if (self.searchTypes == BeerCrushSearchTypePlaces)
+				if (NO)
+					[cell.textLabel setText:NSLocalizedString(@"Missing Place?",@"Missing place? Add it.")];
+				else
+				{
+					[cell.textLabel setText:NSLocalizedString(@"Missing Brewery?",@"Missing brewery? Add it.")];
+					[cell.detailTextLabel setText:NSLocalizedString(@"Missing Brewery? Subtitle",@"(add beers on the brewery's beer list page)")];
+				}
+				
+				UIButton* addButton=[UIButton buttonWithType:UIButtonTypeContactAdd];
+				addButton.frame=CGRectMake(0, 0, 30, 30);
+				[addButton addTarget:self action:@selector(addBeerOrBreweryButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+				
+				cell.accessoryView=addButton;
 			}
-			
-			UIButton* addButton=[UIButton buttonWithType:UIButtonTypeContactAdd];
-			addButton.frame=CGRectMake(0, 0, 30, 30);
-			[addButton addTarget:self action:@selector(addBeerOrBreweryButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-			
-			cell.accessoryView=addButton;
 		}
 	}
 	else 
@@ -451,15 +468,19 @@ enum {
 		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 		if (cell == nil) {
 			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-			[cell.textLabel setFont:[UIFont systemFontOfSize:14]];
-			
-			UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 1, 200, 12)] autorelease];
+
+			UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 1, 200, 8)] autorelease];
 			breweryNameLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
 			breweryNameLabel.textColor=[UIColor grayColor];
 			breweryNameLabel.tag=kTagBreweryNameLabel;
 			[cell.contentView addSubview:breweryNameLabel];
 
-			UILabel* addressLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 30, 200, 12)] autorelease];
+			UILabel* titleLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 9, 200, 20)] autorelease];
+			[titleLabel setFont:[UIFont boldSystemFontOfSize:14]];
+			titleLabel.tag=kTagTitleLabel;
+			[cell.contentView addSubview:titleLabel];
+			
+			UILabel* addressLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 30, 200, 14)] autorelease];
 			addressLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
 			addressLabel.textColor=[UIColor grayColor];
 			addressLabel.tag=kTagAddressLabel;
@@ -469,7 +490,9 @@ enum {
 		UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
 
 		NSDictionary* beer=[self.resultsList objectAtIndex:indexPath.row];
-		[cell.textLabel setText:[beer objectForKey:@"name"]];
+		UILabel* titleLabel=(UILabel*)[cell.contentView viewWithTag:kTagTitleLabel];
+		[titleLabel setText:[beer objectForKey:@"name"]];
+		
 		NSString* idstr=[beer objectForKey:@"id"];
 		if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
 		{ // Beer
@@ -529,7 +552,14 @@ enum {
 	}
 	else
 	{
-		[self addBeerOrBreweryButtonClicked:nil];
+		if (indexPath.row == [self.resultsList count] && [self.resultsList count] < self.totalResultCount)
+		{
+			[self query];
+		}
+		else 
+		{
+			[self addBeerOrBreweryButtonClicked:nil];
+		}
 	}
 }
 
