@@ -17,7 +17,8 @@
 @synthesize searchTypes;
 @synthesize searchText;
 @synthesize delegate;
-@synthesize resultsList;
+@synthesize searchResultsList;
+@synthesize autocompleteResultsList;
 @synthesize totalResultCount;
 @synthesize searchBar;
 @synthesize performedSearchQuery;
@@ -143,6 +144,8 @@ enum {
 - (void)dealloc {
 	[self.logoView release];
 	[self.searchBar release];
+	[self.searchResultsList release];
+	[self.autocompleteResultsList release];
     [super dealloc];
 }
 
@@ -151,10 +154,10 @@ enum {
 {
 	self.performedSearchQuery=NO;
 	
-	if (self.resultsList==nil)
-		self.resultsList=[[NSMutableArray alloc] initWithCapacity:10];
+	if (self.autocompleteResultsList==nil)
+		self.autocompleteResultsList=[[NSMutableArray alloc] initWithCapacity:10];
 	else
-		[self.resultsList removeAllObjects];
+		[self.autocompleteResultsList removeAllObjects];
 	
 	// Send the query off to the server
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
@@ -176,34 +179,19 @@ enum {
 	if ([response statusCode]==200)
 	{
 		char* p=(char*)[answer bytes];
-		while (p)
-		{	// Count the number of items
-			char* tab=strchr(p,'\t');
-			if (!tab)
-				p=nil; // Quit
-			else
+		while (p && *p)
+		{
+			char* nl=strchr(p, '\n');
+			if (nl)
 			{
-				*tab='\0';
-				char* nl=strchr(tab+1, '\n');
-				if (!nl)
-					p=nil; // Quit
-				else
-				{
-					*nl='\0';
-					
-					if (p && tab)
-					{
-						NSMutableDictionary* result=[NSMutableDictionary dictionaryWithCapacity:2];
-						[result setObject:[NSString stringWithCString:p encoding:NSUTF8StringEncoding] forKey:@"name"];
-						[result setObject:[NSString stringWithCString:tab+1 encoding:NSUTF8StringEncoding] forKey:@"id"];
-						[self.resultsList addObject:result];
-					}
-					
-					p=nl+1;
-				}
+				*nl='\0';
+				[self.autocompleteResultsList addObject:[NSString stringWithCString:p encoding:NSUTF8StringEncoding]];
+				p=nl+1;
 			}
+			else
+				p=nil;
 		}
-		DLog(@"%d results",[self.resultsList count]);
+		DLog(@"%d results",[self.autocompleteResultsList count]);
 		[self performSelectorOnMainThread:@selector(myReloadData) withObject:nil waitUntilDone:NO];
 	}
 	else
@@ -248,7 +236,7 @@ enum {
 	else if (self.searchTypes == BeerCrushSearchTypePlaces)
 		dataset="place";
 
-	NSURL* url=[NSURL URLWithString:[[NSString stringWithFormat:BEERCRUSH_API_URL_SEARCH_QUERY, self.searchText, dataset, [self.resultsList count]] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	NSURL* url=[NSURL URLWithString:[[NSString stringWithFormat:BEERCRUSH_API_URL_SEARCH_QUERY, self.searchText, dataset, [self.searchResultsList count]] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	NSData* answer=nil;
 	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
 	
@@ -256,7 +244,9 @@ enum {
 	{
 		NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
 		NSDictionary* results=[s JSONValue];
-		[self.resultsList addObjectsFromArray:[[results objectForKey:@"response"] objectForKey:@"docs"]];
+		if (self.searchResultsList==nil)
+			self.searchResultsList=[[NSMutableArray alloc] initWithCapacity:100];
+		[self.searchResultsList addObjectsFromArray:[[results objectForKey:@"response"] objectForKey:@"docs"]];
 		self.totalResultCount=[[[results objectForKey:@"response"] objectForKey:@"numFound"] unsignedIntValue];
 		DLog(@"%d Results:%@",self.totalResultCount,results);
 	}
@@ -299,7 +289,8 @@ enum {
 	}
 	else
 	{
-		[self.resultsList removeAllObjects];
+		[self.autocompleteResultsList removeAllObjects];
+		[self.searchResultsList removeAllObjects];
 		self.totalResultCount=0;
 		self.searchText=nil;
 		[self myReloadData];
@@ -309,7 +300,8 @@ enum {
 - (void)searchBarSearchButtonClicked:(UISearchBar *)bar
 {
 	self.searchText=nil;
-	[self.resultsList removeAllObjects];
+	[self.autocompleteResultsList removeAllObjects];
+	[self.searchResultsList removeAllObjects];
 	self.totalResultCount=0;
 	
 	if (bar.text.length)
@@ -334,7 +326,7 @@ enum {
     bar.text = @"";
 	
 	self.searchText=nil;
-	[self.resultsList removeAllObjects];
+	[self.searchResultsList removeAllObjects];
 	self.totalResultCount=0;
 }
 
@@ -411,13 +403,13 @@ enum {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (self.performedSearchQuery)  // It's a real query
 	{
-		DLog(@"numberOfRowsInSection=%d",[self.resultsList count]+1);
-		return [self.resultsList count]+([self.resultsList count]<self.totalResultCount?1:0)+([self.searchText length]?1:0);
+		DLog(@"numberOfRowsInSection=%d",[self.searchResultsList count]+1);
+		return [self.searchResultsList count]+([self.searchResultsList count]<self.totalResultCount?1:0)+([self.searchText length]?1:0);
 	}
 	else
 	{
-		DLog(@"numberOfRowsInSection=%d",[self.resultsList count]);
-		return [self.resultsList count];
+		DLog(@"numberOfRowsInSection=%d",[self.autocompleteResultsList count]);
+		return [self.autocompleteResultsList count];
 	}
 }
 
@@ -433,45 +425,45 @@ enum {
 	
 	UITableViewCell* cell=nil;
 	
-	if ((indexPath.row >= [self.resultsList count]))
-	{ 
-		if (indexPath.row == [self.resultsList count] && [self.resultsList count] < self.totalResultCount)
-		{ // Make the "Get more results..." cell
-			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
-			[cell.textLabel setText:NSLocalizedString(@"More Results...",@"Search: Get More Results")];
-		}
-		else
-		{
-			// Show the Add a [Brewery|Place] row
-			if (self.performedSearchQuery)
+	if (self.performedSearchQuery)
+	{
+		if ((indexPath.row >= [self.searchResultsList count]))
+		{ 
+			if (indexPath.row == [self.searchResultsList count] && [self.searchResultsList count] < self.totalResultCount)
+			{ // Make the "Get more results..." cell
+				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
+				[cell.textLabel setText:NSLocalizedString(@"More Results...",@"Search: Get More Results")];
+			}
+			else
 			{
-				static NSString *CellIdentifier = @"AddNewItemCell";
-				
-				cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-				if (cell == nil) {
-					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-				}
-				
-				//			if (self.searchTypes == BeerCrushSearchTypePlaces)
-				if (NO)
-					[cell.textLabel setText:NSLocalizedString(@"Missing Place?",@"Missing place? Add it.")];
-				else
+				// Show the Add a [Brewery|Place] row
+				if (self.performedSearchQuery)
 				{
-					[cell.textLabel setText:NSLocalizedString(@"Missing Brewery?",@"Missing brewery? Add it.")];
-					[cell.detailTextLabel setText:NSLocalizedString(@"Missing Brewery? Subtitle",@"(add beers on the brewery's beer list page)")];
+					static NSString *CellIdentifier = @"AddNewItemCell";
+					
+					cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+					if (cell == nil) {
+						cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+					}
+					
+					//			if (self.searchTypes == BeerCrushSearchTypePlaces)
+					if (NO)
+						[cell.textLabel setText:NSLocalizedString(@"Missing Place?",@"Missing place? Add it.")];
+					else
+					{
+						[cell.textLabel setText:NSLocalizedString(@"Missing Brewery?",@"Missing brewery? Add it.")];
+						[cell.detailTextLabel setText:NSLocalizedString(@"Missing Brewery? Subtitle",@"(add beers on the brewery's beer list page)")];
+					}
+					
+					UIButton* addButton=[UIButton buttonWithType:UIButtonTypeContactAdd];
+					addButton.frame=CGRectMake(0, 0, 30, 30);
+					[addButton addTarget:self action:@selector(addBeerOrBreweryButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+					
+					cell.accessoryView=addButton;
 				}
-				
-				UIButton* addButton=[UIButton buttonWithType:UIButtonTypeContactAdd];
-				addButton.frame=CGRectMake(0, 0, 30, 30);
-				[addButton addTarget:self action:@selector(addBeerOrBreweryButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-				
-				cell.accessoryView=addButton;
 			}
 		}
-	}
-	else 
-	{
-		if (self.performedSearchQuery)
+		else 
 		{
 			static NSString *CellIdentifier = @"Cell";
 			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -498,7 +490,7 @@ enum {
 
 			UILabel* breweryNameLabel=(UILabel*)[cell.contentView viewWithTag:kTagBreweryNameLabel];
 
-			NSDictionary* beer=[self.resultsList objectAtIndex:indexPath.row];
+			NSDictionary* beer=[self.searchResultsList objectAtIndex:indexPath.row];
 			UILabel* titleLabel=(UILabel*)[cell.contentView viewWithTag:kTagTitleLabel];
 			[titleLabel setText:[beer objectForKey:@"name"]];
 			
@@ -547,16 +539,16 @@ enum {
 			
 			cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 		}
-		else // Autocomplete result cell
-		{
-			static NSString *CellIdentifier = @"AutoCompleteCell";
-			cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-			if (cell == nil)
-				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-			
-			NSDictionary* result=[self.resultsList objectAtIndex:indexPath.row];
-			[cell.textLabel setText:[result objectForKey:@"name"]];
-		}
+	}
+	else // Autocomplete result cell
+	{
+		static NSString *CellIdentifier = @"AutoCompleteCell";
+		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+		if (cell == nil)
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		
+		NSString* result=[self.autocompleteResultsList objectAtIndex:indexPath.row];
+		[cell.textLabel setText:result];
 	}
 	
     return cell;
@@ -565,25 +557,14 @@ enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if (indexPath.row < [self.resultsList count])
+	if (self.performedSearchQuery)
 	{
-		if (self.performedSearchQuery)
+		if (indexPath.row < [self.searchResultsList count])
 		{
-			NSString* idstr=[[self.resultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
+			NSString* idstr=[[self.searchResultsList objectAtIndex:indexPath.row] objectForKey:@"id"];
 			[self navigateBasedOnDocumentID:idstr];
 		}
-		else // Autocomplete result cell, do a search on the text in the cell
-		{
-			NSDictionary* result=[self.resultsList objectAtIndex:indexPath.row];
-			self.searchBar.text=[result objectForKey:@"name"];
-
-			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-			[appDelegate performAsyncOperationWithTarget:self selector:@selector(query) object:nil requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Searching",@"Searching")];
-		}
-	}
-	else
-	{
-		if (indexPath.row == [self.resultsList count] && [self.resultsList count] < self.totalResultCount)
+		else if (indexPath.row == [self.searchResultsList count] && [self.searchResultsList count] < self.totalResultCount)
 		{
 			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 			[appDelegate performAsyncOperationWithTarget:self selector:@selector(query) object:nil requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Searching",@"Searching")];
@@ -592,6 +573,15 @@ enum {
 		{
 			[self addBeerOrBreweryButtonClicked:nil];
 		}
+	}
+	else // Autocomplete result cell, do a search on the text in the cell
+	{
+		NSString* result=[self.autocompleteResultsList objectAtIndex:indexPath.row];
+		self.searchBar.text=result;
+		self.searchText=result;
+		
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		[appDelegate performAsyncOperationWithTarget:self selector:@selector(query) object:nil requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Searching",@"Searching")];
 	}
 }
 

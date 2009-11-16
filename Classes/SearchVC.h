@@ -31,7 +31,8 @@ typedef enum
 	BeerCrushSearchType searchTypes;
 	id<SearchVCDelegate> delegate;
 	UISearchBar* searchBar;
-	NSMutableArray* resultsList;
+	NSMutableArray* searchResultsList;
+	NSMutableArray* autocompleteResultsList;
 	unsigned int totalResultCount;
 	NSString* searchText;
 	BOOL performedSearchQuery;
@@ -39,7 +40,8 @@ typedef enum
 	UIEdgeInsets insets;
 }
 
-@property (nonatomic, retain) NSMutableArray* resultsList;
+@property (nonatomic, retain) NSMutableArray* searchResultsList;
+@property (nonatomic, retain) NSMutableArray* autocompleteResultsList;
 @property (nonatomic, assign) unsigned int totalResultCount;
 @property (nonatomic, retain) NSString* searchText;
 @property (nonatomic,retain) UISearchBar* searchBar;
