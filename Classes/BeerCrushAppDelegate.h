@@ -111,10 +111,8 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 @end
 
 #ifdef DEBUG
-//#define BEERCRUSH_API_URL_HOST					"http://macdev"
-#define BEERCRUSH_API_URL_HOST					"http://beercrush.com"
+#define BEERCRUSH_API_URL_HOST					"http://duff"
 #else
-//#define BEERCRUSH_API_URL_HOST					"http://macdev"
 #define BEERCRUSH_API_URL_HOST					"http://beercrush.com"
 #endif
 

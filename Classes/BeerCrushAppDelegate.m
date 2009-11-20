@@ -910,7 +910,12 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		}
 		else if ([method isEqualToString:@"GET"])
 		{
-			// TODO: Always add userid= and usrkey= parameters
+			// Always add userid= and usrkey= parameters
+			NSString* userid=[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
+			NSString* usrkey=[[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"];
+			
+			NSString* s=[[url absoluteString] stringByAppendingFormat:@"&userid=%@&usrkey=%@",userid,usrkey];
+			[theRequest setURL:[NSURL URLWithString:s]];
 		}
 		
 		[theRequest setHTTPMethod:method];

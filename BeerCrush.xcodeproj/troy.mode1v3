@@ -264,6 +264,7 @@
 							<array>
 								<string>29B97314FDCFA39411CA2CEA</string>
 								<string>05C0D47A10740500004D485E</string>
+								<string>080E96DDFE201D6D7F000001</string>
 								<string>29B97315FDCFA39411CA2CEA</string>
 								<string>29B97317FDCFA39411CA2CEA</string>
 								<string>29B97323FDCFA39411CA2CEA</string>
@@ -277,13 +278,13 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>44</integer>
-									<integer>7</integer>
+									<integer>9</integer>
+									<integer>3</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 0}, {203, 1409}}</string>
+							<string>{{0, 13}, {203, 1409}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -320,7 +321,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>SearchVC.m</string>
+								<string>BeerCrushAppDelegate.h</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -328,11 +329,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>SearchVC.m</string>
+										<string>BeerCrushAppDelegate.h</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>05DD372E10AF7B4C007F6F71</string>
+										<string>05DD37EA10B75521007F6F71</string>
 										<key>history</key>
 										<array>
 											<string>059FF95F100F8A6A00960819</string>
@@ -408,16 +409,17 @@
 											<string>05A12B9B10A4D235002F0F32</string>
 											<string>05A12BED10A4F1FE002F0F32</string>
 											<string>05A12C0810A5F334002F0F32</string>
-											<string>05A12C1510A72D9A002F0F32</string>
 											<string>05A12C2410A8A6C6002F0F32</string>
 											<string>05A12C3D10A8B2BD002F0F32</string>
 											<string>05A12C4B10A8CAA1002F0F32</string>
 											<string>05A12C5810A8D86D002F0F32</string>
 											<string>05A12F1510AB9659002F0F32</string>
 											<string>05A12F2B10AC8964002F0F32</string>
-											<string>05A12F3210AC8D66002F0F32</string>
-											<string>05DD363F10AE2264007F6F71</string>
-											<string>05DD372210AF7A6B007F6F71</string>
+											<string>05DD379610B1EAC5007F6F71</string>
+											<string>05DD37AE10B74F20007F6F71</string>
+											<string>05DD37AF10B74F20007F6F71</string>
+											<string>05DD37BF10B7511C007F6F71</string>
+											<string>05DD37C010B7511C007F6F71</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
