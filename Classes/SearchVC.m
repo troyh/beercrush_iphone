@@ -470,18 +470,18 @@ enum {
 			if (cell == nil) {
 				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
-				UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 1, 200, 8)] autorelease];
+				UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 1, 260, 8)] autorelease];
 				breweryNameLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
 				breweryNameLabel.textColor=[UIColor grayColor];
 				breweryNameLabel.tag=kTagBreweryNameLabel;
 				[cell.contentView addSubview:breweryNameLabel];
 
-				UILabel* titleLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 9, 200, 20)] autorelease];
-				[titleLabel setFont:[UIFont boldSystemFontOfSize:14]];
+				UILabel* titleLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 9, 260, 20)] autorelease];
+				[titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
 				titleLabel.tag=kTagTitleLabel;
 				[cell.contentView addSubview:titleLabel];
 				
-				UILabel* addressLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 30, 200, 14)] autorelease];
+				UILabel* addressLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 30, 260, 14)] autorelease];
 				addressLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
 				addressLabel.textColor=[UIColor grayColor];
 				addressLabel.tag=kTagAddressLabel;
@@ -549,6 +549,8 @@ enum {
 		
 		NSString* result=[self.autocompleteResultsList objectAtIndex:indexPath.row];
 		[cell.textLabel setText:result];
+		[cell.textLabel setFont:[UIFont systemFontOfSize:16]];
+		[cell.textLabel setTextColor:[UIColor beercrushBlueColor]];
 	}
 	
     return cell;

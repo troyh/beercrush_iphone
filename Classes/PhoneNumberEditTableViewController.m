@@ -18,6 +18,7 @@
 - (id)init {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+		self.title=@"Phone";
     }
 	
     return self;

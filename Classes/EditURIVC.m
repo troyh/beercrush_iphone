@@ -19,7 +19,7 @@
 {
 	if (self=[super initWithStyle:UITableViewStyleGrouped])
 	{
-		self.title=@"Edit URI";
+		self.title=@"Website";
 
 	}
 	return self;
@@ -43,6 +43,7 @@
 	uriTextField.keyboardType=UIKeyboardTypeURL;
 	uriTextField.textAlignment=UITextAlignmentCenter;
 	uriTextField.autocorrectionType=UITextAutocorrectionTypeNo;
+	uriTextField.autocapitalizationType=UITextAutocapitalizationTypeNone;
 	uriTextField.font=[UIFont systemFontOfSize:17];
 	uriTextField.text=self.uriToEdit;
 }

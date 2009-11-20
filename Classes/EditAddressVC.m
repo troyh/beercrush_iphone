@@ -23,25 +23,29 @@
 {
 	if (self=[super initWithStyle:UITableViewStyleGrouped])
 	{
-		self.title=@"Edit Address";
+		self.title=@"Address";
 		
 		street1=[[UITextField alloc] initWithFrame:CGRectMake(5, 10, 290, 30)];
 		street1.font=[UIFont systemFontOfSize:16];
 		street1.placeholder=@"Street";
+		street1.autocapitalizationType=UITextAutocapitalizationTypeWords;
 		
 		street2=[[UITextField alloc] initWithFrame:CGRectMake(5, 10, 290, 30)];
 		street2.placeholder=@"Street";
 		street2.font=[UIFont systemFontOfSize:16];
+		street2.autocapitalizationType=UITextAutocapitalizationTypeWords;
 
 		city=[[UITextField alloc] initWithFrame:CGRectMake(5, 10, 150, 30)];
 		city.placeholder=@"City";
 		city.font=[UIFont systemFontOfSize:16];
+		city.autocapitalizationType=UITextAutocapitalizationTypeWords;
 
-		state=[[UITextField alloc] initWithFrame:CGRectMake(160, 10, 30, 30)];
+		state=[[UITextField alloc] initWithFrame:CGRectMake(160, 10, 40, 30)];
 		state.placeholder=@"State";
 		state.font=[UIFont systemFontOfSize:16];
+		state.autocapitalizationType=UITextAutocapitalizationTypeWords;
 
-		zip=[[UITextField alloc] initWithFrame:CGRectMake(200, 10, 100, 30)];
+		zip=[[UITextField alloc] initWithFrame:CGRectMake(210, 10, 100, 30)];
 		zip.placeholder=@"Zip Code";
 		zip.font=[UIFont systemFontOfSize:16];
 	}
