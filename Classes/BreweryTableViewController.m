@@ -178,10 +178,12 @@ enum TAGS {
 	}
 	else
 	{
+		[self.navigationItem setLeftBarButtonItem:nil];
+		[self.tableView reloadData];
+		
 		if (self.editingWasCanceled)
 		{
 			[super setEditing:editing animated:animated];
-			[self.navigationItem setLeftBarButtonItem:nil];
 		}
 		else
 		{
@@ -223,6 +225,7 @@ enum TAGS {
 				[appDelegate performAsyncOperationWithTarget:self selector:@selector(saveEdits:) object:bodystr requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Saving",@"Saving")];
 			}
 		}
+
 	}
 }
 
