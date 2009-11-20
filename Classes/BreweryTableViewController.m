@@ -1069,7 +1069,7 @@ enum TAGS {
 		self.breweryObject.data=answer;
 		normalizeBreweryData(self.breweryObject.data);
 		
-		[super setEditing:self.editing animated:YES];
+		[super setEditing:NO animated:YES];
 		[self endEditingMode];
 		[self.navigationItem setLeftBarButtonItem:nil];
 		
