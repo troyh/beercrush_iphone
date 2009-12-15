@@ -705,6 +705,7 @@ enum TAGS {
 			case 0: // Brewery name
 			{
 				EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+				vc.title=@"Brewery Name";
 				vc.textToEdit=[self.breweryObject.data objectForKey:@"name"];
 				vc.delegate=self;
 				[self.navigationController pushViewController:vc animated:YES];
