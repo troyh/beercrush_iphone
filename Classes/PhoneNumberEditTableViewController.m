@@ -7,7 +7,7 @@
 //
 
 #import "PhoneNumberEditTableViewController.h"
-
+#import "RegexKitLite.h"
 
 @implementation PhoneNumberEditTableViewController
 
@@ -109,11 +109,14 @@
 
 	self.textField.text=self.phoneNumberToEdit;
 
-	self.textField.font=[UIFont systemFontOfSize: 40.0];
+	self.textField.placeholder=@"Phone";
+	self.textField.font=[UIFont systemFontOfSize: 35.0];
 	self.textField.textAlignment=UITextAlignmentCenter;
 	self.textField.clearButtonMode=UITextFieldViewModeWhileEditing;
 	self.textField.adjustsFontSizeToFitWidth=YES;
 	self.textField.keyboardType=UIKeyboardTypePhonePad;
+	
+	[self.textField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
 	
 	[cell addSubview:self.textField];
 
@@ -175,6 +178,38 @@
     [super dealloc];
 }
 
+#pragma mark UIControlEvents handlers
+
+-(void)textChanged:(id)sender
+{
+	static BOOL toggle=NO;
+	if (toggle)
+	{
+		toggle=NO;
+		return;
+	}
+	
+	UITextField* fld=(UITextField*)sender;
+	// Remove any parentheses and hyphens
+	NSString* s=[fld.text stringByReplacingOccurrencesOfRegex:@"[^0-9]" withString:@""];
+	
+	// Put parentheses and hyphens back
+	NSString* ns=nil;
+	if ([s length]>6)
+	{
+		ns=[NSString stringWithFormat:@"(%@) %@-%@", [s substringToIndex:3],[s substringWithRange:NSMakeRange(3, 3)], [s substringFromIndex:6]];
+	}
+	else if ([s length]>3)
+	{
+		ns=[NSString stringWithFormat:@"(%@) %@", [s substringToIndex:3], [s substringFromIndex:3]];
+	}
+	else if ([s length]) {
+		ns=[NSString stringWithFormat:@"(%@", s];
+	}
+
+	toggle=YES;
+	fld.text=ns;
+}
 
 @end
 
