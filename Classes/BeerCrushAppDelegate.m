@@ -914,7 +914,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			NSString* userid=[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
 			NSString* usrkey=[[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"];
 			
-			NSString* s=[[url absoluteString] stringByAppendingFormat:@"&userid=%@&usrkey=%@",userid,usrkey];
+			NSString* s=[[url absoluteString] stringByAppendingFormat:@"%cuserid=%@&usrkey=%@",([url query]==nil?'?':'&'),userid,usrkey];
 			[theRequest setURL:[NSURL URLWithString:s]];
 		}
 		
