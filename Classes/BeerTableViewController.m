@@ -1671,7 +1671,8 @@ enum TAGS {
 		}
 		
 		// Verify that the beer has a non-blank name
-		if ([[[self.beerObj.data objectForKey:@"name"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]==0)
+		NSString* beername=[[self.beerObj.data objectForKey:@"name"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		if ([beername length]==0)
 		{
 			UIAlertView* alert=[[UIAlertView alloc] initWithTitle:nil
 														  message:NSLocalizedString(@"Beers must have a name",@"SaveBeerEdits: Beers must have a name")
@@ -1702,9 +1703,13 @@ enum TAGS {
 				[self setEditing:NO animated:YES];
 				[self.delegate didSaveBeerEdits];
 			}
+			else if ([response statusCode]==409) // Duplicate beer
+			{
+				[self performSelectorOnMainThread:@selector(saveEditsFailed:) withObject:[NSString stringWithFormat:NSLocalizedString(@"'%@' is already in Beer Crush",@"SaveBeerEdits: duplicate alert message"), beername] waitUntilDone:NO];
+			}
 			else
 			{
-				[self performSelectorOnMainThread:@selector(saveEditsFailed) withObject:nil waitUntilDone:NO];
+				[self performSelectorOnMainThread:@selector(saveEditsFailed:) withObject:NSLocalizedString(@"Failed to save beer edits",@"SaveBeerEdits: failure alert message") waitUntilDone:NO];
 			}
 		}
 	}
@@ -1716,10 +1721,10 @@ enum TAGS {
 	[appDelegate dismissActivityHUD];
 }
 
--(void)saveEditsFailed
+-(void)saveEditsFailed:(id)message_string
 {
 	UIAlertView* alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Editing Beer",@"SaveBeerEdits: failure alert title")
-												  message:NSLocalizedString(@"Failed to save beer edits",@"SaveBeerEdits: failure alert message")
+												  message:message_string
 												 delegate:nil
 										cancelButtonTitle:NSLocalizedString(@"OK",@"SaveBeerEdits: failure alert cancel button title")
 										otherButtonTitles:nil];

@@ -96,7 +96,7 @@ static const NSInteger kTagBeerNameLabel=2;
 	}
 
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerList) object:nil requiresUserCredentials:wishlistID?YES:NO activityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieveing beer list from server")];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerList) object:nil requiresUserCredentials:wishlistID?YES:NO activityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieving beer list from server")];
 
 }
 
@@ -133,6 +133,9 @@ static const NSInteger kTagBeerNameLabel=2;
 -(void)didSaveBeerEdits
 {
 	[self.parentViewController dismissModalViewControllerAnimated:YES];
+
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerList) object:nil requiresUserCredentials:wishlistID?YES:NO activityHUDText:NSLocalizedString(@"HUD:GettingBeerList",@"Retrieving beer list from server")];
 }
 
 -(void)didCancelBeerEdits
