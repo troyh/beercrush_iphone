@@ -7,7 +7,7 @@
 //
 
 #import "EditURIVC.h"
-
+#import "RegexKitLite.h"
 
 @implementation EditURIVC
 
@@ -46,6 +46,7 @@
 	uriTextField.autocapitalizationType=UITextAutocapitalizationTypeNone;
 	uriTextField.font=[UIFont systemFontOfSize:17];
 	uriTextField.text=self.uriToEdit;
+	uriTextField.placeholder=@"www.website.com";
 }
 
 
@@ -173,6 +174,13 @@
 
 -(void)doneButtonClicked:(id)sender
 {
+	// URL encode it
+	uriTextField.text=[uriTextField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	// Add "http://" if it's not already there
+	if ([uriTextField.text isMatchedByRegex:@"^\\s*http://"]==NO) {
+		uriTextField.text=[NSString stringWithFormat:@"http://%@",uriTextField.text];
+	}
+	
 	[self.delegate editURIVC:self didEditURI:uriTextField.text];
 }
 

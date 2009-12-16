@@ -14,6 +14,7 @@
 #import "RatingControl.h"
 #import "JSON.h"
 #import "PhotoThumbnailControl.h"
+#import "RegexKitLite.h"
 
 @implementation PlaceTableViewController
 
@@ -526,7 +527,9 @@ enum mytags {
 							cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 						}
 						
-						[cell.detailTextLabel setText:[self.placeData objectForKey:@"uri"]];
+						NSMutableString* uri=[self.placeData objectForKey:@"uri"];
+						[uri replaceOccurrencesOfRegex:@"^\\s*http://" withString:@""];
+						[cell.detailTextLabel setText:uri];
 						break;
 					default:
 						break;
@@ -1252,7 +1255,19 @@ enum mytags {
 					}
 					case 2: // Web site
 					{
-						[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString:[placeData valueForKey:@"uri"]] autorelease]];
+						NSString* uri=[placeData valueForKey:@"uri"];
+						if ([uri length])
+						{
+							NSURL* url=nil;
+							if ([uri isMatchedByRegex:@"^\\s*http://"]==NO) {
+								url=[NSURL URLWithString:[NSString stringWithFormat:@"http://%@",uri]];
+							}
+							else {
+								url=[NSURL URLWithString:uri];
+							}
+							
+							[[UIApplication sharedApplication] openURL:url];
+						}
 						break;
 					}
 					default:

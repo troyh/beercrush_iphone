@@ -13,7 +13,7 @@
 #import "RatingControl.h"
 #import "PhotoThumbnailControl.h"
 #import "JSON.h"
-
+#import "RegexKitLite.h"
 
 @implementation BreweryObject
 
@@ -628,7 +628,10 @@ enum TAGS {
 							cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section2Row2Cell"] autorelease];
 						}
 						
-						[cell.textLabel setText:[breweryObject.data objectForKey:@"uri"]];
+						// Remove "http://" for display
+						NSMutableString* uri=[breweryObject.data objectForKey:@"uri"];
+						[uri replaceOccurrencesOfRegex:@"^\\s*http://" withString:@""];
+						[cell.textLabel setText:uri];
 	//					[cell.textLabel setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
 						[cell.textLabel setTextAlignment:UITextAlignmentCenter];
 						break;
@@ -843,7 +846,17 @@ enum TAGS {
 					{
 						NSString* uri=[breweryObject.data objectForKey:@"uri"];
 						if ([uri length])
-							[[UIApplication sharedApplication] openURL:[[[NSURL alloc] initWithString: uri] autorelease]];
+						{
+							NSURL* url=nil;
+							if ([uri isMatchedByRegex:@"^\\s*http://"]==NO) {
+								url=[NSURL URLWithString:[NSString stringWithFormat:@"http://%@",uri]];
+							}
+							else {
+								url=[NSURL URLWithString:uri];
+							}
+
+							[[UIApplication sharedApplication] openURL:url];
+						}
 						break;
 					}
 				}
