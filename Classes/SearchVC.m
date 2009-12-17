@@ -307,6 +307,7 @@ enum {
 	if (bar.text.length)
 	{
 		[bar endEditing:YES];
+		[bar resignFirstResponder];
 		
 		self.searchText=bar.text;
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];

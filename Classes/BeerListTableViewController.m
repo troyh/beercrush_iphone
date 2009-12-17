@@ -187,11 +187,17 @@ static const NSInteger kTagBeerNameLabel=2;
 	if (self.beerListAdditions==nil)
 		self.beerListAdditions=[[[NSMutableArray alloc] initWithCapacity:5] autorelease];
 	[self.beerListAdditions addObject:beerID];
-	
+
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSDictionary* beer=[appDelegate getBeerDoc:beerID];
-	[BEERLIST_ARRAY addObject:beer];
+	
+	// Get the Serving Type VC from the user
+	ServingTypeVC* vc=[[[ServingTypeVC alloc] init] autorelease];
+	vc.delegate=self;
+	vc.dataObject=beer;
+	[self.navigationController pushViewController:vc animated:YES];
 
+	[BEERLIST_ARRAY addObject:beer];
 	[self.tableView reloadData];
 }
 
