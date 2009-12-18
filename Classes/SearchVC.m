@@ -16,6 +16,7 @@
 @synthesize logoView;
 @synthesize searchTypes;
 @synthesize searchText;
+@synthesize autocompleteZeroResults;
 @synthesize delegate;
 @synthesize searchResultsList;
 @synthesize autocompleteResultsList;
@@ -154,49 +155,62 @@ enum {
 {
 	self.performedSearchQuery=NO;
 	
-	if (self.autocompleteResultsList==nil)
-		self.autocompleteResultsList=[[NSMutableArray alloc] initWithCapacity:10];
-	else
-		[self.autocompleteResultsList removeAllObjects];
-	
-	// Send the query off to the server
-	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	
-	const char* dataset="";
-	if (self.searchTypes == (BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
-		dataset="beersandbreweries";
-	else if (self.searchTypes == BeerCrushSearchTypeBreweries)
-		dataset="breweries";
-	else if (self.searchTypes == BeerCrushSearchTypeBeers)
-		dataset="beers";
-	else if (self.searchTypes == BeerCrushSearchTypePlaces)
-		dataset="places";
-	
-	NSURL* url=[NSURL URLWithString:[[NSString stringWithFormat:BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY, qs, dataset ] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-	NSData* answer;
-	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
-	
-	if ([response statusCode]==200)
+	// If this is just a longer version a query that generated zero results, don't bother doing another query (ticket #64)
+	if  (self.autocompleteZeroResults==nil || [qs hasPrefix:self.autocompleteZeroResults]==NO)
 	{
-		char* p=(char*)[answer bytes];
-		while (p && *p)
+		if (self.autocompleteResultsList==nil)
+			self.autocompleteResultsList=[[NSMutableArray alloc] initWithCapacity:10];
+		else
+			[self.autocompleteResultsList removeAllObjects];
+		
+		// Send the query off to the server
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		
+		const char* dataset="";
+		if (self.searchTypes == (BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
+			dataset="beersandbreweries";
+		else if (self.searchTypes == BeerCrushSearchTypeBreweries)
+			dataset="breweries";
+		else if (self.searchTypes == BeerCrushSearchTypeBeers)
+			dataset="beers";
+		else if (self.searchTypes == BeerCrushSearchTypePlaces)
+			dataset="places";
+		
+		NSURL* url=[NSURL URLWithString:[[NSString stringWithFormat:BEERCRUSH_API_URL_AUTOCOMPLETE_QUERY, qs, dataset ] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+		NSData* answer;
+		NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+		
+		if ([response statusCode]==200)
 		{
-			char* nl=strchr(p, '\n');
-			if (nl)
+			char* p=(char*)[answer bytes];
+			while (p && *p)
 			{
-				*nl='\0';
-				[self.autocompleteResultsList addObject:[NSString stringWithCString:p encoding:NSUTF8StringEncoding]];
-				p=nl+1;
+				char* nl=strchr(p, '\n');
+				if (nl)
+				{
+					*nl='\0';
+					[self.autocompleteResultsList addObject:[NSString stringWithCString:p encoding:NSUTF8StringEncoding]];
+					p=nl+1;
+				}
+				else
+					p=nil;
+			}
+			DLog(@"%d results",[self.autocompleteResultsList count]);
+			
+			if ([self.autocompleteResultsList count]==0)
+			{
+				// Remember the text that generated zero results
+				self.autocompleteZeroResults=qs;
 			}
 			else
-				p=nil;
+				self.autocompleteZeroResults=nil;
+			
+			[self performSelectorOnMainThread:@selector(myReloadData) withObject:nil waitUntilDone:NO];
 		}
-		DLog(@"%d results",[self.autocompleteResultsList count]);
-		[self performSelectorOnMainThread:@selector(myReloadData) withObject:nil waitUntilDone:NO];
-	}
-	else
-	{
-		//		[appDelegate alertUser:@"Search failed"];
+		else
+		{
+			//		[appDelegate alertUser:@"Search failed"];
+		}
 	}
 	
 	self.isPerformingAsyncQuery=NO;

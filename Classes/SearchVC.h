@@ -35,6 +35,7 @@ typedef enum
 	NSMutableArray* autocompleteResultsList;
 	unsigned int totalResultCount;
 	NSString* searchText;
+	NSString* autocompleteZeroResults;
 	BOOL performedSearchQuery;
 	BOOL isPerformingAsyncQuery;
 	UIEdgeInsets insets;
@@ -44,6 +45,7 @@ typedef enum
 @property (nonatomic, retain) NSMutableArray* autocompleteResultsList;
 @property (nonatomic, assign) unsigned int totalResultCount;
 @property (nonatomic, retain) NSString* searchText;
+@property (nonatomic, retain) NSString* autocompleteZeroResults;
 @property (nonatomic,retain) UISearchBar* searchBar;
 @property (nonatomic, retain) LogoVC* logoView;
 @property (nonatomic, assign) BeerCrushSearchType searchTypes;
