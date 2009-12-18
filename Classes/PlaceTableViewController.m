@@ -1482,6 +1482,8 @@ enum mytags {
 	if ([response statusCode]==200)
 	{
 		DLog(@"Successfully uploaded photo");
+		UIAlertView* alert=[[[UIAlertView alloc] initWithTitle:@"" message:NSLocalizedString(@"Your photo was sent to Beer Crush. It will appear soon.",@"Place Page: photo uploaded") delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+		[alert show];
 	}
 	else {
 		DLog(@"Failed to upload photo");
@@ -1489,6 +1491,14 @@ enum mytags {
 		[alert show];
 	}
 	
+}
+
+#pragma mark UIAlertView Delegate methods
+
+- (void) alertView:(UIAlertView*)alert didDismissWithButtonIndex:(NSInteger)index
+{
+	// See http://www.iphonedevsdk.com/forum/iphone-sdk-development-advanced-discussion/17373-wait_fences-failed-receive-reply-10004003-a.html for an explanation for this.
+    DLog(@"Doing nothing in didDismissWithButtonIndex to avoid 'wait_fences: failed to receive reply:' error message");
 }
 
 #pragma mark Async operations
