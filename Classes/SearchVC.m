@@ -182,13 +182,18 @@ enum {
 		
 		if ([response statusCode]==200)
 		{
+			// [answer bytes] is not null-terminated, so we have to make sure we don't go beyond the length of the data
 			char* p=(char*)[answer bytes];
-			while (p && *p)
+			NSUInteger plen=[answer length];
+			DLog(@"answer length=%d",plen);
+			char* pend=p+plen;
+
+			while (p && *p && (p < pend))
 			{
-				char* nl=strchr(p, '\n');
+				char* nl=memchr(p, '\n', pend-p);
 				if (nl)
 				{
-					*nl='\0';
+					*nl='\0'; // null-terminate it (I hope it's okay to modify an NSData's data!)
 					[self.autocompleteResultsList addObject:[NSString stringWithCString:p encoding:NSUTF8StringEncoding]];
 					p=nl+1;
 				}
