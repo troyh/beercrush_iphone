@@ -562,8 +562,12 @@ enum {
 		if (cell == nil)
 			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		
-		NSString* result=[self.autocompleteResultsList objectAtIndex:indexPath.row];
-		[cell.textLabel setText:result];
+		if (indexPath.row < [self.autocompleteResultsList count])
+		{
+			NSString* result=[self.autocompleteResultsList objectAtIndex:indexPath.row];
+			[cell.textLabel setText:result];
+		}
+		
 		[cell.textLabel setFont:[UIFont systemFontOfSize:16]];
 		[cell.textLabel setTextColor:[UIColor beercrushBlueColor]];
 	}
