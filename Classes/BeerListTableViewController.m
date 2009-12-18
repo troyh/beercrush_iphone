@@ -242,6 +242,14 @@ static const NSInteger kTagBeerNameLabel=2;
 	if (self.editing)
 	{ // Going out of editing mode
 		[super setEditing:editing animated:animated];
+
+		// Add a row to the table view
+		[self.tableView beginUpdates];
+		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
+												[NSIndexPath indexPathForRow:[BEERLIST_ARRAY count] inSection:0],
+												nil] 
+							  withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView endUpdates];
 		
 		// Save adds/deletes to server
 		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
@@ -473,35 +481,68 @@ static const NSInteger kTagBeerNameLabel=2;
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URL_EDIT_MENU_DOC];
+	
+	// Get changes to menu (just serving type changes) and add them to beerListAdditions and beerListDeletions
+	// i.e., a change is a delete and an add.
+	for (NSMutableDictionary* menuitem in [self.beerList objectForKey:@"items"]) 
+	{
+		if ([[menuitem objectForKey:@"_localchange_"] boolValue]==YES)
+		{
+			if (self.beerListDeletions==nil)
+				self.beerListDeletions=[[[NSMutableArray alloc] initWithCapacity:5] autorelease];
+			[self.beerListDeletions addObject:[menuitem objectForKey:@"id"]];
+			
+			NSMutableArray* types=[NSMutableArray arrayWithCapacity:5];
+			if ([[menuitem valueForKey:@"ontap"] boolValue]==YES)
+				[types addObject:@"tap"];
+			if ([[menuitem valueForKey:@"oncask"] boolValue]==YES)
+				[types addObject:@"cask"];
+			if ([[menuitem valueForKey:@"incan"] boolValue]==YES)
+				[types addObject:@"can"];
+			if ([[menuitem valueForKey:@"inbottle"] boolValue]==YES)
+				[types addObject:@"bottle"];
+			if ([[menuitem valueForKey:@"inbottle22"] boolValue]==YES)
+				[types addObject:@"bottle22"];
+				
+			NSString* s=[NSString stringWithFormat:@"%@;%@",[menuitem objectForKey:@"id"],[types componentsJoinedByString:@","]];
+			if (self.beerListAdditions==nil)
+				self.beerListAdditions=[[[NSMutableArray alloc] initWithCapacity:5] autorelease];
+			[self.beerListAdditions addObject:s];
+		}
+	}
 
 	NSString* adds=(self.beerListAdditions?[self.beerListAdditions componentsJoinedByString:@" "]:@"");
 	NSString* dels=(self.beerListDeletions?[self.beerListDeletions componentsJoinedByString:@" "]:@"");
-	
-	NSString* postdata=[[[NSString alloc] initWithFormat:
-						@"place_id=%@&"
-						"add_item=%@&"
-						"del_item=%@",
-						self.placeID,
-						adds,
-						dels] autorelease];
 
-	NSMutableDictionary* answer=nil;
-	NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:postdata returningJSON:&answer];
+	if ([adds length] || [dels length])
+	{
+		NSString* postdata=[[[NSString alloc] initWithFormat:
+							@"place_id=%@&"
+							"add_item=%@&"
+							"del_item=%@",
+							self.placeID,
+							adds,
+							dels] autorelease];
+
+		NSMutableDictionary* answer=nil;
+		NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:postdata returningJSON:&answer];
+		if ([response statusCode]==200)
+		{
+			// Refresh it by doing another request (the result from the edit request is not a full beer menu)
+			self.beerList=answer;
+			
+			[self.beerListAdditions removeAllObjects];
+			[self.beerListDeletions removeAllObjects];
+			
+			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+		}
+		else 
+		{
+			[self performSelectorOnMainThread:@selector(postBeerToMenuFailed) withObject:nil waitUntilDone:NO];
+		}
+	}
+
 	[appDelegate dismissActivityHUD];
-	if ([response statusCode]==200)
-	{
-		// Refresh it by doing another request (the result from the edit request is not a full beer menu)
-		self.beerList=answer;
-		
-		[self.beerListAdditions removeAllObjects];
-		[self.beerListDeletions removeAllObjects];
-		
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-	}
-	else 
-	{
-		[self performSelectorOnMainThread:@selector(postBeerToMenuFailed) withObject:nil waitUntilDone:NO];
-	}
 }
 
 -(void)getBeerListFailed
@@ -623,6 +664,8 @@ static const NSInteger kTagBeerNameLabel=2;
 		[beer setObject:[NSNumber numberWithBool:b] forKey:@"inbottle22"];
 	else if (t==BeerCrushServingTypeCan)
 		[beer setObject:[NSNumber numberWithBool:b] forKey:@"incan"];
+	
+	[beer setObject:[NSNumber numberWithBool:YES] forKey:@"_localchange_"];
 }
 
 @end
