@@ -354,36 +354,44 @@ enum {
 
 -(void)addBeerOrBreweryButtonClicked:(id)sender
 {
-	UIViewController* vc=[[[UIViewController alloc] initWithNibName:nil bundle:nil] autorelease];
-	UINavigationController* nc=[[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
-	nc.navigationBar.tintColor=[UIColor beercrushTanColor];
+	UIViewController* vc=nil;
 	
 	if (self.searchTypes & (BeerCrushSearchTypeBeers | BeerCrushSearchTypeBreweries))
 	{
 		BreweryTableViewController* btvc=[[[BreweryTableViewController alloc] initWithBreweryID:nil] autorelease];
 		btvc.delegate=self;
 		[btvc setEditing:YES animated:NO];
-		[nc pushViewController:btvc animated:NO];
+		vc=btvc;
 	}
 	else if (self.searchTypes == BeerCrushSearchTypePlaces)
 	{
 		PlaceTableViewController* ptvc=[[[PlaceTableViewController alloc] initWithPlaceID:nil] autorelease];
 		ptvc.delegate=self;
 		[ptvc setEditing:YES animated:NO];
-		[nc pushViewController:ptvc animated:NO];
+		vc=ptvc;
 	}
 	else {
 		return; // Can't continue and present a view controller
 	}
 	
+	UINavigationController* nc=[[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
+	nc.navigationBar.tintColor=[UIColor beercrushTanColor];
 	[self.navigationController presentModalViewController:nc animated:YES];
+}
+
+-(void)newBreweryPanelClose
+{
+	[self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark BreweryVCDelegate methods
 
 -(void)breweryVCDidFinishEditing:(BreweryTableViewController*)btvc
 {
-	[self.navigationController dismissModalViewControllerAnimated:YES];
+	if (self.navigationController.modalViewController) // If modal, give the user a Close button
+		[btvc.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close",@"New Brewery Page: Close button title") style:UIBarButtonItemStyleDone target:self action:@selector(newBreweryPanelClose)]];
+	else // Not modal, dismiss it automatically
+		[self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
 -(void)breweryVCDidCancelEditing:(BreweryTableViewController*)btvc
