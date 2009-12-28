@@ -1195,8 +1195,8 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	}
 	else {
 		DLog(@"Response status code=%d",[response statusCode]);
-		[self genericAlert:NSLocalizedString(@"Beer",@"GetBeerDoc: Alert Message") 
-					 title:NSLocalizedString(@"Unable to get information about beer",@"GetBeerDoc: Alert Title") 
+		[self genericAlert:NSLocalizedString(@"Unable to get information about beer",@"GetBeerDoc: Alert Message") 
+					 title:NSLocalizedString(@"Beer",@"GetBeerDoc: Alert Title") 
 			   buttonTitle:nil];
 	}
 
