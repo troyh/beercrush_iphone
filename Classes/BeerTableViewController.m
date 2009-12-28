@@ -23,6 +23,7 @@
 @synthesize beerID;
 @synthesize breweryID;
 @synthesize beerObj;
+@synthesize thumbnailPhoto;
 @synthesize originalBeerData;
 @synthesize userReviewData;
 @synthesize userRatingControl;
@@ -56,6 +57,7 @@ enum TAGS {
 	kTagEditTextOtherIngs,
 	kTagEditTextCalories,
 	kTagBeerNameLabel,
+	kTagBeerPhotoThumbnail,
 	kTagBreweryNameLabel,
 	kTagDescriptionLabel,
 	kTagStyleLabel,
@@ -102,6 +104,7 @@ enum TAGS {
 	DLog(@"BeerTableViewController release: beerID retainCount=%d",[beerID retainCount]);
 	//	[beerID release];
 	[self.beerObj release];
+	[self.thumbnailPhoto release];
 	[self.originalBeerData release];
 	[self.userReviewData release];
 
@@ -200,6 +203,12 @@ enum TAGS {
 	if (user_id)
 	{
 		self.userReviewData=[appDelegate getReviewsOfBeer:aBeerID byUserID:user_id];
+	}
+
+	NSString* thumburl=[[beerObj.data objectForKey:@"photos"] objectForKey:@"thumbnail"];
+	if (thumburl && [thumburl length])
+	{
+		self.thumbnailPhoto=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:thumburl]]];
 	}
 	
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO]; // Reload data because we may come back from an editing view controller
@@ -470,6 +479,7 @@ enum TAGS {
 							
 							// Put photo to the left
 							PhotoThumbnailControl* photo=[[[PhotoThumbnailControl alloc] initWithFrame:CGRectMake(0, 0, 75, 75)] autorelease];
+							photo.tag=kTagBeerPhotoThumbnail;
 							[photo addTarget:self action:@selector(photoThumbnailClicked:) forControlEvents:UIControlEventTouchUpInside];
 							[cell.contentView addSubview:photo];
 							
@@ -494,6 +504,13 @@ enum TAGS {
 								UILabel* styleLabel=(UILabel*)[cell viewWithTag:kTagStyleLabel];
 								[styleLabel setText:s]; // Take just the 1st
 							}
+						}
+						
+						PhotoThumbnailControl* photo=(PhotoThumbnailControl*)[cell viewWithTag:kTagBeerPhotoThumbnail];
+						if (self.thumbnailPhoto)
+						{
+							photo.image=self.thumbnailPhoto;
+							[photo setNeedsDisplay];
 						}
 					}
 					break;

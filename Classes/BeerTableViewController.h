@@ -35,6 +35,7 @@
 	NSString* beerID;
 	NSString* breweryID;
 	BeerObject* beerObj;
+	UIImage* thumbnailPhoto;
 	NSDictionary* originalBeerData;
 	NSMutableDictionary* userReviewData;
 	
@@ -61,6 +62,7 @@
 @property (nonatomic,retain) NSString* beerID;
 @property (nonatomic,retain) NSString* breweryID;
 @property (nonatomic,retain) BeerObject* beerObj;
+@property (nonatomic,retain) UIImage* thumbnailPhoto;
 @property (nonatomic,retain) NSDictionary* originalBeerData;
 @property (nonatomic,retain) NSMutableDictionary* userReviewData;
 @property (nonatomic,retain) RatingControl* userRatingControl;
