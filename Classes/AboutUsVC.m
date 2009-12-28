@@ -137,6 +137,10 @@
 	NSString *processedBody = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)body, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
 	//create the mailto: URL string
 	NSString *mailToString = [NSString stringWithFormat:@"mailto:%@?subject=$@&body=%@", emailAddress, processedSubject, processedBody];
+	
+	[processedSubject release];
+	[processedBody release];
+	
 	//Convert NSString to NSURL
 	NSURL *url = [NSURL URLWithString:mailToString];
 	//Open the Mail App with the NSURL
