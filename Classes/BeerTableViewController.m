@@ -1550,10 +1550,19 @@ enum TAGS {
 
 -(void)photoThumbnailClicked:(id)sender
 {
-	NSArray* photoList=[NSArray arrayWithObjects:@"beer.png",@"brewery.png",@"bar.png",nil];
-	PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoList:photoList] autorelease];
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBeerPhotoset:) object:self.beerID requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"Getting Photos",@"HUD:Getting Photos")];
+}
+
+-(void)getBeerPhotoset:(id)beer_id
+{
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSMutableDictionary* photoset=[appDelegate getPhotoset:beer_id];
+	PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoSet:photoset] autorelease];
 	viewer.delegate=self;
 	[self.navigationController pushViewController:viewer animated:YES];
+	
+	[appDelegate dismissActivityHUD];
 }
 
 #pragma mark PhotoViewerDelegate methods
@@ -1561,7 +1570,7 @@ enum TAGS {
 -(void)photoViewer:(PhotoViewer*)photoViewer didSelectPhotoToUpload:(UIImage*)photo
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(uploadPhoto:) object:photo requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:UploadingPhoto",@"Uploading Photo")];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(uploadPhoto:) object:photo requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"UploadingPhoto",@"HUD:Uploading Photo")];
 }
 
 #pragma mark EditLineVCDelegate methods
