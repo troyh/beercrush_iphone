@@ -11,21 +11,22 @@
 
 @implementation PhotoViewer
 
-@synthesize photoNamesList;
+@synthesize photoSet;
 @synthesize imageList;
 @synthesize scrollView;
 @synthesize currentPhotoNumber;
 @synthesize delegate;
 
--(id)initWithPhotoList:(NSArray*)photoList
+-(id)initWithPhotoSet:(NSDictionary*)photo_set
 {
     if (self = [super initWithNibName:nil bundle:nil]) {
         // Custom initialization
 		self.title=@"Photos";
 		
-		self.photoNamesList=photoList;
-		self.imageList=[NSMutableArray arrayWithCapacity:[self.photoNamesList count]];
-		for (NSUInteger i=0; i < [self.photoNamesList count]; ++i) {
+		self.photoSet=photo_set;
+		NSArray* list=[self.photoSet objectForKey:@"photos"];
+		self.imageList=[NSMutableArray arrayWithCapacity:[list count]];
+		for (NSUInteger i=0; i < [list count]; ++i) {
 			[self.imageList addObject:[NSNull null]];
 		}
     }
@@ -50,9 +51,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+	NSArray* list=[self.photoSet objectForKey:@"photos"];
+
 	self.scrollView=[[[UIScrollView alloc] initWithFrame:self.view.frame] autorelease];
 	self.scrollView.backgroundColor=[UIColor blackColor];
-	self.scrollView.contentSize=CGSizeMake(scrollView.frame.size.width*[self.photoNamesList count], scrollView.frame.size.height);
+	self.scrollView.contentSize=CGSizeMake(scrollView.frame.size.width*[list count], scrollView.frame.size.height);
 	self.scrollView.pagingEnabled=YES;
 	self.scrollView.delegate=self;
 	
@@ -84,15 +87,16 @@
 {
 	if (photoNumber<0)
 		return;
-	if (photoNumber>=[self.photoNamesList count])
+	NSArray* list=[self.photoSet objectForKey:@"photos"];
+	if (photoNumber>=[list count])
 		return;
 	
 	if ([self.imageList objectAtIndex:photoNumber]==[NSNull null])
 	{
 		// Load the image into the view
-		[self.imageList replaceObjectAtIndex:photoNumber withObject:[UIImage imageNamed:[self.photoNamesList objectAtIndex:photoNumber]]];
+		NSString* url=[[[list objectAtIndex:photoNumber] objectForKey:@"medium"] objectForKey:@"url"];
+		[self.imageList replaceObjectAtIndex:photoNumber withObject:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]]];
 		UIImageView* photo=[[[UIImageView alloc] initWithImage:[self.imageList objectAtIndex:photoNumber]] autorelease];
-		
 		
 		CGRect f=CGRectMake((self.view.frame.size.width*photoNumber)+(self.view.frame.size.width-MIN(photo.image.size.width,self.view.frame.size.width))/2, 
 							(self.view.frame.size.height-MIN(photo.image.size.height,self.view.frame.size.height))/2,
@@ -126,7 +130,7 @@
 
 
 - (void)dealloc {
-	[self.photoNamesList release];
+	[self.photoSet release];
 	[self.imageList release];
 	[self.scrollView release];
 	

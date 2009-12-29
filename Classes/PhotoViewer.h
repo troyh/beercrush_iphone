@@ -16,20 +16,20 @@
 		UIImagePickerControllerDelegate,
 		UINavigationControllerDelegate> 
 {
-	NSArray* photoNamesList;
+	NSDictionary* photoSet;
 	NSMutableArray* imageList;
 	UIScrollView* scrollView;
 	NSUInteger currentPhotoNumber;
 	id<PhotoViewerDelegate> delegate;
 }
 
-@property (nonatomic,retain) NSArray* photoNamesList;
+@property (nonatomic,retain) NSDictionary* photoSet;
 @property (nonatomic,retain) NSMutableArray* imageList;
 @property (nonatomic,retain) UIScrollView* scrollView;
 @property (assign) NSUInteger currentPhotoNumber;
 @property (assign) id<PhotoViewerDelegate> delegate;
 
--(id)initWithPhotoList:(NSArray*)photoList;
+-(id)initWithPhotoSet:(NSDictionary*)photoSet;
 -(void)loadPhoto:(NSUInteger)photoNumber;
 
 @end
