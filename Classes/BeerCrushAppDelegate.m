@@ -1203,6 +1203,32 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	return nil;
 }
 
+-(NSMutableDictionary*)getPhotoset:(NSString*)photosetID
+{
+	// TODO: support caching
+	
+	// Separate the brewery ID and the beer ID from the beerID
+	NSArray* idparts=[photosetID componentsSeparatedByString:@":"];
+	
+	// Retrieve JSON doc for this beer's photoset
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PHOTOSET_DOC, [idparts objectAtIndex:0], [idparts objectAtIndex:1], [idparts objectAtIndex:2] ]];
+	NSMutableDictionary* answer;
+	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
+		[answer retain];
+		return answer;
+	}
+	else {
+		DLog(@"Response status code=%d",[response statusCode]);
+		[self genericAlert:NSLocalizedString(@"Unable to get photos",@"GetBeerPhotos: Alert Message") 
+					 title:NSLocalizedString(@"Beer",@"GetBeerPhotos: Alert Title") 
+			   buttonTitle:nil];
+	}
+	
+	return nil;
+}
+
 -(NSMutableDictionary*)getReviewsOfBeer:(NSString*)beerID byUserID:(NSString*)userID
 {
 	// TODO: support caching
