@@ -597,7 +597,8 @@ enum TAGS {
 						}
 						
 						cell.selectionStyle=UITableViewCellSelectionStyleBlue;
-						[cell.textLabel setText:[NSString stringWithFormat:@"%d Ratings",[self.beerObj.data objectForKey:@"ratingcount"]]];
+						NSUInteger total=[[[self.beerObj.data objectForKey:@"review_summary"] valueForKey:@"total"] unsignedIntegerValue];
+						[cell.textLabel setText:[NSString stringWithFormat:@"%d Rating%s",total,(total==1?"":"s")]];
 
 						if (self.overallRatingControl==nil)
 						{
@@ -606,7 +607,7 @@ enum TAGS {
 						}
 						
 						// Set overall rating (if any)
-						NSString* overall_rating=[self.beerObj.data objectForKey:@"avgrating"];
+						NSString* overall_rating=[[self.beerObj.data objectForKey:@"review_summary"] objectForKey:@"avg"];
 						if (overall_rating!=nil) // No overall rating
 						{
 							self.overallRatingControl.currentRating=[overall_rating integerValue];
@@ -636,11 +637,6 @@ enum TAGS {
 
 							self.bodySlider.minimumValue=1.0;
 							self.bodySlider.maximumValue=5.0;
-							NSString* value=[[self.beerObj.data objectForKey:@"meta"] objectForKey:@"body"];
-							if (value==nil)
-								self.bodySlider.value=1;
-							else
-								[self.bodySlider setValue:[value integerValue] animated:YES];
 
 							UIImageView* leftimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"body_low.png"]] autorelease];
 							CGRect frame=leftimgview.frame;
@@ -662,6 +658,13 @@ enum TAGS {
 						[cell.textLabel setText:@"Body"];
 						cell.textLabel.backgroundColor=[UIColor clearColor];
 						cell.accessoryType=UITableViewCellAccessoryNone;
+
+						NSString* value=[[self.beerObj.data objectForKey:@"review_summary"] valueForKey:@"body_avg"];
+						if (value==nil)
+							self.bodySlider.value=1;
+						else
+							[self.bodySlider setValue:[value floatValue] animated:YES];
+						
 						break;
 					}
 					case 3: // Balance meter
@@ -680,11 +683,6 @@ enum TAGS {
 
 							self.balanceSlider.minimumValue=1.0;
 							self.balanceSlider.maximumValue=5.0;
-							NSString* value=[[self.beerObj.data objectForKey:@"meta"] objectForKey:@"balance"];
-							if (value==nil)
-								self.balanceSlider.value=1;
-							else
-								[self.balanceSlider setValue:[value floatValue] animated:YES];
 
 							UIImageView* leftimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"balance_low.png"]] autorelease];
 							CGRect frame=leftimgview.frame;
@@ -705,6 +703,13 @@ enum TAGS {
 						[cell.textLabel setText:@"Balance"];
 						cell.textLabel.backgroundColor=[UIColor clearColor];
 						cell.accessoryType=UITableViewCellAccessoryNone;
+
+						NSString* value=[[self.beerObj.data objectForKey:@"review_summary"] valueForKey:@"balance_avg"];
+						if (value==nil)
+							self.balanceSlider.value=1;
+						else
+							[self.balanceSlider setValue:[value floatValue] animated:YES];
+
 						break;
 					}
 					case 4: // Aftertaste meter
@@ -723,11 +728,6 @@ enum TAGS {
 
 							self.aftertasteSlider.minimumValue=1.0;
 							self.aftertasteSlider.maximumValue=5.0;
-							NSString* value=[[self.beerObj.data objectForKey:@"meta"] objectForKey:@"aftertaste"];
-							if (value==nil)
-								self.aftertasteSlider.value=1;
-							else
-								[self.aftertasteSlider setValue:[value integerValue] animated:YES];
 							
 							UIImageView* leftimgview=[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"aftertaste_low.png"]] autorelease];
 							CGRect frame=leftimgview.frame;
@@ -748,6 +748,13 @@ enum TAGS {
 						[cell.textLabel setText:@"Aftertaste"];
 						cell.textLabel.backgroundColor=[UIColor clearColor];
 						cell.accessoryType=UITableViewCellAccessoryNone;
+
+						NSString* value=[[self.beerObj.data objectForKey:@"review_summary"] valueForKey:@"aftertaste_avg"];
+						if (value==nil)
+							self.aftertasteSlider.value=1;
+						else
+							[self.aftertasteSlider setValue:[value floatValue] animated:YES];
+
 						break;
 					}
 					case 5: // Flavors summary
@@ -760,15 +767,24 @@ enum TAGS {
 							cell.accessoryType=UITableViewCellAccessoryNone;
 						}
 						[cell.textLabel setText:@"Flavors"];
-						NSString* flavors=[self.beerObj.data objectForKey:@"flavors"];
+						NSArray* flavors=[[self.beerObj.data objectForKey:@"review_summary"] objectForKey:@"flavors"];
 						if (flavors==nil)
 						{
-							[cell.detailTextLabel setText:@"No flavors or aromas reported yet"];
+							[cell.detailTextLabel setText:NSLocalizedString(@"No flavors or aromas reported yet",@"Beer Page: Text when no flavors are specified")];
 							[cell.detailTextLabel setFont:[UIFont systemFontOfSize:12]];
 							[cell.detailTextLabel setTextColor:[UIColor grayColor]];
 						}
 						else
-							[cell.detailTextLabel setText:flavors];
+						{
+							NSDictionary* flavorsdict=[appDelegate getFlavorsDictionary];
+
+							NSMutableArray* flavorslist=[NSMutableArray arrayWithCapacity:5];
+							for (NSString* flavor in flavors) {
+								[flavorslist addObject:[[[flavorsdict objectForKey:@"byid"] objectForKey:flavor] objectForKey:@"title"]];
+							}
+							
+							[cell.detailTextLabel setText:[flavorslist componentsJoinedByString:NSLocalizedString(@", ",@"Beer Page: flavors separator")]];
+						}
 						cell.accessoryType=UITableViewCellAccessoryNone;
 						break;
 					}

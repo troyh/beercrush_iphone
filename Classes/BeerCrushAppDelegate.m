@@ -1477,7 +1477,6 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 -(void)dismissActivityHUD
 { 
 	[self.activityHUD show:NO];
-	[self.activityHUD release];
 	self.activityHUD=nil;
 } 
 
