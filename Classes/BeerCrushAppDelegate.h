@@ -151,6 +151,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 #define BEERCRUSH_API_URL_UPLOAD_PLACE_IMAGE			@BEERCRUSH_API_URL_HOST"/api/place/photo?place_id=%@"
 #define BEERCRUSH_API_URL_UPLOAD_BEER_IMAGE				@BEERCRUSH_API_URL_HOST"/api/beer/photo?beer_id=%@"
 #define BEERCRUSH_API_URL_UPLOAD_BREWERY_IMAGE			@BEERCRUSH_API_URL_HOST"/api/brewery/photo?brewery_id=%@"
+#define BEERCRUSH_API_URL_POST_USER_PROFILE				@BEERCRUSH_API_URL_HOST"/api/user/edit"
 
 @interface UIColor (BeerCrush)
 

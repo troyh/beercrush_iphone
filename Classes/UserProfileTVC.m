@@ -9,8 +9,11 @@
 #import "UserProfileTVC.h"
 #import "BeerCrushAppDelegate.h"
 
-
 @implementation UserProfileTVC
+
+enum {
+	kTagUsernameText=1
+};
 
 - (id)initWithStyle:(UITableViewStyle)style {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -111,7 +114,11 @@
 		{
 			switch (indexPath.row) 
 			{
-				case 0:
+				case 0: // Username
+					[cell.textLabel setText:NSLocalizedString(@"name",@"Name label for Profile screen")];
+					NSString* s=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"];
+					if (s)
+						[cell.detailTextLabel setText:s];
 					break;
 				default:
 					break;
@@ -157,8 +164,17 @@
 	// [self.navigationController pushViewController:anotherViewController];
 	// [anotherViewController release];
 	switch (indexPath.section) {
-		case 0:
+		case 0: // Username
+		{
+			EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+			vc.delegate=self;
+			vc.tag=kTagUsernameText;
+			NSString* s=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"];
+			if (s)
+				vc.textToEdit=s;
+			[self.navigationController pushViewController:vc animated:YES];
 			break;
+		}
 		case 1:
 		{
 			switch (indexPath.row) {
@@ -269,6 +285,59 @@
 //	// Crap, we have only one tab?!?
 }
 
+#pragma mark EditLineVCDelegate methods
+
+-(void)editLineVC:(EditLineVC*)editLineVC doneEditing:(NSString*)text
+{
+	switch (editLineVC.tag) {
+		case kTagUsernameText:
+		{
+			NSMutableDictionary* dict=[NSMutableDictionary dictionaryWithObject:text forKey:@"name"];
+			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			[appDelegate performAsyncOperationWithTarget:self selector:@selector(saveProfileInfo:) object:dict requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"Saving",@"UserProfile: Saving")];
+			break;
+		}
+		default:
+			break;
+	}
+	
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark Async targets
+
+-(void)saveProfileInfo:(NSDictionary*)infoDict
+{
+	NSMutableArray* values=[NSMutableArray arrayWithCapacity:3];
+	NSString* user_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"user_id"];
+	if (user_id==nil)
+	{
+		
+	}
+	else 
+	{
+		[values addObject:[NSString stringWithFormat:@"user_id=%@",user_id]];
+		for (id key in infoDict)
+		{
+			[values addObject:[NSString stringWithFormat:@"%@=%@",key,[[infoDict objectForKey:key] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+		}
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+		NSMutableDictionary* userinfo=nil;
+		NSHTTPURLResponse* response=[appDelegate sendJSONRequest:[NSURL URLWithString:BEERCRUSH_API_URL_POST_USER_PROFILE] usingMethod:@"POST" withData:[values componentsJoinedByString:@"&"] returningJSON:&userinfo];
+		if ([response statusCode]==200 && userinfo)
+		{
+			for (id key in userinfo)
+			{
+				if ([key isEqualToString:@"name"])
+				{
+					[[NSUserDefaults standardUserDefaults] setValue:[userinfo objectForKey:key] forKey:@"username"];
+				}
+			}
+			
+			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+		}
+	}
+}
 
 @end
 

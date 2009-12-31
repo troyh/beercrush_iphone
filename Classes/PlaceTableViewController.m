@@ -1050,8 +1050,9 @@ enum mytags {
 
 -(void)photoThumbnailClicked:(id)sender
 {
-	NSArray* photoList=[NSArray arrayWithObjects:@"beer.png",@"brewery.png",@"bar.png",nil];
-	PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoList:photoList] autorelease];
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSMutableDictionary* photoset=[appDelegate getPhotoset:self.placeID];
+	PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoSet:photoset] autorelease];
 	viewer.delegate=self;
 	[self.navigationController pushViewController:viewer animated:YES];
 }

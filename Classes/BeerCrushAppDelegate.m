@@ -799,6 +799,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 			NSDictionary* logininfo=[s JSONValue];
 
 			// Store the login info in UserDefaults
+			[[NSUserDefaults standardUserDefaults] setObject:[logininfo objectForKey:@"name"] forKey:@"username"];
 			[[NSUserDefaults standardUserDefaults] setObject:[logininfo objectForKey:@"userid"] forKey:@"user_id"];
 			[[NSUserDefaults standardUserDefaults] setObject:[logininfo objectForKey:@"usrkey"] forKey:@"usrkey"];
 		} 
@@ -806,6 +807,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		{
 			DLog(@"Login failed.");
 			// Erase the login info in UserDefaults
+			[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"username"];
 			[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"user_id"];
 			[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"usrkey"];
 			if ([response statusCode]==403 || [response statusCode]==404) // 404 means email doesn't exist, 403 means password was wrong

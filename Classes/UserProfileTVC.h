@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "LoginVC.h"
+#import "EditLineVC.h"
 
-@interface UserProfileTVC : UITableViewController <LoginVCDelegate>  {
+@interface UserProfileTVC : UITableViewController <LoginVCDelegate,EditLineVCDelegate>  {
 
 }
 
