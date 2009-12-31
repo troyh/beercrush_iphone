@@ -211,6 +211,16 @@ void normalizeBeerData(NSMutableDictionary* beerData)
 	normalizeToNumber(beerData, @"fg",NO);
 	normalizeToNumber(beerData, @"srm",NO);
 	normalizeToNumber(beerData, @"calories_per_ml",NO);
+	
+	if ([beerData objectForKey:@"review_summary"]==nil)
+		[beerData setObject:[NSDictionary dictionary] forKey:@"review_summary"];
+	normalizeToNumber([beerData objectForKey:@"review_summary"], @"total", YES);
+	normalizeToNumber([beerData objectForKey:@"review_summary"], @"body_avg", YES);
+	normalizeToNumber([beerData objectForKey:@"review_summary"], @"balance_avg", YES);
+	normalizeToNumber([beerData objectForKey:@"review_summary"], @"aftertaste_avg", YES);
+
+	if ([[beerData objectForKey:@"review_summary"] objectForKey:@"flavors"]==nil)
+		[[beerData objectForKey:@"review_summary"] setObject:[NSArray array] forKey:@"flavors"];
 }
 
 void normalizePlaceData(NSMutableDictionary* placeData)
