@@ -1120,15 +1120,15 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 
 -(NSDictionary*)getPlaceStylesDictionary
 {
+	// TODO: support caching
 	if (self.placeStylesDictionary==nil)
 	{
 		NSURL* url=[NSURL URLWithString:BEERCRUSH_API_URI_GET_PLACE_STYLES];
-		NSData* answer;
-		NSHTTPURLResponse* response=[self sendRequest:url usingMethod:@"GET" withData:nil returningData:&answer];
+		NSMutableDictionary* answer;
+		NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
 		if ([response statusCode]==200)
 		{
-			NSString* s=[[[NSString alloc] initWithData:answer encoding:NSUTF8StringEncoding] autorelease];
-			self.placeStylesDictionary=[s JSONValue];
+			self.placeStylesDictionary=answer;
 			
 			// Create the 'byid' dictionary
 			NSMutableDictionary* byid=[[[NSMutableDictionary alloc] initWithCapacity:30] autorelease];
@@ -1221,21 +1221,29 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	
 	// Separate the brewery ID and the beer ID from the beerID
 	NSArray* idparts=[photosetID componentsSeparatedByString:@":"];
+	NSURL* url=nil;
 	
-	// Retrieve JSON doc for this beer's photoset
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_PHOTOSET_DOC, [idparts objectAtIndex:0], [idparts objectAtIndex:1], [idparts objectAtIndex:2] ]];
-	NSMutableDictionary* answer;
-	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
-	if ([response statusCode]==200)
+	if ([idparts count]==2) // Brewery or Place
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERYORPLACE_PHOTOSET_DOC, [idparts objectAtIndex:0], [idparts objectAtIndex:1] ]];
+	else if ([idparts count] == 3) // Beer
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_PHOTOSET_DOC, [idparts objectAtIndex:0], [idparts objectAtIndex:1], [idparts objectAtIndex:2] ]];
+	
+	if (url)
 	{
-		[answer retain];
-		return answer;
-	}
-	else {
-		DLog(@"Response status code=%d",[response statusCode]);
-		[self genericAlert:NSLocalizedString(@"Unable to get photos",@"GetBeerPhotos: Alert Message") 
-					 title:NSLocalizedString(@"Beer",@"GetBeerPhotos: Alert Title") 
-			   buttonTitle:nil];
+		// Retrieve JSON doc for this beer's photoset
+		NSMutableDictionary* answer;
+		NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+		if ([response statusCode]==200)
+		{
+			[answer retain];
+			return answer;
+		}
+		else {
+			DLog(@"Response status code=%d",[response statusCode]);
+			[self genericAlert:NSLocalizedString(@"Unable to get photos",@"GetPhotos: Alert Message") 
+						 title:NSLocalizedString(@"Photos",@"GetPhotos: Alert Title") 
+				   buttonTitle:nil];
+		}
 	}
 	
 	return nil;
@@ -1343,7 +1351,13 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 -(NSDictionary*)getBeerList:(NSString*)breweryID
 {
 	// TODO: support caching
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_BEERLIST,breweryID]];
+	NSArray* idparts=[breweryID componentsSeparatedByString:@":"];
+	NSURL* url=nil;
+	if ([idparts count]==2)
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_BEERLIST,[idparts objectAtIndex:1]]];
+	else if ([idparts count]==1)
+		url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BREWERY_BEERLIST,[idparts objectAtIndex:0]]];
+	
 	NSMutableDictionary* answer;
 	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
 	if ([response statusCode]==200)
@@ -1356,7 +1370,10 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 -(NSDictionary*)getBeerMenu:(NSString*)placeID
 {
 	// TODO: support caching
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_MENU_DOC, placeID]];
+	
+	// Remove "place:" from ID
+	NSArray* idparts=[placeID componentsSeparatedByString:@":"];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_MENU_DOC, [idparts objectAtIndex:1]]];
 	NSMutableDictionary* answer;
 	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
 	if ([response statusCode]==200)
@@ -1380,9 +1397,9 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		return answer;
 	}
 	else {
-//		[self genericAlert:NSLocalizedString(@"Place",@"GetPlaceDoc: Alert Message") 
-//					 title:NSLocalizedString(@"Unable to get information for place",@"GetPlaceDoc: Alert Title") 
-//			   buttonTitle:nil];
+		[self genericAlert:NSLocalizedString(@"Place",@"GetPlaceDoc: Alert Message") 
+					 title:NSLocalizedString(@"Unable to get information for place",@"GetPlaceDoc: Alert Title") 
+			   buttonTitle:nil];
 	}
 
 	return nil;

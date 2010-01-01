@@ -996,18 +996,24 @@ enum TAGS {
 -(void)photoThumbnailClicked:(id)sender
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBreweryPhotoset:) object:self.breweryID requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"HUD:Getting Photos",@"Getting Photos")];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getBreweryPhotoset:) object:self.breweryID requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"Getting Photos",@"HUD: Getting Photos")];
 }
 
 -(void)getBreweryPhotoset:(id)brewery_id
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSMutableDictionary* photoset=[appDelegate getPhotoset:brewery_id];
-	PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoSet:photoset] autorelease];
-	viewer.delegate=self;
-	[self.navigationController pushViewController:viewer animated:YES];
-	
 	[appDelegate dismissActivityHUD];
+	if (photoset)
+	{
+		NSArray* photos=[photoset objectForKey:@"photos"];
+		if ([photos count])
+		{
+			PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoSet:photoset] autorelease];
+			viewer.delegate=self;
+			[self.navigationController pushViewController:viewer animated:YES];
+		}
+	}
 }
 
 

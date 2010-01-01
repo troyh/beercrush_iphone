@@ -745,7 +745,8 @@ enum mytags {
 				[(UILabel*)[cell.contentView viewWithTag:1] setText:[self.placeData objectForKey:@"name"]];
 				BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 				NSDictionary* styleDict=[appDelegate getPlaceStylesDictionary];
-				[(UILabel*)[cell.contentView viewWithTag:2] setText:[[[styleDict objectForKey:@"byid"] objectForKey:[self.placeData objectForKey:@"placestyle"]] objectForKey:@"name"]];
+				if (styleDict)
+					[(UILabel*)[cell.contentView viewWithTag:2] setText:[[[styleDict objectForKey:@"byid"] objectForKey:[self.placeData objectForKey:@"placestyle"]] objectForKey:@"name"]];
 				break;
 			}
 			case 1: // My Rating, others' ratings and reviews
@@ -1045,19 +1046,31 @@ enum mytags {
 	
 	// Send the review to the site
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendReview:) object:[NSNumber numberWithInt:rating] requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"HUD:SendingReview",@"Sending Review")];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(sendReview:) object:[NSNumber numberWithInt:rating] requiresUserCredentials:YES activityHUDText:NSLocalizedString(@"Sending Review",@"HUD:Sending Review")];
 }
 
 -(void)photoThumbnailClicked:(id)sender
 {
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSMutableDictionary* photoset=[appDelegate getPhotoset:self.placeID];
-	PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoSet:photoset] autorelease];
-	viewer.delegate=self;
-	[self.navigationController pushViewController:viewer animated:YES];
+	[appDelegate performAsyncOperationWithTarget:self selector:@selector(getPlacePhotoset:) object:self.placeID requiresUserCredentials:NO activityHUDText:NSLocalizedString(@"Getting Photos",@"HUD:Getting Photos")];
 }
 
-
+-(void)getPlacePhotoset:(id)place_id
+{
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+	NSMutableDictionary* photoset=[appDelegate getPhotoset:self.placeID];
+	[appDelegate dismissActivityHUD];
+	if (photoset)
+	{
+		NSArray* photos=[photoset objectForKey:@"photos"];
+		if ([photos count])
+		{
+			PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoSet:photoset] autorelease];
+			viewer.delegate=self;
+			[self.navigationController pushViewController:viewer animated:YES];
+		}
+	}
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
