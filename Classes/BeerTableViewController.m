@@ -17,6 +17,7 @@
 #import "ColorsTVC.h"
 #import "AvailabilityTVC.h"
 #import "JSON.h"
+#import "BigTextVC.h"
 
 @implementation BeerTableViewController
 
@@ -937,6 +938,19 @@ enum TAGS {
 				
 				UILabel* descriptionLabel=(UILabel*)[cell viewWithTag:kTagDescriptionLabel];
 				[descriptionLabel setText:[beerObj.data objectForKey:@"description"]];
+				
+				// If it's "long" (>100 chars), put the disclosure arrow on the cell and make it tappable
+				if ([descriptionLabel.text length]>100)
+				{
+					cell.userInteractionEnabled=YES;
+					cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+				}
+				else
+				{
+					cell.userInteractionEnabled=NO;
+					cell.accessoryType=UITableViewCellAccessoryNone;
+				}
+				
 			}
 			break;
 		case 3: // Section 3
@@ -1355,25 +1369,12 @@ enum TAGS {
 				}
 				break;
 			}
-			case 2:
+			case 2: // Description cell
 			{
-				// Make the cell big enough to see all the text
-				UITableViewCell* cell=[self.tableView cellForRowAtIndexPath:indexPath];
-				[UIView beginAnimations:@"bigdescriptioncell" context:nil];
-				CGRect f=cell.frame;
-				if (cell.frame.size.height <= kDescriptionCellDefaultRowHeight) // Make it expand to show the full text
-				{
-					f.size.height+=100;
-					
-					// Move the next section down too
-//					UITableViewCell* next
-				}
-				else // Shrink it to its normal height
-				{
-					f.size.height=kDescriptionCellDefaultRowHeight;
-				}
-				cell.frame=f;
-				[UIView commitAnimations];
+				// Navigate to BigTextVC, if the text is too long to fit in the cell
+				BigTextVC* vc=[[[BigTextVC alloc] init] autorelease];
+				vc.textToDisplay=[self.beerObj.data objectForKey:@"description"];
+				[self.navigationController pushViewController:vc animated:YES];
 				break;
 			}
 			case 3:
