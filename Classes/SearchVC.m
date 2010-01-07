@@ -389,7 +389,7 @@ enum {
 -(void)breweryVCDidFinishEditing:(BreweryTableViewController*)btvc
 {
 	if (self.navigationController.modalViewController) // If modal, give the user a Close button
-		[btvc.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close",@"New Brewery Page: Close button title") style:UIBarButtonItemStyleDone target:self action:@selector(newBreweryPanelClose)]];
+		[btvc.navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close",@"New Brewery Page: Close button title") style:UIBarButtonItemStyleDone target:self action:@selector(newBreweryPanelClose)] autorelease]];
 	else // Not modal, dismiss it automatically
 		[self.navigationController dismissModalViewControllerAnimated:YES];
 }
