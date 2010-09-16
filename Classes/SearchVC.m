@@ -523,12 +523,12 @@ enum {
 			[titleLabel setText:[beer objectForKey:@"name"]];
 			
 			NSString* idstr=[beer objectForKey:@"id"];
-			if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
+			if ([idstr length] > 5 && [[idstr substringToIndex:5] isEqualToString:@"beer:"])
 			{ // Beer
 				[breweryNameLabel setText:[[beer objectForKey:@"brewery"] objectForKey:@"name"]];
 				cell.imageView.image=[UIImage imageNamed:@"beer.png"];
 			}
-			else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
+			else if ([idstr length] > 6 && [[idstr substringToIndex:6] isEqualToString:@"place:"])
 			{ // Place
 				UILabel* addressLabel=(UILabel*)[cell.contentView viewWithTag:kTagAddressLabel];
 
@@ -559,7 +559,7 @@ enum {
 				else
 					cell.imageView.image=[UIImage imageNamed:@"restaurant.png"];
 			}
-			else if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
+			else if ([idstr length] > 8 && [[idstr substringToIndex:8] isEqualToString:@"brewery:"])
 			{ // Brewery
 				[breweryNameLabel setText:@""];
 				cell.imageView.image=[UIImage imageNamed:@"brewery.png"];
@@ -622,17 +622,17 @@ enum {
 -(BOOL)navigateBasedOnDocumentID:(NSString*)idstr
 {
 	UIViewController* vc=nil;
-	if ([[idstr substringToIndex:5] isEqualToString:@"beer:"])
+	if ([idstr length] > 5 && [[idstr substringToIndex:5] isEqualToString:@"beer:"])
 	{ // Beer
 		vc=[[[BeerTableViewController alloc] initWithBeerID:idstr] autorelease];
 	}
-	else if ([[idstr substringToIndex:6] isEqualToString:@"place:"])
+	else if ([idstr length] > 6 && [[idstr substringToIndex:6] isEqualToString:@"place:"])
 	{ // Place
 		PlaceTableViewController* ptvc=[[[PlaceTableViewController alloc] initWithPlaceID:idstr] autorelease];
 		ptvc.delegate=self;
 		vc=ptvc;
 	}
-	else if ([[idstr substringToIndex:8] isEqualToString:@"brewery:"])
+	else if ([idstr length] > 8 && [[idstr substringToIndex:8] isEqualToString:@"brewery:"])
 	{ // Brewery
 		vc=[[[BreweryTableViewController alloc] initWithBreweryID:idstr] autorelease];
 	}
