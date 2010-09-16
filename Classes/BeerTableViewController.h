@@ -38,6 +38,7 @@
 	UIImage* thumbnailPhoto;
 	NSDictionary* originalBeerData;
 	NSMutableDictionary* userReviewData;
+	NSNumber* predictedRating;
 	
 	// UI controls
 	RatingControl* userRatingControl;
@@ -65,6 +66,7 @@
 @property (nonatomic,retain) UIImage* thumbnailPhoto;
 @property (nonatomic,retain) NSDictionary* originalBeerData;
 @property (nonatomic,retain) NSMutableDictionary* userReviewData;
+@property (nonatomic,retain) NSNumber* predictedRating;
 @property (nonatomic,retain) RatingControl* userRatingControl;
 @property (nonatomic,retain) RatingControl* overallRatingControl;
 @property (nonatomic,retain) UISlider* bodySlider;

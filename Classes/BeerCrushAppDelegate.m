@@ -923,11 +923,9 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		else if ([method isEqualToString:@"GET"])
 		{
 			// Always add userid= and usrkey= parameters
-			NSString* userid=[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
-			NSString* usrkey=[[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"];
-			
-			NSString* s=[[url absoluteString] stringByAppendingFormat:@"%cuserid=%@&usrkey=%@",([url query]==nil?'?':'&'),userid,usrkey];
-			[theRequest setURL:[NSURL URLWithString:s]];
+			[theRequest setValue:[NSString stringWithFormat:@"userid=%@; usrkey=%@", 
+								  [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"],
+								  [[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"]] forHTTPHeaderField:@"Cookie"];
 		}
 		
 		[theRequest setHTTPMethod:method];
@@ -1281,6 +1279,38 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 		}
 	}
 	return nil;
+}
+
+-(double)getPredictedRatingForBeer:(NSString*)beerID forUserID:(NSString*)userID 
+{
+	// TODO: support caching
+	
+	if (beerID && [beerID length])
+	{
+		// Separate the brewery ID and the beer ID from the beerID
+		NSArray* idparts=[beerID componentsSeparatedByString:@":"];
+		
+		if (userID && [userID length])
+		{
+			// Retrieve user's review for this beer
+			NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_BEER_PERSONALIZATION, 
+											 [idparts objectAtIndex:1], 
+											 [idparts objectAtIndex:2]]];
+			NSMutableDictionary* answer;
+			NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+			if ([response statusCode]==200)
+			{
+				return [[answer valueForKey:@"predictedrating"] doubleValue];
+			}
+			else {
+				DLog(@"Response status code=%d",[response statusCode]);
+				//		[self genericAlert:NSLocalizedString(@"Beer Reviews",@"GetBeerReviews: Alert Message") 
+				//					 title:NSLocalizedString(@"Unable to get beer reviews",@"GetBeerReviews: Alert Title") 
+				//			   buttonTitle:nil];
+			}
+		}
+	}
+	return 0;
 }
 
 -(NSMutableDictionary*)getBeerReviewsByUser:(NSString*)userID seqNum:(NSNumber*)seqNum

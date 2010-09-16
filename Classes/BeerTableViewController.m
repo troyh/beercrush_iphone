@@ -27,6 +27,7 @@
 @synthesize thumbnailPhoto;
 @synthesize originalBeerData;
 @synthesize userReviewData;
+@synthesize predictedRating;
 @synthesize userRatingControl;
 @synthesize overallRatingControl;
 @synthesize bodySlider;
@@ -204,6 +205,13 @@ enum TAGS {
 	if (user_id)
 	{
 		self.userReviewData=[appDelegate getReviewsOfBeer:aBeerID byUserID:user_id];
+
+		// If we don't have a review, get the predicted rating
+		if (self.userReviewData==nil) {
+			double pr=[appDelegate getPredictedRatingForBeer:aBeerID forUserID:user_id];
+			self.predictedRating=[NSNumber numberWithDouble:pr];
+			DLog("Predicted rating:%@",self.predictedRating);
+		}
 	}
 
 	NSString* thumburl=[[beerObj.data objectForKey:@"photos"] objectForKey:@"thumbnail"];
