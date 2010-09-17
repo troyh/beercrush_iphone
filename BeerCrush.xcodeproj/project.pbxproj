@@ -87,6 +87,7 @@
 		05C9AC400F53756F0020B102 /* MyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C9AC3F0F53756F0020B102 /* MyTableViewController.m */; };
 		05ECB39F107D628F001D59A0 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 05ECB39E107D628F001D59A0 /* RegexKitLite.m */; };
 		05ECB8AF10850A75001D59A0 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 05ECB8AE10850A75001D59A0 /* logo.png */; };
+		05F2C6C510F682F000838503 /* BigTextVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F2C6C410F682F000838503 /* BigTextVC.m */; };
 		05F3BFB30F6EEDCB00603ED1 /* NearbyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */; };
 		05F3C0740F6EF69400603ED1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05F3C0730F6EF69400603ED1 /* CoreLocation.framework */; };
 		05F3C18A0F6F150400603ED1 /* PlaceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F3C1890F6F150400603ED1 /* PlaceTableViewController.m */; };
@@ -234,6 +235,8 @@
 		05ECB39D107D628F001D59A0 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		05ECB39E107D628F001D59A0 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		05ECB8AE10850A75001D59A0 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		05F2C6C310F682F000838503 /* BigTextVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigTextVC.h; sourceTree = "<group>"; };
+		05F2C6C410F682F000838503 /* BigTextVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigTextVC.m; sourceTree = "<group>"; };
 		05F3BFB10F6EEDCB00603ED1 /* NearbyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NearbyTableViewController.h; sourceTree = "<group>"; };
 		05F3BFB20F6EEDCB00603ED1 /* NearbyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NearbyTableViewController.m; sourceTree = "<group>"; };
 		05F3C0730F6EF69400603ED1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -320,6 +323,8 @@
 				05C637F30F56087F00B1C78A /* BeerListTableViewController.m */,
 				05C6364E0F55C1CE00B1C78A /* BeerTableViewController.h */,
 				05C6364F0F55C1CE00B1C78A /* BeerTableViewController.m */,
+				05F2C6C310F682F000838503 /* BigTextVC.h */,
+				05F2C6C410F682F000838503 /* BigTextVC.m */,
 				05451C281048827F00F9400B /* BookmarksTVC.h */,
 				05451C291048827F00F9400B /* BookmarksTVC.m */,
 				05C6364B0F55C03C00B1C78A /* BreweryTableViewController.h */,
@@ -522,6 +527,7 @@
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "BeerCrush" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -664,6 +670,7 @@
 				051BC629107BD6BD004376D9 /* RatingView.m in Sources */,
 				05ECB39F107D628F001D59A0 /* RegexKitLite.m in Sources */,
 				05A12D5810AA1418002F0F32 /* ServingTypeVC.m in Sources */,
+				05F2C6C510F682F000838503 /* BigTextVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -737,7 +744,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-licucore";
 				PREBINDING = NO;
-				SDKROOT = iphonesimulator3.0;
+				SDKROOT = iphoneos4.1;
 			};
 			name = Debug;
 		};
@@ -751,7 +758,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = "-licucore";
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.1;
+				SDKROOT = iphoneos4.1;
 			};
 			name = Release;
 		};
