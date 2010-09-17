@@ -94,17 +94,20 @@
 	if ([self.imageList objectAtIndex:photoNumber]==[NSNull null])
 	{
 		// Load the image into the view
-		NSString* url=[[[list objectAtIndex:photoNumber] objectForKey:@"medium"] objectForKey:@"url"];
-		[self.imageList replaceObjectAtIndex:photoNumber withObject:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]]];
-		UIImageView* photo=[[[UIImageView alloc] initWithImage:[self.imageList objectAtIndex:photoNumber]] autorelease];
-		
-		CGRect f=CGRectMake((self.view.frame.size.width*photoNumber)+(self.view.frame.size.width-MIN(photo.image.size.width,self.view.frame.size.width))/2, 
-							(self.view.frame.size.height-MIN(photo.image.size.height,self.view.frame.size.height))/2,
-							photo.image.size.width, 
-							photo.image.size.height);
-		
-		photo.frame=f;
-		[self.view addSubview:photo];
+		NSString* url=[[list objectAtIndex:photoNumber] objectForKey:@"url"];
+		if (url) 
+		{
+			[self.imageList replaceObjectAtIndex:photoNumber withObject:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?size=medium",url]]]]];
+			UIImageView* photo=[[[UIImageView alloc] initWithImage:[self.imageList objectAtIndex:photoNumber]] autorelease];
+			
+			CGRect f=CGRectMake((self.view.frame.size.width*photoNumber)+(self.view.frame.size.width-MIN(photo.image.size.width,self.view.frame.size.width))/2, 
+								(self.view.frame.size.height-MIN(photo.image.size.height,self.view.frame.size.height))/2,
+								photo.image.size.width, 
+								photo.image.size.height);
+			
+			photo.frame=f;
+			[self.view addSubview:photo];
+		}
 	}
 }
 

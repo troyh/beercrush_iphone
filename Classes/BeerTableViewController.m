@@ -215,7 +215,7 @@ enum TAGS {
 	}
 
 	NSString* thumburl=[[beerObj.data objectForKey:@"photos"] objectForKey:@"thumbnail"];
-	if (thumburl && [thumburl length])
+	if ([thumburl isKindOfClass:[NSNull class]]==NO && thumburl && [thumburl length])
 	{
 		self.thumbnailPhoto=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:thumburl]]];
 	}
@@ -1823,7 +1823,7 @@ enum TAGS {
 
 -(void)uploadPhoto:(id)photoImage
 {
-	NSData* imageData=UIImageJPEGRepresentation(photoImage, 1.0);
+	NSData* imageData=UIImageJPEGRepresentation(photoImage, 90);
 	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_UPLOAD_BEER_IMAGE,self.beerID]];
 	NSData* answer;
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];

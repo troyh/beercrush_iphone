@@ -864,9 +864,11 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		
 		if ([method isEqualToString:@"POST"])
 		{
-			// Always add userid= and usrkey= parameters
 			NSString* userid=[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
 			NSString* usrkey=[[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"];
+
+			// Always add userid and usrkey parameters as cookies
+			[theRequest setValue:[NSString stringWithFormat:@"userid=%@; usrkey=%@",userid,usrkey] forHTTPHeaderField:@"Cookie"];
 			
 			if (data)
 			{
@@ -874,7 +876,7 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				{
 					NSString* stringData=(NSString*)data;
 					
-					stringData=[stringData stringByAppendingFormat:@"&userid=%@&usrkey=%@",userid,usrkey];
+//					stringData=[stringData stringByAppendingFormat:@"&userid=%@&usrkey=%@",userid,usrkey];
 					
 					NSData* body=[stringData dataUsingEncoding:NSUTF8StringEncoding];
 					DLog(@"POST data:%@",stringData);
@@ -884,7 +886,6 @@ void normalizeBreweryData(NSMutableDictionary* data)
 				}
 				else if ([data isKindOfClass:[NSData class]])
 				{
-					// TODO: Always add userid= and usrkey= parameters
 					NSData* dataData=(NSData*)data;
 					// The following code based on http://iphone.zcentric.com/?p=218
 					/*
@@ -904,16 +905,17 @@ void normalizeBreweryData(NSMutableDictionary* data)
 					 */
 					NSMutableData *body = [NSMutableData data];
 					[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];	
-					[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"userid\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-					[body appendData:[userid dataUsingEncoding:NSUTF8StringEncoding]];
-					[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-					[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"usrkey\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-					[body appendData:[usrkey dataUsingEncoding:NSUTF8StringEncoding]];
-					[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+//					[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"userid\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+//					[body appendData:[userid dataUsingEncoding:NSUTF8StringEncoding]];
+//					[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+//					[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"usrkey\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+//					[body appendData:[usrkey dataUsingEncoding:NSUTF8StringEncoding]];
+//					[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
 					[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"photo\"; filename=\"photo.jpg\"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
 					[body appendData:[[NSString stringWithString:@"Content-Type: application/octet-stream\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
 //					DLog(@"POST data:%s<PHOTO DATA HERE>",body.bytes);
-					[body appendData:[NSData dataWithData:dataData]];
+					DLog(@"POST data length:%d",[dataData length]);
+					[body appendData:dataData];
 					[body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
 					// setting the body of the post to the reqeust
 					[theRequest setHTTPBody:body];
@@ -922,10 +924,6 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		}
 		else if ([method isEqualToString:@"GET"])
 		{
-			// Always add userid= and usrkey= parameters
-			[theRequest setValue:[NSString stringWithFormat:@"userid=%@; usrkey=%@", 
-								  [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"],
-								  [[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"]] forHTTPHeaderField:@"Cookie"];
 		}
 		
 		[theRequest setHTTPMethod:method];

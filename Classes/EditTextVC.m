@@ -64,8 +64,8 @@
 -(void)keyboardWillShow:(NSNotification*)notification
 {
 	// Resize the tableview so that it isn't obscured by the keyboard
-	CGRect bounds=[[[notification userInfo] objectForKey:UIKeyboardBoundsUserInfoKey] CGRectValue];
-	CGPoint center=[[[notification userInfo] objectForKey:UIKeyboardCenterEndUserInfoKey] CGPointValue];
+	CGRect bounds=[[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+	CGPoint center=[[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGPointValue];
 	
 	CGRect keyboardFrame=CGRectMake(round(center.x - bounds.size.width/2.0), round(center.y - bounds.size.height/2.0), bounds.size.width, bounds.size.height);
 	CGRect tableViewFrame=[self.textView.window convertRect:self.textView.frame fromView:self.textView.superview];
