@@ -576,8 +576,6 @@ enum TAGS {
 							cell.accessoryType=UITableViewCellAccessoryNone;
 						}
 						
-						[cell.textLabel setText:@"My Rating"];
-						
 						if (self.userRatingControl==nil)
 							self.userRatingControl=[[RatingControl alloc] initWithFrame:CGRectMake(80, 7, 180, 30)];
 						
@@ -585,10 +583,17 @@ enum TAGS {
 						NSString* user_rating=[self.userReviewData objectForKey:@"rating"];
 						if (user_rating!=nil) // Ther user has a review of this beer
 						{
+							[cell.textLabel setText:@"My Rating"];
 							self.userRatingControl.currentRating=[user_rating integerValue];
 							cell.accessoryType=UITableViewCellAccessoryDetailDisclosureButton;
+							DLog(@"Current rating:%d",self.userRatingControl.currentRating);
 						}
-						DLog(@"Current rating:%d",self.userRatingControl.currentRating);
+						else if (self.predictedRating) // Show the predicted rating
+						{
+							[cell.textLabel setText:@"Your Predicted Rating"];
+							self.userRatingControl.currentRating=round([self.predictedRating doubleValue]);
+							DLog(@"Predicted rating:%@",self.predictedRating);
+						}
 						
 						// Set the callback for a review
 						[self.userRatingControl addTarget:self action:@selector(ratingButtonTapped:event:) forControlEvents:UIControlEventValueChanged];
