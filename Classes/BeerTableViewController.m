@@ -1591,13 +1591,13 @@ enum TAGS {
 	[appDelegate dismissActivityHUD];
 	if (photoset)
 	{
-		NSArray* photos=[photoset objectForKey:@"photos"];
-		if ([photos count])
-		{
+//		NSArray* photos=[photoset objectForKey:@"photos"];
+//		if ([photos count])
+//		{
 			PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoSet:photoset] autorelease];
 			viewer.delegate=self;
 			[self.navigationController pushViewController:viewer animated:YES];
-		}
+//		}
 	}
 }
 
