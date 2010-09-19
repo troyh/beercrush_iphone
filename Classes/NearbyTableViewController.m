@@ -30,7 +30,7 @@ void orderByDistance(CLLocation* myLocation, NSMutableArray* placesArray)
 	for (NSMutableDictionary* place in placesArray)
 	{
 		CLLocation* loc=[[[CLLocation alloc] initWithLatitude:[[place valueForKey:@"lat"] doubleValue] longitude:[[place valueForKey:@"lon"] doubleValue]] autorelease];
-		[place setObject:[NSNumber numberWithDouble:[loc getDistanceFrom:myLocation]] forKey:@"distanceAway"];
+		[place setObject:[NSNumber numberWithDouble:[loc distanceFromLocation:myLocation]] forKey:@"distanceAway"];
 	}
 	
 	[placesArray sortUsingFunction:compareLocation context:nil];
