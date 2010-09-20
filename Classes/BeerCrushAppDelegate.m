@@ -1533,8 +1533,14 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 
 -(void)dismissActivityHUD
 { 
-	[self.activityHUD show:NO];
-	self.activityHUD=nil;
+	if ([NSThread isMainThread]==NO) {
+		[self performSelectorOnMainThread:@selector(dismissActivityHUD) withObject:nil waitUntilDone:NO];
+	}
+	else 
+	{
+		[self.activityHUD show:NO];
+		self.activityHUD=nil;
+	}
 } 
 
 -(void)presentActivityHUD:(NSString*)hudText
