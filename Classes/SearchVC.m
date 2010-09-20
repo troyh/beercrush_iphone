@@ -642,6 +642,7 @@ enum {
 	
 	if (self.delegate==nil || [self.delegate searchVC:self didSelectSearchResult:idstr]==YES)
 	{
+		[self.searchBar resignFirstResponder]; // Hide keyboard
 		[self.navigationController pushViewController:vc animated:YES];
 	}
 	
