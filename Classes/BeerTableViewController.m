@@ -1781,7 +1781,7 @@ enum TAGS {
 	}
 	else
 	{
-		[self.delegate didCancelBeerEdits];
+		[self performSelectorOnMainThread:@selector(didCancelBeerEdits:) withObject:self waitUntilDone:NO];
 	}
 	
 	[appDelegate dismissActivityHUD];

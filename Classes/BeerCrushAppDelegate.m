@@ -154,11 +154,10 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 		
 		NSObject* origObj=[origDict objectForKey:[parts objectAtIndex:[parts count]-1]];
 		NSObject* currObj=[currDict objectForKey:[parts objectAtIndex:[parts count]-1]];
-		
-		if ([origObj class] == [currObj class])
+
+		if ([origObj isKindOfClass:[NSString class]])
 		{
-			if ([origObj isKindOfClass:[NSString class]])
-			{
+			if ([currObj isKindOfClass:[NSString class]]) {
 				NSString* origString=(NSString*)origObj;
 				NSString* currString=(NSString*)currObj;
 				if ([origString isEqualToString:currString]==NO)
@@ -166,8 +165,13 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 					[values addObject:[NSString stringWithFormat:@"%@=%@",keyName,currString]];
 				}
 			}
-			else if ([origObj isKindOfClass:[NSNumber class]])
-			{
+			else {
+				[values addObject:[NSString stringWithFormat:@"%@=%@",keyName,currObj]];
+			}
+		}
+		else if ([origObj isKindOfClass:[NSNumber class]])
+		{
+			if ([currObj isKindOfClass:[NSNumber class]]) {
 				NSNumber* origNumber=(NSNumber*)origObj;
 				NSNumber* currNumber=(NSNumber*)currObj;
 				if ([origNumber isEqualToNumber:currNumber]==NO)
@@ -175,8 +179,13 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 					[values addObject:[NSString stringWithFormat:@"%@=%@",keyName,currNumber]];
 				}
 			}
-			else if ([origObj isKindOfClass:[NSArray class]])
-			{
+			else {
+				[values addObject:[NSString stringWithFormat:@"%@=%@",keyName,currObj]];
+			}
+		}
+		else if ([origObj isKindOfClass:[NSArray class]])
+		{
+			if ([currObj isKindOfClass:[NSArray class]]) {
 				NSArray* origArr=(NSArray*)origObj;
 				NSArray* currArr=(NSArray*)currObj;
 				if ([origArr isEqualToArray:currArr]==NO)
@@ -185,11 +194,11 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 				}
 			}
 			else {
-				// What to do?
+				[values addObject:[NSString stringWithFormat:@"%@=%@",keyName,currObj]];
 			}
 		}
 		else {
-			[values addObject:[NSString stringWithFormat:@"%@=%@",keyName,currObj]];
+			// What to do?
 		}
 	}
 	
@@ -213,7 +222,7 @@ void normalizeBeerData(NSMutableDictionary* beerData)
 	normalizeToNumber(beerData, @"calories_per_ml",NO);
 	
 	if ([beerData objectForKey:@"review_summary"]==nil)
-		[beerData setObject:[NSDictionary dictionary] forKey:@"review_summary"];
+		[beerData setObject:[NSMutableDictionary dictionaryWithCapacity:4] forKey:@"review_summary"];
 	normalizeToNumber([beerData objectForKey:@"review_summary"], @"total", YES);
 	normalizeToNumber([beerData objectForKey:@"review_summary"], @"body_avg", YES);
 	normalizeToNumber([beerData objectForKey:@"review_summary"], @"balance_avg", YES);
