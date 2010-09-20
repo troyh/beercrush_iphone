@@ -358,7 +358,7 @@ static const NSInteger kTagBeerNameLabel=2;
 		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 		cell.editingAccessoryType=UITableViewCellAccessoryNone;
-			
+
 		[cell.textLabel setText:NSLocalizedString(@"Add a beer",@"Text for row to add a beer to beer list")];
 	}
 

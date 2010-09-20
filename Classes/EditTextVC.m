@@ -63,20 +63,20 @@
 
 -(void)keyboardWillShow:(NSNotification*)notification
 {
-	// Resize the tableview so that it isn't obscured by the keyboard
-	CGRect bounds=[[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-	CGPoint center=[[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGPointValue];
-	
-	CGRect keyboardFrame=CGRectMake(round(center.x - bounds.size.width/2.0), round(center.y - bounds.size.height/2.0), bounds.size.width, bounds.size.height);
-	CGRect tableViewFrame=[self.textView.window convertRect:self.textView.frame fromView:self.textView.superview];
-	
-	CGRect intersectionFrame=CGRectIntersection(tableViewFrame, keyboardFrame);
-	
-	UIEdgeInsets insets=UIEdgeInsetsMake(0, 0, intersectionFrame.size.height, 0);
-	
-	self.textView.frame=CGRectMake(0, 0, 320, intersectionFrame.size.height);
-	[self.textView setContentInset:insets];
-	[self.textView setScrollIndicatorInsets:insets];
+//	// Resize the tableview so that it isn't obscured by the keyboard
+//	CGRect bounds=[[[notification userInfo] objectForKey:UIKeyboardBoundsUserInfoKey] CGRectValue];
+//	CGPoint center=[[[notification userInfo] objectForKey:UIKeyboardCenterEndUserInfoKey] CGPointValue];
+//	
+//	CGRect keyboardFrame=CGRectMake(round(center.x - bounds.size.width/2.0), round(center.y - bounds.size.height/2.0), bounds.size.width, bounds.size.height);
+//	CGRect tableViewFrame=[self.textView.window convertRect:self.textView.frame fromView:self.textView.superview];
+//	
+//	CGRect intersectionFrame=CGRectIntersection(tableViewFrame, keyboardFrame);
+//	
+//	UIEdgeInsets insets=UIEdgeInsetsMake(0, 0, intersectionFrame.size.height, 0);
+//	
+//	self.textView.frame=CGRectMake(0, 0, 320, intersectionFrame.size.height);
+//	[self.textView setContentInset:insets];
+//	[self.textView setScrollIndicatorInsets:insets];
 }
 
 -(void)keyboardWillHide:(NSNotification*)notification

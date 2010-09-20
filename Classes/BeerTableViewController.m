@@ -1766,8 +1766,7 @@ enum TAGS {
 				
 				[self.tableView reloadData];
 				
-				[self setEditing:NO animated:YES];
-				[self.delegate didSaveBeerEdits];
+				[self performSelectorOnMainThread:@selector(saveEditsSuccessful) withObject:nil waitUntilDone:NO];
 			}
 			else if ([response statusCode]==409) // Duplicate beer
 			{
@@ -1874,6 +1873,12 @@ enum TAGS {
 		[self setEditing:NO animated:YES];
 	}
 
+}
+
+-(void)saveEditsSuccessful 
+{
+	[self setEditing:NO animated:YES];
+	[self.delegate didSaveBeerEdits];
 }
 
 @end
