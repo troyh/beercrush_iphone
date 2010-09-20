@@ -1758,6 +1758,9 @@ enum TAGS {
 			NSHTTPURLResponse* response=[appDelegate sendJSONRequest:url usingMethod:@"POST" withData:bodystr returningJSON:&answer];
 			if ([response statusCode]==200)
 			{
+				// Restore review_summary data from original because the beer data returned from an edit lacks it.
+				[answer setObject:[self.beerObj.data objectForKey:@"review_summary"] forKey:@"review_summary"];
+				
 				self.beerObj.data=answer;
 				normalizeBeerData(self.beerObj.data);
 				
