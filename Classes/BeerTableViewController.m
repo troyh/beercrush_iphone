@@ -1550,6 +1550,10 @@ enum TAGS {
 		{
 			[self.navigationController popViewControllerAnimated:YES];
 		}
+		else {
+			// Inform the user that the review could not be posted
+			[self performSelectorOnMainThread:@selector(reviewPostFailed) withObject:nil waitUntilDone:NO];
+		}
 	}
 }
 
