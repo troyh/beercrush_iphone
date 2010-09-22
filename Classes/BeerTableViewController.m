@@ -1261,45 +1261,41 @@ enum TAGS {
 					}
 					case 2: // ABV edit field
 					{
-						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:0.0 maximumValue:30.0 decimalPositions:1];
 						vc.delegate=self;
 						vc.tag=kTagEditTextABV;
 						vc.title=NSLocalizedString(@"ABV",@"Title: Editing beer ABV");
-						vc.textType=EditLineVCTextTypeFloat;
-						vc.textToEdit=[[self.beerObj.data objectForKey:@"abv"] stringValue];
+						vc.value=[[self.beerObj.data objectForKey:@"abv"] floatValue];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
 					case 3: // IBUs
 					{
-						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:0.0 maximumValue:200.0 decimalPositions:0];
 						vc.delegate=self;
 						vc.tag=kTagEditTextIBU;
 						vc.title=NSLocalizedString(@"IBUs",@"Title: Editing beer IBUs");
-						vc.textType=EditLineVCTextTypeInteger;
-						vc.textToEdit=[[self.beerObj.data objectForKey:@"ibu"] stringValue];
+						vc.value=[[self.beerObj.data objectForKey:@"ibu"] unsignedIntValue];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
 					case 4: // OG
 					{
-						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:1.0 maximumValue:1.1 decimalPositions:4];
 						vc.delegate=self;
 						vc.tag=kTagEditTextOG;
 						vc.title=NSLocalizedString(@"OG",@"Title: Editing beer OG");
-						vc.textType=EditLineVCTextTypeFloat;
-						vc.textToEdit=[[self.beerObj.data objectForKey:@"og"] stringValue];
+						vc.value=[[self.beerObj.data objectForKey:@"og"] floatValue];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}
 					case 5: // FG
 					{
-						EditLineVC* vc=[[[EditLineVC alloc] init] autorelease];
+						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:1.0 maximumValue:1.1 decimalPositions:4];
 						vc.delegate=self;
 						vc.tag=kTagEditTextFG;
 						vc.title=NSLocalizedString(@"FG",@"Title: Editing beer FG");
-						vc.textType=EditLineVCTextTypeFloat;
-						vc.textToEdit=[[self.beerObj.data objectForKey:@"fg"] stringValue];
+						vc.value=[[self.beerObj.data objectForKey:@"fg"] floatValue];
 						[self.navigationController pushViewController:vc animated:YES];
 						break;
 					}

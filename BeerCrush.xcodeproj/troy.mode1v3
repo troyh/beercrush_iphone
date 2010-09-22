@@ -281,7 +281,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>14</integer>
+									<integer>4</integer>
 									<integer>3</integer>
 									<integer>0</integer>
 								</array>
@@ -324,7 +324,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>BeerTableViewController.m</string>
+								<string>NumberDialPicker.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -332,19 +332,17 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>BeerTableViewController.m</string>
+										<string>NumberDialPicker.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>05DC5A19124936EB0055015C</string>
+										<string>05DC5AC81249817C0055015C</string>
 										<key>history</key>
 										<array>
 											<string>05880CF110ED722F006C0B1E</string>
 											<string>05F2C6D810F685C500838503</string>
-											<string>05F2C6DA10F685C500838503</string>
 											<string>05F4928D1242D6B800510025</string>
 											<string>05F492AB1243E68700510025</string>
-											<string>05F492AC1243E68700510025</string>
 											<string>05F492C91243F55D00510025</string>
 											<string>05F492CA1243F55D00510025</string>
 											<string>0560EE991244345E00B5ECC8</string>
@@ -358,7 +356,14 @@
 											<string>05DC59EF12480FEC0055015C</string>
 											<string>05DC5A01124811E10055015C</string>
 											<string>05DC5A02124811E10055015C</string>
-											<string>05DC59E912480FD30055015C</string>
+											<string>05DC5A2E1249670D0055015C</string>
+											<string>05DC5A2F1249670D0055015C</string>
+											<string>05DC5A41124968FA0055015C</string>
+											<string>05DC5A42124968FA0055015C</string>
+											<string>05DC5A5E124976700055015C</string>
+											<string>05DC5AB91249803F0055015C</string>
+											<string>05DC5AC01249808B0055015C</string>
+											<string>05DC5AB81249803F0055015C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -554,6 +559,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>05DC5AC71249815D0055015C</string>
 		<string>05DC592C1247E3C20055015C</string>
 		<string>05DC59271247DED50055015C</string>
 		<string>1CD10A99069EF8BA00B06720</string>

@@ -85,6 +85,7 @@
 		05C637900F56018100B1C78A /* ReviewsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */; };
 		05C637F40F56087F00B1C78A /* BeerListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C637F30F56087F00B1C78A /* BeerListTableViewController.m */; };
 		05C9AC400F53756F0020B102 /* MyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C9AC3F0F53756F0020B102 /* MyTableViewController.m */; };
+		05DC5A1E124941460055015C /* NumberDialPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 05DC5A1D124941460055015C /* NumberDialPicker.m */; };
 		05ECB39F107D628F001D59A0 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 05ECB39E107D628F001D59A0 /* RegexKitLite.m */; };
 		05ECB8AF10850A75001D59A0 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 05ECB8AE10850A75001D59A0 /* logo.png */; };
 		05F2C6C510F682F000838503 /* BigTextVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F2C6C410F682F000838503 /* BigTextVC.m */; };
@@ -232,6 +233,8 @@
 		05C637F30F56087F00B1C78A /* BeerListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeerListTableViewController.m; sourceTree = "<group>"; };
 		05C9AC3E0F53756F0020B102 /* MyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableViewController.h; sourceTree = "<group>"; };
 		05C9AC3F0F53756F0020B102 /* MyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableViewController.m; sourceTree = "<group>"; };
+		05DC5A1C124941460055015C /* NumberDialPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberDialPicker.h; sourceTree = "<group>"; };
+		05DC5A1D124941460055015C /* NumberDialPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumberDialPicker.m; sourceTree = "<group>"; };
 		05ECB39D107D628F001D59A0 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		05ECB39E107D628F001D59A0 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		05ECB8AE10850A75001D59A0 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
@@ -312,6 +315,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				05DC5A1C124941460055015C /* NumberDialPicker.h */,
+				05DC5A1D124941460055015C /* NumberDialPicker.m */,
 				05C0D4DE107413A6004D485E /* AboutUsVC.h */,
 				05C0D4DF107413A6004D485E /* AboutUsVC.m */,
 				05C0D4E0107413A6004D485E /* AboutUsVC.xib */,
@@ -671,6 +676,7 @@
 				05ECB39F107D628F001D59A0 /* RegexKitLite.m in Sources */,
 				05A12D5810AA1418002F0F32 /* ServingTypeVC.m in Sources */,
 				05F2C6C510F682F000838503 /* BigTextVC.m in Sources */,
+				05DC5A1E124941460055015C /* NumberDialPicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
