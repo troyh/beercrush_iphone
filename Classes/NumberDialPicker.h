@@ -42,8 +42,14 @@
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView*)pickerView;
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component;
 
+-(float)getValueOfComponents;
+-(void)setComponentsToValue;
+-(int)lowestValueInComponent:(NSInteger)n;
+
 @end
 
 @protocol NumberDialPickerDelegate
+
+-(void)numberDialPicker:(NumberDialPicker*)picker didChangeValue:(float)value;
 
 @end

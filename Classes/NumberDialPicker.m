@@ -57,6 +57,8 @@
 		view.showsSelectionIndicator=YES;
 //		[view selectRow:0 inComponent:0 animated:NO];
 		self.view=view;
+		
+		[self setComponentsToValue];
 	}
 }
 
@@ -93,11 +95,70 @@
     [super dealloc];
 }
 
+-(int)lowestValueInComponent:(NSInteger)n
+{
+	if (n < self.numberOfComponentsForInteger) {
+		if (self.numberOfComponentsForInteger==1) {
+			return (int)self.min;
+		}
+		return ((int)self.min % (int)pow(10,self.numberOfComponentsForInteger - n)) / pow(10,self.numberOfComponentsForInteger - n - 1);
+	}
+	else {
+		return (int)((int)roundf((self.min - (int)self.min) * pow(10,n - self.numberOfComponentsForInteger + 1)) % 10);
+	}
+}
+
+-(float)getValueOfComponents {
+	float currentValue=0;
+	UIPickerView* picker=(UIPickerView*)self.view;
+	// Verify that the value is within the min & max values and adjust, if necessary
+	for (unsigned int i=0; i < (self.numberOfComponentsForInteger + self.numberOfComponentsForNonInteger); ++i) {
+		NSInteger lowest=[self lowestValueInComponent:i];
+		NSInteger n=[picker selectedRowInComponent:i];
+		if (i < self.numberOfComponentsForInteger) {
+			currentValue+=(lowest+n) * pow(10,self.numberOfComponentsForInteger - i - 1);
+		}
+		else {
+			currentValue+=(lowest+n) / pow(10,i - self.numberOfComponentsForInteger + 1);
+		}
+	}
+	return currentValue;
+}
+
+-(void)setComponentsToValue {
+	if (self.value < self.min) {
+		// Fix it
+		self.value=self.min;
+	}
+	else if (self.max < self.value) {
+		// Fix it
+		self.value=self.max;
+	}
+	
+	UIPickerView* picker=(UIPickerView*)self.view;
+	int row;
+	for (unsigned int i=0; i < (self.numberOfComponentsForInteger + self.numberOfComponentsForNonInteger); ++i) {
+		if (i < self.numberOfComponentsForInteger) {
+			if (self.numberOfComponentsForInteger==1)
+				row=(int)self.value - [self lowestValueInComponent:i];
+			else
+				row=(((int)self.value % (int)pow(10,self.numberOfComponentsForInteger - i)) / pow(10,self.numberOfComponentsForInteger - i - 1)) - [self lowestValueInComponent:i];
+		}
+		else {
+			row=((int)roundf(((self.value - (int)self.value) * pow(10,i - self.numberOfComponentsForInteger + 1))) % 10) - [self lowestValueInComponent:i];
+		}
+		
+		[picker selectRow:row inComponent:i animated:YES];
+	}
+}
+
 #pragma mark UIPickerViewDelegate methods
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-	
+	self.value=[self getValueOfComponents];
+	[self setComponentsToValue];
+	[self.delegate numberDialPicker:self didChangeValue:self.value];
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
@@ -128,7 +189,7 @@
 	if (component < self.numberOfComponentsForInteger) {
 		if (self.numberOfComponentsForInteger == 1) {
 			int range=abs((int)self.max - (int)self.min);
-			return MIN(30.0,((unsigned int)log10(range) + 1) * 25.0);
+			return MAX(30.0,((unsigned int)log10(range) + 1) * 30.0);
 		}
 		return 40.0;
 	}

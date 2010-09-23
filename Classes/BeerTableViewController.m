@@ -50,10 +50,10 @@ const int kDescriptionCellDefaultRowHeight=80;
 
 enum TAGS {
 	kTagEditTextName=1,
-	kTagEditTextABV,
-	kTagEditTextIBU,
-	kTagEditTextOG,
-	kTagEditTextFG,
+	kTagEditABV,
+	kTagEditIBU,
+	kTagEditOG,
+	kTagEditFG,
 	kTagEditTextGrains,
 	kTagEditTextHops,
 	kTagEditTextOtherIngs,
@@ -1263,7 +1263,7 @@ enum TAGS {
 					{
 						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:0.0 maximumValue:30.0 decimalPositions:1];
 						vc.delegate=self;
-						vc.tag=kTagEditTextABV;
+						vc.tag=kTagEditABV;
 						vc.title=NSLocalizedString(@"ABV",@"Title: Editing beer ABV");
 						vc.value=[[self.beerObj.data objectForKey:@"abv"] floatValue];
 						[self.navigationController pushViewController:vc animated:YES];
@@ -1273,7 +1273,7 @@ enum TAGS {
 					{
 						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:0.0 maximumValue:200.0 decimalPositions:0];
 						vc.delegate=self;
-						vc.tag=kTagEditTextIBU;
+						vc.tag=kTagEditIBU;
 						vc.title=NSLocalizedString(@"IBUs",@"Title: Editing beer IBUs");
 						vc.value=[[self.beerObj.data objectForKey:@"ibu"] unsignedIntValue];
 						[self.navigationController pushViewController:vc animated:YES];
@@ -1281,9 +1281,9 @@ enum TAGS {
 					}
 					case 4: // OG
 					{
-						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:1.0 maximumValue:1.1 decimalPositions:3];
+						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:1.0 maximumValue:1.2 decimalPositions:3];
 						vc.delegate=self;
-						vc.tag=kTagEditTextOG;
+						vc.tag=kTagEditOG;
 						vc.title=NSLocalizedString(@"OG",@"Title: Editing beer OG");
 						vc.value=[[self.beerObj.data objectForKey:@"og"] floatValue];
 						[self.navigationController pushViewController:vc animated:YES];
@@ -1291,9 +1291,9 @@ enum TAGS {
 					}
 					case 5: // FG
 					{
-						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:1.0 maximumValue:1.1 decimalPositions:3];
+						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:1.0 maximumValue:1.2 decimalPositions:3];
 						vc.delegate=self;
-						vc.tag=kTagEditTextFG;
+						vc.tag=kTagEditFG;
 						vc.title=NSLocalizedString(@"FG",@"Title: Editing beer FG");
 						vc.value=[[self.beerObj.data objectForKey:@"fg"] floatValue];
 						[self.navigationController pushViewController:vc animated:YES];
@@ -1617,18 +1617,6 @@ enum TAGS {
 		case kTagEditTextName:
 			[self.beerObj.data setObject:text forKey:@"name"];
 			break;
-		case kTagEditTextABV:
-			[self.beerObj.data setObject:[NSNumber numberWithFloat:[text floatValue]] forKey:@"abv"];
-			break;
-		case kTagEditTextIBU:
-			[self.beerObj.data setObject:[NSNumber numberWithFloat:[text floatValue]] forKey:@"ibu"];
-			break;
-		case kTagEditTextOG:
-			[self.beerObj.data setObject:[NSNumber numberWithFloat:[text floatValue]] forKey:@"og"];
-			break;
-		case kTagEditTextFG:
-			[self.beerObj.data setObject:[NSNumber numberWithFloat:[text floatValue]] forKey:@"fg"];
-			break;
 		case kTagEditTextGrains:
 			[self.beerObj.data setObject:text forKey:@"grains"];
 			break;
@@ -1878,6 +1866,29 @@ enum TAGS {
 {
 	[self setEditing:NO animated:YES];
 	[self.delegate didSaveBeerEdits];
+}
+
+#pragma mark NumberDialPickerDelegate methods
+
+-(void)numberDialPicker:(NumberDialPicker*)picker didChangeValue:(float)value
+{
+	switch (picker.tag) {
+		case kTagEditABV:
+			[self.beerObj.data setObject:[NSNumber numberWithFloat:value] forKey:@"abv"];
+			break;
+		case kTagEditIBU:
+			[self.beerObj.data setObject:[NSNumber numberWithFloat:value] forKey:@"ibu"];
+			break;
+		case kTagEditOG:
+			[self.beerObj.data setObject:[NSNumber numberWithFloat:value] forKey:@"og"];
+			break;
+		case kTagEditFG:
+			[self.beerObj.data setObject:[NSNumber numberWithFloat:value] forKey:@"fg"];
+			break;
+		default:
+			break;
+	}
+	[self.tableView reloadData];
 }
 
 @end
