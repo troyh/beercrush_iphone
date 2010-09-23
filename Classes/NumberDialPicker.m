@@ -7,7 +7,7 @@
 //
 
 #import "NumberDialPicker.h"
-
+#import "BeerCrushAppDelegate.h"
 
 @implementation NumberDialPicker
 
@@ -15,7 +15,8 @@
 @synthesize max;
 @synthesize value;
 @synthesize decimalPositions;
-@synthesize numberOfComponents;
+@synthesize numberOfComponentsForInteger;
+@synthesize numberOfComponentsForNonInteger;
 @synthesize tag;
 @synthesize delegate;
 
@@ -25,25 +26,16 @@
 	self.max=maxval;
 	self.decimalPositions=d;
 	
-	//self.numberOfComponents=(d?2:1); // Start with 1 or 2 and work up from there
-	float range=abs(self.max - self.min);
-	if (range == 0) 
-		self.numberOfComponents=0;
-	else if (range < 100)
-		self.numberOfComponents=1;
+	float range=abs((int)self.max - (int)self.min);
+	if (range < 100)
+		self.numberOfComponentsForInteger=1;
 	else
-		self.numberOfComponents=(unsigned int)log10(range) + 1; // a component per digit
+		self.numberOfComponentsForInteger=(unsigned int)log10(range) + 1; // a component per digit
 
-	self.numberOfComponents+=d;
+	self.numberOfComponentsForNonInteger=d;
 	
 	return self;
 }
-
-//-(id)initWithNumberOfDigits:(NSUInteger)n andNumberOfDecimalDigits:(NSUInteger)d
-//{
-//	self.numberOfDigits=n;
-//	return self;
-//}
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -110,15 +102,20 @@
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
 {
-	return 30.0;
+	DLog(@"rowHeightForComponent %d:%f",component,pickerView.frame.size.height / 7);
+	return pickerView.frame.size.height / 7;
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-	unsigned int dld=self.numberOfComponents - self.decimalPositions;
-	if (component == dld)
-		return [NSString stringWithFormat:@".%d",row];
-	return [NSString stringWithFormat:@"%d",row];
+	if (component < self.numberOfComponentsForInteger) {
+		return [NSString stringWithFormat:@"%d",((int)self.min)+row];
+	}
+	else {
+		if (component == self.numberOfComponentsForInteger)
+			return [NSString stringWithFormat:@".%d",row]; // TODO: use locale's decimal point (i.e., commas are used in Europe)
+		return [NSString stringWithFormat:@"%d",row];
+	}
 }
 
 //- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
@@ -128,31 +125,36 @@
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
 {
-	return 60.0 - (self.numberOfComponents * 10.0);
+	if (component < self.numberOfComponentsForInteger) {
+		if (self.numberOfComponentsForInteger == 1) {
+			int range=abs((int)self.max - (int)self.min);
+			return MIN(30.0,((unsigned int)log10(range) + 1) * 25.0);
+		}
+		return 40.0;
+	}
+	return 40.0;
+//	return (pickerView.frame.size.width - 10) / ((self.numberOfComponentsForInteger + self.numberOfComponentsForNonInteger));
 }
 
 #pragma mark UIPickerViewDataSource methods
 
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView*)pickerView
 {
-	return self.numberOfComponents;
+	return self.numberOfComponentsForInteger + self.numberOfComponentsForNonInteger;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-	unsigned int dld=self.numberOfComponents - self.decimalPositions;
-	if (component < dld) {
-		if (dld==1) {
-			return abs(self.max - self.min) + 1;
-		}
+	if (component < self.numberOfComponentsForInteger) {
+		if (self.numberOfComponentsForInteger==1)
+			return abs((int)self.max - (int)self.min) + 1;
 		return 10;
 	}
-	
-	// How many components after the decimal?
-	unsigned int dad=self.numberOfComponents - dld;
-	if (dad==1)
-		return (int)pow(10,self.decimalPositions);
-	return 10;
+	else {
+		if (self.numberOfComponentsForNonInteger==1 && ((int)self.max-(int)self.min)==1)
+			return MIN(10,((self.max-(int)self.max)-(self.min-(int)self.min)) * 10);
+		return 10;
+	}
 }
 
 @end

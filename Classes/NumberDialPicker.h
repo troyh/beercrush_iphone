@@ -17,7 +17,8 @@
 	float max;
 	float value;
 	NSUInteger decimalPositions;
-	NSUInteger numberOfComponents;
+	NSUInteger numberOfComponentsForInteger;
+	NSUInteger numberOfComponentsForNonInteger;
 	NSUInteger tag;
 	id<NumberDialPickerDelegate> delegate;
 }
@@ -26,7 +27,8 @@
 @property (assign) float max;
 @property (assign) float value;
 @property (assign) NSUInteger decimalPositions;
-@property (assign) NSUInteger numberOfComponents;
+@property (assign) NSUInteger numberOfComponentsForInteger;
+@property (assign) NSUInteger numberOfComponentsForNonInteger;
 @property (assign) NSUInteger tag;
 @property (assign) id<NumberDialPickerDelegate> delegate;
 
