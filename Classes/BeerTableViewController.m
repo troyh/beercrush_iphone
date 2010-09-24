@@ -1281,7 +1281,7 @@ enum TAGS {
 					}
 					case 4: // OG
 					{
-						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:1.0 maximumValue:1.2 decimalPositions:3];
+						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:MAX(1.0,[[self.beerObj.data objectForKey:@"fg"] floatValue]) maximumValue:1.2 decimalPositions:3];
 						vc.delegate=self;
 						vc.tag=kTagEditOG;
 						vc.title=NSLocalizedString(@"OG",@"Title: Editing beer OG");
@@ -1291,7 +1291,10 @@ enum TAGS {
 					}
 					case 5: // FG
 					{
-						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:1.0 maximumValue:1.2 decimalPositions:3];
+						float maxfg=[[self.beerObj.data objectForKey:@"og"] floatValue];
+						if (maxfg<=1.0)
+							maxfg=1.2;
+						NumberDialPicker* vc=[[NumberDialPicker alloc] initWithMinumValue:1.0 maximumValue:maxfg decimalPositions:3];
 						vc.delegate=self;
 						vc.tag=kTagEditFG;
 						vc.title=NSLocalizedString(@"FG",@"Title: Editing beer FG");

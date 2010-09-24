@@ -104,7 +104,10 @@
 		return ((int)self.min % (int)pow(10,self.numberOfComponentsForInteger - n)) / pow(10,self.numberOfComponentsForInteger - n - 1);
 	}
 	else {
-		return (int)((int)roundf((self.min - (int)self.min) * pow(10,n - self.numberOfComponentsForInteger + 1)) % 10);
+		float n=(self.min - (int)self.min) * pow(10,n - self.numberOfComponentsForInteger + 1);
+		if ((n+1) == (self.numberOfComponentsForInteger + self.numberOfComponentsForNonInteger)) // Last digit?
+			n=roundf(n);
+		return (int)((int)n % 10);
 	}
 }
 
@@ -145,7 +148,10 @@
 				row=(((int)self.value % (int)pow(10,self.numberOfComponentsForInteger - i)) / pow(10,self.numberOfComponentsForInteger - i - 1)) - [self lowestValueInComponent:i];
 		}
 		else {
-			row=((int)roundf(((self.value - (int)self.value) * pow(10,i - self.numberOfComponentsForInteger + 1))) % 10) - [self lowestValueInComponent:i];
+			float n=(self.value - (int)self.value) * pow(10,i - self.numberOfComponentsForInteger + 1);
+			if ((i+1) == (self.numberOfComponentsForInteger + self.numberOfComponentsForNonInteger)) // Last digit?
+				n=roundf(n);
+			row=((int)n % 10) - [self lowestValueInComponent:i];
 		}
 		
 		[picker selectRow:row inComponent:i animated:YES];
@@ -163,19 +169,20 @@
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
 {
-	DLog(@"rowHeightForComponent %d:%f",component,pickerView.frame.size.height / 7);
-	return pickerView.frame.size.height / 7;
+//	DLog(@"rowHeightForComponent %d:%f",component,pickerView.frame.size.height / 7);
+//	return pickerView.frame.size.height / 7;
+	return 30.0;
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
 	if (component < self.numberOfComponentsForInteger) {
-		return [NSString stringWithFormat:@"%d",((int)self.min)+row];
+		return [NSString stringWithFormat:@"%d",[self lowestValueInComponent:component]+row];
 	}
 	else {
 		if (component == self.numberOfComponentsForInteger)
-			return [NSString stringWithFormat:@".%d",row]; // TODO: use locale's decimal point (i.e., commas are used in Europe)
-		return [NSString stringWithFormat:@"%d",row];
+			return [NSString stringWithFormat:@".%d",[self lowestValueInComponent:component] + row]; // TODO: use locale's decimal point (i.e., commas are used in Europe)
+		return [NSString stringWithFormat:@"%d",[self lowestValueInComponent:component] + row];
 	}
 }
 
@@ -209,7 +216,7 @@
 	if (component < self.numberOfComponentsForInteger) {
 		if (self.numberOfComponentsForInteger==1)
 			return abs((int)self.max - (int)self.min) + 1;
-		return 10;
+		return MIN(10,(abs((int)self.max - (int)self.min) / pow(10,self.numberOfComponentsForInteger - component - 1) + 1));
 	}
 	else {
 		if (self.numberOfComponentsForNonInteger==1 && ((int)self.max-(int)self.min)==1)
