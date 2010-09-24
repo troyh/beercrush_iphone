@@ -281,7 +281,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>4</integer>
+									<integer>16</integer>
 									<integer>3</integer>
 									<integer>0</integer>
 								</array>
@@ -306,7 +306,7 @@
 							<real>203</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>1211 59 1341 1518 0 0 2560 1578 </string>
+						<string>1195 60 1341 1518 0 0 2560 1578 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -324,7 +324,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>NumberDialPicker.m</string>
+								<string>BeerTableViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -332,11 +332,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>NumberDialPicker.m</string>
+										<string>BeerTableViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>05DC5AC81249817C0055015C</string>
+										<string>05DC5BBE124CD3630055015C</string>
 										<key>history</key>
 										<array>
 											<string>05880CF110ED722F006C0B1E</string>
@@ -360,10 +360,11 @@
 											<string>05DC5A2F1249670D0055015C</string>
 											<string>05DC5A41124968FA0055015C</string>
 											<string>05DC5A42124968FA0055015C</string>
-											<string>05DC5A5E124976700055015C</string>
-											<string>05DC5AB91249803F0055015C</string>
-											<string>05DC5AC01249808B0055015C</string>
-											<string>05DC5AB81249803F0055015C</string>
+											<string>05DC5B65124C02E30055015C</string>
+											<string>05DC5B66124C02E30055015C</string>
+											<string>05DC5B68124C02E30055015C</string>
+											<string>05DC5BBA124C23070055015C</string>
+											<string>05DC5BBB124C23070055015C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -377,7 +378,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1116, 1450}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1211 59 1341 1518 0 0 2560 1578 </string>
+								<string>1195 60 1341 1518 0 0 2560 1578 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -397,7 +398,7 @@
 								<key>Frame</key>
 								<string>{{0, 1455}, {1116, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1211 59 1341 1518 0 0 2560 1578 </string>
+								<string>1195 60 1341 1518 0 0 2560 1578 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -559,7 +560,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>05DC5AC71249815D0055015C</string>
 		<string>05DC592C1247E3C20055015C</string>
 		<string>05DC59271247DED50055015C</string>
 		<string>1CD10A99069EF8BA00B06720</string>
@@ -568,7 +568,7 @@
 		<string>/Users/troy/Documents/BeerCrush/BeerCrush.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>1211 59 1341 1518 0 0 2560 1578 </string>
+	<string>1195 60 1341 1518 0 0 2560 1578 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
