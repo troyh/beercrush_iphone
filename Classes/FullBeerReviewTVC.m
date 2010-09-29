@@ -270,10 +270,13 @@
 			{
 				case 0:
 				{
-					NSString* n=[[userReview objectForKey:@"beer"] objectForKey:@"name"];
+					BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+					NSDictionary* beer=[appDelegate getBeerDoc:[self.userReview objectForKey:@"beer_id"]];
+					NSString* n=[beer objectForKey:@"name"];
 					if (n==nil)
 						n=[self.delegate beerName];
 					[cell.textLabel setText:n];
+					[n release];
 					break;
 				}
 				default:

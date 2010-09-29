@@ -143,7 +143,7 @@ NSMutableArray* appendDifferentValuesToArray(NSArray* keyNames,NSDictionary* ori
 #define BEERCRUSH_API_URL_GET_USER_PLACE_REVIEW_DOC		@BEERCRUSH_API_URL_HOST"/api/review/place/%@/%@"
 #define BEERCRUSH_API_URI_GET_PLACE_STYLES				@BEERCRUSH_API_URL_HOST"/api/restaurantcategories"
 #define BEERCRUSH_API_URL_GET_STYLESLIST				@BEERCRUSH_API_URL_HOST"/api/beerstyles"
-#define BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC		@BEERCRUSH_API_URL_HOST"/api/user/%@/beer_reviews/%@"
+#define BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC		@BEERCRUSH_API_URL_HOST"/api/user/%@/reviews"
 #define BEERCRUSH_API_URL_GET_USER_PLACE_REVIEWS_DOC	@BEERCRUSH_API_URL_HOST"/api/user/%@/place_reviews/%d"
 #define BEERCRUSH_API_URL_GET_USER_WISHLIST_DOC			@BEERCRUSH_API_URL_HOST"/api/wishlist/%@"
 #define BEERCRUSH_API_URL_LOGIN							@BEERCRUSH_API_URL_HOST"/api/login"

@@ -871,14 +871,14 @@ void normalizeBreweryData(NSMutableDictionary* data)
 																cachePolicy:NSURLRequestUseProtocolCachePolicy
 															timeoutInterval:30.0];
 		
+		NSString* userid=[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
+		NSString* usrkey=[[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"];
+		
+		// Always add userid and usrkey parameters as cookies
+		[theRequest setValue:[NSString stringWithFormat:@"userid=%@; usrkey=%@",userid,usrkey] forHTTPHeaderField:@"Cookie"];
+
 		if ([method isEqualToString:@"POST"])
 		{
-			NSString* userid=[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
-			NSString* usrkey=[[NSUserDefaults standardUserDefaults] objectForKey:@"usrkey"];
-
-			// Always add userid and usrkey parameters as cookies
-			[theRequest setValue:[NSString stringWithFormat:@"userid=%@; usrkey=%@",userid,usrkey] forHTTPHeaderField:@"Cookie"];
-			
 			if (data)
 			{
 				if ([data isKindOfClass:[NSString class]])
@@ -934,11 +934,12 @@ void normalizeBreweryData(NSMutableDictionary* data)
 		else if ([method isEqualToString:@"GET"])
 		{
 		}
-		
+
+		DLog(@"%@ URL:%@",method,[url absoluteString]);
+		DLog(@"Auth:userid=%@; usrkey=%@",userid,usrkey);
+
 		[theRequest setHTTPMethod:method];
 		
-		DLog(@"%@ URL:%@",method,[url absoluteString]);
-
 		NSError* error;
 		
 		[UIApplication sharedApplication].networkActivityIndicatorVisible=YES;
@@ -1307,6 +1308,9 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 			NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
 			if ([response statusCode]==200)
 			{
+				id o=[answer valueForKey:@"predictedrating"];
+				if ([o isKindOfClass:[NSNull class]])
+					return 0;
 				return [[answer valueForKey:@"predictedrating"] doubleValue];
 			}
 			else {
@@ -1323,7 +1327,7 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 -(NSMutableDictionary*)getBeerReviewsByUser:(NSString*)userID seqNum:(NSNumber*)seqNum
 {
 	NSMutableDictionary* answer=nil;
-	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC, userID, seqNum]];
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_BEER_REVIEWS_DOC, userID]];
 	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
 	if ([response statusCode]==200)
 	{

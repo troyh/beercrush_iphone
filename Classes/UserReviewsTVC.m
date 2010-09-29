@@ -55,9 +55,7 @@
 		
 		NSMutableDictionary* reviews=[delegate getBeerReviewsByUser:user_id seqNum:seqnum];
 		[self.reviewsList addObjectsFromArray:[reviews objectForKey:@"reviews"]];
-		self.totalReviews=[[reviews objectForKey:@"total"] integerValue];
-		self.seqNext=[[reviews objectForKey:@"seqnum"] integerValue]+1;
-		self.seqMax=[[reviews objectForKey:@"seqmax"] integerValue];
+		self.totalReviews=[[[reviews objectForKey:@"meta"] objectForKey:@"total"] integerValue];
 		
 		if ([seqnum unsignedIntValue]>0)
 		{
@@ -157,13 +155,18 @@
 	{
 		// Set up the cell...
 		NSMutableDictionary* review=[self.reviewsList objectAtIndex:indexPath.row];
-		NSString* s=[[review objectForKey:@"beer"] objectForKey:@"name"];
+//		NSString* s=[[review objectForKey:@"beer"] objectForKey:@"name"];
+		NSString* s=[review objectForKey:@"beer_id"];
 		if (s==nil)
 			[cell.textLabel setText:@"???"];
 		else
 		{
-			[cell.textLabel setText:s];
-			//[cell.detailTextLabel setText:[review objectForKey:@"brewery_name"]];
+			BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
+			NSDictionary* beer=[appDelegate getBeerDoc:s];
+			[cell.textLabel setText:[beer objectForKey:@"name"]];
+			
+//			NSDictionary* brewery=[appDelegate getBreweryDoc:[beer objectForKey:@"brewery_id"]];
+//			[cell.detailTextLabel setText:[brewery objectForKey:@"name"]];
 
 			NSArray* starsfmt=[NSArray arrayWithObjects:
 							   @"☆☆☆☆☆",
@@ -176,6 +179,7 @@
 			
 			// Set up the cell...
 			[cell.detailTextLabel setText:[starsfmt objectAtIndex:[[review objectForKey:@"rating"] integerValue]]];
+			[beer release];
 		}
 	}
 	else
