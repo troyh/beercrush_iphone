@@ -67,6 +67,7 @@
 		058FF79210332E2100DA6D81 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 058FF79110332E2100DA6D81 /* LoginVC.m */; };
 		058FFBCA1035DE4200DA6D81 /* FullBeerReviewTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 058FFBC91035DE4200DA6D81 /* FullBeerReviewTVC.m */; };
 		058FFCA410360A1E00DA6D81 /* FlavorsAromasTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 058FFCA310360A1E00DA6D81 /* FlavorsAromasTVC.m */; };
+		0590178C1254028200DD8818 /* AvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0590178B1254028200DD8818 /* AvatarImageView.m */; };
 		05944DBD0F72E2BB0043D34C /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05944DBC0F72E2BB0043D34C /* MainWindow.xib */; };
 		05944DC50F72E7C30043D34C /* BeerCrush.png in Resources */ = {isa = PBXBuildFile; fileRef = 05944DC40F72E7C30043D34C /* BeerCrush.png */; };
 		059DA054104C70B200D5652E /* EditTextVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 059DA053104C70B200D5652E /* EditTextVC.m */; };
@@ -204,6 +205,8 @@
 		058FFBC91035DE4200DA6D81 /* FullBeerReviewTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullBeerReviewTVC.m; sourceTree = "<group>"; };
 		058FFCA210360A1E00DA6D81 /* FlavorsAromasTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlavorsAromasTVC.h; sourceTree = "<group>"; };
 		058FFCA310360A1E00DA6D81 /* FlavorsAromasTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlavorsAromasTVC.m; sourceTree = "<group>"; };
+		0590178A1254028200DD8818 /* AvatarImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarImageView.h; sourceTree = "<group>"; };
+		0590178B1254028200DD8818 /* AvatarImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvatarImageView.m; sourceTree = "<group>"; };
 		05944DBC0F72E2BB0043D34C /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		05944DC40F72E7C30043D34C /* BeerCrush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BeerCrush.png; sourceTree = "<group>"; };
 		059DA052104C70B200D5652E /* EditTextVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditTextVC.h; sourceTree = "<group>"; };
@@ -396,6 +399,8 @@
 				05ECB3A0107D629E001D59A0 /* RegexKitLite */,
 				05C6378E0F56018100B1C78A /* ReviewsTableViewController.h */,
 				05C6378F0F56018100B1C78A /* ReviewsTableViewController.m */,
+				0590178A1254028200DD8818 /* AvatarImageView.h */,
+				0590178B1254028200DD8818 /* AvatarImageView.m */,
 				051BBE931075539B004376D9 /* SearchVC.h */,
 				051BBE941075539B004376D9 /* SearchVC.m */,
 				05A12D5610AA1418002F0F32 /* ServingTypeVC.h */,
@@ -677,6 +682,7 @@
 				05A12D5810AA1418002F0F32 /* ServingTypeVC.m in Sources */,
 				05F2C6C510F682F000838503 /* BigTextVC.m in Sources */,
 				05DC5A1E124941460055015C /* NumberDialPicker.m in Sources */,
+				0590178C1254028200DD8818 /* AvatarImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
