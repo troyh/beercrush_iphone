@@ -1594,14 +1594,15 @@ enum TAGS {
 	[appDelegate dismissActivityHUD];
 	if (photoset)
 	{
-//		NSArray* photos=[photoset objectForKey:@"photos"];
-//		if ([photos count])
-//		{
-			PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoSet:photoset] autorelease];
-			viewer.delegate=self;
-			[self.navigationController pushViewController:viewer animated:YES];
-//		}
+		[self performSelectorOnMainThread:@selector(showBeerPhotoset:) withObject:photoset waitUntilDone:NO];
 	}
+}
+
+-(void)showBeerPhotoset:(NSMutableDictionary*)photoset
+{
+	PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoSet:photoset] autorelease];
+	viewer.delegate=self;
+	[self.navigationController pushViewController:viewer animated:YES];
 }
 
 #pragma mark PhotoViewerDelegate methods
