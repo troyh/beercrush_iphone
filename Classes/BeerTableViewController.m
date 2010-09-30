@@ -1600,6 +1600,8 @@ enum TAGS {
 
 -(void)showBeerPhotoset:(NSMutableDictionary*)photoset
 {
+	// NOTE: We don't verify that there are photos to show first. We always push the PhotoViewer view controller because that's 
+	// the only way to add a photo.
 	PhotoViewer* viewer=[[[PhotoViewer alloc] initWithPhotoSet:photoset] autorelease];
 	viewer.delegate=self;
 	[self.navigationController pushViewController:viewer animated:YES];
