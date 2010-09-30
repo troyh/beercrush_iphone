@@ -1822,6 +1822,11 @@ enum TAGS {
 	NSData* answer;
 	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	NSHTTPURLResponse* response=[appDelegate sendRequest:url usingMethod:@"POST" withData:imageData returningData:&answer];
+	[self performSelectorOnMainThread:@selector(uploadPhotoComplete:) withObject:response waitUntilDone:NO];
+}
+
+-(void)uploadPhotoComplete:(NSHTTPURLResponse*)response
+{
 	if ([response statusCode]==200)
 	{
 		DLog(@"Successfully uploaded photo");
@@ -1834,6 +1839,7 @@ enum TAGS {
 		[alert show];
 	}
 
+	BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 	[appDelegate dismissActivityHUD];
 }
 
