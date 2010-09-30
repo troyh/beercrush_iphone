@@ -1342,6 +1342,24 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 	return nil;
 }
 
+-(NSMutableDictionary*)getUserDoc:(NSString*)userID
+{
+	NSMutableDictionary* answer=nil;
+	NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:BEERCRUSH_API_URL_GET_USER_INFO, userID]];
+	NSHTTPURLResponse* response=[self sendJSONRequest:url usingMethod:@"GET" withData:nil returningJSON:&answer];
+	if ([response statusCode]==200)
+	{
+		return answer;
+	}
+	else
+	{
+		//		[self genericAlert:NSLocalizedString(@"Beer Reviews",@"GetUserBeerReviews: Alert Message") 
+		//					 title:NSLocalizedString(@"Unable to get beer reviews",@"GetUserBeerReviews: Alert Title") 
+		//			   buttonTitle:nil];
+	}
+	return nil;
+}
+
 -(NSString*)breweryNameFromBeerID:(NSString*)beer_id
 {
 	if (beer_id && [beer_id length])

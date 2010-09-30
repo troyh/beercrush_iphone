@@ -8,6 +8,7 @@
 
 #import "ReviewsTableViewController.h"
 #import "RatingView.h"
+#import "AvatarImageView.h"
 
 @implementation ReviewsTableViewController
 
@@ -169,7 +170,8 @@
 		[cell.contentView addSubview:ratingView];
 		
 		// Create avatar view
-		UIImageView* avatarView=[[[UIImageView alloc] initWithFrame:CGRectMake(3, 3, 35, 35)] autorelease];
+		AvatarImageView* avatarView=[[[AvatarImageView alloc] initWithFrame:CGRectMake(3, 3, 35, 35)] autorelease];
+		//UIImageView* avatarView=[[[UIImageView alloc] initWithFrame:CGRectMake(3, 3, 35, 35)] autorelease];
 		avatarView.tag=kTagAvatarView;
 		[cell.contentView addSubview:avatarView];
 		
@@ -182,8 +184,10 @@
 	}
 	else
 	{
+		BeerCrushAppDelegate* appDelegate=(BeerCrushAppDelegate*)[[UIApplication sharedApplication] delegate];
 		UILabel* label=(UILabel*)[cell viewWithTag:kTagUserIDLabel];
-		[label setText:[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"user_id"]];
+		NSDictionary* user=[appDelegate getUserDoc:[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"user_id"]];
+		[label setText:[user objectForKey:@"name"]];
 
 		label=(UILabel*)[cell viewWithTag:kTagDateLabel];
 		id v=[[[self.reviewsList objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"mtime"];
@@ -206,9 +210,9 @@
 			[rv setRating:[(NSNumber*)v floatValue]];
 		}
 		
-		UIImageView* avatar=(UIImageView*)[cell viewWithTag:kTagAvatarView];
-		avatar.image=[UIImage imageNamed:@"avatar_default.png"];
-
+		AvatarImageView* aiv=(AvatarImageView*)[cell viewWithTag:kTagAvatarView];
+		NSString* avatarURL=[user objectForKey:@"avatar"];
+		[aiv avatarURLFromString:avatarURL];
 	}
 
     return cell;

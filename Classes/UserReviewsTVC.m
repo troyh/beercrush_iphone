@@ -15,6 +15,9 @@
 @synthesize seqNext;
 @synthesize seqMax;
 
+static const NSInteger kTagBreweryNameLabel=1;
+static const NSInteger kTagBeerNameLabel=2;
+
 - (id)init {
     // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     if (self = [super initWithStyle:UITableViewStylePlain]) {
@@ -149,11 +152,18 @@
 	UITableViewCell* cell=[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+
+		UILabel* breweryNameLabel=[[[UILabel alloc] initWithFrame:CGRectMake(45, 1, 200, 12)] autorelease];
+		breweryNameLabel.font=[UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+		breweryNameLabel.textColor=[UIColor grayColor];
+		breweryNameLabel.tag=kTagBreweryNameLabel;
+		[cell.contentView addSubview:breweryNameLabel];
 	}
 	
 	if (indexPath.row<[self.reviewsList count])
 	{
 		// Set up the cell...
+
 		NSMutableDictionary* review=[self.reviewsList objectAtIndex:indexPath.row];
 //		NSString* s=[[review objectForKey:@"beer"] objectForKey:@"name"];
 		NSString* s=[review objectForKey:@"beer_id"];
@@ -165,8 +175,8 @@
 			NSDictionary* beer=[appDelegate getBeerDoc:s];
 			[cell.textLabel setText:[beer objectForKey:@"name"]];
 			
-//			NSDictionary* brewery=[appDelegate getBreweryDoc:[beer objectForKey:@"brewery_id"]];
-//			[cell.detailTextLabel setText:[brewery objectForKey:@"name"]];
+			UILabel* breweryNameLabel=(UILabel*)[cell viewWithTag:kTagBreweryNameLabel];
+			[breweryNameLabel setText:[appDelegate breweryNameFromBeerID:[beer objectForKey:@"brewery_id"]]];
 
 			NSArray* starsfmt=[NSArray arrayWithObjects:
 							   @"☆☆☆☆☆",
