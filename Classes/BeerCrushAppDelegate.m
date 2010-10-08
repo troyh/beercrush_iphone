@@ -1582,7 +1582,7 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 			self.activityHUD = [[UIProgressHUD alloc] initWithWindow:self.tabBarController.moreNavigationController.visibleViewController.view];
 		}
 		else
-			self.activityHUD = [[UIProgressHUD alloc] initWithWindow:self.tabBarController.navigationController.visibleViewController.view];
+			self.activityHUD = [[UIProgressHUD alloc] initWithWindow:self.tabBarController.selectedViewController.view];
 	}
 	[self.activityHUD setText:hudText]; 
 	[self.activityHUD show:YES]; 
