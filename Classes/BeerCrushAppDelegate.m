@@ -1577,8 +1577,13 @@ void recursivelyGetPlaceStyleIDs(NSDictionary* fromDict, NSMutableDictionary* to
 -(void)presentActivityHUD:(NSString*)hudText
 { 
 	// UIProgressHUD is undocumented by Apple. If you get screwed, try this instead: http://www.bukovinski.com/2009/04/08/mbprogresshud-for-iphone/
-	if (self.activityHUD==nil)
-		self.activityHUD = [[UIProgressHUD alloc] initWithWindow:self.tabBarController.selectedViewController.view];
+	if (self.activityHUD==nil) {
+		if (self.tabBarController.selectedIndex>=4) { // The More nav controller
+			self.activityHUD = [[UIProgressHUD alloc] initWithWindow:self.tabBarController.moreNavigationController.visibleViewController.view];
+		}
+		else
+			self.activityHUD = [[UIProgressHUD alloc] initWithWindow:self.tabBarController.navigationController.visibleViewController.view];
+	}
 	[self.activityHUD setText:hudText]; 
 	[self.activityHUD show:YES]; 
 }
